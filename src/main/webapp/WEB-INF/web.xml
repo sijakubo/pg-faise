@@ -8,7 +8,7 @@
   <!-- Servlets -->
   <servlet>
     <servlet-name>greetServlet</servlet-name>
-    <servlet-class>uni-oldenburg.server.GreetingServiceImpl</servlet-class>
+    <servlet-class>uni.oldenburg.server.GreetingServiceImpl</servlet-class>
   </servlet>
 
   <servlet-mapping>

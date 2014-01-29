@@ -1,6 +1,6 @@
-package uni-oldenburg.client;
+package uni.oldenburg.client;
 
-import uni-oldenburg.shared.FieldVerifier;
+import uni.oldenburg.shared.FieldVerifier;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -22,7 +22,7 @@ public class GwtTestsimulation extends GWTTestCase {
    * Must refer to a valid module that sources this class.
    */
   public String getModuleName() {
-    return "uni-oldenburg.simulationJUnit";
+    return "uni.oldenburg.simulationJUnit";
   }
 
   /**
