@@ -1,4 +1,4 @@
-pg-faise
+pg-faise-simulation
 ========
 
-Github Repository für die Projektgruppe FAISE der Universität Oldenburg
+Github Repository für die Software Simulation der Projektgruppe FAISE
