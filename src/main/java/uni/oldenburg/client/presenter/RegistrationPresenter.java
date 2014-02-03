@@ -2,19 +2,10 @@ package uni.oldenburg.client.presenter;
 
 
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.Widget;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import uni.oldenburg.client.SimulationsServiceAsync;
+import uni.oldenburg.client.SimulationServiceAsync;
 
 public class RegistrationPresenter implements Presenter {  
 
@@ -24,11 +15,11 @@ public class RegistrationPresenter implements Presenter {
     
   }
   
-  private final SimulationsServiceAsync rpcService;
+  private final SimulationServiceAsync rpcService;
   private final HandlerManager eventBus;
   private final Display display;
   
-  public RegistrationPresenter(SimulationsServiceAsync rpcService, HandlerManager eventBus, Display view) {
+  public RegistrationPresenter(SimulationServiceAsync rpcService, HandlerManager eventBus, Display view) {
     this.rpcService = rpcService;
     this.eventBus = eventBus;
     this.display = view;

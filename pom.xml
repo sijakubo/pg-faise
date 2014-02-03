@@ -73,12 +73,10 @@
                         </goals>
                     </execution>
                 </executions>
-                <!-- Plugin configuration. There are many available options, see
-                  gwt-maven-plugin documentation at codehaus.org -->
                 <configuration>
                     <runTarget>simulation.html</runTarget>
                     <hostedWebapp>${webappDirectory}</hostedWebapp>
-                    <i18nMessagesBundle>uni-oldenburg.client.Messages</i18nMessagesBundle>
+                    <i18nMessagesBundle>uni.oldenburg.client.Messages</i18nMessagesBundle>
                 </configuration>
             </plugin>
 
