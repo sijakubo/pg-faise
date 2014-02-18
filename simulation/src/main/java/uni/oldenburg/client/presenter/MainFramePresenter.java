@@ -3,13 +3,15 @@ package uni.oldenburg.client.presenter;
 
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.Widget;
+
 import uni.oldenburg.client.SimulationServiceAsync;
 
 public class MainFramePresenter implements Presenter {
 
 
     public interface Display {
-
+    	Widget asWidget();
     }
 
     private final SimulationServiceAsync rpcService;
@@ -28,7 +30,9 @@ public class MainFramePresenter implements Presenter {
 
 
     public void go(final HasWidgets container) {
-
+      bind();
+   	  container.clear();
+   	  container.add(display.asWidget());
     }
 
 
