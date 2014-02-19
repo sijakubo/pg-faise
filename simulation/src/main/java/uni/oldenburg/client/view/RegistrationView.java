@@ -1,9 +1,9 @@
 package uni.oldenburg.client.view;
 
 
-import com.google.gwt.user.client.ui.Composite;
-
 import uni.oldenburg.client.presenter.RegistrationPresenter;
+
+import com.google.gwt.user.client.ui.Composite;
 
 
 

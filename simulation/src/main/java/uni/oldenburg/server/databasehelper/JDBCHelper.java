@@ -1,10 +1,10 @@
 package uni.oldenburg.server.databasehelper;
 
-import org.apache.log4j.Logger;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import org.apache.log4j.Logger;
 
 public final class JDBCHelper {
     private JDBCHelper() {

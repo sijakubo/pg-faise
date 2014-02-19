@@ -2,11 +2,11 @@ package uni.oldenburg.client.presenter;
 
 
 
+import uni.oldenburg.client.SimulationServiceAsync;
+
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
-
-import uni.oldenburg.client.SimulationServiceAsync;
 
 public class RegistrationPresenter implements Presenter {  
 

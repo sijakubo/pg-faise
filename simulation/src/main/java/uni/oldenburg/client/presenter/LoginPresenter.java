@@ -6,7 +6,6 @@ import uni.oldenburg.client.SimulationServiceAsync;
 import uni.oldenburg.client.event.CallRegisterEvent;
 import uni.oldenburg.client.event.LoginCompletedEvent;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
