@@ -14,8 +14,5 @@ public class LoginCompletedEvent extends GwtEvent<LoginCompletedEventHandler> {
   @Override
   protected void dispatch(LoginCompletedEventHandler handler) {
 	 handler.onLogin(this);
-	
   }
-
-
 }

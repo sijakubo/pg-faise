@@ -11,68 +11,51 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasValue;
-import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
-public class LoginPresenter implements Presenter {  
-
-
-
-  public interface Display {
-	    HasValue<String> getTextboxUsername();
-		HasValue<String> getTextboxPassword();
+public class LoginPresenter extends Presenter {
+	private final IDisplay display;
+	
+	public interface IDisplay {
+		HasValue<String> getUsername();
+		HasValue<String> getPassword();
 		HasClickHandlers getLoginButton();
-		HasClickHandlers getRegistrierenButton();
-		  
-		Widget asWidget();
-  }
+		HasClickHandlers getRegisterButton();
+	}
   
-  private final SimulationServiceAsync rpcService;
-  private final HandlerManager eventBus;
-  private final Display display;
+	public LoginPresenter(SimulationServiceAsync rpcService, HandlerManager eventBus, IDisplay view) {
+		super(rpcService, eventBus);
+		this.display = view;
+	}
+	
+	public Widget getDisplay() {
+		return (Widget)display;
+	}
   
-  public LoginPresenter(SimulationServiceAsync rpcService, HandlerManager eventBus, Display view) {
-    this.rpcService = rpcService;
-    this.eventBus = eventBus;
-    this.display = view;
-  }
-  
-  private void addSendenButtonListener(){
-		display.getLoginButton().addClickHandler(new ClickHandler(){
+	private void addSendenButtonListener(){
+		display.getLoginButton().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				sendeLogin(display.getTextboxUsername().getValue(), display.getTextboxPassword().getValue());
-				
+				sendeLogin(	display.getUsername().getValue(),
+							display.getPassword().getValue()
+							);					
 			}	
 		});
 	}
 	
 	public void sendeLogin(String value, String value2) {
 		eventBus.fireEvent(new LoginCompletedEvent());
-	
     }
 
 	private void addRegistrierenButtonListener(){
-		display.getRegistrierenButton().addClickHandler(new ClickHandler(){
+		display.getRegisterButton().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				eventBus.fireEvent(new CallRegisterEvent());
-				
 			}	
 		});
 	}
   
-  
-  public void bind(){
-	  this.addSendenButtonListener();
-	  this.addRegistrierenButtonListener();
-  }
-
-  
-  public void go(final HasWidgets container) {
-	  bind();
-	  container.clear();
-	  container.add(display.asWidget());
-  }
-
- 
-  
+	public void bind(){
+		this.addSendenButtonListener();
+		this.addRegistrierenButtonListener();
+	}
 }
