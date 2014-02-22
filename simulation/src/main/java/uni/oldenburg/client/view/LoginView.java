@@ -31,7 +31,7 @@ public class LoginView extends Composite implements LoginPresenter.IDisplay {
 		vpLogin.add(txtPassword);
 		
 		HorizontalPanel hpButtons = new HorizontalPanel();
-		btnLogin = new Button("Senden");
+		btnLogin = new Button("Login");
 		btnLogin.setText("Login");
 		btnLogin.setSize("100px", "30px");
 		hpButtons.add(btnLogin);

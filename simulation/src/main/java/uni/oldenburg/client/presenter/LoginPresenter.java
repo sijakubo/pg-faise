@@ -32,7 +32,7 @@ public class LoginPresenter extends Presenter {
 		return (Widget)display;
 	}
   
-	private void addSendenButtonListener(){
+	private void addLoginButtonListener() {
 		display.getLoginButton().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				sendeLogin(	display.getUsername().getValue(),
@@ -42,11 +42,11 @@ public class LoginPresenter extends Presenter {
 		});
 	}
 	
-	public void sendeLogin(String value, String value2) {
+	public void sendeLogin(String user, String pass) {
 		eventBus.fireEvent(new LoginCompletedEvent());
     }
 
-	private void addRegistrierenButtonListener(){
+	private void addRegisterButtonListener() {
 		display.getRegisterButton().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				eventBus.fireEvent(new CallRegisterEvent());
@@ -55,7 +55,7 @@ public class LoginPresenter extends Presenter {
 	}
   
 	public void bind(){
-		this.addSendenButtonListener();
-		this.addRegistrierenButtonListener();
+		this.addLoginButtonListener();
+		this.addRegisterButtonListener();
 	}
 }
