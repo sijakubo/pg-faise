@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
 
-
 public class AppController extends Presenter implements ValueChangeHandler<String> {
     private HasWidgets container;
 
@@ -39,7 +38,7 @@ public class AppController extends Presenter implements ValueChangeHandler<Strin
     	eventBus.addHandler(LoginCompletedEvent.TYPE,
     			new LoginCompletedEventHandler() {
     				public void onLogin(LoginCompletedEvent event) {
-    					History.newItem("Mainpage");
+    					History.newItem("Main");
     				}
     			}); 
     	 
@@ -77,7 +76,7 @@ public class AppController extends Presenter implements ValueChangeHandler<Strin
         else if(token.equals("Register")) {
         	presenter = new RegistrationPresenter(rpcService, eventBus, new RegistrationView());
         }
-        else if(token.equals("Mainpage")) {
+        else if(token.equals("Main")) {
         	presenter = new MainFramePresenter(rpcService, eventBus, new MainFrameView());
         }
  
