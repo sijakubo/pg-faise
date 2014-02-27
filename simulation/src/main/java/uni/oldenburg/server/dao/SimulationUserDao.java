@@ -27,6 +27,8 @@ public class SimulationUserDao {
     }
 
     public void persistSimulationUser(SimulationUser newUser) throws SQLException {
+
+
         PreparedStatement prepStatement = ConnectionPool.getConnection()
                 .prepareStatement("INSERT INTO " + SimulationUser.TABLE_NAME + " (email, name, password) VALUES (?, ?, ?)");
 
@@ -35,4 +37,16 @@ public class SimulationUserDao {
         prepStatement.setString(3, newUser.getPassword());
         prepStatement.executeUpdate();
     }
+
+    public boolean isCredentialsCorrect(String username, String password) throws SQLException {
+        PreparedStatement prepStatement = ConnectionPool.getConnection()
+                .prepareStatement("SELECT name FROM " + SimulationUser.TABLE_NAME + " WHERE email = ? and password = ?");
+
+        prepStatement.setString(1, username);
+        prepStatement.setString(2, password);
+        prepStatement.execute();
+        ResultSet resultSet = prepStatement.getResultSet();
+        return resultSet.next();
+    }
+
 }

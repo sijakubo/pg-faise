@@ -11,8 +11,6 @@ public class RegistrationView extends Composite implements RegistrationPresenter
     private Button btnRegister;
 
     public RegistrationView() {
-        VerticalPanel vpLogin = new VerticalPanel();
-
         Grid grid = new Grid(4, 2);
         grid.setWidget(0, 0, new Label("E-Mail: "));
         grid.setWidget(0, 1, createEmailInput());
@@ -25,6 +23,7 @@ public class RegistrationView extends Composite implements RegistrationPresenter
 
         grid.setWidget(3, 1, createRegisterButton());
 
+        VerticalPanel vpLogin = new VerticalPanel();
         vpLogin.add(grid);
         initWidget(vpLogin);
     }

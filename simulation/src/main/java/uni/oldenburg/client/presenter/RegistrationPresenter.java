@@ -10,11 +10,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
 import uni.oldenburg.client.event.RegisterCompleteEvent;
-import uni.oldenburg.client.service.RegistrationServiceAsync;
+import uni.oldenburg.client.service.RegistrationAndLoginServiceAsync;
 import uni.oldenburg.shared.model.SimulationUser;
 
 public class RegistrationPresenter extends Presenter {
-    private RegistrationServiceAsync rpcService;
+    private RegistrationAndLoginServiceAsync rpcService;
     private final IDisplay display;
 
     public interface IDisplay {
@@ -24,7 +24,7 @@ public class RegistrationPresenter extends Presenter {
         HasClickHandlers getRegisterButton();
     }
 
-    public RegistrationPresenter(RegistrationServiceAsync rpcService, HandlerManager eventBus, IDisplay view) {
+    public RegistrationPresenter(RegistrationAndLoginServiceAsync rpcService, HandlerManager eventBus, IDisplay view) {
         super(eventBus);
         this.rpcService = rpcService;
         this.display = view;
@@ -44,11 +44,11 @@ public class RegistrationPresenter extends Presenter {
         });
     }
 
-    public void registerUser(String email, String name, String passwort) {
-        rpcService.registerUser(new SimulationUser(email, name, passwort), new AsyncCallback<Boolean>() {
+    public void registerUser(String email, String name, String password) {
+        rpcService.registerUser(new SimulationUser(email, name, password), new AsyncCallback<Boolean>() {
             @Override
             public void onFailure(Throwable throwable) {
-                Window.alert("Unable to Register user");
+                Window.alert("Email bereits vergeben");
             }
 
             @Override

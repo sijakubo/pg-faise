@@ -11,7 +11,7 @@
     </servlet>
     <servlet>
         <servlet-name>registrationService</servlet-name>
-        <servlet-class>uni.oldenburg.server.service.RegistrationServiceImpl</servlet-class>
+        <servlet-class>uni.oldenburg.server.service.RegistrationAndLoginServiceImpl</servlet-class>
     </servlet>
 
     <servlet-mapping>
