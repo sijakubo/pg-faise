@@ -7,12 +7,20 @@
     <!-- Servlets -->
     <servlet>
         <servlet-name>simulationService</servlet-name>
-        <servlet-class>uni.oldenburg.server.SimulationServiceImpl</servlet-class>
+        <servlet-class>uni.oldenburg.server.service.SimulationServiceImpl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>registrationService</servlet-name>
+        <servlet-class>uni.oldenburg.server.service.RegistrationServiceImpl</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>simulationService</servlet-name>
         <url-pattern>/simulation/simulationsService</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>registrationService</servlet-name>
+        <url-pattern>/simulation/registrationService</url-pattern>
     </servlet-mapping>
 
     <!-- Default page to serve -->

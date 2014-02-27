@@ -1,4 +1,4 @@
-package uni.oldenburg.client;
+package uni.oldenburg.client.service;
 
 public interface SimulationServiceAsync {
 

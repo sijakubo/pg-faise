@@ -1,6 +1,6 @@
-package uni.oldenburg.server;
+package uni.oldenburg.server.service;
 
-import uni.oldenburg.client.SimulationService;
+import uni.oldenburg.client.service.SimulationService;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 

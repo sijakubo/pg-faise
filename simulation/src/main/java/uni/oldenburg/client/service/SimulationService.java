@@ -1,4 +1,4 @@
-package uni.oldenburg.client;
+package uni.oldenburg.client.service;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;

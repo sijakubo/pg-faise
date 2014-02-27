@@ -2,7 +2,7 @@ package uni.oldenburg.client.presenter;
 
 
 
-import uni.oldenburg.client.SimulationServiceAsync;
+import uni.oldenburg.client.service.SimulationServiceAsync;
 import uni.oldenburg.client.event.CallRegisterEvent;
 import uni.oldenburg.client.event.LoginCompletedEvent;
 
@@ -14,7 +14,8 @@ import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
 
 public class LoginPresenter extends Presenter {
-	private final IDisplay display;
+    private SimulationServiceAsync rpcService;
+    private final IDisplay display;
 	
 	public interface IDisplay {
 		HasValue<String> getUsername();
@@ -24,8 +25,9 @@ public class LoginPresenter extends Presenter {
 	}
   
 	public LoginPresenter(SimulationServiceAsync rpcService, HandlerManager eventBus, IDisplay view) {
-		super(rpcService, eventBus);
-		this.display = view;
+		super(eventBus);
+        this.rpcService = rpcService;
+        this.display = view;
 	}
 	
 	public Widget getDisplay() {
