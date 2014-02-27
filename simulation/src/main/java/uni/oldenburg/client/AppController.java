@@ -7,15 +7,15 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
+
 import uni.oldenburg.client.event.*;
 import uni.oldenburg.client.presenter.LoginPresenter;
 import uni.oldenburg.client.presenter.MainFramePresenter;
 import uni.oldenburg.client.presenter.Presenter;
 import uni.oldenburg.client.presenter.RegistrationPresenter;
 import uni.oldenburg.client.service.RegistrationAndLoginService;
-import uni.oldenburg.client.service.RegistrationAndLoginServiceAsync;
+import uni.oldenburg.client.service.ServiceAsync;
 import uni.oldenburg.client.service.SimulationService;
-import uni.oldenburg.client.service.SimulationServiceAsync;
 import uni.oldenburg.client.view.LoginView;
 import uni.oldenburg.client.view.MainFrameView;
 import uni.oldenburg.client.view.RegistrationView;
@@ -24,8 +24,8 @@ import uni.oldenburg.client.view.RegistrationView;
 public class AppController extends Presenter implements ValueChangeHandler<String> {
     private HasWidgets container;
 
-    public AppController(HandlerManager eventBus) {
-        super(eventBus);
+    public AppController(ServiceAsync rpcService, HandlerManager eventBus) {
+        super(rpcService, eventBus);
         bind();
     }
 
@@ -52,7 +52,6 @@ public class AppController extends Presenter implements ValueChangeHandler<Strin
 
         eventBus.addHandler(RegisterCompleteEvent.TYPE,
                 new RegisterCompleteEventHandler() {
-                    @Override
                     public void onRegister(RegisterCompleteEvent event) {
                         History.newItem("Login");
                     }
@@ -79,13 +78,15 @@ public class AppController extends Presenter implements ValueChangeHandler<Strin
         Presenter presenter = null;
 
         if (token.equals("Login")) {
-            RegistrationAndLoginServiceAsync identityService = GWT.create(RegistrationAndLoginService.class);
+            ServiceAsync identityService = GWT.create(RegistrationAndLoginService.class);
             presenter = new LoginPresenter(identityService, eventBus, new LoginView());
-        } else if (token.equals("Register")) {
-            RegistrationAndLoginServiceAsync identityService = GWT.create(RegistrationAndLoginService.class);
+        }
+        else if (token.equals("Register")) {
+        	ServiceAsync identityService = GWT.create(RegistrationAndLoginService.class);
             presenter = new RegistrationPresenter(identityService, eventBus, new RegistrationView());
-        } else if (token.equals("Main")) {
-            SimulationServiceAsync simulationServiceAsync = GWT.create(SimulationService.class);
+        }
+        else if (token.equals("Main")) {
+        	ServiceAsync simulationServiceAsync = GWT.create(SimulationService.class);
             presenter = new MainFramePresenter(simulationServiceAsync, eventBus, new MainFrameView());
         }
 

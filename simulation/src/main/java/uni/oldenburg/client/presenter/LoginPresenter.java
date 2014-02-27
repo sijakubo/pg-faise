@@ -9,12 +9,13 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
+
 import uni.oldenburg.client.event.CallRegisterEvent;
 import uni.oldenburg.client.event.LoginCompletedEvent;
 import uni.oldenburg.client.service.RegistrationAndLoginServiceAsync;
+import uni.oldenburg.client.service.ServiceAsync;
 
 public class LoginPresenter extends Presenter {
-    private RegistrationAndLoginServiceAsync rpcService;
     private final IDisplay display;
 
     public interface IDisplay {
@@ -27,8 +28,8 @@ public class LoginPresenter extends Presenter {
         HasClickHandlers getRegisterButton();
     }
 
-    public LoginPresenter(RegistrationAndLoginServiceAsync rpcService, HandlerManager eventBus, IDisplay view) {
-        super(eventBus);
+    public LoginPresenter(ServiceAsync rpcService, HandlerManager eventBus, IDisplay view) {
+        super(rpcService, eventBus);
         this.rpcService = rpcService;
         this.display = view;
     }
@@ -48,13 +49,11 @@ public class LoginPresenter extends Presenter {
     }
 
     public void sendeLogin(String user, String email) {
-        rpcService.loginUser(user, email, new AsyncCallback<Boolean>() {
-            @Override
+        ((RegistrationAndLoginServiceAsync)rpcService).loginUser(user, email, new AsyncCallback<Boolean>() {
             public void onFailure(Throwable throwable) {
                 Window.alert("Fehler beim abfragen der Benutzerdaten");
             }
 
-            @Override
             public void onSuccess(Boolean loginSuccessful) {
                 if (loginSuccessful) {
                     eventBus.fireEvent(new LoginCompletedEvent());

@@ -1,7 +1,6 @@
 package uni.oldenburg.client.service;
 
-public interface SimulationServiceAsync {
-
+public interface SimulationServiceAsync extends ServiceAsync {
 
 }
 

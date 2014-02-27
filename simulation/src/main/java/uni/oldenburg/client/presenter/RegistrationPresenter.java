@@ -9,8 +9,10 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
+
 import uni.oldenburg.client.event.RegisterCompleteEvent;
 import uni.oldenburg.client.service.RegistrationAndLoginServiceAsync;
+import uni.oldenburg.client.service.ServiceAsync;
 import uni.oldenburg.shared.model.SimulationUser;
 
 public class RegistrationPresenter extends Presenter {
@@ -24,9 +26,8 @@ public class RegistrationPresenter extends Presenter {
         HasClickHandlers getRegisterButton();
     }
 
-    public RegistrationPresenter(RegistrationAndLoginServiceAsync rpcService, HandlerManager eventBus, IDisplay view) {
-        super(eventBus);
-        this.rpcService = rpcService;
+    public RegistrationPresenter(ServiceAsync rpcService, HandlerManager eventBus, IDisplay view) {
+        super(rpcService, eventBus);
         this.display = view;
     }
 
@@ -45,13 +46,11 @@ public class RegistrationPresenter extends Presenter {
     }
 
     public void registerUser(String email, String name, String password) {
-        rpcService.registerUser(new SimulationUser(email, name, password), new AsyncCallback<Boolean>() {
-            @Override
+        ((RegistrationAndLoginServiceAsync)rpcService).registerUser(new SimulationUser(email, name, password), new AsyncCallback<Boolean>() {
             public void onFailure(Throwable throwable) {
                 Window.alert("Email bereits vergeben");
             }
 
-            @Override
             public void onSuccess(Boolean aBoolean) {
                 eventBus.fireEvent(new RegisterCompleteEvent());
             }
