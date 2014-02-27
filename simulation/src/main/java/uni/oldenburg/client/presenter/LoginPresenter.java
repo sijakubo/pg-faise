@@ -30,7 +30,6 @@ public class LoginPresenter extends Presenter {
 
     public LoginPresenter(ServiceAsync rpcService, HandlerManager eventBus, IDisplay view) {
         super(rpcService, eventBus);
-        this.rpcService = rpcService;
         this.display = view;
     }
 
