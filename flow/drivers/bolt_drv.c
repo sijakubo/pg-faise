@@ -6,7 +6,7 @@
  */ 
 #include "drivers/bolt_drv.h"
 
-static unsigned char bolts;
+static uint8_t bolts;
 
 void bolt_drv_init(void){
 	BOLTS_PxDIR |= (BOLT_1 | BOLT_2);
@@ -36,4 +36,8 @@ void bolts_toggle(unsigned char boltv){
 		bolts ^= BOLT_2;
 		BOLTS_PxOUT ^= BOLT_2;
 	}
+}
+
+uint8_t get_bolts(void){
+	return 0x0F & bolts;
 }

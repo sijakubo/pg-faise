@@ -21,7 +21,7 @@
 #define PHOTOSENSOR_4 1<<PC7
 
 void photosensor_drv_init(void);
-unsigned char get_photosensors();
+uint8_t get_photosensors();
 
 
 

@@ -11,6 +11,7 @@ void photosensor_drv_init(void){
 	PHOTOSENSORS_PxOUT |= 0xF0;
 }
 
-unsigned char get_photosensors(){
-	return PHOTOSENSORS_PxIN;
+uint8_t get_photosensors(){
+	uint8_t res = 0xF0 & PHOTOSENSORS_PxIN;
+	return res>>4;
 }
