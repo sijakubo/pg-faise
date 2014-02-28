@@ -19,10 +19,10 @@ public final class ConnectionPool {
                 connection = DriverManager.getConnection("jdbc:postgresql://134.106.62.111:5432/faisedb", "faiseuser", "sonne15");
             }
         } catch (ClassNotFoundException e) {
-            Logger logger = Logger.getLogger(JDBCHelper.class);
+            Logger logger = Logger.getLogger(ConnectionPool.class);
             logger.error("Unable to find Postgres-Database Driver", e);
         } catch (SQLException e) {
-            Logger logger = Logger.getLogger(JDBCHelper.class);
+            Logger logger = Logger.getLogger(ConnectionPool.class);
             logger.error("Unable to estable connection to Postgres-Database", e);
         }
 
