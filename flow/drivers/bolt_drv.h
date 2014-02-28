@@ -20,6 +20,6 @@ void bolt_drv_init(void);
 void bolts_up(unsigned char boltv);
 void bolts_down(unsigned char boltv);
 void bolts_toggle(unsigned char boltv);
-uint8_t get_bolts(void);
+unsigned char bolts_get(void);
 
 #endif
