@@ -1,14 +1,12 @@
 package uni.oldenburg.client.view;
 
-import java.util.Arrays;
-import java.util.List;
-
 import uni.oldenburg.client.presenter.MainFramePresenter;
+import uni.oldenburg.shared.model.Job;
 
 import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -16,8 +14,6 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.view.client.AsyncDataProvider;
-import com.google.gwt.view.client.HasData;
 
 public class MainFrameView extends Composite implements MainFramePresenter.IDisplay {
 	
@@ -26,17 +22,11 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	private MenuBar        editMenuBar;
 	private MenuBar        viewMenuBar;
 	
-	private CellTable<Job> jobTable = new CellTable<Job>();
-	private Button         btStrategies;
+	private CellTable<Job> ctJobTable = new CellTable<Job>();
+	private Button         btnStrategies;
 	private ToggleButton   tbVirtualHybridSwitch;
 	
-	private Canvas       canvas;
-	
-	private static final List<Job> JOBS = Arrays.asList(
-		      new Job(1, "XY"),
-		      new Job(2, "zt"),
-		      new Job(3, "Patata"),
-		      new Job(4, "UO"));
+	private Canvas         canvas;
 	
 	public MainFrameView() {
 
@@ -49,7 +39,7 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		//file menu
 		
 		fileMenuBar = new MenuBar(true);
-		fileMenuBar.setAnimationEnabled(true);		
+		fileMenuBar.setAnimationEnabled(true);
 		fileMenuBar.addItem("Load Scenario", new Command() {
 			public void execute() {
 				
@@ -186,41 +176,14 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 
 		//table
 		
-	    jobTable.setPageSize(5);
-	    TextColumn<Job> jobNumberColumn = new TextColumn<Job>() {
-	    	@Override
-	        public String getValue(Job object) {
-	    		return "" + object.jobNumber;
-	        }
-	    };
-	    jobTable.addColumn(jobNumberColumn, "Job Number");	    
-	    TextColumn<Job> jobColumn = new TextColumn<Job>() {
-	    	@Override
-	        public String getValue(Job object) {
-	    		return object.job;
-	        }
-	    };
-	    jobTable.addColumn(jobColumn, "Job");
-	    vpLeftFrame.add(jobTable);
+		ctJobTable.setPageSize(5);
+	    vpLeftFrame.add(ctJobTable);
 
-	    AsyncDataProvider<Job> provider = new AsyncDataProvider<Job>() {
-	    	@Override
-	        protected void onRangeChanged(HasData<Job> display) {
-	    		int start = display.getVisibleRange().getStart();
-	    		int end = start + display.getVisibleRange().getLength();
-	    		end = end >= JOBS.size() ? JOBS.size() : end;
-	    		List<Job> sub = JOBS.subList(start, end);
-	    		updateRowData(start, sub);
-	    	}
-	    };
-	    provider.addDataDisplay(jobTable);
-	    provider.updateRowCount(JOBS.size(), true);
-	    
 	    SimplePager pager = new SimplePager();
-	    pager.setDisplay(jobTable);
+	    pager.setDisplay(ctJobTable);
 
 	    VerticalPanel vp = new VerticalPanel();
-	    vp.add(jobTable);
+	    vp.add(ctJobTable);
 	    vp.add(pager);
 	    vpLeftFrame.add(vp);
 	    
@@ -232,9 +195,9 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		
 		//button for changing pathfinding strategy
 		
-		btStrategies = new Button("Strategies");
-		btStrategies.setText("Strategies");
-		vpLeftFrame.add(btStrategies);
+		btnStrategies = new Button("Strategies");
+		btnStrategies.setText("Strategies");
+		vpLeftFrame.add(btnStrategies);
 		
 		hpSubFrame.add(vpLeftFrame);
 		
@@ -245,14 +208,16 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		vpMainFrame.add(hpSubFrame);
 		initWidget(vpMainFrame);
 	}
-	
-	private static class Job {
-	    private final int jobNumber;
-	    private final String job;
 
-	    public Job(int jobNumber, String job) {
-	    	this.jobNumber = jobNumber;
-	      	this.job = job;
-	    }
-	}
+    public HasClickHandlers getStrategiesButton() {
+        return btnStrategies;
+    }
+
+    public HasClickHandlers getVirtualHybridButton() {
+        return tbVirtualHybridSwitch;
+    }
+    
+    public CellTable<Job> getJobTable() {
+        return ctJobTable;
+    }
 }
