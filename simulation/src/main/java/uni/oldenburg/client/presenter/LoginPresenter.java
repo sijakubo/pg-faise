@@ -20,11 +20,8 @@ public class LoginPresenter extends Presenter {
 
     public interface IDisplay {
         HasValue<String> getEmail();
-
         HasValue<String> getPassword();
-
         HasClickHandlers getLoginButton();
-
         HasClickHandlers getRegisterButton();
     }
 
@@ -40,15 +37,15 @@ public class LoginPresenter extends Presenter {
     private void addLoginButtonListener() {
         display.getLoginButton().addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
-                sendeLogin(display.getEmail().getValue(),
-                        display.getPassword().getValue()
+                sendeLogin(	display.getEmail().getValue(),
+                        	display.getPassword().getValue()
                 );
             }
         });
     }
 
-    public void sendeLogin(String user, String email) {
-        ((RegistrationAndLoginServiceAsync)rpcService).loginUser(user, email, new AsyncCallback<Boolean>() {
+    public void sendeLogin(String user, String password) {
+        ((RegistrationAndLoginServiceAsync)rpcService).loginUser(user, password, new AsyncCallback<Boolean>() {
             public void onFailure(Throwable throwable) {
                 Window.alert("Fehler beim abfragen der Benutzerdaten");
             }

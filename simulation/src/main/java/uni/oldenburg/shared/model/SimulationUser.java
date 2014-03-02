@@ -2,6 +2,7 @@ package uni.oldenburg.shared.model;
 
 import java.io.Serializable;
 
+@SuppressWarnings("serial")
 public class SimulationUser implements Serializable {
     public static final String TABLE_NAME = "simulationuser";
 

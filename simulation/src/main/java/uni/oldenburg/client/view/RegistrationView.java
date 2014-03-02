@@ -2,6 +2,7 @@ package uni.oldenburg.client.view;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.*;
+
 import uni.oldenburg.client.presenter.RegistrationPresenter;
 
 public class RegistrationView extends Composite implements RegistrationPresenter.IDisplay {
@@ -53,7 +54,7 @@ public class RegistrationView extends Composite implements RegistrationPresenter
         txtPassword.setPixelSize(200, 30);
         return txtPassword;
     }
-
+	
     public HasValue<String> getPassword() {
         return txtPassword;
     }

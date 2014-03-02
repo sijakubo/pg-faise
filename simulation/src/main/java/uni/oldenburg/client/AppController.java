@@ -86,8 +86,8 @@ public class AppController extends Presenter implements ValueChangeHandler<Strin
             presenter = new RegistrationPresenter(identityService, eventBus, new RegistrationView());
         }
         else if (token.equals("Main")) {
-        	ServiceAsync simulationServiceAsync = GWT.create(SimulationService.class);
-            presenter = new MainFramePresenter(simulationServiceAsync, eventBus, new MainFrameView());
+        	ServiceAsync identityService = GWT.create(SimulationService.class);
+            presenter = new MainFramePresenter(identityService, eventBus, new MainFrameView());
         }
 
         if (presenter != null) {

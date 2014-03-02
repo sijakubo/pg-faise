@@ -16,7 +16,6 @@ import uni.oldenburg.client.service.ServiceAsync;
 import uni.oldenburg.shared.model.SimulationUser;
 
 public class RegistrationPresenter extends Presenter {
-    private RegistrationAndLoginServiceAsync rpcService;
     private final IDisplay display;
 
     public interface IDisplay {
@@ -38,9 +37,9 @@ public class RegistrationPresenter extends Presenter {
     private void addRegisterButtonListener() {
         display.getRegisterButton().addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
-                registerUser(display.getEmail().getValue(),
-                        display.getName().getValue(),
-                        display.getPassword().getValue());
+                registerUser(	display.getEmail().getValue(),
+                        		display.getName().getValue(),
+                        		display.getPassword().getValue());
             }
         });
     }
