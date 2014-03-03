@@ -3,15 +3,21 @@ package uni.oldenburg.client.presenter;
 import java.util.Arrays;
 import java.util.List;
 
-import uni.oldenburg.client.service.ServiceAsync;
+import uni.oldenburg.client.service.SimulationServiceAsync;
+import uni.oldenburg.shared.model.Conveyor;
+import uni.oldenburg.shared.model.ConveyorRamp;
+import uni.oldenburg.shared.model.ConveyorVehicle;
 import uni.oldenburg.shared.model.Job;
 
+import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
@@ -26,12 +32,13 @@ public class MainFramePresenter extends Presenter {
 		      new Job(4, "UO"));
 		
 	public interface IDisplay {
-        CellTable<Job>   getJobTable();
-        HasClickHandlers getStrategiesButton();
-        HasClickHandlers getVirtualHybridButton();
+        CellTable<Job>   	getJobTable();
+        HasClickHandlers 	getStrategiesButton();
+        HasClickHandlers	getVirtualHybridButton();
+        Canvas				getCanvas();
     }
 	
-    public MainFramePresenter(ServiceAsync rpcService, HandlerManager eventBus, IDisplay view) {
+    public MainFramePresenter(SimulationServiceAsync rpcService, HandlerManager eventBus, IDisplay view) {
     	super(rpcService, eventBus);
         this.display = view;
     }
@@ -85,10 +92,26 @@ public class MainFramePresenter extends Presenter {
 	    provider.addDataDisplay(display.getJobTable());
 	    provider.updateRowCount(JOBS.size(), true);	    
     }
+    
+    private void drawConveyor(Conveyor myConveyer) {
+    	Context2d context = display.getCanvas().getContext2d();
+    	context.drawImage(myConveyer.getCanvasElement(), myConveyer.getX(), myConveyer.getY());
+    }
+    
+    private void generateConveyor() {
+    	for (int i = 0; i < 5; ++i) {
+        	drawConveyor(new ConveyorVehicle(Random.nextInt(780), Random.nextInt(460)));	
+    	}
+    	
+    	for (int i = 0; i < 5; ++i) {
+        	drawConveyor(new ConveyorRamp(Random.nextInt(780), Random.nextInt(460)));
+    	}
+    }
 
     public void bind() {
         this.addStrategiesButtonListener();
         this.addVirtualHybridButtonListener();
         this.setupJobTable();
+        this.generateConveyor();
     }
 }

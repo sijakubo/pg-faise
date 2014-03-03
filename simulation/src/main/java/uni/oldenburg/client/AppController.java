@@ -14,8 +14,10 @@ import uni.oldenburg.client.presenter.MainFramePresenter;
 import uni.oldenburg.client.presenter.Presenter;
 import uni.oldenburg.client.presenter.RegistrationPresenter;
 import uni.oldenburg.client.service.RegistrationAndLoginService;
+import uni.oldenburg.client.service.RegistrationAndLoginServiceAsync;
 import uni.oldenburg.client.service.ServiceAsync;
 import uni.oldenburg.client.service.SimulationService;
+import uni.oldenburg.client.service.SimulationServiceAsync;
 import uni.oldenburg.client.view.LoginView;
 import uni.oldenburg.client.view.MainFrameView;
 import uni.oldenburg.client.view.RegistrationView;
@@ -78,15 +80,15 @@ public class AppController extends Presenter implements ValueChangeHandler<Strin
         Presenter presenter = null;
 
         if (token.equals("Login")) {
-            ServiceAsync identityService = GWT.create(RegistrationAndLoginService.class);
+        	RegistrationAndLoginServiceAsync identityService = GWT.create(RegistrationAndLoginService.class);
             presenter = new LoginPresenter(identityService, eventBus, new LoginView());
         }
         else if (token.equals("Register")) {
-        	ServiceAsync identityService = GWT.create(RegistrationAndLoginService.class);
+        	RegistrationAndLoginServiceAsync identityService = GWT.create(RegistrationAndLoginService.class);
             presenter = new RegistrationPresenter(identityService, eventBus, new RegistrationView());
         }
         else if (token.equals("Main")) {
-        	ServiceAsync identityService = GWT.create(SimulationService.class);
+        	SimulationServiceAsync identityService = GWT.create(SimulationService.class);
             presenter = new MainFramePresenter(identityService, eventBus, new MainFrameView());
         }
 

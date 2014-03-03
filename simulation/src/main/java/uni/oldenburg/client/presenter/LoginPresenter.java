@@ -13,7 +13,6 @@ import com.google.gwt.user.client.ui.Widget;
 import uni.oldenburg.client.event.CallRegisterEvent;
 import uni.oldenburg.client.event.LoginCompletedEvent;
 import uni.oldenburg.client.service.RegistrationAndLoginServiceAsync;
-import uni.oldenburg.client.service.ServiceAsync;
 
 public class LoginPresenter extends Presenter {
     private final IDisplay display;
@@ -25,7 +24,7 @@ public class LoginPresenter extends Presenter {
         HasClickHandlers getRegisterButton();
     }
 
-    public LoginPresenter(ServiceAsync rpcService, HandlerManager eventBus, IDisplay view) {
+    public LoginPresenter(RegistrationAndLoginServiceAsync rpcService, HandlerManager eventBus, IDisplay view) {
         super(rpcService, eventBus);
         this.display = view;
     }

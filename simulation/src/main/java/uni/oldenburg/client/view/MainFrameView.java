@@ -28,6 +28,9 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	
 	private Canvas         canvas;
 	
+	private final int canvasWidth  = 800;
+	private final int canvasHeight = 480;
+	
 	public MainFrameView() {
 
 		VerticalPanel   vpMainFrame = new VerticalPanel();
@@ -201,7 +204,12 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		
 		hpSubFrame.add(vpLeftFrame);
 		
+		// create canvas object
 		canvas = Canvas.createIfSupported();
+		canvas.setWidth(canvasWidth + "px");
+		canvas.setHeight(canvasHeight + "px");
+		canvas.setCoordinateSpaceWidth(canvasWidth);
+		canvas.setCoordinateSpaceHeight(canvasHeight);
 		hpSubFrame.add(canvas);
 		
 		vpMainFrame.add(menuBar);
@@ -220,4 +228,8 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
     public CellTable<Job> getJobTable() {
         return ctJobTable;
     }
+
+	public Canvas getCanvas() {
+		return canvas;
+	}
 }
