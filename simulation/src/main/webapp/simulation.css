@@ -1,5 +1,18 @@
 /** Add css rules here for your application. */
+.left_panel {
+	width: 200px;
+}
 
+.conveyor_panel, .conveyor_ramp, .conveyor_vehicle {
+	width: 100%;
+}
+
+.conveyor_label {
+	margin-top: 10px;
+	width: 100%;
+	font-size: 12pt;
+	text-align: center;
+}
 
 /** Example rules used by the template application (remove for your app) */
 h1 {

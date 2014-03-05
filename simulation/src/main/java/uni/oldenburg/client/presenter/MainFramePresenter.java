@@ -35,6 +35,8 @@ public class MainFramePresenter extends Presenter {
         CellTable<Job>   	getJobTable();
         HasClickHandlers 	getStrategiesButton();
         HasClickHandlers	getVirtualHybridButton();
+        HasClickHandlers	getConveyorRampButton();
+        HasClickHandlers	getConveyorVehicleButton();
         Canvas				getCanvas();
     }
 	
@@ -63,6 +65,22 @@ public class MainFramePresenter extends Presenter {
         });
     }
     
+    private void addConveyorRampButtonListener() {
+        display.getConveyorRampButton().addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+                //TODO
+            }
+        });
+    }
+    
+    private void addConveyorVehicleButtonListener() {
+        display.getConveyorVehicleButton().addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+                //TODO
+            }
+        });
+    }
+    
     private void setupJobTable() {
 	    TextColumn<Job> jobNumberColumn = new TextColumn<Job>() {
 	    	@Override
@@ -70,13 +88,15 @@ public class MainFramePresenter extends Presenter {
 	    		return "" + object.getJobNumber();
 	        }
 	    };
-	    display.getJobTable().addColumn(jobNumberColumn, "Job Number");	    
+	    
 	    TextColumn<Job> jobColumn = new TextColumn<Job>() {
 	    	@Override
 	        public String getValue(Job object) {
 	    		return object.getJob();
 	        }
 	    };
+	    
+	    display.getJobTable().addColumn(jobNumberColumn, "Job Number");	    
 	    display.getJobTable().addColumn(jobColumn, "Job");
 
 	    AsyncDataProvider<Job> provider = new AsyncDataProvider<Job>() {
@@ -111,6 +131,8 @@ public class MainFramePresenter extends Presenter {
     public void bind() {
         this.addStrategiesButtonListener();
         this.addVirtualHybridButtonListener();
+        this.addConveyorRampButtonListener();
+        this.addConveyorVehicleButtonListener();
         this.setupJobTable();
         this.generateConveyor();
     }

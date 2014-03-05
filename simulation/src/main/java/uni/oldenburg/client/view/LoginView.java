@@ -27,15 +27,13 @@ public class LoginView extends Composite implements LoginPresenter.IDisplay {
     }
 
     private Button createButtonRegister() {
-        btnRegister = new Button("Registrieren");
-        btnRegister.setText("Registrieren");
+        btnRegister = new Button("Register");
         btnRegister.setSize("100px", "30px");
         return btnRegister;
     }
 
     private Button createLoginButton() {
         btnLogin = new Button("Login");
-        btnLogin.setText("Login");
         btnLogin.setSize("100px", "30px");
         return btnLogin;
     }

@@ -10,6 +10,7 @@ import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ToggleButton;
@@ -17,16 +18,21 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class MainFrameView extends Composite implements MainFramePresenter.IDisplay {
 	
-	private MenuBar        menuBar;	
-	private MenuBar        fileMenuBar;
-	private MenuBar        editMenuBar;
-	private MenuBar        viewMenuBar;
+	private MenuBar			menuBar;	
+	private MenuBar			fileMenuBar;
+	private MenuBar			editMenuBar;
+	private MenuBar			viewMenuBar;
 	
-	private CellTable<Job> ctJobTable = new CellTable<Job>();
-	private Button         btnStrategies;
-	private ToggleButton   tbVirtualHybridSwitch;
+	private CellTable<Job>	ctJobTable = new CellTable<Job>();
+	private Button         	btnStrategies;
+	private ToggleButton	tbVirtualHybridSwitch;
+	// conveyor menu
+	private Label			lblConveyor;
+	private Button			btnConveyorRamp;
+	private Button			btnConveyorVehicle;
+	// -------------
 	
-	private Canvas         canvas;
+	private Canvas			canvas;
 	
 	private final int canvasWidth  = 800;
 	private final int canvasHeight = 480;
@@ -36,6 +42,7 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		VerticalPanel   vpMainFrame = new VerticalPanel();
 		HorizontalPanel hpSubFrame = new HorizontalPanel();
 		VerticalPanel   vpLeftFrame = new VerticalPanel();
+		vpLeftFrame.addStyleName("left_panel");
 			
 		//--- menu bar ---
 		
@@ -202,6 +209,24 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		btnStrategies.setText("Strategies");
 		vpLeftFrame.add(btnStrategies);
 		
+		// conveyor list
+		VerticalPanel vpConveyor = new VerticalPanel();
+		vpConveyor.addStyleName("conveyor_panel");
+		
+		lblConveyor = new Label("Stetigfoerderer");
+		lblConveyor.addStyleName("conveyor_label");
+		btnConveyorRamp = new Button("Rampe");
+		btnConveyorRamp.addStyleName("conveyor_ramp");
+		btnConveyorVehicle = new Button("Fahrzeug");
+		btnConveyorVehicle.addStyleName("conveyor_vehicle");
+		
+		vpConveyor.add(lblConveyor);
+		vpConveyor.add(btnConveyorRamp);
+		vpConveyor.add(btnConveyorVehicle);
+		
+		vpLeftFrame.add(vpConveyor);
+		// -------------
+		
 		hpSubFrame.add(vpLeftFrame);
 		
 		// create canvas object
@@ -231,5 +256,13 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 
 	public Canvas getCanvas() {
 		return canvas;
+	}
+
+	public HasClickHandlers getConveyorRampButton() {
+		return btnConveyorRamp;
+	}
+
+	public HasClickHandlers getConveyorVehicleButton() {
+		return btnConveyorVehicle;
 	}
 }
