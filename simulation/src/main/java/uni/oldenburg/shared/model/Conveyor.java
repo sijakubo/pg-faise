@@ -7,6 +7,8 @@ import com.google.gwt.dom.client.CanvasElement;
 
 @SuppressWarnings("serial")
 public abstract class Conveyor implements Serializable {
+	public static final String TABLE_NAME = "szenario_conveyor";
+	
 	private int ID;
 	
 	private int x;
@@ -23,7 +25,7 @@ public abstract class Conveyor implements Serializable {
 	protected abstract Canvas createCanvas(Canvas canvas);
 	
 	protected Conveyor(int x, int y, int width, int height) {
-		ID = ID_Counter++;
+		ID = ++ID_Counter;
 		strType = getType();
 
 		setPosition(x, y);

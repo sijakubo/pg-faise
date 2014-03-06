@@ -6,6 +6,7 @@ import com.google.gwt.canvas.dom.client.CssColor;
 
 @SuppressWarnings("serial")
 public class ConveyorRamp extends Conveyor {
+	public static final String TYPE = "Rampe";
 
 	public ConveyorRamp() {
 		super(0, 0, 20, 20);
@@ -28,6 +29,6 @@ public class ConveyorRamp extends Conveyor {
 
 	@Override
 	public String getType() {
-		return "Rampe";
+		return ConveyorRamp.TYPE;
 	}
 }

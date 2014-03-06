@@ -8,6 +8,7 @@ import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.ConveyorVehicle;
 import uni.oldenburg.shared.model.Job;
+import uni.oldenburg.shared.model.Szenario;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
@@ -18,6 +19,8 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Random;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
@@ -118,14 +121,36 @@ public class MainFramePresenter extends Presenter {
     	context.drawImage(myConveyer.getCanvasElement(), myConveyer.getX(), myConveyer.getY());
     }
     
-    private void generateConveyor() {
+    @SuppressWarnings("unused")
+	private void generateConveyor() {
     	for (int i = 0; i < 5; ++i) {
-        	drawConveyor(new ConveyorVehicle(Random.nextInt(780), Random.nextInt(460)));	
+        	drawConveyor(new ConveyorRamp(Random.nextInt(780), Random.nextInt(460)));	
     	}
     	
     	for (int i = 0; i < 5; ++i) {
-        	drawConveyor(new ConveyorRamp(Random.nextInt(780), Random.nextInt(460)));
+        	drawConveyor(new ConveyorVehicle(Random.nextInt(780), Random.nextInt(460)));
     	}
+    }
+    
+    public void loadSzenario(String name) {
+    	((SimulationServiceAsync)rpcService).loadSzenario(name, new AsyncCallback<Szenario>() {
+			public void onFailure(Throwable arg0) {
+				Window.alert(arg0.getLocalizedMessage());			
+			}
+
+			public void onSuccess(Szenario szenario) {				
+				List<Conveyor> lstConveyor = szenario.getConveyorList();
+				
+				if (lstConveyor.size() == 0) {
+					Window.alert("Keine Stetigförderer im Szenario gefunden!");
+					return;
+				}
+				
+				for (Conveyor myConveyor: lstConveyor) {
+					drawConveyor(myConveyor);
+				}
+			}
+    	});
     }
 
     public void bind() {
@@ -134,6 +159,7 @@ public class MainFramePresenter extends Presenter {
         this.addConveyorRampButtonListener();
         this.addConveyorVehicleButtonListener();
         this.setupJobTable();
-        this.generateConveyor();
+        //this.generateConveyor();
+        loadSzenario("TestSzenario");
     }
 }

@@ -6,7 +6,8 @@ import com.google.gwt.canvas.dom.client.CssColor;
 
 @SuppressWarnings("serial")
 public class ConveyorVehicle extends Conveyor {
-
+	public static final String TYPE = "Fahrzeug";
+	
 	public ConveyorVehicle() {
 		super(0, 0, 20, 20);
 	}
@@ -28,7 +29,7 @@ public class ConveyorVehicle extends Conveyor {
 
 	@Override
 	public String getType() {
-		return "Fahrzeug";
+		return ConveyorVehicle.TYPE;
 	}
 
 }
