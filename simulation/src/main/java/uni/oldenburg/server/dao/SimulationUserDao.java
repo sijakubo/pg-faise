@@ -19,11 +19,16 @@ public class SimulationUserDao {
             throw new IllegalStateException("Unable to find User for UserId: " + userId);
         }
 
-        return new SimulationUser(
+        SimulationUser simulationUser = new SimulationUser(
                 resultSet.getLong("id"),
                 resultSet.getString("name"),
                 resultSet.getString("email"),
                 resultSet.getString("password"));
+
+        resultSet.close();
+        preparedStatement.close();
+
+        return simulationUser;
     }
 
     public void persistSimulationUser(SimulationUser newUser) throws SQLException {
