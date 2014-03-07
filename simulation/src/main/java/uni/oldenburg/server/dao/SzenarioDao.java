@@ -11,10 +11,11 @@ import java.util.List;
 
 public class SzenarioDao {
     public Szenario loadSzenario(String name) throws SQLException {
-        PreparedStatement preparedStatement = ConnectionPool.getConnection()
-                .prepareStatement("SELECT szenario.id AS id, time_created, simulationuser.name AS user_name " +
-                        "FROM " + Szenario.TABLE_NAME + ", " + SimulationUser.TABLE_NAME + " " +
-                        "WHERE szenario.user_id = simulationuser.id AND szenario.title = ?");
+    	String strSQL = "SELECT szenario.id AS id, time_created, simulationuser.name AS user_name " +
+                		"FROM " + Szenario.TABLE_NAME + ", " + SimulationUser.TABLE_NAME + " " +
+                		"WHERE szenario.user_id = simulationuser.id AND szenario.title = ?";
+    	
+        PreparedStatement preparedStatement = ConnectionPool.getConnection().prepareStatement(strSQL);
 
         preparedStatement.setString(1, name);
         ResultSet resultSet = preparedStatement.executeQuery();
@@ -23,8 +24,10 @@ public class SzenarioDao {
             throw new IllegalStateException("Szenario could not be found: " + name);
         }
 
-        Szenario newSzenario =
-                new Szenario(resultSet.getInt("id"), name, resultSet.getString("time_created"), resultSet.getString("user_name"));
+        Szenario newSzenario = new Szenario(resultSet.getInt("id"),
+        									name, 
+        									resultSet.getString("time_created"), 
+        									resultSet.getString("user_name"));
 
         List<Conveyor> lstConveyor = loadConveyor(newSzenario.getID());
 
@@ -52,15 +55,15 @@ public class SzenarioDao {
 
         while (resultSet.next()) {
             Conveyor newConveyor = null;
+            
             String type = resultSet.getString("type");
             int posX = resultSet.getInt("pos_x");
             int posY = resultSet.getInt("pos_y");
 
-            newConveyor = new ConveyorVehicle(0, 0);
-
-            if (type == ConveyorRamp.TYPE) {
+            if (type.compareTo(ConveyorRamp.TYPE) == 0) {
                 newConveyor = new ConveyorRamp(posX, posY);
-            } else if (type == ConveyorVehicle.TYPE) {
+            }
+            else if (type.compareTo(ConveyorVehicle.TYPE) == 0) {
                 newConveyor = new ConveyorVehicle(posX, posY);
             }
 
