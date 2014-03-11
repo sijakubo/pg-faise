@@ -15,6 +15,6 @@
 
 #include "contiki-conf.h"
 
-void usart0_print(uint8_t *buf, uint8_t size);
+void uart0_send(uint8_t *buf, uint8_t size);
 
 #endif /* UART_DRV_H_ */

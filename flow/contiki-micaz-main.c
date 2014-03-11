@@ -50,6 +50,9 @@
 #include "dev/rs232.h"
 #include "dev/watchdog.h"
 #include "dev/slip.h"
+
+#include "dev/serial-line.h"
+
 #include "interface/bolt_int.h"
 
 #include "init-net.h"
@@ -68,7 +71,7 @@ init_usart(void)
  // slip_arch_init(USART_BAUD_115200);
     rs232_redirect_stdout(RS232_PORT_0);
 #else
-  rs232_redirect_stdout(RS232_PORT_0);
+    rs232_redirect_stdout(RS232_PORT_0);
 #endif /* WITH_UIP */
 
 }
@@ -82,8 +85,9 @@ main(void)
   leds_on(LEDS_RED);
 
   /* Initialize USART */
-  init_usart();
   
+  init_usart();
+
   /* Clock */
   clock_init();
 
@@ -109,13 +113,17 @@ main(void)
   init_net();
   
   printf_P(PSTR(CONTIKI_VERSION_STRING " started. Node id %u\n"), node_id);
-
+ 
   leds_off(LEDS_ALL);
   
   bolt_init();
 
   /* Autostart processes */
   autostart_start(autostart_processes);
+  
+  serial_line_init();
+  
+  rs232_set_input(RS232_PORT_0, serial_line_input_byte) ;
 
   /* Main scheduler loop */
   do {

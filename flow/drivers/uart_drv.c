@@ -6,7 +6,7 @@
  */ 
 #include "drivers/uart_drv.h"
 
-void usart0_send(uint8_t *buf, uint8_t size)
+void uart0_send(uint8_t *buf, uint8_t size)
 {
 	while(size > 0) {
 		putchar(*buf++);

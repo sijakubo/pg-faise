@@ -77,56 +77,63 @@
 #include "lib/random.h"
 #include "dev/leds.h"
 #include "interface/bolt_int.h"
+#include "service/uart_service.h"
+#include "dev/serial-line.h"
+/*---------------------------------------------------------------------------*/
+PROCESS(uart_recv, "UART Reception");
+PROCESS(uarttest, "UART Test");
+AUTOSTART_PROCESSES(&uarttest, &uart_recv);
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 
-
-#include <stdio.h>
-#include "../../Atmel/Atmel Toolchain/AVR8 GCC/Native/3.4.2.1002/avr8-gnu-toolchain/avr/include/avr/iom128.h"
-/*---------------------------------------------------------------------------*/
-PROCESS(bolttest, "IO Test für Bolzen");
-PROCESS(petest, "IO Test für Lichtschranken");
-AUTOSTART_PROCESSES(&petest, &bolttest);
-/*---------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------*/
-PROCESS_THREAD(bolttest, ev, data)
+PROCESS_THREAD(uart_recv, ev, data)
 {
-	static struct etimer et;
-
 	PROCESS_BEGIN();
-
-	while(1) {
-		etimer_set(&et, CLOCK_SECOND / 100);
-		PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
-		bolt_release_and_separate_packet();
+	while(1){
+		PROCESS_WAIT_EVENT_UNTIL(ev == serial_line_event_message);
+		int i = 0;
+		if(*(uint8_t*)data == UART_LED_GREEN_COMMAND){
+			data++;
+			if(*(uint8_t*)data == 0x01)
+				leds_on(LEDS_GREEN);
+			if(*(uint8_t*)data == 0x00)
+				leds_off(LEDS_GREEN);
+		} else if(*(uint8_t*)data == UART_LED_RED_COMMAND){
+			data++;
+			if(*(uint8_t*)data == 0x01)
+				leds_on(LEDS_RED);
+			if(*(uint8_t*)data == 0x00)
+				leds_off(LEDS_RED);
+		}
+				
 	}
-
 	PROCESS_END();
 }
 
-PROCESS_THREAD(petest, ev, data)
+PROCESS_THREAD(uarttest, ev, data)
 {
 	static struct etimer et;
-
+	static uint8_t i = 0;
+	uint8_t pArg = 0;
 	PROCESS_BEGIN();
 	
-	PORTC |= 0xF0;
-	DDRC &= 0x0F & DDRC;
-	
-	leds_off(LEDS_GREEN | LEDS_RED);
+	leds_off(LEDS_ALL);
 
 	while(1) {
-		etimer_set(&et, CLOCK_SECOND / 100);
+		etimer_set(&et, CLOCK_SECOND * 2);
 		PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
-		
-		if(PINC & (1<<PC7)){
-			leds_on(LEDS_GREEN);
+		if(i == 1){
+			pArg = 0x01;
+			uart0_send_command(UART_LED_GREEN_COMMAND, &pArg);
+			pArg = 0x00;
+			uart0_send_command(UART_LED_RED_COMMAND, &pArg);
+			i = 0;
 		} else {
-			leds_off(LEDS_GREEN);
-		}
-		
-		if(PINC & (1<<PC5)){
-			leds_on(LEDS_RED);
-		} else {
-			leds_off(LEDS_RED);
+			pArg = 0x01;
+			uart0_send_command(UART_LED_RED_COMMAND, &pArg);
+			pArg = 0x00;
+			uart0_send_command(UART_LED_GREEN_COMMAND, &pArg);
+			i = 1;
 		}
 	}
 
