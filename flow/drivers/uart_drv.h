@@ -9,12 +9,23 @@
 #ifndef UART_DRV_H_
 #define UART_DRV_H_
 
-#define IS_INDEXABLE(arg) (sizeof(arg[0]))
-#define IS_ARRAY(arg) (IS_INDEXABLE(arg) && (((void *) &arg) == ((void *) arg)))
-#define ARRAYSIZE(arr) (IS_ARRAY(arr) ? (sizeof(arr) / sizeof(arr[0])) : 0)
+#ifndef BUFSIZE
+#define BUFSIZE 16
+#endif
 
+#define UART0_LINE_END 0x0a
+
+#include "contiki.h"
 #include "contiki-conf.h"
 
 void uart0_send(uint8_t *buf, uint8_t size);
+
+extern process_event_t serial_line_event_message;
+
+int uart0_line_input_byte(unsigned char c);
+
+void uart0_line_init(void);
+
+PROCESS_NAME(uart0_recv_process);
 
 #endif /* UART_DRV_H_ */

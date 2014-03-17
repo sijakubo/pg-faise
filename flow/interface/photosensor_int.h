@@ -11,8 +11,8 @@
 
 
 void photosensor_init(void);
-int is_bay_occupied(int i);
-int num_packages(void);
+uint8_t photosensor_is_bay_occupied(uint8_t i);
+uint8_t photosensor_num_packages(void);
 
 
 #endif /* PHOTOSENSOR_INT_H_ */

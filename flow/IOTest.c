@@ -78,51 +78,59 @@
 #include "lib/random.h"
 #include "dev/leds.h"
 #include "interface/bolt_int.h"
+#include "interface/photosensor_int.h"
 #include "service/uart_service.h"
-#include "dev/serial-line.h"
+
 /*---------------------------------------------------------------------------*/
-PROCESS(uart_recv, "UART Reception");
-PROCESS(uarttest, "UART Test");
-AUTOSTART_PROCESSES(&uarttest, &uart_recv);
+PROCESS(ramptest, "Test for Ramps");
+AUTOSTART_PROCESSES(&ramptest);
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 
-PROCESS_THREAD(uart_recv, ev, data)
+struct broadcast_conn broadcast;
+
+static void broadcast_recv(struct broadcast_conn *c, const rimeaddr_t *from)
 {
-	PROCESS_BEGIN();
-	while(1){
-		PROCESS_WAIT_EVENT_UNTIL(ev == serial_line_event_message);
-		if(*(uint8_t*)data == UART_LED_GREEN_COMMAND){
-			data++;
-			if(*(uint8_t*)data == 0x01)
-				leds_on(LEDS_GREEN);
-			if(*(uint8_t*)data == 0x00)
-				leds_off(LEDS_GREEN);
-		} else if(*(uint8_t*)data == UART_LED_RED_COMMAND){
-			data++;
-			if(*(uint8_t*)data == 0x01)
-				leds_on(LEDS_RED);
-			if(*(uint8_t*)data == 0x00)
-				leds_off(LEDS_RED);
-		}
-				
-	}
-	PROCESS_END();
+	uint8_t* msg = (uint8_t*)packetbuf_dataptr();
+	if(msg[0] == UART_RAMP_RELEASE_PACKAGE){
+		leds_toggle(LEDS_GREEN);
+		bolt_release();
+	} else if(msg[0] == UART_RAMP_SEPARATE_PACKAGE){
+		leds_toggle(LEDS_RED);
+		bolt_separate();
+	} else if(msg[0] == UART_RAMP_RELEASE_AND_SEPARATE_PACKAGE){
+		leds_toggle(LEDS_RED | LEDS_GREEN);
+		bolt_release_and_separate();
+	} else if(msg[0] == UART_RAMP_NUM_PACKAGES){
+		uint8_t newmsg[2];
+		newmsg[0] = UART_RAMP_RET_NUM_PACKAGES;
+		newmsg[1] = photosensor_num_packages();
+		packetbuf_copyfrom(newmsg, 2);
+		broadcast_send(&broadcast);
+	} else if(msg[0] == UART_RAMP_RET_NUM_PACKAGES){
+		printf("Number of packages: %u\n", msg[1]);
+	} 
 }
 
-PROCESS_THREAD(uarttest, ev, data)
+static const struct broadcast_callbacks broadcast_call = {broadcast_recv};
+
+PROCESS_THREAD(ramptest, ev, data)
 {
 	static struct etimer et;
 	PROCESS_BEGIN();
 	
 	leds_off(LEDS_ALL);
-
+	
+	broadcast_open(&broadcast, 129, &broadcast_call);
+	
 	while(1) {
+		leds_toggle(LEDS_YELLOW);
 		etimer_set(&et, CLOCK_SECOND);
 		PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
-		process_start(&bolt_int_release_and_separate, NULL);
 	}
 
 	PROCESS_END();
 }
+
+/*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/

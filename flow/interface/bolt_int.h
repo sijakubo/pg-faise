@@ -19,8 +19,11 @@
 #define BOLT_UPPER BOLT_2
 
 void bolt_init(void);
-void bolt_release_and_separate_packet(void);
+void bolt_release(void);
+void bolt_release_and_separate(void);
+void bolt_separate(void);
 
+PROCESS_NAME(bolt_int_release);
 PROCESS_NAME(bolt_int_release_and_separate);
 PROCESS_NAME(bolt_int_separate);
 

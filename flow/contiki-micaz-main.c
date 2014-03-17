@@ -51,9 +51,8 @@
 #include "dev/watchdog.h"
 #include "dev/slip.h"
 
-#include "dev/serial-line.h"
-
 #include "interface/bolt_int.h"
+#include "drivers/uart_drv.h"
 
 #include "init-net.h"
 #include "dev/ds2401.h"
@@ -121,9 +120,9 @@ main(void)
   /* Autostart processes */
   autostart_start(autostart_processes);
   
-  serial_line_init();
+  uart0_line_init();
   
-  rs232_set_input(RS232_PORT_0, serial_line_input_byte) ;
+  rs232_set_input(RS232_PORT_0, uart0_line_input_byte) ;
 
   /* Main scheduler loop */
   do {
