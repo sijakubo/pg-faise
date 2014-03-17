@@ -137,7 +137,8 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		editMenuBar.addItem("PlugIn", new Command() {
 			public void execute() {
 				
-			}
+			} 
+			//hey
 		});
 
 		//view menu
