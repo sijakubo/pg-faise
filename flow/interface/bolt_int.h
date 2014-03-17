@@ -9,7 +9,7 @@
 #ifndef BOLT_INT_H_
 #define BOLT_INT_H_
 
-
+#include "contiki.h"
 #include "sys/clock.h"
 
 #define BOLT_SLIDE_TIME CLOCK_SECOND*3
@@ -20,5 +20,8 @@
 
 void bolt_init(void);
 void bolt_release_and_separate_packet(void);
+
+PROCESS_NAME(bolt_int_release_and_separate);
+PROCESS_NAME(bolt_int_separate);
 
 #endif /* BOLT_INT_H_ */

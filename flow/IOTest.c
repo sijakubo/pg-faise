@@ -91,7 +91,6 @@ PROCESS_THREAD(uart_recv, ev, data)
 	PROCESS_BEGIN();
 	while(1){
 		PROCESS_WAIT_EVENT_UNTIL(ev == serial_line_event_message);
-		int i = 0;
 		if(*(uint8_t*)data == UART_LED_GREEN_COMMAND){
 			data++;
 			if(*(uint8_t*)data == 0x01)
@@ -113,28 +112,14 @@ PROCESS_THREAD(uart_recv, ev, data)
 PROCESS_THREAD(uarttest, ev, data)
 {
 	static struct etimer et;
-	static uint8_t i = 0;
-	uint8_t pArg = 0;
 	PROCESS_BEGIN();
 	
 	leds_off(LEDS_ALL);
 
 	while(1) {
-		etimer_set(&et, CLOCK_SECOND * 2);
+		etimer_set(&et, CLOCK_SECOND);
 		PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
-		if(i == 1){
-			pArg = 0x01;
-			uart0_send_command(UART_LED_GREEN_COMMAND, &pArg);
-			pArg = 0x00;
-			uart0_send_command(UART_LED_RED_COMMAND, &pArg);
-			i = 0;
-		} else {
-			pArg = 0x01;
-			uart0_send_command(UART_LED_RED_COMMAND, &pArg);
-			pArg = 0x00;
-			uart0_send_command(UART_LED_GREEN_COMMAND, &pArg);
-			i = 1;
-		}
+		process_start(&bolt_int_release_and_separate, NULL);
 	}
 
 	PROCESS_END();
