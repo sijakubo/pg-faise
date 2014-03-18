@@ -4,7 +4,6 @@
  * Created: 24.02.2014 10:25:15
  *  Author: JanGerd
  */ 
-#include "contiki.h"
 #include "sys/rtimer.h"
 #include "drivers/bolt_drv.h"
 #include "interface/bolt_int.h"

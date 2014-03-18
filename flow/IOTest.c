@@ -80,18 +80,18 @@
 #include "interface/bolt_int.h"
 #include "interface/photosensor_int.h"
 #include "service/uart_service.h"
+#include "contiki-conf.h"
 
 /*---------------------------------------------------------------------------*/
 PROCESS(ramptest, "Test for Ramps");
 AUTOSTART_PROCESSES(&ramptest);
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
-
 struct broadcast_conn broadcast;
-
 static void broadcast_recv(struct broadcast_conn *c, const rimeaddr_t *from)
 {
 	uint8_t* msg = (uint8_t*)packetbuf_dataptr();
+	printf("%u", CONTIKIMAC_CONF_BROADCAST_RATE_LIMIT);
 	if(msg[0] == UART_RAMP_RELEASE_PACKAGE){
 		leds_toggle(LEDS_GREEN);
 		bolt_release();
@@ -109,7 +109,7 @@ static void broadcast_recv(struct broadcast_conn *c, const rimeaddr_t *from)
 		broadcast_send(&broadcast);
 	} else if(msg[0] == UART_RAMP_RET_NUM_PACKAGES){
 		printf("Number of packages: %u\n", msg[1]);
-	} 
+	}
 }
 
 static const struct broadcast_callbacks broadcast_call = {broadcast_recv};
@@ -117,12 +117,15 @@ static const struct broadcast_callbacks broadcast_call = {broadcast_recv};
 PROCESS_THREAD(ramptest, ev, data)
 {
 	static struct etimer et;
+	
+	PROCESS_EXITHANDLER(broadcast_close(&broadcast);)
+	
 	PROCESS_BEGIN();
 	
 	leds_off(LEDS_ALL);
 	
 	broadcast_open(&broadcast, 129, &broadcast_call);
-	
+
 	while(1) {
 		leds_toggle(LEDS_YELLOW);
 		etimer_set(&et, CLOCK_SECOND);
