@@ -1,6 +1,7 @@
 package uni.oldenburg.server.service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import uni.oldenburg.client.service.SimulationService;
 import uni.oldenburg.server.dao.SzenarioDao;
@@ -23,4 +24,23 @@ public class SimulationServiceImpl extends RemoteServiceServlet implements Simul
 		
 		return newSzenario;
 	}
+
+	//Method gets the Name of the ScenarioTitles in order to present it within the Popup
+	public ArrayList<String> getScenarioTitles() {
+		SzenarioDao szenarioDao = new SzenarioDao();
+		ArrayList<String> scenarioTitles = null;
+		
+		try {
+			scenarioTitles = szenarioDao.getSzenarioTitles();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return scenarioTitles;
+	}
+	
+	
+	
+	
 }

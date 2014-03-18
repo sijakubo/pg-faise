@@ -23,6 +23,11 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	private MenuBar			editMenuBar;
 	private MenuBar			viewMenuBar;
 	
+	
+	
+	
+	
+	
 	private CellTable<Job>	ctJobTable = new CellTable<Job>();
 	private Button         	btnStrategies;
 	private ToggleButton	tbVirtualHybridSwitch;
@@ -37,6 +42,13 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	private final int canvasWidth  = 800;
 	private final int canvasHeight = 480;
 	
+	
+	
+	
+	
+	
+	
+	
 	public MainFrameView() {
 
 		VerticalPanel   vpMainFrame = new VerticalPanel();
@@ -50,6 +62,8 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		
 		fileMenuBar = new MenuBar(true);
 		fileMenuBar.setAnimationEnabled(true);
+		
+		/*
 		fileMenuBar.addItem("Load Scenario", new Command() {
 			public void execute() {
 				
@@ -87,11 +101,14 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 				
 			}
 		});
+		*/
 
 		//edit menu
 		
 		editMenuBar = new MenuBar(true);
 		editMenuBar.setAnimationEnabled(true);
+		
+		/*
 		editMenuBar.addItem("Undo", new Command() {
 			public void execute() {
 				
@@ -140,11 +157,14 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 			} 
 			//hey
 		});
+		*/
 
 		//view menu
 		
 		viewMenuBar = new MenuBar(true);
 		viewMenuBar.setAnimationEnabled(true);
+		
+		/*
 		viewMenuBar.addItem("Brightness", new Command() {
 			public void execute() {
 				
@@ -167,10 +187,14 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 				
 			}
 		});
+		*/
 		
 		//menu bar
 		
 		menuBar = new MenuBar();
+		
+		/*
+		
 		menuBar.addItem("File", fileMenuBar);
 		menuBar.addSeparator();
 		menuBar.addItem("Edit", editMenuBar);
@@ -182,7 +206,8 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 				
 			}
 		});
-		
+		*/
+	
 		//--- left panel ---
 
 		//table
@@ -265,5 +290,22 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 
 	public HasClickHandlers getConveyorVehicleButton() {
 		return btnConveyorVehicle;
+	}
+
+	public MenuBar getMenuBar() {
+		
+		return this.menuBar;
+	}
+
+	public MenuBar getFileMenuBar() {
+		return this.fileMenuBar;
+	}
+
+	public MenuBar getEditMenuBar() {
+		return this.editMenuBar;
+	}
+
+	public MenuBar getViewMenuBar() {
+		return this.viewMenuBar;
 	}
 }

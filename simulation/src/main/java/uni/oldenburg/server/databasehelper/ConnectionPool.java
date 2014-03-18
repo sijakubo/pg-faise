@@ -16,7 +16,7 @@ public final class ConnectionPool {
         try {
             if (connection == null || connection.isClosed()) {
                 Class.forName("org.postgresql.Driver");
-                connection = DriverManager.getConnection("jdbc:postgresql://134.106.62.111:5432/faisedb", "faiseuser", "sonne15");
+                connection = DriverManager.getConnection("jdbc:postgresql://134.106.13.165:5432/faisedb", "faiseuser", "sonne15");
             }
         } catch (ClassNotFoundException e) {
             Logger logger = Logger.getLogger(ConnectionPool.class);

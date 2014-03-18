@@ -10,70 +10,100 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SzenarioDao {
-    public Szenario loadSzenario(String name) throws SQLException {
-    	String strSQL = "SELECT szenario.id AS id, time_created, simulationuser.name AS user_name " +
-                		"FROM " + Szenario.TABLE_NAME + ", " + SimulationUser.TABLE_NAME + " " +
-                		"WHERE szenario.user_id = simulationuser.id AND szenario.title = ?";
-    	
-        PreparedStatement preparedStatement = ConnectionPool.getConnection().prepareStatement(strSQL);
 
-        preparedStatement.setString(1, name);
-        ResultSet resultSet = preparedStatement.executeQuery();
+	// Returns the names of the Szenarios so that they can be showed in the
+	// Popup for Scenario selection
+	public ArrayList<String> getSzenarioTitles() throws SQLException {
 
-        if (!resultSet.next()) {
-            throw new IllegalStateException("Szenario could not be found: " + name);
-        }
+		ArrayList<String> scenarioTitles = new ArrayList<String>();
 
-        Szenario newSzenario = new Szenario(resultSet.getInt("id"),
-        									name, 
-        									resultSet.getString("time_created"), 
-        									resultSet.getString("user_name"));
+		String strSQL = "SELECT title FROM " + Szenario.TABLE_NAME;
 
-        List<Conveyor> lstConveyor = loadConveyor(newSzenario.getID());
+		PreparedStatement preparedStatement = ConnectionPool.getConnection()
+				.prepareStatement(strSQL);
 
-        for (Conveyor newConveyor : lstConveyor) {
-            newSzenario.addConveyor(newConveyor);
-        }
+		ResultSet resultSet = preparedStatement.executeQuery();
 
-        resultSet.close();
-        preparedStatement.close();
+		while (resultSet.next()) {
 
-        return newSzenario;
-    }
+			String title = resultSet.getString("title");
+			
+			scenarioTitles.add(title);
 
-    private List<Conveyor> loadConveyor(int szenario_id) throws SQLException {
-        List<Conveyor> lstConveyor = new ArrayList<Conveyor>();
+		}
 
-        String strSQL = "SELECT type, pos_x, pos_y " +
-                "FROM " + Conveyor.TABLE_NAME + " " +
-                "WHERE szenario_id = ?";
+		return scenarioTitles;
 
-        PreparedStatement preparedStatement = ConnectionPool.getConnection().prepareStatement(strSQL);
+	}
 
-        preparedStatement.setInt(1, szenario_id);
-        ResultSet resultSet = preparedStatement.executeQuery();
+	public Szenario loadSzenario(String name) throws SQLException {
+		String strSQL = "SELECT szenario.id AS id, time_created, simulationuser.name AS user_name "
+				+ "FROM "
+				+ Szenario.TABLE_NAME
+				+ ", "
+				+ SimulationUser.TABLE_NAME
+				+ " "
+				+ "WHERE szenario.user_id = simulationuser.id AND szenario.title = ?";
 
-        while (resultSet.next()) {
-            Conveyor newConveyor = null;
-            
-            String type = resultSet.getString("type");
-            int posX = resultSet.getInt("pos_x");
-            int posY = resultSet.getInt("pos_y");
+		PreparedStatement preparedStatement = ConnectionPool.getConnection()
+				.prepareStatement(strSQL);
 
-            if (type.compareTo(ConveyorRamp.TYPE) == 0) {
-                newConveyor = new ConveyorRamp(posX, posY);
-            }
-            else if (type.compareTo(ConveyorVehicle.TYPE) == 0) {
-                newConveyor = new ConveyorVehicle(posX, posY);
-            }
+		preparedStatement.setString(1, name);
+		ResultSet resultSet = preparedStatement.executeQuery();
 
-            if (newConveyor != null)
-                lstConveyor.add(newConveyor);
-        }
+		if (!resultSet.next()) {
+			throw new IllegalStateException("Szenario could not be found: "
+					+ name);
+		}
 
-        resultSet.close();
-        preparedStatement.close();
+		Szenario newSzenario = new Szenario(resultSet.getInt("id"), name,
+				resultSet.getString("time_created"),
+				resultSet.getString("user_name"));
 
-        return lstConveyor;
-    }
+		List<Conveyor> lstConveyor = loadConveyor(newSzenario.getID());
+
+		for (Conveyor newConveyor : lstConveyor) {
+			newSzenario.addConveyor(newConveyor);
+		}
+
+		resultSet.close();
+		preparedStatement.close();
+
+		return newSzenario;
+	}
+
+	private List<Conveyor> loadConveyor(int szenario_id) throws SQLException {
+		List<Conveyor> lstConveyor = new ArrayList<Conveyor>();
+
+		String strSQL = "SELECT type, pos_x, pos_y " + "FROM "
+				+ Conveyor.TABLE_NAME + " " + "WHERE szenario_id = ?";
+
+		PreparedStatement preparedStatement = ConnectionPool.getConnection()
+				.prepareStatement(strSQL);
+
+		preparedStatement.setInt(1, szenario_id);
+		ResultSet resultSet = preparedStatement.executeQuery();
+
+		while (resultSet.next()) {
+			Conveyor newConveyor = null;
+
+			String type = resultSet.getString("type");
+			int posX = resultSet.getInt("pos_x");
+			int posY = resultSet.getInt("pos_y");
+
+			if (type.compareTo(ConveyorRamp.TYPE) == 0) {
+				newConveyor = new ConveyorRamp(posX, posY);
+			} else if (type.compareTo(ConveyorVehicle.TYPE) == 0) {
+				newConveyor = new ConveyorVehicle(posX, posY);
+			}
+
+			if (newConveyor != null)
+				lstConveyor.add(newConveyor);
+		}
+
+		resultSet.close();
+		preparedStatement.close();
+
+		return lstConveyor;
+	}
 }

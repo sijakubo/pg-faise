@@ -24,6 +24,7 @@ public class RegistrationAndLoginServiceImpl extends RemoteServiceServlet implem
         return persistSuccessful;
     }
 
+    
     public boolean loginUser(String username, String password) {
         SimulationUserDao simulationUserDao = new SimulationUserDao();
         boolean matchingUsernameAndPassword = false;
