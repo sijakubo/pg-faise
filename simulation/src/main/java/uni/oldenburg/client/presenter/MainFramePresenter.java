@@ -31,6 +31,7 @@ import com.google.gwt.view.client.HasData;
 
 public class MainFramePresenter extends Presenter {
 	private final IDisplay display;
+	private Szenario szenario;
 
 	private static final List<Job> JOBS = Arrays.asList(new Job(1, "XY"),
 			new Job(2, "zt"), new Job(3, "Patata"), new Job(4, "UO"));
@@ -61,6 +62,7 @@ public class MainFramePresenter extends Presenter {
 			HandlerManager eventBus, IDisplay view) {
 		super(rpcService, eventBus);
 		this.display = view;
+		this.szenario = null;
 	}
 
 	public Widget getDisplay() {
@@ -158,6 +160,7 @@ public class MainFramePresenter extends Presenter {
 					}
 
 					public void onSuccess(Szenario szenario) {
+						MainFramePresenter.this.szenario = szenario;
 						List<Conveyor> lstConveyor = szenario.getConveyorList();
 
 						if (lstConveyor.size() == 0) {
@@ -171,43 +174,26 @@ public class MainFramePresenter extends Presenter {
 					}
 				});
 	}
-	
-	
-	//Gets the Scenario Titles From Server and displays it in a Dialog
-	public void getScenarioTitlesFromServerAndShow(){
-		
-		
-		((SimulationServiceAsync) rpcService).getScenarioTitles(
-				new AsyncCallback<ArrayList<String>>() {
-					
-					
-					
+
+	// Gets the Scenario Titles From Server and displays it in a Dialog
+	public void getScenarioTitlesFromServerAndShow() {
+		((SimulationServiceAsync) rpcService)
+				.getScenarioTitles(new AsyncCallback<ArrayList<String>>() {
+
 					public void onFailure(Throwable arg0) {
 						Window.alert(arg0.getLocalizedMessage());
 					}
 
-					
-
 					public void onSuccess(ArrayList<String> result) {
-						
-						DialogBoxScenarioSelection dialog=new DialogBoxScenarioSelection(result,MainFramePresenter.this); 
+
+						DialogBoxScenarioSelection dialog = new DialogBoxScenarioSelection(
+								result, MainFramePresenter.this);
 						dialog.show();
-						
-						
+
 					}
 				});
-		
-		
-		
+
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 
 	public void bind() {
 		this.initializeMenuBars();
@@ -217,20 +203,21 @@ public class MainFramePresenter extends Presenter {
 		this.addConveyorVehicleButtonListener();
 		this.setupJobTable();
 		// this.generateConveyor();
-		loadSzenario("TestSzenario");
+		// loadSzenario("TestSzenario");
 	}
 
-	// Method initializes the Menubar. This is done here, because it is necessary to embed Client-Server Communication
-	// into the Execute-methods of the Menubaritems. It would be ugly to insert the RPC-Service into a View 
+	// Method initializes the Menubar. This is done here, because it is
+	// necessary to embed Client-Server Communication
+	// into the Execute-methods of the Menubaritems. It would be ugly to insert
+	// the RPC-Service into a View
 	private void initializeMenuBars() {
 		// --- menu bar ---
 
 		// file menu
 
-		
 		this.display.getFileMenuBar().addItem("Load Scenario", new Command() {
 			public void execute() {
-                   getScenarioTitlesFromServerAndShow();
+				getScenarioTitlesFromServerAndShow();
 			}
 		});
 		this.display.getFileMenuBar().addItem("Recently Used", new Command() {
@@ -268,7 +255,6 @@ public class MainFramePresenter extends Presenter {
 
 		// edit menu
 
-		
 		this.display.getEditMenuBar().addItem("Undo", new Command() {
 			public void execute() {
 
@@ -295,16 +281,18 @@ public class MainFramePresenter extends Presenter {
 
 			}
 		});
-		this.display.getEditMenuBar().addItem("Simulation Settings", new Command() {
-			public void execute() {
+		this.display.getEditMenuBar().addItem("Simulation Settings",
+				new Command() {
+					public void execute() {
 
-			}
-		});
-		this.display.getEditMenuBar().addItem("Start/Stop Simulation", new Command() {
-			public void execute() {
+					}
+				});
+		this.display.getEditMenuBar().addItem("Start/Stop Simulation",
+				new Command() {
+					public void execute() {
 
-			}
-		});
+					}
+				});
 		this.display.getEditMenuBar().addSeparator();
 		this.display.getEditMenuBar().addItem("Save As Image", new Command() {
 			public void execute() {
@@ -320,7 +308,6 @@ public class MainFramePresenter extends Presenter {
 
 		// view menu
 
-		
 		this.display.getViewMenuBar().addItem("Brightness", new Command() {
 			public void execute() {
 
@@ -346,12 +333,14 @@ public class MainFramePresenter extends Presenter {
 
 		// menu bar
 
-		
-		this.display.getMenuBar().addItem("File", this.display.getFileMenuBar());
+		this.display.getMenuBar()
+				.addItem("File", this.display.getFileMenuBar());
 		this.display.getMenuBar().addSeparator();
-		this.display.getMenuBar().addItem("Edit", this.display.getEditMenuBar());
+		this.display.getMenuBar()
+				.addItem("Edit", this.display.getEditMenuBar());
 		this.display.getMenuBar().addSeparator();
-		this.display.getMenuBar().addItem("View", this.display.getViewMenuBar());
+		this.display.getMenuBar()
+				.addItem("View", this.display.getViewMenuBar());
 		this.display.getMenuBar().addSeparator();
 		this.display.getMenuBar().addItem("Help", new Command() {
 			public void execute() {

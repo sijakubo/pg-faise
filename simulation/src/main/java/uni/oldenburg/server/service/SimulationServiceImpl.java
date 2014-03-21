@@ -41,6 +41,19 @@ public class SimulationServiceImpl extends RemoteServiceServlet implements Simul
 	}
 	
 	
+	//Saves the Szenario, which comes from the Client, into the Database
+	public void saveSzenario(Szenario szenario) {
+		SzenarioDao szenarioDao = new SzenarioDao();
+		
+		
+		try {
+			szenarioDao.persistSzenario(szenario);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
 	
 	
 }

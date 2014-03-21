@@ -35,6 +35,54 @@ public class SzenarioDao {
 		return scenarioTitles;
 
 	}
+	
+	//Persists a Szenario into the Database
+	public void persistSzenario(Szenario szenario) throws SQLException {
+
+		//Todo unterscheiden zw. Insert und Update
+
+        PreparedStatement prepStatement = ConnectionPool.getConnection()
+                .prepareStatement("INSERT INTO " + Szenario.TABLE_NAME + " (id, title, time_created, created_by_user) VALUES (?, ?, ?, ?)");
+
+        prepStatement.setInt(1, szenario.getID());
+        prepStatement.setString(2, szenario.getTitle());
+        prepStatement.setString(3, szenario.getTimeCreated());
+        prepStatement.setString(4, szenario.getCreatedByUser());
+        
+        prepStatement.executeUpdate();
+        
+        
+        
+        
+        prepStatement = ConnectionPool.getConnection()
+                .prepareStatement("INSERT INTO " + Conveyor.TABLE_NAME + " (szenario_id, type, pos_x, pos_y) VALUES (?, ?, ?, ?)");
+        
+        
+        //Persist the Conveyors
+        List<Conveyor> lstConveyor = szenario.getConveyorList();
+        
+        for (Conveyor myConveyor : lstConveyor) {
+        	
+        	prepStatement.setInt(1, myConveyor.getID());
+            prepStatement.setString(2, myConveyor.getType());
+            prepStatement.setInt(3, myConveyor.getX());
+            prepStatement.setInt(4, myConveyor.getY());
+            
+            prepStatement.executeUpdate();
+        	
+			
+		}
+        
+        
+    }
+	
+	
+	
+	
+	
+	
+	
+	
 
 	public Szenario loadSzenario(String name) throws SQLException {
 		String strSQL = "SELECT szenario.id AS id, time_created, simulationuser.name AS user_name "

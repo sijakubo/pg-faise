@@ -11,4 +11,5 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface SimulationService extends RemoteService {
 	Szenario loadSzenario(String name);
 	ArrayList<String> getScenarioTitles();
+	void saveSzenario(Szenario szenario);
 }
