@@ -33,8 +33,8 @@ public class MainFramePresenter extends Presenter {
 	private final IDisplay display;
 	private Szenario szenario;
 
-	private static final List<Job> JOBS = Arrays.asList(new Job(1, "XY"),
-			new Job(2, "zt"), new Job(3, "Patata"), new Job(4, "UO"));
+	private static final List<Job> JOBS = Arrays.asList(new Job(1, "XY", Job.OUTGOING, 42),
+			new Job(2, "zt", Job.OUTGOING, 73), new Job(3, "Patata", Job.INCOMING, 128), new Job(4, "UO", Job.OUTGOING, 1337));
 
 	public interface IDisplay {
 		CellTable<Job> getJobTable();
