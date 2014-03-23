@@ -31,35 +31,29 @@ import com.google.gwt.view.client.HasData;
 
 public class MainFramePresenter extends Presenter {
 	private final IDisplay display;
+	@SuppressWarnings("unused")
 	private Szenario szenario;
 
-	private static final List<Job> JOBS = Arrays.asList(new Job(1, "XY", Job.OUTGOING, 42),
-			new Job(2, "zt", Job.OUTGOING, 73), new Job(3, "Patata", Job.INCOMING, 128), new Job(4, "UO", Job.OUTGOING, 1337));
+	private static final List<Job> JOBS = Arrays.asList(
+			new Job(1, "XY", Job.OUTGOING, 42),
+			new Job(2, "zt", Job.OUTGOING, 73),
+			new Job(3, "Patata", Job.INCOMING, 128),
+			new Job(4, "UO", Job.OUTGOING, 1337)
+	);
 
 	public interface IDisplay {
 		CellTable<Job> getJobTable();
-
 		HasClickHandlers getStrategiesButton();
-
 		HasClickHandlers getVirtualHybridButton();
-
 		HasClickHandlers getConveyorRampButton();
-
 		HasClickHandlers getConveyorVehicleButton();
-
 		MenuBar getMenuBar();
-
-		MenuBar getFileMenuBar();
-
+		MenuBar getSimulationMenuBar();
 		MenuBar getEditMenuBar();
-
-		MenuBar getViewMenuBar();
-
 		Canvas getCanvas();
 	}
 
-	public MainFramePresenter(SimulationServiceAsync rpcService,
-			HandlerManager eventBus, IDisplay view) {
+	public MainFramePresenter(SimulationServiceAsync rpcService, HandlerManager eventBus, IDisplay view) {
 		super(rpcService, eventBus);
 		this.display = view;
 		this.szenario = null;
@@ -135,8 +129,7 @@ public class MainFramePresenter extends Presenter {
 
 	private void drawConveyor(Conveyor myConveyer) {
 		Context2d context = display.getCanvas().getContext2d();
-		context.drawImage(myConveyer.getCanvasElement(), myConveyer.getX(),
-				myConveyer.getY());
+		context.drawImage(myConveyer.getCanvasElement(), myConveyer.getX(), myConveyer.getY());
 	}
 
 	@SuppressWarnings("unused")
@@ -152,9 +145,7 @@ public class MainFramePresenter extends Presenter {
 		}
 	}
 
-	public void loadSzenario(String name) {
-		((SimulationServiceAsync) rpcService).loadSzenario(name,
-				new AsyncCallback<Szenario>() {
+	public void loadSzenario(String name) { ((SimulationServiceAsync) rpcService).loadSzenario(name, new AsyncCallback<Szenario>() {
 					public void onFailure(Throwable arg0) {
 						Window.alert(arg0.getLocalizedMessage());
 					}
@@ -177,19 +168,14 @@ public class MainFramePresenter extends Presenter {
 
 	// Gets the Scenario Titles From Server and displays it in a Dialog
 	public void getScenarioTitlesFromServerAndShow() {
-		((SimulationServiceAsync) rpcService)
-				.getScenarioTitles(new AsyncCallback<ArrayList<String>>() {
-
+		((SimulationServiceAsync) rpcService).getScenarioTitles(new AsyncCallback<ArrayList<String>>() {
 					public void onFailure(Throwable arg0) {
 						Window.alert(arg0.getLocalizedMessage());
 					}
 
 					public void onSuccess(ArrayList<String> result) {
-
-						DialogBoxScenarioSelection dialog = new DialogBoxScenarioSelection(
-								result, MainFramePresenter.this);
+						DialogBoxScenarioSelection dialog = new DialogBoxScenarioSelection(result, MainFramePresenter.this);
 						dialog.show();
-
 					}
 				});
 
@@ -202,8 +188,6 @@ public class MainFramePresenter extends Presenter {
 		this.addConveyorRampButtonListener();
 		this.addConveyorVehicleButtonListener();
 		this.setupJobTable();
-		// this.generateConveyor();
-		// loadSzenario("TestSzenario");
 	}
 
 	// Method initializes the Menubar. This is done here, because it is
@@ -215,117 +199,47 @@ public class MainFramePresenter extends Presenter {
 
 		// file menu
 
-		this.display.getFileMenuBar().addItem("Load Scenario", new Command() {
+		this.display.getSimulationMenuBar().addItem("Load Scenario", new Command() {
 			public void execute() {
 				getScenarioTitlesFromServerAndShow();
 			}
 		});
-		this.display.getFileMenuBar().addItem("Recently Used", new Command() {
+
+		this.display.getSimulationMenuBar().addItem("Save", new Command() {
 			public void execute() {
 
 			}
 		});
-		this.display.getFileMenuBar().addSeparator();
-		this.display.getFileMenuBar().addItem("Adjust Scenario", new Command() {
+		this.display.getSimulationMenuBar().addItem("Save As", new Command() {
 			public void execute() {
 
 			}
 		});
-		this.display.getFileMenuBar().addItem("Save", new Command() {
+		
+		this.display.getSimulationMenuBar().addSeparator();		
+		
+		this.display.getSimulationMenuBar().addItem("Simulation Settings", new Command() {
 			public void execute() {
 
 			}
 		});
-		this.display.getFileMenuBar().addItem("Save As", new Command() {
+		
+		this.display.getSimulationMenuBar().addSeparator();				
+		
+		this.display.getSimulationMenuBar().addItem("Start/Stop Simulation", new Command() {
 			public void execute() {
 
 			}
-		});
-		this.display.getFileMenuBar().addSeparator();
-		this.display.getFileMenuBar().addItem("Print", new Command() {
-			public void execute() {
-
-			}
-		});
-		this.display.getFileMenuBar().addItem("Exit", new Command() {
-			public void execute() {
-
-			}
-		});
+		});		
 
 		// edit menu
-
-		this.display.getEditMenuBar().addItem("Undo", new Command() {
-			public void execute() {
-
-			}
-		});
-		this.display.getEditMenuBar().addItem("Redo", new Command() {
-			public void execute() {
-
-			}
-		});
-		this.display.getEditMenuBar().addSeparator();
 		this.display.getEditMenuBar().addItem("Define Job Set", new Command() {
 			public void execute() {
 
 			}
 		});
+		
 		this.display.getEditMenuBar().addItem("Edit Jobs", new Command() {
-			public void execute() {
-
-			}
-		});
-		this.display.getEditMenuBar().addItem("Change Database", new Command() {
-			public void execute() {
-
-			}
-		});
-		this.display.getEditMenuBar().addItem("Simulation Settings",
-				new Command() {
-					public void execute() {
-
-					}
-				});
-		this.display.getEditMenuBar().addItem("Start/Stop Simulation",
-				new Command() {
-					public void execute() {
-
-					}
-				});
-		this.display.getEditMenuBar().addSeparator();
-		this.display.getEditMenuBar().addItem("Save As Image", new Command() {
-			public void execute() {
-
-			}
-		});
-		this.display.getEditMenuBar().addItem("PlugIn", new Command() {
-			public void execute() {
-
-			}
-			// hey
-		});
-
-		// view menu
-
-		this.display.getViewMenuBar().addItem("Brightness", new Command() {
-			public void execute() {
-
-			}
-		});
-		this.display.getViewMenuBar().addSeparator();
-		this.display.getViewMenuBar().addItem("Zoom In", new Command() {
-			public void execute() {
-
-			}
-		});
-		this.display.getViewMenuBar().addItem("Zoom Out", new Command() {
-			public void execute() {
-
-			}
-		});
-		this.display.getViewMenuBar().addSeparator();
-		this.display.getViewMenuBar().addItem("Fullscreen", new Command() {
 			public void execute() {
 
 			}
@@ -333,20 +247,9 @@ public class MainFramePresenter extends Presenter {
 
 		// menu bar
 
-		this.display.getMenuBar()
-				.addItem("File", this.display.getFileMenuBar());
+		this.display.getMenuBar().addItem("Simulation", this.display.getSimulationMenuBar());
 		this.display.getMenuBar().addSeparator();
-		this.display.getMenuBar()
-				.addItem("Edit", this.display.getEditMenuBar());
-		this.display.getMenuBar().addSeparator();
-		this.display.getMenuBar()
-				.addItem("View", this.display.getViewMenuBar());
-		this.display.getMenuBar().addSeparator();
-		this.display.getMenuBar().addItem("Help", new Command() {
-			public void execute() {
-
-			}
-		});
+		this.display.getMenuBar().addItem("Edit", this.display.getEditMenuBar());
 	}
 
 }
