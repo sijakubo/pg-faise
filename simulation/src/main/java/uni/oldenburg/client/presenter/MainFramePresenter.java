@@ -14,9 +14,18 @@ import uni.oldenburg.shared.model.Szenario;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.canvas.dom.client.CssColor;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.TextColumn;
@@ -31,8 +40,8 @@ import com.google.gwt.view.client.HasData;
 
 public class MainFramePresenter extends Presenter {
 	private final IDisplay display;
-	@SuppressWarnings("unused")
-	private Szenario szenario;
+	private Szenario currentSzenario;
+	Conveyor dropableConveyor;
 
 	private static final List<Job> JOBS = Arrays.asList(
 			new Job(1, "XY", Job.OUTGOING, 42),
@@ -56,11 +65,53 @@ public class MainFramePresenter extends Presenter {
 	public MainFramePresenter(SimulationServiceAsync rpcService, HandlerManager eventBus, IDisplay view) {
 		super(rpcService, eventBus);
 		this.display = view;
-		this.szenario = null;
+		this.currentSzenario = new Szenario();
+		this.dropableConveyor = null;
 	}
 
 	public Widget getDisplay() {
 		return (Widget) display;
+	}
+	
+	private void addCanvasListener() {
+		display.getCanvas().addMouseMoveHandler(new MouseMoveHandler() {
+			public void onMouseMove(MouseMoveEvent event) {				
+				Conveyor myConveyor = MainFramePresenter.this.dropableConveyor;
+				
+				if (myConveyor == null)
+					return;
+				
+				myConveyor.setPosition(event.getX(), event.getY());				
+				
+				loadSzenario(MainFramePresenter.this.currentSzenario);
+				drawConveyor(myConveyor);
+				
+				display.getCanvas().setFocus(true);				
+			}
+		});
+		
+		display.getCanvas().addMouseUpHandler(new MouseUpHandler() {
+			public void onMouseUp(MouseUpEvent event) {				
+				if (event.getNativeButton() == NativeEvent.BUTTON_LEFT) {
+					Conveyor myConveyor = MainFramePresenter.this.dropableConveyor;
+					
+					if (myConveyor != null) {
+						MainFramePresenter.this.currentSzenario.addConveyor(myConveyor);
+						MainFramePresenter.this.dropableConveyor = null;
+						loadSzenario(MainFramePresenter.this.currentSzenario);
+					}
+				}
+			}
+		});
+		
+		display.getCanvas().addKeyUpHandler(new KeyUpHandler() {
+			public void onKeyUp(KeyUpEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ESCAPE) {
+					MainFramePresenter.this.dropableConveyor = null;					
+					loadSzenario(MainFramePresenter.this.currentSzenario);
+				}
+			}
+		});
 	}
 
 	private void addStrategiesButtonListener() {
@@ -82,7 +133,7 @@ public class MainFramePresenter extends Presenter {
 	private void addConveyorRampButtonListener() {
 		display.getConveyorRampButton().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				// TODO
+				MainFramePresenter.this.dropableConveyor = new ConveyorRamp();
 			}
 		});
 	}
@@ -90,7 +141,7 @@ public class MainFramePresenter extends Presenter {
 	private void addConveyorVehicleButtonListener() {
 		display.getConveyorVehicleButton().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				// TODO
+				MainFramePresenter.this.dropableConveyor = new ConveyorVehicle();
 			}
 		});
 	}
@@ -127,9 +178,9 @@ public class MainFramePresenter extends Presenter {
 		provider.updateRowCount(JOBS.size(), true);
 	}
 
-	private void drawConveyor(Conveyor myConveyer) {
+	private void drawConveyor(Conveyor myConveyor) {
 		Context2d context = display.getCanvas().getContext2d();
-		context.drawImage(myConveyer.getCanvasElement(), myConveyer.getX(), myConveyer.getY());
+		context.drawImage(myConveyor.getCanvasElement(), myConveyor.getX(), myConveyor.getY());
 	}
 
 	@SuppressWarnings("unused")
@@ -144,41 +195,52 @@ public class MainFramePresenter extends Presenter {
 					Random.nextInt(460)));
 		}
 	}
+	
+	public void clearCanvas() {
+		Context2d context = display.getCanvas().getContext2d();
+		context.setFillStyle(CssColor.make(255, 255, 255));
+		context.fillRect(0,  0, display.getCanvas().getCoordinateSpaceWidth(), display.getCanvas().getCoordinateSpaceHeight());
+		context.fill();
+	}
+	
+	public void loadSzenario(Szenario szenario) {
+		clearCanvas();		
+		
+		if (szenario == null)
+			return;
+		
+		List<Conveyor> lstConveyor = szenario.getConveyorList();
+		
+		for (Conveyor myConveyor : lstConveyor) {
+			drawConveyor(myConveyor);
+		}
+	}
 
-	public void loadSzenario(String name) { ((SimulationServiceAsync) rpcService).loadSzenario(name, new AsyncCallback<Szenario>() {
-					public void onFailure(Throwable arg0) {
-						Window.alert(arg0.getLocalizedMessage());
-					}
+	public void loadSzenario(String name) {
+		((SimulationServiceAsync) rpcService).loadSzenario(name, new AsyncCallback<Szenario>() {
+			public void onFailure(Throwable arg0) {
+				Window.alert(arg0.getLocalizedMessage());
+			}
 
-					public void onSuccess(Szenario szenario) {
-						MainFramePresenter.this.szenario = szenario;
-						List<Conveyor> lstConveyor = szenario.getConveyorList();
-
-						if (lstConveyor.size() == 0) {
-							Window.alert("Keine Stetigförderer im Szenario gefunden!");
-							return;
-						}
-
-						for (Conveyor myConveyor : lstConveyor) {
-							drawConveyor(myConveyor);
-						}
-					}
-				});
+			public void onSuccess(Szenario szenario) {
+				MainFramePresenter.this.currentSzenario = szenario;
+				loadSzenario(szenario);
+			}
+		});
 	}
 
 	// Gets the Scenario Titles From Server and displays it in a Dialog
 	public void getScenarioTitlesFromServerAndShow() {
 		((SimulationServiceAsync) rpcService).getScenarioTitles(new AsyncCallback<ArrayList<String>>() {
-					public void onFailure(Throwable arg0) {
-						Window.alert(arg0.getLocalizedMessage());
-					}
+			public void onFailure(Throwable arg0) {
+				Window.alert(arg0.getLocalizedMessage());
+			}
 
-					public void onSuccess(ArrayList<String> result) {
-						DialogBoxScenarioSelection dialog = new DialogBoxScenarioSelection(result, MainFramePresenter.this);
-						dialog.show();
-					}
-				});
-
+			public void onSuccess(ArrayList<String> result) {
+				DialogBoxScenarioSelection dialog = new DialogBoxScenarioSelection(result, MainFramePresenter.this);
+				dialog.show();
+			}
+		});
 	}
 
 	public void bind() {
@@ -187,6 +249,7 @@ public class MainFramePresenter extends Presenter {
 		this.addVirtualHybridButtonListener();
 		this.addConveyorRampButtonListener();
 		this.addConveyorVehicleButtonListener();
+		this.addCanvasListener();
 		this.setupJobTable();
 	}
 
