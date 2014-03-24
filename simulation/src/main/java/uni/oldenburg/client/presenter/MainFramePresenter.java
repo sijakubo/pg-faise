@@ -19,6 +19,8 @@ import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.ContextMenuEvent;
+import com.google.gwt.event.dom.client.ContextMenuHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -76,6 +78,14 @@ public class MainFramePresenter extends Presenter {
 	}
 	
 	private void addCanvasListener() {
+		// standard-kontextmenu im canvas object nicht unterbinden
+		display.getCanvas().addDomHandler(new ContextMenuHandler() {
+			public void onContextMenu(ContextMenuEvent event) {
+				event.preventDefault();
+				event.stopPropagation();
+			}
+		}, ContextMenuEvent.getType());
+		
 		display.getCanvas().addMouseMoveHandler(new MouseMoveHandler() {
 			public void onMouseMove(MouseMoveEvent event) {				
 				Conveyor myConveyor = MainFramePresenter.this.dropableConveyor;
@@ -94,17 +104,37 @@ public class MainFramePresenter extends Presenter {
 		});
 		
 		display.getCanvas().addMouseUpHandler(new MouseUpHandler() {
-			public void onMouseUp(MouseUpEvent event) {				
-				if (event.getNativeButton() == NativeEvent.BUTTON_LEFT) {
-					Conveyor myConveyor = MainFramePresenter.this.dropableConveyor;
-					
+			public void onMouseUp(MouseUpEvent event) {
+				Conveyor myConveyor = MainFramePresenter.this.dropableConveyor;
+				
+				// conveyor drag & drop
+				if (event.getNativeButton() == NativeEvent.BUTTON_LEFT) {					
+					// conveyor hinzufügen
 					if (myConveyor != null) {
-						MainFramePresenter.this.currentSzenario.addConveyor(myConveyor);
-						MainFramePresenter.this.dropableConveyor = null;
-						loadSzenario(MainFramePresenter.this.currentSzenario);
+						// wenn platz noch frei ist
+						if (isSpotAvailable(event.getX(), event.getY())) {
+							MainFramePresenter.this.currentSzenario.addConveyor(myConveyor);
+							MainFramePresenter.this.dropableConveyor = null;
+							loadSzenario(MainFramePresenter.this.currentSzenario);	
+						}
 					}
 					else {
-						MainFramePresenter.this.dropableConveyor = grabConveyor(event.getX(), event.getY());
+						// conveyor verschieben
+						grabConveyor(event.getX(), event.getY());
+					}
+				}
+				else if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT) {
+					// rampe rotieren
+					if (myConveyor == null)
+						return;
+					
+					if (myConveyor.getType().compareTo("Rampe") == 0) {												
+						((ConveyorRamp)myConveyor).setVertical(!((ConveyorRamp)myConveyor).isVertical());
+						
+						loadSzenario(MainFramePresenter.this.currentSzenario);
+						drawConveyor(myConveyor);
+						
+						display.getCanvas().setFocus(true);
 					}
 				}
 			}
@@ -210,7 +240,11 @@ public class MainFramePresenter extends Presenter {
 		}
 	}
 	
-	public Conveyor grabConveyor(int x, int y) {
+	public boolean isSpotAvailable(int x, int y) {
+		return (findConveyor(x, y) == null);
+	}
+	
+	public Conveyor findConveyor(int x, int y) {
 		Conveyor myConveyor = null;
 		List<Conveyor> lstConveyor = this.currentSzenario.getConveyorList();
 		
@@ -224,10 +258,16 @@ public class MainFramePresenter extends Presenter {
 			break;
 		}
 		
+		return myConveyor;
+	}
+	
+	public void grabConveyor(int x, int y) {
+		Conveyor myConveyor = findConveyor(x, y);
+		
 		if (myConveyor != null)
 			this.currentSzenario.removeConveyor(myConveyor);
 		
-		return myConveyor;
+		this.dropableConveyor = myConveyor;
 	}
 	
 	public void clearCanvas() {

@@ -63,6 +63,16 @@ public abstract class Conveyor implements Serializable {
 	public int getHeight() {
 		return this.height;
 	}
+	
+	protected void setSize(int width, int height) {
+		if (this.width == width && this.height == height)
+			return;
+		
+		this.width = width;
+		this.height = height;
+		
+		this.canvas = null;
+	}
 
 	public void move(int x_rel, int y_rel) {
 		this.x += x_rel;
