@@ -14,7 +14,14 @@ public class Szenario implements Serializable {
 	private String created_by_user;
 	private List<Conveyor> lstConveyor;
 	
-	public Szenario () {};
+	public Szenario () {
+		this.id = -1;
+		this.title = "new Szenario";
+		this.time_created = "now";
+		this.created_by_user = "unknown user";
+		
+		lstConveyor = new ArrayList<Conveyor>();
+	};
 	
 	public Szenario (int id, String title, String time_created, String created_by_user) {
 		this.id = id;
@@ -31,6 +38,10 @@ public class Szenario implements Serializable {
 	
 	public void addConveyor(Conveyor newConveyor) {
 		lstConveyor.add(newConveyor);
+	}
+	
+	public void removeConveyor(Conveyor conveyor) {
+		lstConveyor.remove(conveyor);
 	}
 	
 	public String getTitle() {

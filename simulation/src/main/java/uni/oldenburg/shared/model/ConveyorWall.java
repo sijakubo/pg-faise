@@ -5,14 +5,14 @@ import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
 
 @SuppressWarnings("serial")
-public class ConveyorVehicle extends Conveyor {
-	public static final String TYPE = "Fahrzeug";
+public class ConveyorWall extends Conveyor {
+	public static final String TYPE = "Wand";
 	
-	public ConveyorVehicle() {
+	public ConveyorWall() {
 		super(0, 0, Conveyor.getRastersize(), Conveyor.getRastersize());
 	}
 	
-	public ConveyorVehicle(int x, int y) {
+	public ConveyorWall(int x, int y) {
 		super(x, y, Conveyor.getRastersize(), Conveyor.getRastersize());
 	}
 
@@ -20,7 +20,7 @@ public class ConveyorVehicle extends Conveyor {
 	protected Canvas createCanvas(Canvas canvas) {
 		Context2d context = canvas.getContext2d();
 		
-		context.setFillStyle(CssColor.make("blue"));
+		context.setFillStyle(CssColor.make("black"));
 		context.fillRect(0, 0, getWidth(), getHeight());
 		context.fill();
 		
@@ -29,7 +29,7 @@ public class ConveyorVehicle extends Conveyor {
 
 	@Override
 	public String getType() {
-		return ConveyorVehicle.TYPE;
+		return ConveyorWall.TYPE;
 	}
 
 }

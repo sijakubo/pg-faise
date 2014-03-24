@@ -7,6 +7,7 @@ import com.google.gwt.dom.client.CanvasElement;
 
 @SuppressWarnings("serial")
 public abstract class Conveyor implements Serializable {
+	private final static int rasterSize = 20;
 	public static final String TABLE_NAME = "szenario_conveyor";
 
 	private int ID;
@@ -62,6 +63,16 @@ public abstract class Conveyor implements Serializable {
 	public int getHeight() {
 		return this.height;
 	}
+	
+	protected void setSize(int width, int height) {
+		if (this.width == width && this.height == height)
+			return;
+		
+		this.width = width;
+		this.height = height;
+		
+		this.canvas = null;
+	}
 
 	public void move(int x_rel, int y_rel) {
 		this.x += x_rel;
@@ -83,5 +94,9 @@ public abstract class Conveyor implements Serializable {
 		}
 
 		return canvas.getCanvasElement();
+	}
+	
+	public static int getRastersize() {
+		return rasterSize;
 	}
 }
