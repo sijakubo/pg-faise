@@ -9,6 +9,7 @@ import uni.oldenburg.client.view.DialogBoxScenarioSelection;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.ConveyorVehicle;
+import uni.oldenburg.shared.model.ConveyorWall;
 import uni.oldenburg.shared.model.Job;
 import uni.oldenburg.shared.model.Szenario;
 
@@ -56,6 +57,7 @@ public class MainFramePresenter extends Presenter {
 		HasClickHandlers getVirtualHybridButton();
 		HasClickHandlers getConveyorRampButton();
 		HasClickHandlers getConveyorVehicleButton();
+		HasClickHandlers getConveyorWallButton();
 		MenuBar getMenuBar();
 		MenuBar getSimulationMenuBar();
 		MenuBar getEditMenuBar();
@@ -81,7 +83,8 @@ public class MainFramePresenter extends Presenter {
 				if (myConveyor == null)
 					return;
 				
-				myConveyor.setPosition(event.getX(), event.getY());				
+				myConveyor.setPosition(	event.getX() - (event.getX() % Conveyor.getRastersize()), 
+										event.getY() - (event.getY() % Conveyor.getRastersize()));				
 				
 				loadSzenario(MainFramePresenter.this.currentSzenario);
 				drawConveyor(myConveyor);
@@ -99,6 +102,9 @@ public class MainFramePresenter extends Presenter {
 						MainFramePresenter.this.currentSzenario.addConveyor(myConveyor);
 						MainFramePresenter.this.dropableConveyor = null;
 						loadSzenario(MainFramePresenter.this.currentSzenario);
+					}
+					else {
+						MainFramePresenter.this.dropableConveyor = grabConveyor(event.getX(), event.getY());
 					}
 				}
 			}
@@ -142,6 +148,14 @@ public class MainFramePresenter extends Presenter {
 		display.getConveyorVehicleButton().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				MainFramePresenter.this.dropableConveyor = new ConveyorVehicle();
+			}
+		});
+	}
+	
+	private void addConveyorWallButtonListener() {
+		display.getConveyorWallButton().addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				MainFramePresenter.this.dropableConveyor = new ConveyorWall();
 			}
 		});
 	}
@@ -194,6 +208,26 @@ public class MainFramePresenter extends Presenter {
 			drawConveyor(new ConveyorVehicle(Random.nextInt(780),
 					Random.nextInt(460)));
 		}
+	}
+	
+	public Conveyor grabConveyor(int x, int y) {
+		Conveyor myConveyor = null;
+		List<Conveyor> lstConveyor = this.currentSzenario.getConveyorList();
+		
+		for(Conveyor cvEntry : lstConveyor) {
+			if (x < cvEntry.getX()) continue;
+			if (y < cvEntry.getY()) continue;
+			if (x > (cvEntry.getX() + cvEntry.getWidth())) continue;
+			if (y > (cvEntry.getY() + cvEntry.getHeight())) continue;
+			
+			myConveyor = cvEntry;
+			break;
+		}
+		
+		if (myConveyor != null)
+			this.currentSzenario.removeConveyor(myConveyor);
+		
+		return myConveyor;
 	}
 	
 	public void clearCanvas() {
@@ -249,6 +283,7 @@ public class MainFramePresenter extends Presenter {
 		this.addVirtualHybridButtonListener();
 		this.addConveyorRampButtonListener();
 		this.addConveyorVehicleButtonListener();
+		this.addConveyorWallButtonListener();
 		this.addCanvasListener();
 		this.setupJobTable();
 	}

@@ -9,11 +9,11 @@ public class ConveyorRamp extends Conveyor {
 	public static final String TYPE = "Rampe";
 
 	public ConveyorRamp() {
-		super(0, 0, 20, 20);
+		super(0, 0, Conveyor.getRastersize(), Conveyor.getRastersize());
 	}
 	
 	public ConveyorRamp(int x, int y) {
-		super(x, y, 20, 20);
+		super(x, y, Conveyor.getRastersize(), Conveyor.getRastersize());
 	}
 
 	@Override

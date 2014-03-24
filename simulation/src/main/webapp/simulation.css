@@ -3,7 +3,7 @@
 	width: 200px;
 }
 
-.conveyor_panel, .conveyor_ramp, .conveyor_vehicle {
+.conveyor_panel, .conveyor_ramp, .conveyor_vehicle, .conveyor_wall {
 	width: 100%;
 }
 

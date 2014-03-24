@@ -27,6 +27,7 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	private Label			lblConveyor;
 	private Button			btnConveyorRamp;
 	private Button			btnConveyorVehicle;
+	private Button			btnConveyorWall;
 	// -------------
 	
 	private Canvas			canvas;
@@ -94,10 +95,13 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		btnConveyorRamp.addStyleName("conveyor_ramp");
 		btnConveyorVehicle = new Button("Fahrzeug");
 		btnConveyorVehicle.addStyleName("conveyor_vehicle");
+		btnConveyorWall = new Button("Wand");
+		btnConveyorWall.addStyleName("conveyor_wall");		
 		
 		vpConveyor.add(lblConveyor);
 		vpConveyor.add(btnConveyorRamp);
 		vpConveyor.add(btnConveyorVehicle);
+		vpConveyor.add(btnConveyorWall);
 		
 		vpLeftFrame.add(vpConveyor);
 		// -------------
@@ -151,5 +155,9 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 
 	public MenuBar getEditMenuBar() {
 		return this.editMenuBar;
+	}
+
+	public HasClickHandlers getConveyorWallButton() {
+		return this.btnConveyorWall;
 	}
 }

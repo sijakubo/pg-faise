@@ -40,6 +40,10 @@ public class Szenario implements Serializable {
 		lstConveyor.add(newConveyor);
 	}
 	
+	public void removeConveyor(Conveyor conveyor) {
+		lstConveyor.remove(conveyor);
+	}
+	
 	public String getTitle() {
 		return title;
 	}
