@@ -43,15 +43,28 @@ public class SimulationUserDao {
         prepStatement.executeUpdate();
     }
 
-    public boolean isCredentialsCorrect(String username, String password) throws SQLException {
+    public SimulationUser findUserForUsernameAndPassword(String email, String password) throws SQLException {
         PreparedStatement prepStatement = ConnectionPool.getConnection()
-                .prepareStatement("SELECT name FROM " + SimulationUser.TABLE_NAME + " WHERE email = ? and password = ?");
+                .prepareStatement("SELECT id, email, name, password"
+                        + " FROM " + SimulationUser.TABLE_NAME
+                        + " WHERE email = ? and password = ?");
 
-        prepStatement.setString(1, username);
+        prepStatement.setString(1, email);
         prepStatement.setString(2, password);
-        prepStatement.execute();
-        ResultSet resultSet = prepStatement.getResultSet();
-        return resultSet.next();
-    }
+        ResultSet resultSet = prepStatement.executeQuery();
 
+        SimulationUser user = new SimulationUser();
+        if (resultSet.next()) {
+            //User found for email and Password
+            user.setId(resultSet.getLong("id"));
+            user.setEmail(resultSet.getString("email"));
+            user.setName(resultSet.getString("name"));
+            user.setPassword(resultSet.getString("password"));
+        } else {
+            System.out.println("No user Found!");
+            user = null;
+        }
+
+        return user;
+    }
 }

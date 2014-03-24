@@ -1,10 +1,11 @@
 package uni.oldenburg.server.databasehelper;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
-import org.apache.log4j.Logger;
 
 public final class ConnectionPool {
     private static Connection connection;
@@ -20,10 +21,10 @@ public final class ConnectionPool {
             }
         } catch (ClassNotFoundException e) {
             Logger logger = Logger.getLogger(ConnectionPool.class);
-            logger.error("Unable to find Postgres-Database Driver", e);
+            logger.log(Level.ERROR, "Unable to find Postgres-Database Driver", e);
         } catch (SQLException e) {
             Logger logger = Logger.getLogger(ConnectionPool.class);
-            logger.error("Unable to estable connection to Postgres-Database", e);
+            logger.log(Level.ERROR, "Unable to estable connection to Postgres-Database", e);
         }
 
         return connection;

@@ -9,7 +9,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
-
 import uni.oldenburg.client.event.CallRegisterEvent;
 import uni.oldenburg.client.event.LoginCompletedEvent;
 import uni.oldenburg.client.service.RegistrationAndLoginServiceAsync;
@@ -19,8 +18,11 @@ public class LoginPresenter extends Presenter {
 
     public interface IDisplay {
         HasValue<String> getEmail();
+
         HasValue<String> getPassword();
+
         HasClickHandlers getLoginButton();
+
         HasClickHandlers getRegisterButton();
     }
 
@@ -43,8 +45,8 @@ public class LoginPresenter extends Presenter {
         });
     }
 
-    public void sendLogin(String user, String password) {
-        ((RegistrationAndLoginServiceAsync)rpcService).loginUser(user, password, new AsyncCallback<Boolean>() {
+    public void sendLogin(final String email, final String password) {
+        ((RegistrationAndLoginServiceAsync) rpcService).loginUser(email, password, new AsyncCallback<Boolean>() {
             public void onFailure(Throwable throwable) {
                 Window.alert("Fehler beim Abfragen der Benutzerdaten");
             }
