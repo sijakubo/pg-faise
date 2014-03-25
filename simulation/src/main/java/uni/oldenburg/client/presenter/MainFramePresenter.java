@@ -93,8 +93,7 @@ public class MainFramePresenter extends Presenter {
 				if (myConveyor == null)
 					return;
 				
-				myConveyor.setPosition(	event.getX() - (event.getX() % Conveyor.getRastersize()), 
-										event.getY() - (event.getY() % Conveyor.getRastersize()));				
+				myConveyor.setPosition(event.getX(), event.getY());				
 				
 				loadSzenario(MainFramePresenter.this.currentSzenario);
 				drawConveyor(myConveyor);

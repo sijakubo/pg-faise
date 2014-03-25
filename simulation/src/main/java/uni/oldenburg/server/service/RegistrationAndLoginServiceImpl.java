@@ -1,14 +1,17 @@
 package uni.oldenburg.server.service;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
 import uni.oldenburg.client.service.RegistrationAndLoginService;
 import uni.oldenburg.server.dao.SimulationUserDao;
 import uni.oldenburg.shared.model.SimulationUser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import java.sql.SQLException;
 
 @SuppressWarnings("serial")
@@ -58,7 +61,8 @@ public class RegistrationAndLoginServiceImpl extends RemoteServiceServlet implem
     }
 
     //Logout User
-    private void deleteUserFromSession() {
+    @SuppressWarnings("unused")
+	private void deleteUserFromSession() {
         HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
         HttpSession session = httpServletRequest.getSession();
         session.removeAttribute("user");

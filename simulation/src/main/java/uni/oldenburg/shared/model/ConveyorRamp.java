@@ -8,13 +8,15 @@ import com.google.gwt.canvas.dom.client.CssColor;
 public class ConveyorRamp extends Conveyor {
 	public static final String TYPE = "Rampe";
 	private boolean bVertical = true;
+	private int numBlocks = 3;
 
 	public ConveyorRamp() {
-		super(0, 0, Conveyor.getRastersize(), Conveyor.getRastersize() * 3);
+		setSize(Conveyor.getRastersize(), Conveyor.getRastersize() * numBlocks);
 	}
 	
 	public ConveyorRamp(int x, int y) {
-		super(x, y, Conveyor.getRastersize(), Conveyor.getRastersize() * 3);
+		setPosition(x, y);
+		setSize(Conveyor.getRastersize(), Conveyor.getRastersize() * numBlocks);
 	}
 
 	@Override
@@ -44,8 +46,8 @@ public class ConveyorRamp extends Conveyor {
 		this.bVertical = value;
 		
 		if (value)
-			this.setSize(Conveyor.getRastersize(), Conveyor.getRastersize() * 3);
+			this.setSize(Conveyor.getRastersize(), Conveyor.getRastersize() * numBlocks);
 		else
-			this.setSize(Conveyor.getRastersize() * 3, Conveyor.getRastersize());
+			this.setSize(Conveyor.getRastersize() * numBlocks, Conveyor.getRastersize());
 	}
 }

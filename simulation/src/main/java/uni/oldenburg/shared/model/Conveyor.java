@@ -26,6 +26,11 @@ public abstract class Conveyor implements Serializable {
 	protected abstract Canvas createCanvas(Canvas canvas);
 
     protected Conveyor() {
+		ID = ++ID_Counter;
+		strType = getType();
+		
+		setPosition(0, 0);
+		setSize(0, 0);
     }
 
     protected Conveyor(int x, int y, int width, int height) {
@@ -33,10 +38,7 @@ public abstract class Conveyor implements Serializable {
 		strType = getType();
 
 		setPosition(x, y);
-		this.width = width;
-		this.height = height;
-
-		canvas = null;
+		setSize(width, height);
 	}
 
 	public int getID() {
@@ -44,8 +46,8 @@ public abstract class Conveyor implements Serializable {
 	}
 
 	public void setPosition(int x, int y) {
-		this.x = x;
-		this.y = y;
+		this.x = x - (x % rasterSize);
+		this.y = y - (y % rasterSize);
 	}
 
 	public int getX() {
