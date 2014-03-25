@@ -24,24 +24,39 @@ void extflash_enable(){
 
 void extflash_disable(){
 	EXTFLASH_CS_PORT |= 1<<EXTFLASH_CS;
-	EXTFLASH_SPI_PORT &= ~(1<<EXTFLASH_CLK | 1<<EXTFLASH_TXD);
+	EXTFLASH_SPI_PORT &= ~(1<<EXTFLASH_CLK) | 1<<EXTFLASH_TXD;
 }
 
-uint8_t extflash_tr_byte(uint8_t spiOut){
+void extflash_wait_idle(){
+	EXTFLASH_SPI_PORT &= ~(1<<EXTFLASH_CLK | 1<<EXTFLASH_TXD);
+	clock_wait(1);
+	while(!(PIND & (1<<EXTFLASH_RXD))){
+		EXTFLASH_SPI_PORT |= 1<<EXTFLASH_CLK;
+		EXTFLASH_SPI_PORT &= ~(1<<EXTFLASH_CLK);
+		clock_wait(1);
+	}
+}
+
+uint8_t extflash_tr_byte(uint8_t spiOut, uint8_t isRead){
 	uint8_t recv = 0;
 	uint8_t i = 8;
 
 	printf("SPI SENT: %u\n", spiOut);
-	for(;i >= 1; i--){
-		EXTFLASH_SPI_PORT &= ~(1<<EXTFLASH_CLK | 1<<EXTFLASH_TXD);
-		
+	//extflash_wait_idle();
+	for(;i >= 1; i--){	
 		if(spiOut & (1<<(i-1))){
 			EXTFLASH_SPI_PORT |= 1<<EXTFLASH_TXD;
+		} else {
+			EXTFLASH_SPI_PORT &= ~(1<<EXTFLASH_TXD);
 		}
 		
 		EXTFLASH_SPI_PORT |= 1<<EXTFLASH_CLK;
+		EXTFLASH_SPI_PORT &= ~(1<<EXTFLASH_CLK);
 		
-		if(PIND & (1<<EXTFLASH_RXD)){
+		if(isRead)
+			clock_wait(1);
+		
+		if((PIND & (1<<EXTFLASH_RXD))){
 			recv |= 1<<(i-1);
 		}
 	}
@@ -81,6 +96,6 @@ void extflash_write_buffer2_to_mem(uint16_t page){
 	
 }
 
-static uint8_t read_status_register(void)
+uint8_t read_status_register(void)
 {
 }

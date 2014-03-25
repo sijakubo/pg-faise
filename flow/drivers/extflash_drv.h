@@ -9,6 +9,8 @@
 #ifndef EXTFLASH_DRV_H_
 #define EXTFLASH_DRV_H_
 
+#include "contiki.h"
+#include "contiki-lib.h"
 #include "dev/spi.h"
 #include "contiki-conf.h"
 
@@ -30,7 +32,7 @@
 
 void extflash_init();
 
-uint8_t extflash_tr_byte(uint8_t spiOut);
+uint8_t extflash_tr_byte(uint8_t spiOut, uint8_t isRead);
 
 void extflash_write_page_to_buffer1(uint16_t page);
 void extflash_write_page_to_buffer2(uint16_t page);
@@ -43,6 +45,6 @@ uint8_t extflash_compare_buffer2_to_mem(uint16_t page);
 void extflash_write_buffer1_to_mem(uint16_t page);
 void extflash_write_buffer2_to_mem(uint16_t page);
 
-static uint8_t read_status_register(void);
+uint8_t read_status_register(void);
 
 #endif /* EXTFLASH_DRV_H_ */
