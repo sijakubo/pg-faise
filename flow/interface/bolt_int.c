@@ -12,23 +12,26 @@ PROCESS(bolt_int_release, "Separate Package");
 PROCESS(bolt_int_release_and_separate, "Release and Separate Package");
 PROCESS(bolt_int_separate, "Separate Package");
 
+static struct etimer bolt_timer;
+static uint8_t bolt_state = 0;
+
 PROCESS_THREAD(bolt_int_release, ev, data)
 {
-	static uint8_t state = 0;
-	static struct etimer bolt_timer;
+	bolt_state = 0;
 	uint16_t timeout = 0;
+	
 	PROCESS_BEGIN();
-	while(state < 2){
-		if(state == 0){
+	while(bolt_state < 2){
+		if(bolt_state == 0){
 			bolts_up(BOLT_UPPER);
 			timeout = BOLT_TIMEOUT;
-		} else if(state == 1) {
+		} else if(bolt_state == 1) {
 			bolts_down(BOLT_LOWER);
 			timeout = BOLT_SLIDE_TIME;
 		}
 		etimer_set(&bolt_timer, timeout);
 		PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&bolt_timer));
-		state++;
+		bolt_state++;
 	}
 	bolts_up(BOLT_LOWER);
 	PROCESS_END();
@@ -36,27 +39,27 @@ PROCESS_THREAD(bolt_int_release, ev, data)
 
 PROCESS_THREAD(bolt_int_release_and_separate, ev, data)
 {
-	static uint8_t state = 0;
-	static struct etimer bolt_timer;
+	bolt_state = 0;
 	uint16_t timeout = 0;
+	
 	PROCESS_BEGIN();
-		while(state < 4){
-			if(state == 0){
+		while(bolt_state < 4){
+			if(bolt_state == 0){
 				bolts_up(BOLT_UPPER);
 				timeout = BOLT_TIMEOUT;
-			} else if(state == 1) {
+			} else if(bolt_state == 1) {
 				bolts_down(BOLT_LOWER);
 				timeout = BOLT_SLIDE_TIME;
-			} else if(state == 2) {
+			} else if(bolt_state == 2) {
 				bolts_up(BOLT_LOWER);
 				timeout = BOLT_TIMEOUT;
-			} else if(state == 3) {
+			} else if(bolt_state == 3) {
 				bolts_down(BOLT_UPPER);
 				timeout = BOLT_SLIDE_TIME;
 			}
 			etimer_set(&bolt_timer, timeout);
 			PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&bolt_timer));
-			state++;
+			bolt_state++;
 		}
 		bolts_up(BOLT_UPPER);
 	PROCESS_END();
@@ -64,21 +67,21 @@ PROCESS_THREAD(bolt_int_release_and_separate, ev, data)
 
 PROCESS_THREAD(bolt_int_separate, ev, data)
 {
-	static uint8_t state = 0;
-	static struct etimer bolt_timer;
+	bolt_state = 0;
 	uint16_t timeout = 0;
+	
 	PROCESS_BEGIN();
-	while(state < 2){
-		if(state == 0){
+	while(bolt_state < 2){
+		if(bolt_state == 0){
 			bolts_up(BOLT_LOWER);
 			timeout = BOLT_TIMEOUT;
-		} else if(state == 1) {
+		} else if(bolt_state == 1) {
 			bolts_down(BOLT_UPPER);
 			timeout = BOLT_SLIDE_TIME;
 		}
 		etimer_set(&bolt_timer, timeout);
 		PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&bolt_timer));
-		state++;
+		bolt_state++;
 	}
 	bolts_up(BOLT_UPPER);
 	PROCESS_END();

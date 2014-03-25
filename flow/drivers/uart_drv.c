@@ -20,7 +20,7 @@ void uart0_send(uint8_t *buf, uint8_t size)
 
 int uart0_line_input_byte(unsigned char c) 
 {
-  static uint8_t overflow = 0;
+  static uint8_t overflow;
 
   if(!overflow) {
     if(ringbuf_put(&rxbuf, c) == 0) {
@@ -40,7 +40,7 @@ PROCESS(uart0_recv_process, "uart0 driver");
 PROCESS_THREAD(uart0_recv_process, ev, data)
 {
   static uint8_t buf[BUFSIZE];
-  static int ptr;
+  static int ptr = 0;
 
   PROCESS_BEGIN();
 
@@ -62,10 +62,6 @@ PROCESS_THREAD(uart0_recv_process, ev, data)
 
         uart0_dispatch_message(buf);
 
-        /*if(PROCESS_ERR_OK ==
-          process_post(PROCESS_CURRENT(), PROCESS_EVENT_CONTINUE, NULL)) {
-          PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_CONTINUE);
-        }*/
         ptr = 0;
       }
     }

@@ -6,38 +6,31 @@
  */ 
 #include "drivers/bolt_drv.h"
 
-static uint8_t bolts;
-
 void bolt_drv_init(void){
 	BOLTS_PxDIR |= (BOLT_1 | BOLT_2);
 	BOLTS_PxOUT |= (BOLT_1 | BOLT_2);
-	bolts = (BOLT_1 | BOLT_2);
 }
 
 void bolts_up(unsigned char boltv){
 	boltv &= 0x03;
-	bolts |= boltv;
 	BOLTS_PxOUT |= boltv;
 }
 
 void bolts_down(unsigned char boltv){
 	boltv &= 0x03;
-	bolts &= ~boltv;
 	BOLTS_PxOUT &= ~boltv; 
 }
 
 void bolts_toggle(unsigned char boltv){
 	boltv &= 0x03;
 	if(boltv & BOLT_1){
-		bolts ^= BOLT_1;
 		BOLTS_PxOUT ^= BOLT_1;
 	}
 	if(boltv & BOLT_2){
-		bolts ^= BOLT_2;
 		BOLTS_PxOUT ^= BOLT_2;
 	}
 }
 
 uint8_t get_bolts(void){
-	return 0x0F & bolts;
+	return 0x0F & BOLTS_PxOUT;
 }

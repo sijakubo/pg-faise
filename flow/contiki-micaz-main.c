@@ -58,6 +58,8 @@
 #include "dev/ds2401.h"
 #include "sys/node-id.h"
 
+#include "drivers/extflash_drv.h"
+
 /*---------------------------------------------------------------------------*/
 void
 init_usart(void)
@@ -82,6 +84,8 @@ main(void)
   leds_init();
 
   leds_on(LEDS_RED);
+  
+  extflash_init();
 
   /* Initialize USART */
   
@@ -126,7 +130,6 @@ main(void)
 
   /* Main scheduler loop */
   do {
-
     process_run();
 
   }while(1);

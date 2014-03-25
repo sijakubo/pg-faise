@@ -70,7 +70,6 @@
  *
  */
 
- 
 #include "contiki.h"
 #include "net/rime.h"
 #include "lib/list.h"
@@ -81,6 +80,7 @@
 #include "interface/photosensor_int.h"
 #include "service/uart_service.h"
 #include "contiki-conf.h"
+#include "drivers/extflash_drv.h"
 
 /*---------------------------------------------------------------------------*/
 PROCESS(ramptest, "Test for Ramps");
@@ -128,8 +128,24 @@ PROCESS_THREAD(ramptest, ev, data)
 
 	while(1) {
 		leds_toggle(LEDS_YELLOW);
-		etimer_set(&et, CLOCK_SECOND);
+		etimer_set(&et, CLOCK_SECOND*4);
 		PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
+		extflash_enable();
+			printf("GET STATUS\n");
+			extflash_tr_byte(0x57);
+			extflash_tr_byte(0xff);
+		extflash_disable();
+		extflash_enable();	
+			printf("GET PAGE\n");
+			extflash_tr_byte(0x53);
+			extflash_tr_byte(0xf4);
+			extflash_tr_byte(0xff);
+			extflash_tr_byte(0xff);
+			printf("GET STATUS\n");
+			extflash_tr_byte(0x57);
+			extflash_tr_byte(0xff);
+		extflash_disable();
+		EXTFLASH_CS_PORT |= 1<<EXTFLASH_CS;
 	}
 
 	PROCESS_END();
