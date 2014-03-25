@@ -47,10 +47,10 @@ public class MainFramePresenter extends Presenter {
 	Conveyor dropableConveyor;
 
 	private static final List<Job> JOBS = Arrays.asList(
-			new Job(1, "XY", Job.OUTGOING, 42),
-			new Job(2, "zt", Job.OUTGOING, 73),
-			new Job(3, "Patata", Job.INCOMING, 128),
-			new Job(4, "UO", Job.OUTGOING, 1337)
+			new Job("XY", Job.OUTGOING, 42, 12, 128),
+			new Job("zt", Job.OUTGOING, 73, 45, 256),
+			new Job("Patata", Job.INCOMING, 128, 64, 512),
+			new Job("UO", Job.OUTGOING, 1337, 128, 1024)
 	);
 
 	public interface IDisplay {
@@ -190,10 +190,10 @@ public class MainFramePresenter extends Presenter {
 	}
 
 	private void setupJobTable() {
-		TextColumn<Job> jobNumberColumn = new TextColumn<Job>() {
+		TextColumn<Job> jobIdColumn = new TextColumn<Job>() {
 			@Override
 			public String getValue(Job object) {
-				return "" + object.getJobNumber();
+				return "" + object.getId();
 			}
 		};
 
@@ -204,8 +204,8 @@ public class MainFramePresenter extends Presenter {
 			}
 		};
 
-		display.getJobTable().addColumn(jobNumberColumn, "Job Number");
-		display.getJobTable().addColumn(jobColumn, "Job");
+		display.getJobTable().addColumn(jobIdColumn, "Auftrags-Id");
+		display.getJobTable().addColumn(jobColumn, "Auftrag");
 
 		AsyncDataProvider<Job> provider = new AsyncDataProvider<Job>() {
 			@Override

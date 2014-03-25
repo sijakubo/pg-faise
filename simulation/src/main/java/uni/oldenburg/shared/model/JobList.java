@@ -28,8 +28,10 @@ public class JobList {
 			String jobName = "Job #" + i;
 			int type = (Math.random() < 0.5) ? Job.INCOMING : Job.OUTGOING;
 			long timestamp = (long)(Math.random() * 10000);
+			int destinationId = (int)(Math.random() * 1000);
+			int packageId = (int)(Math.random() * 1000);
 
-			addJob(new Job(i, jobName, type, timestamp));
+			addJob(new Job(jobName, type, timestamp, destinationId, packageId));
 		}
 	}
 	
@@ -37,7 +39,11 @@ public class JobList {
 		return name;
 	}
 	
-	public List<Job> getJobs() {
-		return jobList;
+	public Job getJob(int index) {
+		return jobList.get(index);
+	}
+	
+	public int size() {
+		return jobList.size();
 	}
 }
