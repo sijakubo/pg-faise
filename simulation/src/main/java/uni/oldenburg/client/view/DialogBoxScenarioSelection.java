@@ -28,7 +28,7 @@ public class DialogBoxScenarioSelection extends DialogBox {
 		// Enable animation.
 		setAnimationEnabled(true);
 
-		// Enable glass background.
+		// Enabl glass background.
 		setGlassEnabled(true);
 		
 		VerticalPanel vpSzenario = new VerticalPanel();
