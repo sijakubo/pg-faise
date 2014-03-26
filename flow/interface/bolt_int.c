@@ -17,10 +17,12 @@ static uint8_t bolt_state = 0;
 
 PROCESS_THREAD(bolt_int_release, ev, data)
 {
-	bolt_state = 0;
 	uint16_t timeout = 0;
 	
 	PROCESS_BEGIN();
+	
+	bolt_state = 0;
+	
 	while(bolt_state < 2){
 		if(bolt_state == 0){
 			bolts_up(BOLT_UPPER);
@@ -39,38 +41,42 @@ PROCESS_THREAD(bolt_int_release, ev, data)
 
 PROCESS_THREAD(bolt_int_release_and_separate, ev, data)
 {
-	bolt_state = 0;
 	uint16_t timeout = 0;
 	
 	PROCESS_BEGIN();
-		while(bolt_state < 4){
-			if(bolt_state == 0){
-				bolts_up(BOLT_UPPER);
-				timeout = BOLT_TIMEOUT;
-			} else if(bolt_state == 1) {
-				bolts_down(BOLT_LOWER);
-				timeout = BOLT_SLIDE_TIME;
-			} else if(bolt_state == 2) {
-				bolts_up(BOLT_LOWER);
-				timeout = BOLT_TIMEOUT;
-			} else if(bolt_state == 3) {
-				bolts_down(BOLT_UPPER);
-				timeout = BOLT_SLIDE_TIME;
-			}
-			etimer_set(&bolt_timer, timeout);
-			PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&bolt_timer));
-			bolt_state++;
+	
+	bolt_state = 0;
+	
+	while(bolt_state < 4){
+		if(bolt_state == 0){
+			bolts_up(BOLT_UPPER);
+			timeout = BOLT_TIMEOUT;
+		} else if(bolt_state == 1) {
+			bolts_down(BOLT_LOWER);
+			timeout = BOLT_SLIDE_TIME;
+		} else if(bolt_state == 2) {
+			bolts_up(BOLT_LOWER);
+			timeout = BOLT_TIMEOUT;
+		} else if(bolt_state == 3) {
+			bolts_down(BOLT_UPPER);
+			timeout = BOLT_SLIDE_TIME;
 		}
-		bolts_up(BOLT_UPPER);
+		etimer_set(&bolt_timer, timeout);
+		PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&bolt_timer));
+		bolt_state++;
+	}
+	bolts_up(BOLT_UPPER);
 	PROCESS_END();
 }
 
 PROCESS_THREAD(bolt_int_separate, ev, data)
 {
-	bolt_state = 0;
 	uint16_t timeout = 0;
 	
 	PROCESS_BEGIN();
+	
+	bolt_state = 0;
+	
 	while(bolt_state < 2){
 		if(bolt_state == 0){
 			bolts_up(BOLT_LOWER);

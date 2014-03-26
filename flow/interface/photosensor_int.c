@@ -12,13 +12,13 @@ void photosensor_init(void){
 
 uint8_t photosensor_is_bay_occupied(uint8_t i){
 	if(i == 1)
-		return ((int)(PHOTOSENSOR_1 & get_photosensors()));
+		return ((uint8_t)((1<<PHOTOSENSOR_1) & get_photosensors()));
 	else if(i == 2)
-		return ((int)(PHOTOSENSOR_2 & get_photosensors()));
+		return ((uint8_t)((1<<PHOTOSENSOR_2) & get_photosensors()));
 	else if(i == 3)
-		return ((int)(PHOTOSENSOR_3 & get_photosensors()));
+		return ((uint8_t)((1<<PHOTOSENSOR_3) & get_photosensors()));
 	else if(i == 4)
-		return ((int)(PHOTOSENSOR_4 & get_photosensors()));
+		return ((uint8_t)((1<<PHOTOSENSOR_4) & get_photosensors()));
 	
 	return 0;
 }

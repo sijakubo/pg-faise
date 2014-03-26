@@ -120,6 +120,7 @@ main(void)
   leds_off(LEDS_ALL);
   
   bolt_init();
+  photosensor_init();
 
   /* Autostart processes */
   autostart_start(autostart_processes);

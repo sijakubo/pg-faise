@@ -13,10 +13,12 @@
 #include "contiki-conf.h"
 
 /** PIN für Bolzen 1 */
-#define BOLT_1 PINC0
+#define BOLT_1_1 PINC0
+#define BOLT_1_2 PINC1
 
 /** PIN für Bolzen 2 */
-#define BOLT_2 PINC1
+#define BOLT_2_1 PINC2
+#define BOLT_2_2 PINC3
 
 /** Data Direction Register für die Bolzen - Bits BOLT_1 und BOLT_2 müssen auf Ausgang gesetzt werden */
 #define BOLTS_PxDIR DDRC

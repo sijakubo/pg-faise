@@ -12,11 +12,11 @@
 #include "contiki.h"
 #include "sys/clock.h"
 
-#define BOLT_SLIDE_TIME CLOCK_SECOND*3
-#define BOLT_TIMEOUT CLOCK_SECOND
+#define BOLT_SLIDE_TIME CLOCK_SECOND*2
+#define BOLT_TIMEOUT CLOCK_SECOND/2
 
-#define BOLT_LOWER BOLT_1
-#define BOLT_UPPER BOLT_2
+#define BOLT_LOWER 0x01
+#define BOLT_UPPER 0x02
 
 void bolt_init(void);
 void bolt_release(void);

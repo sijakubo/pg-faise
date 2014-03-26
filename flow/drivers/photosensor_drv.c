@@ -27,6 +27,6 @@ void photosensor_drv_init(void){
  * \author	Jan-Gerd Meß
  */
 uint8_t get_photosensors(){
-	uint8_t res = 0xF0 & PHOTOSENSORS_PxIN;
-	return res>>4;
+	uint8_t res = 0xF0 & ~(PINC);
+	return res;
 }
