@@ -1,25 +1,39 @@
 package uni.oldenburg.shared.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JobList {
+@SuppressWarnings("serial")
+public class JobList implements Serializable {
 	
 	private String name;
 	private List<Job> jobList;
 	
+	public JobList() {
+		this.name = "undefined";
+		this.jobList = new ArrayList<Job>();		
+	}
+	
 	public JobList(String name) {
 		this.name = name;
-		jobList = new ArrayList<Job>();
+		this.jobList = new ArrayList<Job>();
 	}
 	
 	public void addJob(Job job) {
+			
 		int index = 0;
+		
 		//sort by timestamp
-		while(jobList.get(index) != null && jobList.get(index).getTimestamp() < job.getTimestamp()) {
+		while(index < jobList.size() && jobList.get(index).getTimestamp() < job.getTimestamp()) {
 			index++;
 		}
-		jobList.add(index, job);
+		
+		if(index == jobList.size()) {
+			jobList.add(job);
+		} else {
+			jobList.add(index, job);
+		}
 	}
 	
 	public void addRandomJobs(int numberOfJobs) {
@@ -45,5 +59,9 @@ public class JobList {
 	
 	public int size() {
 		return jobList.size();
+	}
+	
+	public List<Job> subList(int start, int end) {
+		return jobList.subList(start, end);
 	}
 }

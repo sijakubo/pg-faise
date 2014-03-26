@@ -13,6 +13,7 @@ public class Szenario implements Serializable {
 	private String time_created;
 	private String created_by_user;
 	private List<Conveyor> lstConveyor;
+	private JobList jobList;
 	
 	public Szenario () {
 		this.id = -1;
@@ -21,8 +22,13 @@ public class Szenario implements Serializable {
 		this.created_by_user = "unknown user";
 		
 		lstConveyor = new ArrayList<Conveyor>();
+		jobList = new JobList("Auftragsliste");
+		jobList.addJob(new Job("XY", Job.OUTGOING, 42, 12, 128)); //dummy-data
+		jobList.addJob(new Job("zt", Job.OUTGOING, 73, 45, 256)); //dummy-data
+		jobList.addJob(new Job("Patata", Job.INCOMING, 128, 64, 512)); //dummy-data
+		jobList.addJob(new Job("UO", Job.OUTGOING, 1337, 128, 1024)); //dummy-data
 	};
-	
+		
 	public Szenario (int id, String title, String time_created, String created_by_user) {
 		this.id = id;
 		this.title = title;
@@ -30,6 +36,11 @@ public class Szenario implements Serializable {
 		this.created_by_user = created_by_user;
 		
 		lstConveyor = new ArrayList<Conveyor>();
+		jobList = new JobList("Auftragsliste");
+		jobList.addJob(new Job("XY", Job.OUTGOING, 42, 12, 128)); //dummy-data
+		jobList.addJob(new Job("zt", Job.OUTGOING, 73, 45, 256)); //dummy-data
+		jobList.addJob(new Job("Patata", Job.INCOMING, 128, 64, 512)); //dummy-data
+		jobList.addJob(new Job("UO", Job.OUTGOING, 1337, 128, 1024)); //dummy-data
 	}
 	
 	public int getID() {
@@ -70,5 +81,9 @@ public class Szenario implements Serializable {
 
 	public List<Conveyor> getConveyorList() {
 		return lstConveyor;
+	}
+	
+	public JobList getJoblist() {
+		return jobList;
 	}
 }

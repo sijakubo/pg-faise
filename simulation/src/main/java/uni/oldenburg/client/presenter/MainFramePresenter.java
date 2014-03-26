@@ -1,7 +1,6 @@
 package uni.oldenburg.client.presenter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import uni.oldenburg.client.service.SimulationServiceAsync;
@@ -11,6 +10,7 @@ import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.ConveyorVehicle;
 import uni.oldenburg.shared.model.ConveyorWall;
 import uni.oldenburg.shared.model.Job;
+import uni.oldenburg.shared.model.JobList;
 import uni.oldenburg.shared.model.Szenario;
 
 import com.google.gwt.canvas.client.Canvas;
@@ -43,15 +43,8 @@ import com.google.gwt.view.client.HasData;
 
 public class MainFramePresenter extends Presenter {
 	private final IDisplay display;
-	private Szenario currentSzenario;
+	private Szenario currentScenario;
 	Conveyor dropableConveyor;
-
-	private static final List<Job> JOBS = Arrays.asList(
-			new Job("XY", Job.OUTGOING, 42, 12, 128),
-			new Job("zt", Job.OUTGOING, 73, 45, 256),
-			new Job("Patata", Job.INCOMING, 128, 64, 512),
-			new Job("UO", Job.OUTGOING, 1337, 128, 1024)
-	);
 
 	public interface IDisplay {
 		CellTable<Job> getJobTable();
@@ -69,7 +62,7 @@ public class MainFramePresenter extends Presenter {
 	public MainFramePresenter(SimulationServiceAsync rpcService, HandlerManager eventBus, IDisplay view) {
 		super(rpcService, eventBus);
 		this.display = view;
-		this.currentSzenario = new Szenario();
+		this.currentScenario = new Szenario();
 		this.dropableConveyor = null;
 	}
 
@@ -95,7 +88,7 @@ public class MainFramePresenter extends Presenter {
 				
 				myConveyor.setPosition(event.getX(), event.getY());				
 				
-				loadSzenario(MainFramePresenter.this.currentSzenario);
+				loadSzenario(MainFramePresenter.this.currentScenario);
 				drawConveyor(myConveyor);
 				
 				display.getCanvas().setFocus(true);				
@@ -112,9 +105,9 @@ public class MainFramePresenter extends Presenter {
 					if (myConveyor != null) {
 						// wenn platz noch frei ist
 						if (isSpotAvailable(event.getX(), event.getY())) {
-							MainFramePresenter.this.currentSzenario.addConveyor(myConveyor);
+							MainFramePresenter.this.currentScenario.addConveyor(myConveyor);
 							MainFramePresenter.this.dropableConveyor = null;
-							loadSzenario(MainFramePresenter.this.currentSzenario);	
+							loadSzenario(MainFramePresenter.this.currentScenario);	
 						}
 					}
 					else {
@@ -130,7 +123,7 @@ public class MainFramePresenter extends Presenter {
 					if (myConveyor.getType().compareTo("Rampe") == 0) {												
 						((ConveyorRamp)myConveyor).setVertical(!((ConveyorRamp)myConveyor).isVertical());
 						
-						loadSzenario(MainFramePresenter.this.currentSzenario);
+						loadSzenario(MainFramePresenter.this.currentScenario);
 						drawConveyor(myConveyor);
 						
 						display.getCanvas().setFocus(true);
@@ -143,7 +136,7 @@ public class MainFramePresenter extends Presenter {
 			public void onKeyUp(KeyUpEvent event) {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ESCAPE) {
 					MainFramePresenter.this.dropableConveyor = null;					
-					loadSzenario(MainFramePresenter.this.currentSzenario);
+					loadSzenario(MainFramePresenter.this.currentScenario);
 				}
 			}
 		});
@@ -207,18 +200,20 @@ public class MainFramePresenter extends Presenter {
 		display.getJobTable().addColumn(jobIdColumn, "Auftrags-Id");
 		display.getJobTable().addColumn(jobColumn, "Auftrag");
 
+		final JobList jobList = currentScenario.getJoblist();
+		
 		AsyncDataProvider<Job> provider = new AsyncDataProvider<Job>() {
 			@Override
 			protected void onRangeChanged(HasData<Job> display) {
 				int start = display.getVisibleRange().getStart();
 				int end = start + display.getVisibleRange().getLength();
-				end = end >= JOBS.size() ? JOBS.size() : end;
-				List<Job> sub = JOBS.subList(start, end);
+				end = end >= jobList.size() ? jobList.size() : end;
+				List<Job> sub = jobList.subList(start, end);
 				updateRowData(start, sub);
 			}
 		};
 		provider.addDataDisplay(display.getJobTable());
-		provider.updateRowCount(JOBS.size(), true);
+		provider.updateRowCount(jobList.size(), true);
 	}
 
 	private void drawConveyor(Conveyor myConveyor) {
@@ -245,7 +240,7 @@ public class MainFramePresenter extends Presenter {
 	
 	public Conveyor findConveyor(int x, int y) {
 		Conveyor myConveyor = null;
-		List<Conveyor> lstConveyor = this.currentSzenario.getConveyorList();
+		List<Conveyor> lstConveyor = this.currentScenario.getConveyorList();
 		
 		for(Conveyor cvEntry : lstConveyor) {
 			if (x < cvEntry.getX()) continue;
@@ -264,7 +259,7 @@ public class MainFramePresenter extends Presenter {
 		Conveyor myConveyor = findConveyor(x, y);
 		
 		if (myConveyor != null)
-			this.currentSzenario.removeConveyor(myConveyor);
+			this.currentScenario.removeConveyor(myConveyor);
 		
 		this.dropableConveyor = myConveyor;
 	}
@@ -296,7 +291,7 @@ public class MainFramePresenter extends Presenter {
 			}
 
 			public void onSuccess(Szenario szenario) {
-				MainFramePresenter.this.currentSzenario = szenario;
+				MainFramePresenter.this.currentScenario = szenario;
 				loadSzenario(szenario);
 			}
 		});
