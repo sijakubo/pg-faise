@@ -1,9 +1,10 @@
-/*
- * extflash_drv.h
+/**
+ * \file extflash_drv.h
+ * \brief	Treiber auf Pin-Ebene für Zugriffe auf den externen Speicher
  *
- * Created: 24.03.2014 16:43:24
- *  Author: JanGerd
- */ 
+ * \author	Jan-Gerd Meß
+ * \date    24.03.2014
+ */
 
 
 #ifndef EXTFLASH_DRV_H_
@@ -14,37 +15,57 @@
 #include "dev/spi.h"
 #include "contiki-conf.h"
 
-#define EXTFLASH_BLOCKSIZE 264
+/** Port für den SPI-Bus zum Speicher*/
+#define EXTFLASH_SPI_PORT PORTD
 
-#define EXTFLASH_OP_RDST 0x57
+/** Data Direction Register für den SPI-Bus zum Speicher */
+#define EXTFLASH_SPI_DDR DDRD
 
+/** Eingangs-Pin für den SPI-Bus zum Speicher */
+#define EXTFLASH_SPI_IN PIND
+
+/** Port für den Chipselect des Speichers*/
 #define EXTFLASH_CS_PORT PORTA
+
+/** Data Direction Register für den Chipselect des Speichers*/
 #define EXTFLASH_CS_DDR DDRA
+
+
+/** Pin für den CLK des SPI-Bus zum Speicher */
+#define EXTFLASH_CLK		PIND5
+
+/** Pin für den SI / RXD des SPI-Bus zum Speicher */
+#define EXTFLASH_RXD		PIND2
+
+/** Pin für den SO / TXD des SPI-Bus zum Speicher */
+#define EXTFLASH_TXD		PIND3
+
+/** Pin für den Chipselect des Speichers */
 #define EXTFLASH_CS			PINA3
 
-#define EXTFLASH_SPI_PORT PORTD
-#define EXTFLASH_SPI_DDR DDRD
-#define EXTFLASH_SPI_IN PIND
-#define EXTFLASH_CLK		PIND5
-#define EXTFLASH_RXD		PIND2
-#define EXTFLASH_TXD		PIND3
+/** Größe einer Seite (Page) im Speicher */
+#define EXTFLASH_BLOCKSIZE 264
+
+/** Anzahl der Pages im Speicher */
+#define EXTFLASH_NUM_PAGES 2048
+
+/** Compare-Bit im Statusregister des Speichers */
+#define EXTFLASH_ST_COMPARE 6
+
+/** Opcode Statusregister */
+#define EXTFLASH_OP_RDST 0x57
+
+/** Byte, das zur Übertragung von Dont-Care-Werten genutzt wird*/
+#define EXTFLASH_DONT_CARE 0xFF
+
 
 
 void extflash_init();
 
 uint8_t extflash_tr_byte(uint8_t spiOut, uint8_t isRead);
 
-void extflash_write_page_to_buffer1(uint16_t page);
-void extflash_write_page_to_buffer2(uint16_t page);
-void extflash_write_buffer1(uint16_t address, uint8_t len, uint8_t* data);
-void extflash_write_buffer2(uint16_t address, uint8_t len, uint8_t* data);
+uint8_t extflash_read_status_register(void);
 
-uint8_t extflash_compare_buffer1_to_mem(uint16_t page);
-uint8_t extflash_compare_buffer2_to_mem(uint16_t page);
-
-void extflash_write_buffer1_to_mem(uint16_t page);
-void extflash_write_buffer2_to_mem(uint16_t page);
-
-uint8_t read_status_register(void);
+uint8_t extflash_get_last_compare(void);
 
 #endif /* EXTFLASH_DRV_H_ */

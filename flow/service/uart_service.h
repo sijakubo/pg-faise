@@ -20,9 +20,11 @@
 //*********************************************
 #define UART_RAMP_NUM_PACKAGES 0x03
 #define UART_RAMP_RET_NUM_PACKAGES 0x04
-#define UART_RAMP_RELEASE_AND_SEPARATE_PACKAGE 0x05
-#define UART_RAMP_SEPARATE_PACKAGE 0x06
-#define UART_RAMP_RELEASE_PACKAGE 0x07
+#define UART_RAMP_BAY_STATUS 0x05
+#define UART_RAMP__RET_BAY_STATUS 0x06
+#define UART_RAMP_RELEASE_AND_SEPARATE_PACKAGE 0x07
+#define UART_RAMP_SEPARATE_PACKAGE 0x08
+#define UART_RAMP_RELEASE_PACKAGE 0x09
 //*********************************************
 
 void uart0_send_command(uint8_t com, uint8_t* args);

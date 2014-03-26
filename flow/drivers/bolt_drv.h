@@ -1,9 +1,10 @@
-/*
- * bolt.h
+/**
+ * \file bolt_drv.h
+ * \brief	Treiber für die Bolzen an den Rampen.
  *
- * Created: 24.02.2014 10:00:04
- *  Author: JanGerd
- */ 
+ * \author	Jan-Gerd Meß
+ * \date	24.02.2014
+ */
 
 
 #ifndef BOLT_DRV_H_
@@ -11,9 +12,16 @@
 
 #include "contiki-conf.h"
 
-#define BOLT_1 1
-#define BOLT_2 2
+/** PIN für Bolzen 1 */
+#define BOLT_1 PINC0
+
+/** PIN für Bolzen 2 */
+#define BOLT_2 PINC1
+
+/** Data Direction Register für die Bolzen - Bits BOLT_1 und BOLT_2 müssen auf Ausgang gesetzt werden */
 #define BOLTS_PxDIR DDRC
+
+/** Outport für die Bolzen */
 #define BOLTS_PxOUT PORTC
 
 void bolt_drv_init(void);

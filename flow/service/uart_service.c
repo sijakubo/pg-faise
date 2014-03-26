@@ -41,6 +41,10 @@ void uart0_dispatch_message(uint8_t* msg){
 		packetbuf_copyfrom(msg, 1);
 		broadcast_send(&broadcast);
 		printf("Asking for number of packages...\n");
+	} else if(msg[0] == UART_RAMP_BAY_STATUS){
+		packetbuf_copyfrom(msg, 2);
+		broadcast_send(&broadcast);
+		printf("Asking for Status of Bay %u...\n", msg[1]);
 	} else if(msg[0] == UART_RAMP_SEPARATE_PACKAGE){
 		packetbuf_copyfrom(msg, 1);
 		broadcast_send(&broadcast);

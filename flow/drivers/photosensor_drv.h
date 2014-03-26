@@ -1,8 +1,9 @@
-/*
- * photosensor_drv.h
+/**
+ * \file photosensor_drv.h
+ * \brief	Treiber auf Pin-Ebene für die Lichtschranken
  *
- * Created: 24.02.2014 16:43:24
- *  Author: JanGerd
+ * \author	Jan-Gerd Meß
+ * \date    12.03.2014
  */ 
 
 
@@ -11,14 +12,26 @@
 
 #include "contiki-conf.h"
 
+/** Data Direction Register für die Lichtschranken */
 #define PHOTOSENSORS_PxDIR DDRC
+
+/** Port für die Lichtschranken */
 #define PHOTOSENSORS_PxOUT PORTC
+
+/** Pin für die Lichtschranken */
 #define PHOTOSENSORS_PxIN PINC;
 
-#define PHOTOSENSOR_1 1<<PC4
-#define PHOTOSENSOR_2 1<<PC5
-#define PHOTOSENSOR_3 1<<PC6
-#define PHOTOSENSOR_4 1<<PC7
+/** Pin für Lichtschranke 1 */
+#define PHOTOSENSOR_1 PINC4
+
+/** Pin für Lichtschranke 2 */
+#define PHOTOSENSOR_2 PINC5
+
+/** Pin für Lichtschranke 3 */
+#define PHOTOSENSOR_3 PINC6
+
+/** Pin für Lichtschranke 4 */
+#define PHOTOSENSOR_4 PINC7
 
 void photosensor_drv_init(void);
 uint8_t get_photosensors();

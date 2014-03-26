@@ -1,16 +1,31 @@
-/*
- * photosensor_drv.c
+/**
+ * \file photosensor_drv.c
+ * \brief	Treiber auf Pin-Ebene für die Lichtschranken
  *
- * Created: 24.02.2014 16:43:11
- *  Author: JanGerd
+ * \author	Jan-Gerd Meß
+ * \date    12.03.2014
  */ 
 #include "drivers/photosensor_drv.h"
 
+
+/**
+ * \fn	void photosensor_drv_init(void)
+ * \brief	Initialisiert den Lichtschranken-Treiber: Setzt die Ports für alle vier Lichtschranken als Eingänge
+ *
+ * \author	Jan-Gerd Meß
+ */
 void photosensor_drv_init(void){
 	PHOTOSENSORS_PxDIR &= 0x0F;
 	PHOTOSENSORS_PxOUT |= 0xF0;
 }
 
+
+/**
+ * \fn	uint8_t get_photosensors()
+ * \brief	Gibt den Zustand der Lichtschranken zurück. Format der Rückgabe: X X X X LS4 LS3 LS2 LS1
+ *
+ * \author	Jan-Gerd Meß
+ */
 uint8_t get_photosensors(){
 	uint8_t res = 0xF0 & PHOTOSENSORS_PxIN;
 	return res>>4;
