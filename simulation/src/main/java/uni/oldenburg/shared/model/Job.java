@@ -8,19 +8,17 @@ public class Job {
 	private static int IdCounter = 0;
 	
     private final int id;
-    private final String job;
     private final int type;
     private final long timestamp;
     private final int destinationId;
     private final int packageId;
     
-    public Job(String job, int type, long timestamp, int destinationId, int packageId) {
+    public Job(int type, long timestamp, int packageId, int destinationId) {
     	this.id = ++IdCounter;
-    	this.job = job;
       	this.type = type;
       	this.timestamp = timestamp;
-      	this.destinationId = destinationId;
       	this.packageId = packageId;
+      	this.destinationId = destinationId;
     }
 
     public int getDestinationId() {
@@ -31,10 +29,6 @@ public class Job {
     	return id;
     }
     
-    public String getJob() {
-    	return job;
-    }
-
     public int getPackageId() {
     	return packageId;
     }

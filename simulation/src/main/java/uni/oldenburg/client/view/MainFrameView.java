@@ -75,21 +75,21 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	    
 	    //togglebutton for switching between hybrid and virtual mode
 	    
-		tbVirtualHybridSwitch = new ToggleButton("Virtual / Hybrid");
-		tbVirtualHybridSwitch.setText("Virtual / Hybrid");
+		tbVirtualHybridSwitch = new ToggleButton("Virtuell / Hybrid");
+		tbVirtualHybridSwitch.setText("Virtuell / Hybrid");
 		vpLeftFrame.add(tbVirtualHybridSwitch);
 		
 		//button for changing pathfinding strategy
 		
-		btnStrategies = new Button("Strategies");
-		btnStrategies.setText("Strategies");
+		btnStrategies = new Button("Strategien");
+		btnStrategies.setText("Strategien");
 		vpLeftFrame.add(btnStrategies);
 		
 		// conveyor list
 		VerticalPanel vpConveyor = new VerticalPanel();
 		vpConveyor.addStyleName("conveyor_panel");
 		
-		lblConveyor = new Label("Stetigfoerderer");
+		lblConveyor = new Label("Stetigf" + (char)246 + "rderer");
 		lblConveyor.addStyleName("conveyor_label");
 		btnConveyorRamp = new Button("Rampe");
 		btnConveyorRamp.addStyleName("conveyor_ramp");

@@ -39,13 +39,12 @@ public class JobList implements Serializable {
 	public void addRandomJobs(int numberOfJobs) {
 		for(int i = 0; i < numberOfJobs; i++) {
 			
-			String jobName = "Job #" + i;
 			int type = (Math.random() < 0.5) ? Job.INCOMING : Job.OUTGOING;
 			long timestamp = (long)(Math.random() * 10000);
 			int destinationId = (int)(Math.random() * 1000);
 			int packageId = (int)(Math.random() * 1000);
 
-			addJob(new Job(jobName, type, timestamp, destinationId, packageId));
+			addJob(new Job(type, timestamp, destinationId, packageId));
 		}
 	}
 	

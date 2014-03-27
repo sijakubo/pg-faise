@@ -23,10 +23,10 @@ public class Szenario implements Serializable {
 		
 		lstConveyor = new ArrayList<Conveyor>();
 		jobList = new JobList("Auftragsliste");
-		jobList.addJob(new Job("XY", Job.OUTGOING, 42, 12, 128)); //dummy-data
-		jobList.addJob(new Job("zt", Job.OUTGOING, 73, 45, 256)); //dummy-data
-		jobList.addJob(new Job("Patata", Job.INCOMING, 128, 64, 512)); //dummy-data
-		jobList.addJob(new Job("UO", Job.OUTGOING, 1337, 128, 1024)); //dummy-data
+		jobList.addJob(new Job(Job.OUTGOING, 42, 128, 12)); //dummy-data
+		jobList.addJob(new Job(Job.OUTGOING, 73, 256, 45)); //dummy-data
+		jobList.addJob(new Job(Job.INCOMING, 512, 128, 0)); //dummy-data
+		jobList.addJob(new Job(Job.OUTGOING, 1337, 1024, 128)); //dummy-data
 	};
 		
 	public Szenario (int id, String title, String time_created, String created_by_user) {
@@ -37,10 +37,10 @@ public class Szenario implements Serializable {
 		
 		lstConveyor = new ArrayList<Conveyor>();
 		jobList = new JobList("Auftragsliste");
-		jobList.addJob(new Job("XY", Job.OUTGOING, 42, 12, 128)); //dummy-data
-		jobList.addJob(new Job("zt", Job.OUTGOING, 73, 45, 256)); //dummy-data
-		jobList.addJob(new Job("Patata", Job.INCOMING, 128, 64, 512)); //dummy-data
-		jobList.addJob(new Job("UO", Job.OUTGOING, 1337, 128, 1024)); //dummy-data
+		jobList.addJob(new Job(Job.OUTGOING, 42, 128, 12)); //dummy-data
+		jobList.addJob(new Job(Job.OUTGOING, 73, 256, 45)); //dummy-data
+		jobList.addJob(new Job(Job.INCOMING, 512, 128, 0)); //dummy-data
+		jobList.addJob(new Job(Job.OUTGOING, 1337, 1024, 128)); //dummy-data
 	}
 	
 	public int getID() {

@@ -183,22 +183,38 @@ public class MainFramePresenter extends Presenter {
 	}
 
 	private void setupJobTable() {
-		TextColumn<Job> jobIdColumn = new TextColumn<Job>() {
+		TextColumn<Job> idColumn = new TextColumn<Job>() {
 			@Override
 			public String getValue(Job object) {
 				return "" + object.getId();
 			}
 		};
-
-		TextColumn<Job> jobColumn = new TextColumn<Job>() {
+		TextColumn<Job> timestampColumn = new TextColumn<Job>() {
 			@Override
 			public String getValue(Job object) {
-				return object.getJob();
+				return "" + object.getTimestamp();
+			}
+		};
+		TextColumn<Job> packageColumn = new TextColumn<Job>() {
+			@Override
+			public String getValue(Job object) {
+				return "" + object.getPackageId();
+			}
+		};
+		TextColumn<Job> destinationColumn = new TextColumn<Job>() {
+			@Override
+			public String getValue(Job object) {
+				if(object.getDestinationId() == 0) {
+					return "Zwischenlager";
+				}
+				return "" + object.getDestinationId();
 			}
 		};
 
-		display.getJobTable().addColumn(jobIdColumn, "Auftrags-Id");
-		display.getJobTable().addColumn(jobColumn, "Auftrag");
+		display.getJobTable().addColumn(idColumn, "Id");
+		display.getJobTable().addColumn(timestampColumn, "Zeit");
+		display.getJobTable().addColumn(packageColumn, "Paket");
+		display.getJobTable().addColumn(destinationColumn, "Ziel");
 
 		final JobList jobList = currentScenario.getJoblist();
 		
@@ -331,18 +347,18 @@ public class MainFramePresenter extends Presenter {
 
 		// file menu
 
-		this.display.getSimulationMenuBar().addItem("Load Scenario", new Command() {
+		this.display.getSimulationMenuBar().addItem("Szenario laden", new Command() {
 			public void execute() {
 				getScenarioTitlesFromServerAndShow();
 			}
 		});
 
-		this.display.getSimulationMenuBar().addItem("Save", new Command() {
+		this.display.getSimulationMenuBar().addItem("Speichern", new Command() {
 			public void execute() {
 
 			}
 		});
-		this.display.getSimulationMenuBar().addItem("Save As", new Command() {
+		this.display.getSimulationMenuBar().addItem("Speichern als", new Command() {
 			public void execute() {
 
 			}
@@ -350,7 +366,7 @@ public class MainFramePresenter extends Presenter {
 		
 		this.display.getSimulationMenuBar().addSeparator();		
 		
-		this.display.getSimulationMenuBar().addItem("Simulation Settings", new Command() {
+		this.display.getSimulationMenuBar().addItem("Simulationseinstellungen", new Command() {
 			public void execute() {
 
 			}
@@ -358,20 +374,20 @@ public class MainFramePresenter extends Presenter {
 		
 		this.display.getSimulationMenuBar().addSeparator();				
 		
-		this.display.getSimulationMenuBar().addItem("Start/Stop Simulation", new Command() {
+		this.display.getSimulationMenuBar().addItem("Simulation starten/anhalten", new Command() {
 			public void execute() {
 
 			}
 		});		
 
 		// edit menu
-		this.display.getEditMenuBar().addItem("Define Job Set", new Command() {
+		this.display.getEditMenuBar().addItem("Auftragsliste bearbeiten", new Command() {
 			public void execute() {
 
 			}
 		});
 		
-		this.display.getEditMenuBar().addItem("Edit Jobs", new Command() {
+		this.display.getEditMenuBar().addItem("Auftr" + (char)228 +"ge bearbeiten", new Command() {
 			public void execute() {
 
 			}
@@ -381,7 +397,7 @@ public class MainFramePresenter extends Presenter {
 
 		this.display.getMenuBar().addItem("Simulation", this.display.getSimulationMenuBar());
 		this.display.getMenuBar().addSeparator();
-		this.display.getMenuBar().addItem("Edit", this.display.getEditMenuBar());
+		this.display.getMenuBar().addItem("Bearbeiten", this.display.getEditMenuBar());
 	}
 
 }
