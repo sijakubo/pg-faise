@@ -70,6 +70,7 @@
  *
  */
 
+ 
 #include "contiki.h"
 #include "net/rime.h"
 #include "lib/list.h"
@@ -77,59 +78,62 @@
 #include "lib/random.h"
 #include "dev/leds.h"
 #include "interface/bolt_int.h"
+#include "interface/photosensor_int.h"
+#include "service/uart_service.h"
+#include "contiki-conf.h"
 
+/*---------------------------------------------------------------------------*/
+PROCESS(ramptest, "Test for Ramps");
+AUTOSTART_PROCESSES(&ramptest);
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+struct broadcast_conn broadcast;
+static void broadcast_recv(struct broadcast_conn *c, const rimeaddr_t *from)
+{
+	uint8_t* msg = (uint8_t*)packetbuf_dataptr();
+	printf("%u", CONTIKIMAC_CONF_BROADCAST_RATE_LIMIT);
+	if(msg[0] == UART_RAMP_RELEASE_PACKAGE){
+		leds_toggle(LEDS_GREEN);
+		bolt_release();
+	} else if(msg[0] == UART_RAMP_SEPARATE_PACKAGE){
+		leds_toggle(LEDS_RED);
+		bolt_separate();
+	} else if(msg[0] == UART_RAMP_RELEASE_AND_SEPARATE_PACKAGE){
+		leds_toggle(LEDS_RED | LEDS_GREEN);
+		bolt_release_and_separate();
+	} else if(msg[0] == UART_RAMP_NUM_PACKAGES){
+		uint8_t newmsg[2];
+		newmsg[0] = UART_RAMP_RET_NUM_PACKAGES;
+		newmsg[1] = photosensor_num_packages();
+		packetbuf_copyfrom(newmsg, 2);
+		broadcast_send(&broadcast);
+	} else if(msg[0] == UART_RAMP_RET_NUM_PACKAGES){
+		printf("Number of packages: %u\n", msg[1]);
+	}
+}
 
-#include <stdio.h>
-#include "../../Atmel/Atmel Toolchain/AVR8 GCC/Native/3.4.2.1002/avr8-gnu-toolchain/avr/include/avr/iom128.h"
-/*---------------------------------------------------------------------------*/
-PROCESS(bolttest, "IO Test für Bolzen");
-PROCESS(petest, "IO Test für Lichtschranken");
-AUTOSTART_PROCESSES(&petest, &bolttest);
-/*---------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------*/
-PROCESS_THREAD(bolttest, ev, data)
+static const struct broadcast_callbacks broadcast_call = {broadcast_recv};
+
+PROCESS_THREAD(ramptest, ev, data)
 {
 	static struct etimer et;
-
+	
+	PROCESS_EXITHANDLER(broadcast_close(&broadcast);)
+	
 	PROCESS_BEGIN();
+	
+	leds_off(LEDS_ALL);
+	
+	broadcast_open(&broadcast, 129, &broadcast_call);
 
 	while(1) {
-		etimer_set(&et, CLOCK_SECOND / 100);
+		leds_toggle(LEDS_YELLOW);
+		etimer_set(&et, CLOCK_SECOND);
 		PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
-		bolt_release_and_separate_packet();
 	}
 
 	PROCESS_END();
 }
 
-PROCESS_THREAD(petest, ev, data)
-{
-	static struct etimer et;
-
-	PROCESS_BEGIN();
-	
-	PORTC |= 0xF0;
-	DDRC &= 0x0F & DDRC;
-	
-	leds_off(LEDS_GREEN | LEDS_RED);
-
-	while(1) {
-		etimer_set(&et, CLOCK_SECOND / 100);
-		PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
-		
-		if(PINC & (1<<PC7)){
-			leds_on(LEDS_GREEN);
-		} else {
-			leds_off(LEDS_GREEN);
-		}
-		
-		if(PINC & (1<<PC5)){
-			leds_on(LEDS_RED);
-		} else {
-			leds_off(LEDS_RED);
-		}
-	}
-
-	PROCESS_END();
-}
+/*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/

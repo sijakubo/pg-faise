@@ -1,0 +1,175 @@
+%%
+%% Template of the department Very Large Business Applications,
+%%    CvO University Oldenburg for scientific papers
+%%
+%% Created by Dipl.-Inform. Daniel Süpke
+%%    For questions, comments, suggestions etc. send an email to:
+%%    suepke@wi-ol.de or suepke@gmx.de
+%%
+%% Version: April 16, 2010
+%%
+%% Note: Has only been tested with pdflatex, not latex (dvi). Still, there is
+%% theoretical support also for latex.
+%%
+
+
+\documentclass[11pt]{scrartcl}
+
+%% packages
+%\usepackage[utf8]{inputenc}       % Standard for Linux
+\usepackage[latin1]{inputenc}    % Standard for Windows
+\usepackage{ngerman}              % For German language
+\usepackage{fancyhdr}
+\usepackage{geometry}
+\usepackage{ifpdf}
+\usepackage{setspace}             % For line spread
+
+
+
+% For pdflatex
+\ifpdf
+  % One of these two:
+  \usepackage[pdftex]{graphicx}
+  %\usepackage[pdftex]{epsfig}
+
+  \usepackage[pdftex]{hyperref}
+% For latex (dvi)
+\else
+  % One of these two:
+  \usepackage[dvips]{graphicx}
+  %\usepackage[dvips]{epsfig}
+
+  % make the command \href from hyperref available as a 'print only'
+  \newcommand{\href}[2]{#2}
+\fi
+
+
+%% Picture options
+\graphicspath{{pictures/}}         % Default path to pictures used
+\DeclareGraphicsExtensions{.png}   % More extensions can be added
+
+
+%% Pagestyle options
+\pagestyle{fancy}
+%\lhead{}
+%\chead{}
+%\rhead{}
+%\lfoot{Daniel Süpke}
+%\cfoot{}
+%\rfoot{}
+\renewcommand{\headrulewidth}{0.4pt}
+
+
+
+\geometry{a4paper,left=3cm,right=3cm}
+%\geometry{a4paper,left=3cm,right=2.5cm}   % Please use these settings for a PhD-thesis
+
+
+
+
+%% Document start
+\begin{document}
+
+%% Title page
+\begin{titlepage}
+  \begin{centering}
+  \begin{figure}[h!]
+    \centering
+    \includegraphics[width=20pt]{CvO-Oldenburg-Logo}    % Ggf. Copyright beachten - ansonsten nur für Gebrauch an der CvO
+  \end{figure}
+
+  \vspace*{0.8cm}
+
+  \begin{figure}[h!]
+    \centering
+    \includegraphics[width=20pt]{faise_logo_gross}    % Ggf. Copyright beachten - ansonsten nur für Gebrauch an der CvO/VLBA
+  \end{figure}
+
+  \vspace*{0.4cm}
+  
+  \textsf{\Huge \textbf{Fully Autonomous Intralogistic Swarm Experiment (FAISE)}}
+
+  \vspace*{0.5cm}
+  %\noindent Referat / Diplomarbeit\\
+  %\emph{Bei Referaten noch mit Zusatz:} im Rahmen des..     % Insert correct type
+	\begin{table}[h]
+\centering
+  \begin{tabular}{ll}
+   \textbf{\underline{Betreuer}} &  \\
+   & Betreuer 1 \\
+	 & Betreuer 2 \\
+	 & Betreuer 3 \\ 
+	 &  \\
+	 \underline{Projektbeginn:}& 10.11.2013 \\
+		\underline{Projektende:}& 30.11.2014 \\
+		&  \\
+	  \underline{Kontakt} &  \\
+		& PLZ Ort\\
+    & Telefonnummer\\
+		& faise@uni-oldenburg.de\\
+		& http://www.faise.uni-oldenburg.de
+\end{tabular}
+\end{table}
+  \end{centering}
+  
+\end{titlepage}
+
+
+
+%\thispagestyle{empty}
+\newpage
+
+\tableofcontents
+\newpage
+
+
+\section*{Glossar}             % Alternatively a glossary package can be used
+\addcontentsline{toc}{section}{Glossar}
+\section*{Symbolverzeichnis}   % If needed
+\addcontentsline{toc}{section}{Symbolverzeichnis}
+\newpage
+
+\listoffigures
+\addcontentsline{toc}{section}{Abbildungsverzeichnis}
+\listoftables
+\addcontentsline{toc}{section}{Tabellenverzeichnis}
+\newpage
+
+%% Line spread
+\onehalfspacing
+
+% Start of content
+\include{./kapitel/Einleitung} 
+
+\include{./kapitel/kapitel1}
+
+\include{./kapitel/kapitel2}
+
+% Appendix
+\begin{appendix}
+
+\section{Anhang}
+TODO ...
+
+\begin{verbatim}
+TODO...
+\end{verbatim}
+
+\newpage
+
+\addcontentsline{toc}{section}{Literaturverzeichnis}
+\bibliographystyle{alpha}
+\bibliography{literatur} % Point to BibTeX literature file e.g. literatur.bib
+
+\end{appendix}
+
+
+
+\newpage
+\include{./kapitel/abschliessendeErklaerung}
+
+
+\vspace*{3cm}
+\noindent Oldenburg, den \today \hspace*{2cm} 
+
+\end{document}
