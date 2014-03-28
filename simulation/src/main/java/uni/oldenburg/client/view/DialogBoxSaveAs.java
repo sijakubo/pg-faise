@@ -88,7 +88,7 @@ public class DialogBoxSaveAs extends DialogBox {
 									dialog.show();
 								}else {
 									//Szenario is inserted into Database
-									DialogBoxSaveAs.this.getPresenter().sendSzenarioToServer(DialogBoxSaveAs.this.getPresenter().getActualSzenario(), "INSERT");
+									DialogBoxSaveAs.this.getPresenter().sendSzenarioToServer(DialogBoxSaveAs.this.getPresenter().getActualSzenario());
 								}
 
 							}

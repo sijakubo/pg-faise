@@ -43,8 +43,7 @@ public class DialogBoxOverwrite extends DialogBox {
 		yes.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				DialogBoxOverwrite.this.presenter.sendSzenarioToServer(
-						DialogBoxOverwrite.this.presenter.getActualSzenario(),
-						"UPDATE");
+						DialogBoxOverwrite.this.presenter.getActualSzenario());
 				DialogBoxOverwrite.this.hide();
 			}
 		});

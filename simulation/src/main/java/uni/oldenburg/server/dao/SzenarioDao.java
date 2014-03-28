@@ -66,14 +66,28 @@ public class SzenarioDao {
 	/**
 	 * Persists a Szenario into the Database by executing an Insert
 	 * 
-	 * @author Raschid
-	 * 		   Matthias
+	 * @author Raschid Matthias
 	 */
 	public void persistSzenario(Szenario szenario) throws SQLException {
 
 		// Inserting the Szenariodata
+		// delete conveyors of szenario
+        PreparedStatement prepStatement = ConnectionPool
+                .getConnection()
+                .prepareStatement("DELETE FROM szenario_conveyor WHERE szenario_id = (SELECT id from szenario WHERE title = ?)");
 
-		PreparedStatement prepStatement = ConnectionPool
+        prepStatement.setString(1, szenario.getTitle());
+        prepStatement.executeUpdate();
+
+        // delete current szenario
+        prepStatement = ConnectionPool
+                .getConnection()
+                .prepareStatement("DELETE FROM szenario WHERE title = ?");
+
+        prepStatement.setString(1, szenario.getTitle());
+        prepStatement.executeUpdate();
+
+		prepStatement = ConnectionPool
 				.getConnection()
 				.prepareStatement(
 						"INSERT INTO szenario (" +
@@ -118,60 +132,54 @@ public class SzenarioDao {
 	/**
 	 * Updates an existing Szenario
 	 * 
-	 * @author Raschid
+	 * @author Raschid public void updateSzenario(Szenario szenario) throws
+	 *         SQLException {
+	 * 
+	 *         // The existing Szenario must be selected before it can be
+	 *         updated PreparedStatement prepStatement = ConnectionPool
+	 *         .getConnection() .prepareStatement( "SELECT * FROM " +
+	 *         Szenario.TABLE_NAME + " WHERE id=?");
+	 * 
+	 *         prepStatement.setInt(1, szenario.getID());
+	 * 
+	 *         ResultSet update=prepStatement.executeQuery();
+	 * 
+	 *         update.updateInt("id", szenario.getID());
+	 *         update.updateString("title", szenario.getTitle());
+	 *         update.updateString("time_created", szenario.getTimeCreated());
+	 *         update.updateString("user_id", szenario.getTimeCreated());
+	 *         update.updateRow();
+	 * 
+	 *         // Before the Conveyors can be updated all existing Conveyors,
+	 *         which // belong to the szenario have to be removed prepStatement
+	 *         = ConnectionPool.getConnection().prepareStatement( "DELETE FROM "
+	 *         + Conveyor.TABLE_NAME + " WHERE szenario_id=?");
+	 * 
+	 *         prepStatement.setInt(1, szenario.getID());
+	 * 
+	 *         prepStatement.executeUpdate();
+	 * 
+	 *         // Now the Conveyors can be added prepStatement = ConnectionPool
+	 *         .getConnection() .prepareStatement( "INSERT INTO " +
+	 *         Conveyor.TABLE_NAME +
+	 *         " (szenario_id, type, pos_x, pos_y) VALUES(?, ?, ?, ?");
+	 * 
+	 *         // Persist the Conveyors List<Conveyor> lstConveyor =
+	 *         szenario.getConveyorList();
+	 * 
+	 *         for (Conveyor myConveyor : lstConveyor) {
+	 * 
+	 *         prepStatement.setInt(1, szenario.getID());
+	 *         prepStatement.setString(2, myConveyor.getType());
+	 *         prepStatement.setInt(3, myConveyor.getX());
+	 *         prepStatement.setInt(4, myConveyor.getY());
+	 * 
+	 *         prepStatement.executeUpdate();
+	 * 
+	 *         }
+	 * 
+	 *         }
 	 */
-	public void updateSzenario(Szenario szenario) throws SQLException {
-
-		// The existing Szenario must be selected before it can be updated
-		PreparedStatement prepStatement = ConnectionPool
-				.getConnection()
-				.prepareStatement(
-						"SELECT * FROM "
-								+ Szenario.TABLE_NAME
-								+ " WHERE id=?");
-
-		prepStatement.setInt(1, szenario.getID());
-
-		ResultSet update=prepStatement.executeQuery();
-		
-		update.updateInt("id", szenario.getID());
-		update.updateString("title", szenario.getTitle());
-		update.updateString("time_created", szenario.getTimeCreated());
-		update.updateString("user_id", szenario.getTimeCreated());
-		update.updateRow();
-		
-		// Before the Conveyors can be updated all existing Conveyors, which
-		// belong to the szenario have to be removed
-		prepStatement = ConnectionPool.getConnection().prepareStatement(
-				"DELETE FROM " + Conveyor.TABLE_NAME + " WHERE szenario_id=?");
-
-		prepStatement.setInt(1, szenario.getID());
-
-		prepStatement.executeUpdate();
-
-		// Now the Conveyors can be added
-		prepStatement = ConnectionPool
-				.getConnection()
-				.prepareStatement(
-						"INSERT INTO "
-								+ Conveyor.TABLE_NAME
-								+ " (szenario_id, type, pos_x, pos_y) VALUES(?, ?, ?, ?");
-
-		// Persist the Conveyors
-		List<Conveyor> lstConveyor = szenario.getConveyorList();
-
-		for (Conveyor myConveyor : lstConveyor) {
-
-			prepStatement.setInt(1, szenario.getID());
-			prepStatement.setString(2, myConveyor.getType());
-			prepStatement.setInt(3, myConveyor.getX());
-			prepStatement.setInt(4, myConveyor.getY());
-
-			prepStatement.executeUpdate();
-
-		}
-
-	}
 
 	/**
 	 * loads the Szenario by a name and intializes the Szenario and Conveyor
@@ -238,7 +246,7 @@ public class SzenarioDao {
 				newConveyor = new ConveyorRamp(posX, posY);
 			} else if (type.compareTo(ConveyorVehicle.TYPE) == 0) {
 				newConveyor = new ConveyorVehicle(posX, posY);
-			}else if (type.compareTo(ConveyorWall.TYPE) == 0) {
+			} else if (type.compareTo(ConveyorWall.TYPE) == 0) {
 				newConveyor = new ConveyorWall(posX, posY);
 			}
 

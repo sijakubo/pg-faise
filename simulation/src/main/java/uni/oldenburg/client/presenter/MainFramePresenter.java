@@ -382,10 +382,10 @@ public class MainFramePresenter extends Presenter {
 	 * 
 	 * @author Raschid
 	 */
-	public void sendSzenarioToServer(Szenario szenario, String operation) {
+	public void sendSzenarioToServer(Szenario szenario) {
 
 		// Send Szenario to Server
-		((SimulationServiceAsync) rpcService).saveSzenario(szenario, operation,
+		((SimulationServiceAsync) rpcService).saveSzenario(szenario, 
 				new AsyncCallback<Void>() {
 
 					public void onFailure(Throwable caught) {

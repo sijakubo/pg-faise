@@ -51,24 +51,18 @@ public class SimulationServiceImpl extends RemoteServiceServlet implements
 	 * 
 	 * @author Raschid
 	 */
-	public void saveSzenario(Szenario szenario, String selection) {
+	public void saveSzenario(Szenario szenario) {
 		SzenarioDao szenarioDao = new SzenarioDao();
 
-		// Decide if a new szenario is inserted or an existing one is updated
-		if (selection.equals("INSERT")) {
+		
+		
 			try {
 				szenarioDao.persistSzenario(szenario);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 
-		} else if (selection.equals("UPDATE")) {
-			try {
-				szenarioDao.updateSzenario(szenario);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
+		 
 
 	}
 
