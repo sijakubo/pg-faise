@@ -77,7 +77,7 @@ public class SzenarioDao {
 				.prepareStatement(
 						"INSERT INTO "
 								+ Szenario.TABLE_NAME
-								+ " WHERE id=? AND title=? AND time_created=? AND created_by_user=?");
+								+ " (id, title, time_created, user_id) VALUES(?, ?, ?, ?)");
 
 		prepStatement.setInt(1, szenario.getID());
 		prepStatement.setString(2, szenario.getTitle());
