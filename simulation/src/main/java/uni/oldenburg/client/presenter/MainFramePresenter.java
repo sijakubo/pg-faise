@@ -48,6 +48,7 @@ public class MainFramePresenter extends Presenter {
 	private final IDisplay display;
 	private Szenario currentSzenario;
 	Conveyor dropableConveyor;
+	JobList lstJobs = new JobList();
 
 	public interface IDisplay {
 		CellTable<Job> getJobTable();
@@ -223,7 +224,7 @@ public class MainFramePresenter extends Presenter {
 		display.getJobTable().addColumn(packageColumn, "Paket");
 		display.getJobTable().addColumn(destinationColumn, "Ziel");
 
-		final JobList jobList = currentSzenario.getJoblist();
+		final JobList jobList = this.lstJobs;
 		
 		AsyncDataProvider<Job> provider = new AsyncDataProvider<Job>() {
 			@Override
