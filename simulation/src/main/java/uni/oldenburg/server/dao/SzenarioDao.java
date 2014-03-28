@@ -67,6 +67,7 @@ public class SzenarioDao {
 	 * Persists a Szenario into the Database by executing an Insert
 	 * 
 	 * @author Raschid
+	 * 		   Matthias
 	 */
 	public void persistSzenario(Szenario szenario) throws SQLException {
 
@@ -75,57 +76,43 @@ public class SzenarioDao {
 		PreparedStatement prepStatement = ConnectionPool
 				.getConnection()
 				.prepareStatement(
-						"INSERT INTO "
-								+ Szenario.TABLE_NAME
-								+ " (id, title, time_created, user_id) VALUES(?, ?, ?, ?)");
+						"INSERT INTO szenario (" +
+							"id, " +
+							"title, " +
+							"time_created, " +
+							"user_id) " +
+						"VALUES (" +
+							"(SELECT CASE WHEN MAX(ID) IS NULL THEN 0 ELSE MAX(ID)+1 END FROM szenario), " +
+							"?, " +
+							"now(), " +
+							"4");
+		
+			// use this as soon as it's possible to get user information out of session				
+		//"(SELECT ID FROM simulationuser WHERE name = ?)");
 
-		prepStatement.setInt(1, szenario.getID());
-		prepStatement.setString(2, szenario.getTitle());
-		prepStatement.setString(3, szenario.getTimeCreated());
-		prepStatement.setString(4, szenario.getCreatedByUser());
+		prepStatement.setString(1, szenario.getTitle());
 
 		prepStatement.executeUpdate();
 
 		prepStatement = ConnectionPool
 				.getConnection()
 				.prepareStatement(
-						"INSERT INTO "
-								+ Conveyor.TABLE_NAME
-								+ " (szenario_id, type, pos_x, pos_y) VALUES(?, ?, ?, ?)");
-
-		// Because we know the correct id of the szenario only if the szenario
-		// was inserted, we have to select the id of the
-		// Szenario by its title, so that the conveyors can be assigned to the
-		// right szenario
-		String strSQL = "SELECT id FROM " + Szenario.TABLE_NAME
-				+ " WHERE szenario.title = ?";
-
-		prepStatement = ConnectionPool.getConnection().prepareStatement(strSQL);
-
-		prepStatement.setString(1, szenario.getTitle());
-
-		ResultSet resultSet=prepStatement.executeQuery();
-		
-		int idSzenario=-1;
-				
-		if(resultSet.next()){
-			idSzenario=resultSet.getInt("id");
-		}
+						"INSERT INTO " + Conveyor.TABLE_NAME +
+							" (szenario_id, type, pos_x, pos_y) " +
+						"VALUES" + 
+							"((SELECT id FROM szenario WHERE title = ?), ?, ?, ?)");
 
 		// Persisting the Conveyors
 		List<Conveyor> lstConveyor = szenario.getConveyorList();
 
 		for (Conveyor myConveyor : lstConveyor) {
-
-			prepStatement.setInt(1, idSzenario);
+			prepStatement.setString(1, szenario.getTitle());
 			prepStatement.setString(2, myConveyor.getType());
 			prepStatement.setInt(3, myConveyor.getX());
 			prepStatement.setInt(4, myConveyor.getY());
 
 			prepStatement.executeUpdate();
-
 		}
-
 	}
 
 	/**

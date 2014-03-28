@@ -39,7 +39,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
@@ -354,12 +353,9 @@ public class MainFramePresenter extends Presenter {
 	public void trySaveSzenario(Szenario szenario) {
 
 		// Check if Szenario already exists
-		((SimulationServiceAsync) rpcService).checkIfTitleExists(
-				szenario.getTitle(), new AsyncCallback<Boolean>() {
-
+		((SimulationServiceAsync) rpcService).checkIfTitleExists(szenario.getTitle(), new AsyncCallback<Boolean>() {
 					public void onFailure(Throwable caught) {
 						Window.alert("Communication Problem");
-
 					}
 
 					public void onSuccess(Boolean result) {
@@ -368,20 +364,15 @@ public class MainFramePresenter extends Presenter {
 						if (result) {
 							// Show the popup so the user can select if he wants
 							// to overwrite or not
-							DialogBoxOverwrite dialog = new DialogBoxOverwrite(
-									MainFramePresenter.this);
+							DialogBoxOverwrite dialog = new DialogBoxOverwrite(MainFramePresenter.this);
 							dialog.show();
 						} else {
 							// Open Save as Dialog
-							DialogBoxSaveAs dialog = new DialogBoxSaveAs(
-									MainFramePresenter.this);
+							DialogBoxSaveAs dialog = new DialogBoxSaveAs(MainFramePresenter.this);
 							dialog.show();
 						}
-
 					}
-
 				});
-
 	}
 
 	/**
