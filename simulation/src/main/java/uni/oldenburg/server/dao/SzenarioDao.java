@@ -85,7 +85,7 @@ public class SzenarioDao {
 							"(SELECT CASE WHEN MAX(ID) IS NULL THEN 0 ELSE MAX(ID)+1 END FROM szenario), " +
 							"?, " +
 							"now(), " +
-							"4");
+							"4)");
 		
 			// use this as soon as it's possible to get user information out of session				
 		//"(SELECT ID FROM simulationuser WHERE name = ?)");
@@ -238,6 +238,8 @@ public class SzenarioDao {
 				newConveyor = new ConveyorRamp(posX, posY);
 			} else if (type.compareTo(ConveyorVehicle.TYPE) == 0) {
 				newConveyor = new ConveyorVehicle(posX, posY);
+			}else if (type.compareTo(ConveyorWall.TYPE) == 0) {
+				newConveyor = new ConveyorWall(posX, posY);
 			}
 
 			if (newConveyor != null)
