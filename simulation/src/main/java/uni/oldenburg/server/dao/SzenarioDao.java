@@ -44,7 +44,7 @@ public class SzenarioDao {
 
 		ArrayList<String> scenarioTitles = new ArrayList<String>();
 
-		String strSQL = "SELECT title FROM " + Szenario.TABLE_NAME;
+		String strSQL = "SELECT title FROM " + Szenario.TABLE_NAME + " ORDER BY title";
 
 		PreparedStatement preparedStatement = ConnectionPool.getConnection()
 				.prepareStatement(strSQL);
