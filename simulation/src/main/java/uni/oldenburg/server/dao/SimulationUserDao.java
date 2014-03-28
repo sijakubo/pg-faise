@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SimulationUserDao {
+	
+	
     public SimulationUser findSimulationUserById(Long userId) throws SQLException {
         PreparedStatement preparedStatement = ConnectionPool.getConnection()
                 .prepareStatement("SELECT id, name, password, email FROM " + SimulationUser.TABLE_NAME + " WHERE id = ?");

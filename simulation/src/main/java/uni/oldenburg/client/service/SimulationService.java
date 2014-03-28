@@ -12,4 +12,5 @@ public interface SimulationService extends RemoteService {
 	Szenario loadSzenario(String name);
 	ArrayList<String> getScenarioTitles();
 	void saveSzenario(Szenario szenario);
+	boolean checkIfTitleExists(String title);
 }

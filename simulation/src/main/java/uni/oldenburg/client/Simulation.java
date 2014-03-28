@@ -13,10 +13,11 @@ import uni.oldenburg.client.service.SimulationService;
  */
 
 public class Simulation implements EntryPoint {
+	
+	
 	/**
 	  * This is the entry point method.
-	  */
-	
+	  */	
 	 public void onModuleLoad() {
 		 ServiceAsync rpcService = GWT.create(SimulationService.class);
 		 HandlerManager eventBus = new HandlerManager(null);
