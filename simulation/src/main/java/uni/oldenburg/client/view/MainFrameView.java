@@ -29,6 +29,7 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	private Button			btnConveyorVehicle;
 	private Button			btnConveyorWall;
 	// -------------
+	private Label			lblUserName;
 	
 	private Canvas			canvas;
 	
@@ -104,6 +105,14 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		vpConveyor.add(btnConveyorWall);
 		
 		vpLeftFrame.add(vpConveyor);
+		
+		
+		lblUserName = new Label("Test");
+		
+		vpLeftFrame.add(lblUserName);
+		
+		
+		
 		// -------------
 		
 		hpSubFrame.add(vpLeftFrame);
@@ -159,5 +168,13 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 
 	public HasClickHandlers getConveyorWallButton() {
 		return this.btnConveyorWall;
+	}
+
+	public Label getLabelUserName() {
+		return this.lblUserName;
+	}
+	
+	public void setLabelUserName(String userName) {
+		this.lblUserName.setText(userName);
 	}
 }

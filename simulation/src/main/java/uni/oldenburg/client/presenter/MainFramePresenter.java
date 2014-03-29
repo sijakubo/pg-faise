@@ -39,6 +39,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
@@ -54,14 +55,25 @@ public class MainFramePresenter extends Presenter {
 		CellTable<Job> getJobTable();
 
 		HasClickHandlers getStrategiesButton();
+
 		HasClickHandlers getVirtualHybridButton();
+
 		HasClickHandlers getConveyorRampButton();
+
 		HasClickHandlers getConveyorVehicleButton();
+
 		HasClickHandlers getConveyorWallButton();
 
 		MenuBar getMenuBar();
+
 		MenuBar getSimulationMenuBar();
+
 		MenuBar getEditMenuBar();
+
+		Label getLabelUserName();
+
+		void setLabelUserName(String userName);
+
 		Canvas getCanvas();
 	}
 
@@ -75,6 +87,31 @@ public class MainFramePresenter extends Presenter {
 
 	public Widget getDisplay() {
 		return (Widget) display;
+
+	}
+
+	/**
+	 * Method gets UserName from Server and writes it into the Label
+	 * 
+	 * @author Nagi
+	 */
+	private void setLabelUserName() {
+
+		// Get the Username from Server
+		((SimulationServiceAsync) rpcService)
+				.getUserName(new AsyncCallback<String>() {
+					public void onFailure(Throwable arg0) {
+						Window.alert(arg0.getLocalizedMessage());
+					}
+
+					public void onSuccess(String result) {
+						// Write the String into the Label
+						MainFramePresenter.this.getDisplay1().setLabelUserName(
+								"Eingeloggt als: " + result);
+
+					}
+
+				});
 
 	}
 
@@ -95,7 +132,7 @@ public class MainFramePresenter extends Presenter {
 				event.stopPropagation();
 			}
 		}, ContextMenuEvent.getType());
-		
+
 		/**
 		 * show movement of drag&drop-able object
 		 * 
@@ -118,7 +155,7 @@ public class MainFramePresenter extends Presenter {
 		});
 
 		/**
-		 * drag, drop and rotate objects on canvas 
+		 * drag, drop and rotate objects on canvas
 		 * 
 		 * @author Matthias
 		 */
@@ -132,7 +169,8 @@ public class MainFramePresenter extends Presenter {
 					if (myConveyor != null) {
 						// wenn platz noch frei ist
 						if (isSpotAvailable(event.getX(), event.getY())) {
-							MainFramePresenter.this.currentSzenario.addConveyor(myConveyor);
+							MainFramePresenter.this.currentSzenario
+									.addConveyor(myConveyor);
 							MainFramePresenter.this.dropableConveyor = null;
 							loadSzenario(MainFramePresenter.this.currentSzenario);
 						}
@@ -144,9 +182,11 @@ public class MainFramePresenter extends Presenter {
 					// rampe rotieren
 					if (myConveyor == null)
 						return;
-					
+
 					if (myConveyor.getType().compareTo(ConveyorRamp.TYPE) == 0) {
-						((ConveyorRamp) myConveyor).setVertical(!((ConveyorRamp) myConveyor).isVertical());
+						((ConveyorRamp) myConveyor)
+								.setVertical(!((ConveyorRamp) myConveyor)
+										.isVertical());
 
 						loadSzenario(MainFramePresenter.this.currentSzenario);
 						drawConveyor(myConveyor);
@@ -158,8 +198,7 @@ public class MainFramePresenter extends Presenter {
 		});
 
 		/**
-		 * keyboard handling for canvas
-		 * to delete conveyor
+		 * keyboard handling for canvas to delete conveyor
 		 * 
 		 * @author Matthias
 		 */
@@ -250,7 +289,7 @@ public class MainFramePresenter extends Presenter {
 		TextColumn<Job> destinationColumn = new TextColumn<Job>() {
 			@Override
 			public String getValue(Job object) {
-				if(object.getDestinationId() == 0) {
+				if (object.getDestinationId() == 0) {
 					return "Zwischenlager";
 				}
 				return "" + object.getDestinationId();
@@ -263,7 +302,7 @@ public class MainFramePresenter extends Presenter {
 		display.getJobTable().addColumn(destinationColumn, "Ziel");
 
 		final JobList jobList = this.lstJobs;
-		
+
 		AsyncDataProvider<Job> provider = new AsyncDataProvider<Job>() {
 			@Override
 			protected void onRangeChanged(HasData<Job> display) {
@@ -285,7 +324,8 @@ public class MainFramePresenter extends Presenter {
 	 */
 	private void drawConveyor(Conveyor myConveyor) {
 		Context2d context = display.getCanvas().getContext2d();
-		context.drawImage(myConveyor.getCanvasElement(), myConveyor.getX(),myConveyor.getY());
+		context.drawImage(myConveyor.getCanvasElement(), myConveyor.getX(),
+				myConveyor.getY());
 	}
 
 	/**
@@ -324,13 +364,17 @@ public class MainFramePresenter extends Presenter {
 		Conveyor myConveyor = null;
 
 		List<Conveyor> lstConveyor = this.currentSzenario.getConveyorList();
-		
-		for(Conveyor cvEntry : lstConveyor) {
-			if (x < cvEntry.getX()) continue;
-			if (y < cvEntry.getY()) continue;
-			if (x > (cvEntry.getX() + cvEntry.getWidth())) continue;
-			if (y > (cvEntry.getY() + cvEntry.getHeight())) continue;
-			
+
+		for (Conveyor cvEntry : lstConveyor) {
+			if (x < cvEntry.getX())
+				continue;
+			if (y < cvEntry.getY())
+				continue;
+			if (x > (cvEntry.getX() + cvEntry.getWidth()))
+				continue;
+			if (y > (cvEntry.getY() + cvEntry.getHeight()))
+				continue;
+
 			myConveyor = cvEntry;
 			break;
 		}
@@ -432,7 +476,8 @@ public class MainFramePresenter extends Presenter {
 	public void trySaveSzenario(Szenario szenario) {
 
 		// Check if Szenario already exists
-		((SimulationServiceAsync) rpcService).checkIfTitleExists(szenario.getTitle(), new AsyncCallback<Boolean>() {
+		((SimulationServiceAsync) rpcService).checkIfTitleExists(
+				szenario.getTitle(), new AsyncCallback<Boolean>() {
 					public void onFailure(Throwable caught) {
 						Window.alert("Communication Problem");
 					}
@@ -443,11 +488,13 @@ public class MainFramePresenter extends Presenter {
 						if (result) {
 							// Show the popup so the user can select if he wants
 							// to overwrite or not
-							DialogBoxOverwrite dialog = new DialogBoxOverwrite(MainFramePresenter.this);
+							DialogBoxOverwrite dialog = new DialogBoxOverwrite(
+									MainFramePresenter.this);
 							dialog.show();
 						} else {
 							// Open Save as Dialog
-							DialogBoxSaveAs dialog = new DialogBoxSaveAs(MainFramePresenter.this);
+							DialogBoxSaveAs dialog = new DialogBoxSaveAs(
+									MainFramePresenter.this);
 							dialog.show();
 						}
 					}
@@ -464,7 +511,7 @@ public class MainFramePresenter extends Presenter {
 	public void sendSzenarioToServer(Szenario szenario) {
 
 		// Send Szenario to Server
-		((SimulationServiceAsync) rpcService).saveSzenario(szenario, 
+		((SimulationServiceAsync) rpcService).saveSzenario(szenario,
 				new AsyncCallback<Void>() {
 
 					public void onFailure(Throwable caught) {
@@ -489,6 +536,7 @@ public class MainFramePresenter extends Presenter {
 		this.addConveyorWallButtonListener();
 		this.addCanvasListener();
 		this.setupJobTable();
+		this.setLabelUserName();
 
 	}
 
@@ -516,50 +564,57 @@ public class MainFramePresenter extends Presenter {
 				trySaveSzenario(MainFramePresenter.this.getActualSzenario());
 			}
 		});
-		this.display.getSimulationMenuBar().addItem("Speichern unter...", new Command() {
-			public void execute() {
-				// Open Save as Dialog
-				DialogBoxSaveAs dialog = new DialogBoxSaveAs(
-						MainFramePresenter.this);
-				dialog.show();
-			}
-		});
-		
-		this.display.getSimulationMenuBar().addSeparator();		
-		
-		this.display.getSimulationMenuBar().addItem("Einstellungen", new Command() {
-			public void execute() {
+		this.display.getSimulationMenuBar().addItem("Speichern unter...",
+				new Command() {
+					public void execute() {
+						// Open Save as Dialog
+						DialogBoxSaveAs dialog = new DialogBoxSaveAs(
+								MainFramePresenter.this);
+						dialog.show();
+					}
+				});
 
-			}
-		});
-		
-		this.display.getSimulationMenuBar().addSeparator();				
-		
-		this.display.getSimulationMenuBar().addItem("Starten/Anhalten", new Command() {
-			public void execute() {
+		this.display.getSimulationMenuBar().addSeparator();
+
+		this.display.getSimulationMenuBar().addItem("Einstellungen",
+				new Command() {
+					public void execute() {
+
+					}
+				});
+
+		this.display.getSimulationMenuBar().addSeparator();
+
+		this.display.getSimulationMenuBar().addItem("Starten/Anhalten",
+				new Command() {
+					public void execute() {
 
 					}
 				});
 
 		// edit menu
-		this.display.getEditMenuBar().addItem("Auftragsliste bearbeiten", new Command() {
-			public void execute() {
+		this.display.getEditMenuBar().addItem("Auftragsliste bearbeiten",
+				new Command() {
+					public void execute() {
 
-			}
-		});
-		
-		this.display.getEditMenuBar().addItem("Auftr" + (char)228 +"ge bearbeiten", new Command() {
-			public void execute() {
+					}
+				});
 
-			}
-		});
+		this.display.getEditMenuBar().addItem(
+				"Auftr" + (char) 228 + "ge bearbeiten", new Command() {
+					public void execute() {
+
+					}
+				});
 
 		// menu bar
 
-		this.display.getMenuBar().addItem("Simulation", this.display.getSimulationMenuBar());
+		this.display.getMenuBar().addItem("Simulation",
+				this.display.getSimulationMenuBar());
 		this.display.getMenuBar().addSeparator();
-		
-		this.display.getMenuBar().addItem("Bearbeiten", this.display.getEditMenuBar());
+
+		this.display.getMenuBar().addItem("Bearbeiten",
+				this.display.getEditMenuBar());
 	}
 
 	public Szenario getActualSzenario() {
@@ -570,4 +625,7 @@ public class MainFramePresenter extends Presenter {
 		return this.rpcService;
 	}
 
+	public IDisplay getDisplay1() {
+		return this.display;
+	}
 }

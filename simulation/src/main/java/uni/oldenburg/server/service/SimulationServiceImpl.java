@@ -3,6 +3,9 @@ package uni.oldenburg.server.service;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import uni.oldenburg.client.service.SimulationService;
 import uni.oldenburg.server.dao.SzenarioDao;
 import uni.oldenburg.shared.model.Szenario;
@@ -81,6 +84,15 @@ public class SimulationServiceImpl extends RemoteServiceServlet implements Simul
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	public String getUserName() {
+		HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
+        HttpSession session = httpServletRequest.getSession(true);
+        //String userName=(String) session.getValue("user");
+     
+        return "Nagi";
+		
 	}
 
 }
