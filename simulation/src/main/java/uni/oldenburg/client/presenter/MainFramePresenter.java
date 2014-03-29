@@ -72,8 +72,6 @@ public class MainFramePresenter extends Presenter {
 
 		Label getLabelUserName();
 
-		void setLabelUserName(String userName);
-
 		Canvas getCanvas();
 	}
 
@@ -98,21 +96,17 @@ public class MainFramePresenter extends Presenter {
 	private void setLabelUserName() {
 
 		// Get the Username from Server
-		((SimulationServiceAsync) rpcService)
-				.getUserName(new AsyncCallback<String>() {
+		((SimulationServiceAsync) rpcService).getUserName(new AsyncCallback<String>() {
 					public void onFailure(Throwable arg0) {
 						Window.alert(arg0.getLocalizedMessage());
 					}
 
 					public void onSuccess(String result) {
 						// Write the String into the Label
-						MainFramePresenter.this.getDisplay1().setLabelUserName(
-								"Eingeloggt als: " + result);
-
+						((MainFramePresenter.IDisplay) MainFramePresenter.this.getDisplay())
+							.getLabelUserName().setText("Eingeloggt als: " + result);
 					}
-
 				});
-
 	}
 
 	/**
@@ -623,9 +617,5 @@ public class MainFramePresenter extends Presenter {
 
 	public ServiceAsync getService() {
 		return this.rpcService;
-	}
-
-	public IDisplay getDisplay1() {
-		return this.display;
 	}
 }

@@ -173,8 +173,4 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	public Label getLabelUserName() {
 		return this.lblUserName;
 	}
-	
-	public void setLabelUserName(String userName) {
-		this.lblUserName.setText(userName);
-	}
 }

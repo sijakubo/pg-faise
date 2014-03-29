@@ -67,5 +67,5 @@ public class RegistrationAndLoginServiceImpl extends RemoteServiceServlet implem
         HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
         HttpSession session = httpServletRequest.getSession();
         session.removeAttribute("user");
-    }
+    }  
 }

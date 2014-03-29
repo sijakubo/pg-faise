@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import uni.oldenburg.client.service.SimulationService;
 import uni.oldenburg.server.dao.SzenarioDao;
+import uni.oldenburg.shared.model.SimulationUser;
 import uni.oldenburg.shared.model.Szenario;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -85,14 +86,12 @@ public class SimulationServiceImpl extends RemoteServiceServlet implements Simul
 		}
 		return result;
 	}
-
+	
 	public String getUserName() {
 		HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
         HttpSession session = httpServletRequest.getSession(true);
-        //String userName=(String) session.getValue("user");
+        SimulationUser simUser= (SimulationUser) session.getAttribute("user");
      
-        return "Nagi";
-		
-	}
-
+        return simUser.getName();
+	}  	
 }

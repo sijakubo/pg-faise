@@ -11,6 +11,6 @@ public interface SimulationServiceAsync extends ServiceAsync {
 	void getScenarioTitles (AsyncCallback<ArrayList<String>> asyncCallback);
 	void saveSzenario(Szenario szenario, AsyncCallback<Void> asyncCallback);
 	void checkIfTitleExists(String title, AsyncCallback<Boolean> asyncCallback);
-	void getUserName( AsyncCallback<String> asyncCallback);
+	void getUserName( AsyncCallback<String> asyncCallback);	
 }
 
