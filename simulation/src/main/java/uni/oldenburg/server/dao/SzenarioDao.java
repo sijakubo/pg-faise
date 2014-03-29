@@ -69,8 +69,6 @@ public class SzenarioDao {
 	 * @author Raschid Matthias
 	 */
 	public void persistSzenario(Szenario szenario) throws SQLException {
-
-		// Inserting the Szenariodata
 		// delete conveyors of szenario
         PreparedStatement prepStatement = ConnectionPool
                 .getConnection()
@@ -108,6 +106,7 @@ public class SzenarioDao {
 
 		prepStatement.executeUpdate();
 
+		// Inserting the Szenariodata
 		prepStatement = ConnectionPool
 				.getConnection()
 				.prepareStatement(
@@ -130,62 +129,10 @@ public class SzenarioDao {
 	}
 
 	/**
-	 * Updates an existing Szenario
-	 * 
-	 * @author Raschid public void updateSzenario(Szenario szenario) throws
-	 *         SQLException {
-	 * 
-	 *         // The existing Szenario must be selected before it can be
-	 *         updated PreparedStatement prepStatement = ConnectionPool
-	 *         .getConnection() .prepareStatement( "SELECT * FROM " +
-	 *         Szenario.TABLE_NAME + " WHERE id=?");
-	 * 
-	 *         prepStatement.setInt(1, szenario.getID());
-	 * 
-	 *         ResultSet update=prepStatement.executeQuery();
-	 * 
-	 *         update.updateInt("id", szenario.getID());
-	 *         update.updateString("title", szenario.getTitle());
-	 *         update.updateString("time_created", szenario.getTimeCreated());
-	 *         update.updateString("user_id", szenario.getTimeCreated());
-	 *         update.updateRow();
-	 * 
-	 *         // Before the Conveyors can be updated all existing Conveyors,
-	 *         which // belong to the szenario have to be removed prepStatement
-	 *         = ConnectionPool.getConnection().prepareStatement( "DELETE FROM "
-	 *         + Conveyor.TABLE_NAME + " WHERE szenario_id=?");
-	 * 
-	 *         prepStatement.setInt(1, szenario.getID());
-	 * 
-	 *         prepStatement.executeUpdate();
-	 * 
-	 *         // Now the Conveyors can be added prepStatement = ConnectionPool
-	 *         .getConnection() .prepareStatement( "INSERT INTO " +
-	 *         Conveyor.TABLE_NAME +
-	 *         " (szenario_id, type, pos_x, pos_y) VALUES(?, ?, ?, ?");
-	 * 
-	 *         // Persist the Conveyors List<Conveyor> lstConveyor =
-	 *         szenario.getConveyorList();
-	 * 
-	 *         for (Conveyor myConveyor : lstConveyor) {
-	 * 
-	 *         prepStatement.setInt(1, szenario.getID());
-	 *         prepStatement.setString(2, myConveyor.getType());
-	 *         prepStatement.setInt(3, myConveyor.getX());
-	 *         prepStatement.setInt(4, myConveyor.getY());
-	 * 
-	 *         prepStatement.executeUpdate();
-	 * 
-	 *         }
-	 * 
-	 *         }
-	 */
-
-	/**
 	 * loads the Szenario by a name and intializes the Szenario and Conveyor
 	 * Objects with
 	 * 
-	 * @author Raschid
+	 * @author Raschid Matthias
 	 */
 	public Szenario loadSzenario(String name) throws SQLException {
 		String strSQL = "SELECT szenario.id AS id, time_created, simulationuser.name AS user_name "
@@ -222,7 +169,12 @@ public class SzenarioDao {
 
 		return newSzenario;
 	}
-
+	
+	/**
+	 * load conveyors from database into a list
+	 * 
+	 * @author Matthias
+	 */
 	private List<Conveyor> loadConveyor(int szenario_id) throws SQLException {
 		List<Conveyor> lstConveyor = new ArrayList<Conveyor>();
 

@@ -78,15 +78,29 @@ public class MainFramePresenter extends Presenter {
 
 	}
 
+	/**
+	 * setup listener of canvas object for managing drag & drop handling
+	 * 
+	 * @author Matthias
+	 */
 	private void addCanvasListener() {
-		// standard-kontextmenu im canvas object nicht unterbinden
+		/**
+		 * disable default context menu in canvas
+		 * 
+		 * @author Matthias
+		 */
 		display.getCanvas().addDomHandler(new ContextMenuHandler() {
 			public void onContextMenu(ContextMenuEvent event) {
 				event.preventDefault();
 				event.stopPropagation();
 			}
 		}, ContextMenuEvent.getType());
-
+		
+		/**
+		 * show movement of drag&drop-able object
+		 * 
+		 * @author Matthias
+		 */
 		display.getCanvas().addMouseMoveHandler(new MouseMoveHandler() {
 			public void onMouseMove(MouseMoveEvent event) {
 				Conveyor myConveyor = MainFramePresenter.this.dropableConveyor;
@@ -103,6 +117,11 @@ public class MainFramePresenter extends Presenter {
 			}
 		});
 
+		/**
+		 * drag, drop and rotate objects on canvas 
+		 * 
+		 * @author Matthias
+		 */
 		display.getCanvas().addMouseUpHandler(new MouseUpHandler() {
 			public void onMouseUp(MouseUpEvent event) {
 				Conveyor myConveyor = MainFramePresenter.this.dropableConveyor;
@@ -125,11 +144,9 @@ public class MainFramePresenter extends Presenter {
 					// rampe rotieren
 					if (myConveyor == null)
 						return;
-
-					if (myConveyor.getType().compareTo("Rampe") == 0) {
-						((ConveyorRamp) myConveyor)
-								.setVertical(!((ConveyorRamp) myConveyor)
-										.isVertical());
+					
+					if (myConveyor.getType().compareTo(ConveyorRamp.TYPE) == 0) {
+						((ConveyorRamp) myConveyor).setVertical(!((ConveyorRamp) myConveyor).isVertical());
 
 						loadSzenario(MainFramePresenter.this.currentSzenario);
 						drawConveyor(myConveyor);
@@ -140,6 +157,12 @@ public class MainFramePresenter extends Presenter {
 			}
 		});
 
+		/**
+		 * keyboard handling for canvas
+		 * to delete conveyor
+		 * 
+		 * @author Matthias
+		 */
 		display.getCanvas().addKeyUpHandler(new KeyUpHandler() {
 			public void onKeyUp(KeyUpEvent event) {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ESCAPE) {
@@ -166,6 +189,11 @@ public class MainFramePresenter extends Presenter {
 		});
 	}
 
+	/**
+	 * select ramp as drag/drop-able conveyor
+	 * 
+	 * @author Matthias
+	 */
 	private void addConveyorRampButtonListener() {
 		display.getConveyorRampButton().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -174,6 +202,11 @@ public class MainFramePresenter extends Presenter {
 		});
 	}
 
+	/**
+	 * select vehicle as drag/drop-able conveyor
+	 * 
+	 * @author Matthias
+	 */
 	private void addConveyorVehicleButtonListener() {
 		display.getConveyorVehicleButton().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -182,6 +215,11 @@ public class MainFramePresenter extends Presenter {
 		});
 	}
 
+	/**
+	 * select wall as drag/drop-able conveyor
+	 * 
+	 * @author Matthias
+	 */
 	private void addConveyorWallButtonListener() {
 		display.getConveyorWallButton().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -240,12 +278,21 @@ public class MainFramePresenter extends Presenter {
 		provider.updateRowCount(jobList.size(), true);
 	}
 
+	/**
+	 * draw conveyor von main canvas
+	 * 
+	 * @author Matthias
+	 */
 	private void drawConveyor(Conveyor myConveyor) {
 		Context2d context = display.getCanvas().getContext2d();
-		context.drawImage(myConveyor.getCanvasElement(), myConveyor.getX(),
-				myConveyor.getY());
+		context.drawImage(myConveyor.getCanvasElement(), myConveyor.getX(),myConveyor.getY());
 	}
 
+	/**
+	 * draw conveyors on random positions
+	 * 
+	 * @author Matthias
+	 */
 	@SuppressWarnings("unused")
 	private void generateConveyor() {
 		for (int i = 0; i < 5; ++i) {
@@ -259,10 +306,20 @@ public class MainFramePresenter extends Presenter {
 		}
 	}
 
+	/**
+	 * check if spot is taken by a conveyor
+	 * 
+	 * @author Matthias
+	 */
 	public boolean isSpotAvailable(int x, int y) {
 		return (findConveyor(x, y) == null);
 	}
 
+	/**
+	 * find conveyor on given location
+	 * 
+	 * @author Matthias
+	 */
 	public Conveyor findConveyor(int x, int y) {
 		Conveyor myConveyor = null;
 
@@ -281,6 +338,11 @@ public class MainFramePresenter extends Presenter {
 		return myConveyor;
 	}
 
+	/**
+	 * grab conveyor at given location
+	 * 
+	 * @author Matthias
+	 */
 	public void grabConveyor(int x, int y) {
 		Conveyor myConveyor = findConveyor(x, y);
 
@@ -290,6 +352,11 @@ public class MainFramePresenter extends Presenter {
 		this.dropableConveyor = myConveyor;
 	}
 
+	/**
+	 * clear the main canvas for redrawing
+	 * 
+	 * @author Matthias
+	 */
 	public void clearCanvas() {
 		Context2d context = display.getCanvas().getContext2d();
 		context.setFillStyle(CssColor.make(255, 255, 255));
@@ -299,6 +366,11 @@ public class MainFramePresenter extends Presenter {
 
 	}
 
+	/**
+	 * draw current szenario
+	 * 
+	 * @author Matthias
+	 */
 	public void loadSzenario(Szenario szenario) {
 		clearCanvas();
 
@@ -312,6 +384,11 @@ public class MainFramePresenter extends Presenter {
 		}
 	}
 
+	/**
+	 * load szenario from database and draw it
+	 * 
+	 * @author Matthias
+	 */
 	public void loadSzenario(String name) {
 		((SimulationServiceAsync) rpcService).loadSzenario(name,
 				new AsyncCallback<Szenario>() {

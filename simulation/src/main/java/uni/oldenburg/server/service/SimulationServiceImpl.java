@@ -10,8 +10,12 @@ import uni.oldenburg.shared.model.Szenario;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
-public class SimulationServiceImpl extends RemoteServiceServlet implements
-		SimulationService {
+public class SimulationServiceImpl extends RemoteServiceServlet implements SimulationService {
+	/**
+	 * load szenario based on unique name
+	 * 
+	 * @author Matthias
+	 */
 	public Szenario loadSzenario(String name) {
 		SzenarioDao szenarioDao = new SzenarioDao();
 		Szenario newSzenario = null;
@@ -53,17 +57,12 @@ public class SimulationServiceImpl extends RemoteServiceServlet implements
 	 */
 	public void saveSzenario(Szenario szenario) {
 		SzenarioDao szenarioDao = new SzenarioDao();
-
 		
-		
-			try {
-				szenarioDao.persistSzenario(szenario);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-
-		 
-
+		try {
+			szenarioDao.persistSzenario(szenario);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

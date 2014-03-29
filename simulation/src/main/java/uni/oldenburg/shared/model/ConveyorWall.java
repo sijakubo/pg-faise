@@ -4,6 +4,12 @@ import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
 
+/**
+ * class for handing wall blocks in the canvas
+ * 
+ * @author Matthias
+ */
+
 @SuppressWarnings("serial")
 public class ConveyorWall extends Conveyor {
 	public static final String TYPE = "Wand";

@@ -5,6 +5,12 @@ import java.io.Serializable;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.CanvasElement;
 
+/**
+ * Conveyor class for positioning and drawhandling
+ * 
+ * @author Matthias
+ */
+
 @SuppressWarnings("serial")
 public abstract class Conveyor implements Serializable {
 	private final static int rasterSize = 20;
@@ -45,6 +51,11 @@ public abstract class Conveyor implements Serializable {
 		return ID;
 	}
 
+	/**
+	 * Align positioning based on rastersize
+	 * 
+	 * @author Matthias
+	 */
 	public void setPosition(int x, int y) {
 		this.x = x - (x % rasterSize);
 		this.y = y - (y % rasterSize);
@@ -81,6 +92,11 @@ public abstract class Conveyor implements Serializable {
 		this.y += y_rel;
 	}
 
+	/**
+	 * draw and retrieve canvas when necessary
+	 * 
+	 * @author Matthias
+	 */
 	public CanvasElement getCanvasElement() {
 		if (canvas == null) {
 			canvas = Canvas.createIfSupported();

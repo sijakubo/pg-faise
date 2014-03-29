@@ -4,6 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * szenario class to store and handle related information
+ * 
+ * @author Matthias
+ */
+
 @SuppressWarnings("serial")
 public class Szenario implements Serializable {
 	public static final String TABLE_NAME = "szenario";

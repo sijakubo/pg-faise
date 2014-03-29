@@ -4,6 +4,12 @@ import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
 
+/**
+ * class for handing ramp blocks in the canvas
+ * 
+ * @author Matthias
+ */
+
 @SuppressWarnings("serial")
 public class ConveyorRamp extends Conveyor {
 	public static final String TYPE = "Rampe";
@@ -38,6 +44,12 @@ public class ConveyorRamp extends Conveyor {
 	public boolean isVertical() {
 		return bVertical;
 	}
+	
+	/**
+	 * change size based on vertical status
+	 * 
+	 * @author Matthias
+	 */	
 
 	public void setVertical(boolean value) {
 		if (this.bVertical == value)
