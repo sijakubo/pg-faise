@@ -109,9 +109,9 @@ public class DialogBoxSaveAs extends DialogBox {
 		});
 
 		hPanel.add(exit);
-		
-		vpPanel.add(hPanel);
 		vpPanel.add(textbox);
+		vpPanel.add(hPanel);
+		
 
 		this.setWidget(vpPanel);
 		this.center();
