@@ -21,6 +21,7 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	private MenuBar			editMenuBar;
 	
 	private CellTable<Job>	ctJobTable = new CellTable<Job>();
+	private Button			btnAddJobs;
 	private Button         	btnStrategies;
 	private ToggleButton	tbVirtualHybridSwitch;
 	// conveyor menu
@@ -63,7 +64,7 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 
 		//table
 		
-		ctJobTable.setPageSize(5);
+		ctJobTable.setPageSize(10);
 	    vpLeftFrame.add(ctJobTable);
 
 	    SimplePager pager = new SimplePager();
@@ -73,6 +74,10 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	    vp.add(ctJobTable);
 	    vp.add(pager);
 	    vpLeftFrame.add(vp);
+	    
+	    btnAddJobs = new Button("10 Auftr" + (char)228 + "ge hinzuf" + (char)252 + "gen");
+	    btnAddJobs.setText("10 Auftr" + (char)228 + "ge hinzuf" + (char)252 + "gen");
+	    vpLeftFrame.add(btnAddJobs);
 	    
 	    //togglebutton for switching between hybrid and virtual mode
 	    
@@ -137,9 +142,13 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
     public HasClickHandlers getVirtualHybridButton() {
         return tbVirtualHybridSwitch;
     }
-    
+
     public CellTable<Job> getJobTable() {
         return ctJobTable;
+    }
+
+    public HasClickHandlers getAddJobsButton() {
+        return btnAddJobs;
     }
 
 	public Canvas getCanvas() {

@@ -53,6 +53,8 @@ public class MainFramePresenter extends Presenter {
 
 	public interface IDisplay {
 		CellTable<Job> getJobTable();
+		
+		HasClickHandlers getAddJobsButton();
 
 		HasClickHandlers getStrategiesButton();
 
@@ -206,6 +208,15 @@ public class MainFramePresenter extends Presenter {
 		});
 	}
 
+	private void addAddJobsButtonListener() {
+		display.getAddJobsButton().addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				lstJobs.addRandomJobs(10); //FIXME: use spinner
+				setupJobTable();
+			}
+		});
+	}
+
 	private void addStrategiesButtonListener() {
 		display.getStrategiesButton().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -260,7 +271,10 @@ public class MainFramePresenter extends Presenter {
 			}
 		});
 	}
-
+	
+	/**
+	 * @author Christopher
+	 */
 	private void setupJobTable() {
 		TextColumn<Job> idColumn = new TextColumn<Job>() {
 			@Override
@@ -290,6 +304,9 @@ public class MainFramePresenter extends Presenter {
 			}
 		};
 
+		while(display.getJobTable().getColumnCount() > 0) {
+			display.getJobTable().removeColumn(0);
+		}
 		display.getJobTable().addColumn(idColumn, "Id");
 		display.getJobTable().addColumn(timestampColumn, "Zeit");
 		display.getJobTable().addColumn(packageColumn, "Paket");
@@ -523,6 +540,7 @@ public class MainFramePresenter extends Presenter {
 
 	public void bind() {
 		this.initializeMenuBars();
+		this.addAddJobsButtonListener();
 		this.addStrategiesButtonListener();
 		this.addVirtualHybridButtonListener();
 		this.addConveyorRampButtonListener();

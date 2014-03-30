@@ -1,5 +1,9 @@
 package uni.oldenburg.shared.model;
 
+/**
+ * @author Christopher
+ */
+
 public class Job {
 	
 	public static final int INCOMING = 0;
