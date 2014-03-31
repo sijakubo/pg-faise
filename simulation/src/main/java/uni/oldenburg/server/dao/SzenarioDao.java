@@ -111,9 +111,9 @@ public class SzenarioDao {
 				.getConnection()
 				.prepareStatement(
 						"INSERT INTO " + Conveyor.TABLE_NAME +
-							" (szenario_id, type, pos_x, pos_y) " +
+							" (szenario_id, type, pos_x, pos_y, direction) " +
 						"VALUES" + 
-							"((SELECT id FROM szenario WHERE title = ?), ?, ?, ?)");
+							"((SELECT id FROM szenario WHERE title = ?), ?, ?, ?, ?)");
 
 		// Persisting the Conveyors
 		List<Conveyor> lstConveyor = szenario.getConveyorList();
@@ -123,6 +123,7 @@ public class SzenarioDao {
 			prepStatement.setString(2, myConveyor.getType());
 			prepStatement.setInt(3, myConveyor.getX());
 			prepStatement.setInt(4, myConveyor.getY());
+			prepStatement.setInt(5, myConveyor.getDirection());
 
 			prepStatement.executeUpdate();
 		}
@@ -178,7 +179,7 @@ public class SzenarioDao {
 	private List<Conveyor> loadConveyor(int szenario_id) throws SQLException {
 		List<Conveyor> lstConveyor = new ArrayList<Conveyor>();
 
-		String strSQL = "SELECT type, pos_x, pos_y " + "FROM "
+		String strSQL = "SELECT type, pos_x, pos_y, direction " + "FROM "
 				+ Conveyor.TABLE_NAME + " " + "WHERE szenario_id = ?";
 
 		PreparedStatement preparedStatement = ConnectionPool.getConnection()
@@ -193,17 +194,22 @@ public class SzenarioDao {
 			String type = resultSet.getString("type");
 			int posX = resultSet.getInt("pos_x");
 			int posY = resultSet.getInt("pos_y");
+			int direction = resultSet.getInt("direction");
 
 			if (type.compareTo(ConveyorRamp.TYPE) == 0) {
 				newConveyor = new ConveyorRamp(posX, posY);
-			} else if (type.compareTo(ConveyorVehicle.TYPE) == 0) {
+			}
+			else if (type.compareTo(ConveyorVehicle.TYPE) == 0) {
 				newConveyor = new ConveyorVehicle(posX, posY);
-			} else if (type.compareTo(ConveyorWall.TYPE) == 0) {
+			} 
+			else if (type.compareTo(ConveyorWall.TYPE) == 0) {
 				newConveyor = new ConveyorWall(posX, posY);
 			}
 
-			if (newConveyor != null)
-				lstConveyor.add(newConveyor);
+			if (newConveyor != null) {
+				newConveyor.rotate(direction);				
+				lstConveyor.add(newConveyor);	
+			}
 		}
 
 		resultSet.close();

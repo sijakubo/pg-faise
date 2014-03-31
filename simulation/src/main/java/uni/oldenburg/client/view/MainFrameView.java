@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -31,6 +32,7 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	private Button			btnConveyorWall;
 	// -------------
 	private Label			lblUserName;
+	private TextArea 		txtDebug;	
 	
 	private Canvas			canvas;
 	
@@ -38,7 +40,6 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	private final int canvasHeight = 480;
 	
 	public MainFrameView() {
-
 		VerticalPanel   vpMainFrame = new VerticalPanel();
 		HorizontalPanel hpSubFrame = new HorizontalPanel();
 		VerticalPanel   vpLeftFrame = new VerticalPanel();
@@ -130,8 +131,14 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		canvas.setCoordinateSpaceHeight(canvasHeight);
 		hpSubFrame.add(canvas);
 		
+		txtDebug = new TextArea();
+		txtDebug.setWidth("100%");
+		txtDebug.setHeight("100px");
+		
 		vpMainFrame.add(menuBar);
 		vpMainFrame.add(hpSubFrame);
+		vpMainFrame.add(txtDebug);
+		
 		initWidget(vpMainFrame);
 	}
 
@@ -181,5 +188,9 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 
 	public Label getLabelUserName() {
 		return this.lblUserName;
+	}
+
+	public void log(String log) {
+		this.txtDebug.setText(log + "\n" + this.txtDebug.getText());
 	}
 }

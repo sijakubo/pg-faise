@@ -17,7 +17,5 @@ public class SzenarioDaoTest {
             e.printStackTrace();
             Assert.fail();
         }
-
-
     }
 }

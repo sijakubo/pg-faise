@@ -55,26 +55,19 @@ public class MainFramePresenter extends Presenter {
 		CellTable<Job> getJobTable();
 		
 		HasClickHandlers getAddJobsButton();
-
 		HasClickHandlers getStrategiesButton();
-
 		HasClickHandlers getVirtualHybridButton();
-
 		HasClickHandlers getConveyorRampButton();
-
 		HasClickHandlers getConveyorVehicleButton();
-
 		HasClickHandlers getConveyorWallButton();
 
 		MenuBar getMenuBar();
-
 		MenuBar getSimulationMenuBar();
-
 		MenuBar getEditMenuBar();
-
 		Label getLabelUserName();
-
 		Canvas getCanvas();
+		
+		void log(String log);		
 	}
 
 	public MainFramePresenter(SimulationServiceAsync rpcService,
@@ -179,10 +172,9 @@ public class MainFramePresenter extends Presenter {
 					if (myConveyor == null)
 						return;
 
-					if (myConveyor.getType().compareTo(ConveyorRamp.TYPE) == 0) {
-						((ConveyorRamp) myConveyor)
-								.setVertical(!((ConveyorRamp) myConveyor)
-										.isVertical());
+					if (myConveyor.getType().compareTo(ConveyorRamp.TYPE) == 0 || 
+						myConveyor.getType().compareTo(ConveyorVehicle.TYPE) == 0) {
+						myConveyor.rotateClockwise();
 
 						loadSzenario(MainFramePresenter.this.currentSzenario);
 						drawConveyor(myConveyor);
