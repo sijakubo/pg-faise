@@ -3,6 +3,7 @@ package uni.oldenburg.shared.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author Christopher
@@ -44,10 +45,14 @@ public class JobList implements Serializable {
 		for(int i = 0; i < numberOfJobs; i++) {
 			
 			int type = (Math.random() < 0.5) ? Job.INCOMING : Job.OUTGOING;
-			long timestamp = (long)(Math.random() * 10000);
 			int destinationId = (int)(Math.random() * 1000);
 			int packageId = (int)(Math.random() * 1000);
-
+						
+			int expectedValue = 500;
+			int standardDeviation = 100;
+			
+			long timestamp = (long) (expectedValue + (standardDeviation * new Random().nextGaussian())) % 1000;
+			
 			addJob(new Job(type, timestamp, destinationId, packageId));
 		}
 	}
