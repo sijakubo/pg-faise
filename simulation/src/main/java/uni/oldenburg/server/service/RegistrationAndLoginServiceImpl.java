@@ -1,23 +1,25 @@
 package uni.oldenburg.server.service;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-
 import uni.oldenburg.client.service.RegistrationAndLoginService;
 import uni.oldenburg.server.dao.SimulationUserDao;
 import uni.oldenburg.shared.model.SimulationUser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import java.sql.SQLException;
 
 @SuppressWarnings("serial")
 public class RegistrationAndLoginServiceImpl extends RemoteServiceServlet implements RegistrationAndLoginService {
 
-    public boolean registerUser(SimulationUser newUser) {
+   /**
+    * register newUser.
+    *
+    * @author sijakubo
+    */
+   public boolean registerUser(SimulationUser newUser) {
         SimulationUserDao simulationUserDao = new SimulationUserDao();
         boolean persistSuccessful = false;
 
@@ -31,7 +33,11 @@ public class RegistrationAndLoginServiceImpl extends RemoteServiceServlet implem
         return persistSuccessful;
     }
 
-
+   /**
+    * if user found for email and password, store user in Session. Else return false.
+    *
+    * @author sijakubo
+    */
     public boolean loginUser(String email, String password) {
         SimulationUserDao simulationUserDao = new SimulationUserDao();
         SimulationUser user = null;
@@ -53,19 +59,25 @@ public class RegistrationAndLoginServiceImpl extends RemoteServiceServlet implem
         return isUserFoundForCredentials;
     }
 
-    //Login User
+   /**
+    * @author sijakubo
+    */
     private void storeUserInSession(SimulationUser user) {
         HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
         HttpSession session = httpServletRequest.getSession(true);
         session.setAttribute("user", user);
-        
+
     }
 
-    //Logout User
+   /**
+    * Creates the callback for the SessionInformationService
+    *
+    * @author sijakubo
+    */
     @SuppressWarnings("unused")
-	private void deleteUserFromSession() {
+    private void deleteUserFromSession() {
         HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
         HttpSession session = httpServletRequest.getSession();
         session.removeAttribute("user");
-    }  
+    }
 }

@@ -13,7 +13,21 @@
         <servlet-name>registrationService</servlet-name>
         <servlet-class>uni.oldenburg.server.service.RegistrationAndLoginServiceImpl</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>sessionInformationService</servlet-name>
+        <servlet-class>uni.oldenburg.server.service.SessionInformationServiceImpl</servlet-class>
+    </servlet>
 
+   <servlet>
+      <servlet-name>remoteLogging</servlet-name>
+      <servlet-class>com.google.gwt.logging.server.RemoteLoggingServiceImpl</servlet-class>
+   </servlet>
+
+
+   <servlet-mapping>
+      <servlet-name>remoteLogging</servlet-name>
+      <url-pattern>/simulation/remote_logging</url-pattern>
+   </servlet-mapping>
     <servlet-mapping>
         <servlet-name>simulationService</servlet-name>
         <url-pattern>/simulation/simulationsService</url-pattern>
@@ -21,6 +35,10 @@
     <servlet-mapping>
         <servlet-name>registrationService</servlet-name>
         <url-pattern>/simulation/registrationService</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>sessionInformationService</servlet-name>
+        <url-pattern>/simulation/sessionInformationService</url-pattern>
     </servlet-mapping>
 
     <!-- Default page to serve -->
