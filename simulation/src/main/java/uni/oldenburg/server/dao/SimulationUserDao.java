@@ -8,8 +8,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SimulationUserDao {
-	
-	
+
+   /**
+    * @author sijakubo
+    */
     public SimulationUser findSimulationUserById(Long userId) throws SQLException {
         PreparedStatement preparedStatement = ConnectionPool.getConnection()
                 .prepareStatement("SELECT id, name, password, email FROM " + SimulationUser.TABLE_NAME + " WHERE id = ?");
@@ -33,6 +35,9 @@ public class SimulationUserDao {
         return simulationUser;
     }
 
+   /**
+    * @author sijakubo
+    */
     public void persistSimulationUser(SimulationUser newUser) throws SQLException {
 
 
