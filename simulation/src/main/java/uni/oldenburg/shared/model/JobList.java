@@ -11,7 +11,7 @@ import java.util.Random;
 
 @SuppressWarnings("serial")
 public class JobList implements Serializable {
-	
+	public static final String TABLE_NAME = "joblist";
 	private String name;
 	private List<Job> jobList;
 	
@@ -51,7 +51,7 @@ public class JobList implements Serializable {
 			int expectedValue = 500;
 			int standardDeviation = 100;
 			
-			long timestamp = (long) (expectedValue + (standardDeviation * new Random().nextGaussian())) % 1000;
+			int timestamp =  (int) ((expectedValue + (standardDeviation * new Random().nextGaussian())) % 1000);
 			
 			addJob(new Job(type, timestamp, destinationId, packageId));
 		}
@@ -59,6 +59,10 @@ public class JobList implements Serializable {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public void setName(String name) {
+		this.name=name;
 	}
 	
 	public Job getJob(int index) {
@@ -71,5 +75,9 @@ public class JobList implements Serializable {
 	
 	public List<Job> subList(int start, int end) {
 		return jobList.subList(start, end);
+	}
+	
+	public List<Job> getJoblist() {
+		return this.jobList;
 	}
 }

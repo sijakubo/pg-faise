@@ -5,8 +5,11 @@ import java.util.List;
 
 import uni.oldenburg.client.service.ServiceAsync;
 import uni.oldenburg.client.service.SimulationServiceAsync;
+import uni.oldenburg.client.view.DialogBoxJoblistSelection;
 import uni.oldenburg.client.view.DialogBoxOverwrite;
+import uni.oldenburg.client.view.DialogBoxOverwriteJoblist;
 import uni.oldenburg.client.view.DialogBoxSaveAs;
+import uni.oldenburg.client.view.DialogBoxSaveAsJoblist;
 import uni.oldenburg.client.view.DialogBoxScenarioSelection;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
@@ -529,6 +532,118 @@ public class MainFramePresenter extends Presenter {
 
 				});
 	}
+	
+	/**
+	 * draw current joblist
+	 * 
+	 * @author Raschid
+	 */
+	public void loadJoblist(JobList list) {
+
+		if (list == null)
+			return;
+
+		this.setupJobTable();
+	}
+
+	/**
+	 * load joblist from database and draw it
+	 * 
+	 * @author Matthias
+	 */
+	public void loadJoblist(String name) {
+		((SimulationServiceAsync) rpcService).loadJoblist(name,
+				new AsyncCallback<JobList>() {
+					public void onFailure(Throwable arg0) {
+						Window.alert(arg0.getLocalizedMessage());
+					}
+
+					public void onSuccess(JobList list) {
+						MainFramePresenter.this.lstJobs = list;
+						loadJoblist(list);
+					}
+				});
+	}
+
+	/**
+	 * Gets the Joblist Titles From Server and displays it in a Dialog
+	 * 
+	 * @author Raschid
+	 */
+	public void getJoblistTitlesFromServerAndShow() {
+		((SimulationServiceAsync) rpcService)
+				.getJoblistTitles(new AsyncCallback<ArrayList<String>>() {
+					public void onFailure(Throwable arg0) {
+						Window.alert(arg0.getLocalizedMessage());
+					}
+
+					public void onSuccess(ArrayList<String> result) {
+						DialogBoxJoblistSelection dialog = new DialogBoxJoblistSelection(
+								result, MainFramePresenter.this);
+						dialog.show();
+					}
+				});
+	}
+
+	/**
+	 * Method checks if Joblist exists and then decides wether to save or to
+	 * open the Save As Dialog
+	 * 
+	 * @author Raschid
+	 */
+	public void trySaveJoblist(JobList joblist) {
+
+		// Check if Szenario already exists
+		((SimulationServiceAsync) rpcService).checkIfJobListExists(
+				joblist.getName(), new AsyncCallback<Boolean>() {
+					public void onFailure(Throwable caught) {
+						Window.alert("Communication Problem");
+					}
+
+					public void onSuccess(Boolean result) {
+						// If Joblist exists open a popup, where the user can
+						// be asked if he wants to overwrite or not
+						if (result) {
+							// Show the popup so the user can select if he wants
+							// to overwrite or not
+							DialogBoxOverwriteJoblist dialog = new DialogBoxOverwriteJoblist(
+									MainFramePresenter.this);
+							dialog.show();
+						} else {
+							// Open Save as Dialog
+							DialogBoxSaveAsJoblist dialog = new DialogBoxSaveAsJoblist(
+									MainFramePresenter.this);
+							dialog.show();
+						}
+					}
+				});
+	}
+
+	/**
+	 * Method sends the Joblist to the server in order to write it into the
+	 * database. The operation String decides wether an Update or an Insert
+	 * should be made
+	 * 
+	 * @author Raschid
+	 */
+	public void sendJoblistToServer(JobList list) {
+
+		// Send Szenario to Server
+		((SimulationServiceAsync) rpcService).saveJoblist(list,
+				new AsyncCallback<Void>() {
+
+					public void onFailure(Throwable caught) {
+						Window.alert("Communication Problem, Joblist was not saved");
+
+					}
+
+					public void onSuccess(Void result) {
+						Window.alert("Szenario was successfully saved");
+
+					}
+
+				});
+	}
 
 	public void bind() {
 		this.initializeMenuBars();
@@ -597,17 +712,27 @@ public class MainFramePresenter extends Presenter {
 				});
 
 		// edit menu
-		this.display.getEditMenuBar().addItem("Auftragsliste bearbeiten",
+		this.display.getEditMenuBar().addItem("Auftragsliste laden",
 				new Command() {
 					public void execute() {
-
+						getJoblistTitlesFromServerAndShow();
 					}
 				});
 
 		this.display.getEditMenuBar().addItem(
-				"Auftr" + (char) 228 + "ge bearbeiten", new Command() {
+				"Auftragsliste speichern", new Command() {
 					public void execute() {
-
+						trySaveJoblist(MainFramePresenter.this.getActualJoblist());
+					}
+				});
+		
+		this.display.getEditMenuBar().addItem(
+				"Auftragsliste speichern unter...", new Command() {
+					public void execute() {
+						// Open Save as Dialog
+						DialogBoxSaveAsJoblist dialog = new DialogBoxSaveAsJoblist(
+								MainFramePresenter.this);
+						dialog.show();
 					}
 				});
 
@@ -617,12 +742,16 @@ public class MainFramePresenter extends Presenter {
 				this.display.getSimulationMenuBar());
 		this.display.getMenuBar().addSeparator();
 
-		this.display.getMenuBar().addItem("Bearbeiten",
+		this.display.getMenuBar().addItem("Auftragsliste",
 				this.display.getEditMenuBar());
 	}
 
 	public Szenario getActualSzenario() {
 		return this.currentSzenario;
+	}
+	
+	public JobList getActualJoblist() {
+		return this.lstJobs;
 	}
 
 	public ServiceAsync getService() {
