@@ -70,7 +70,7 @@ public class DialogBoxSaveAsJoblist extends DialogBox {
 				//If the Button was clicked it must been checked if a Joblist with the given title exists
 				
 				// Check if Joblist already exists
-				((SimulationServiceAsync) ((MainFramePresenter) DialogBoxSaveAsJoblist.this.presenter).getService()).checkIfTitleExists(
+				((SimulationServiceAsync) ((MainFramePresenter) DialogBoxSaveAsJoblist.this.presenter).getService()).checkIfJobListExists(
 						DialogBoxSaveAsJoblist.this.getPresenter().getActualJoblist().getName(), new AsyncCallback<Boolean>() {
 
 							public void onFailure(Throwable caught) {

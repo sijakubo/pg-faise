@@ -540,8 +540,7 @@ public class MainFramePresenter extends Presenter {
 	 */
 	public void loadJoblist(JobList list) {
 
-		if (list == null)
-			return;
+		
 
 		this.setupJobTable();
 	}
@@ -549,7 +548,7 @@ public class MainFramePresenter extends Presenter {
 	/**
 	 * load joblist from database and draw it
 	 * 
-	 * @author Matthias
+	 * @author Raschid
 	 */
 	public void loadJoblist(String name) {
 		((SimulationServiceAsync) rpcService).loadJoblist(name,
@@ -638,7 +637,7 @@ public class MainFramePresenter extends Presenter {
 					}
 
 					public void onSuccess(Void result) {
-						Window.alert("Szenario was successfully saved");
+						Window.alert("Joblist was successfully saved");
 
 					}
 

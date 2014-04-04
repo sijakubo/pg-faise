@@ -76,6 +76,7 @@ public class JoblistDao {
 	 * @author Raschid
 	 */
 	public void persistJoblist(JobList joblist) throws SQLException {
+		
 		// delete Jobs of Joblist
 		PreparedStatement prepStatement = ConnectionPool
 				.getConnection()
@@ -117,7 +118,7 @@ public class JoblistDao {
 								+ "(?, (SELECT id FROM joblist WHERE name = ?), ?, ?, ?, ?) ");
 
 		// Persisting the Conveyors
-		List<Job> lstJobs = joblist.getJoblist();
+		 ArrayList<Job> lstJobs = joblist.getJoblist();
 
 		for (Job job : lstJobs) {
 			prepStatement.setInt(1, job.getId());
@@ -129,6 +130,7 @@ public class JoblistDao {
 		
 			prepStatement.executeUpdate();
 		}
+		
 	}
 
 	/**
