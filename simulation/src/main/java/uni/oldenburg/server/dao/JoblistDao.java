@@ -114,19 +114,19 @@ public class JoblistDao {
 						"INSERT INTO "
 								+ Job.TABLE_NAME
 								+ " (id, joblist_id, package_id, destination_id, time_delay, type) "
-								+ "VALUES "
-								+ "(?, (SELECT id FROM joblist WHERE name = ?), ?, ?, ?, ?) ");
+								+ "VALUES ("
+								+ "(SELECT CASE WHEN MAX(ID) IS NULL THEN 0 ELSE MAX(ID)+1 END FROM job) , (SELECT id FROM joblist WHERE name = ?), ?, ?, ?, ?) ");
 
 		// Persisting the Conveyors
-		 ArrayList<Job> lstJobs = joblist.getJoblist();
+		List<Job> lstJobs = joblist.getJoblist();
 
 		for (Job job : lstJobs) {
-			prepStatement.setInt(1, job.getId());
-			prepStatement.setString(2, joblist.getName());
-			prepStatement.setInt(3, job.getPackageId());
-			prepStatement.setInt(4, job.getDestinationId());
-			prepStatement.setInt(5, job.getTimestamp());
-			prepStatement.setInt(6, job.getType());
+			
+			prepStatement.setString(1, joblist.getName());
+			prepStatement.setInt(2, job.getPackageId());
+			prepStatement.setInt(3, job.getDestinationId());
+			prepStatement.setInt(4, job.getTimestamp());
+			prepStatement.setInt(5, job.getType());
 		
 			prepStatement.executeUpdate();
 		}
@@ -177,29 +177,30 @@ public class JoblistDao {
 	private List<Job> loadJob(int id_joblist) throws SQLException {
 		List<Job> lstJobs = new ArrayList<Job>();
 
-		String strSQL = "SELECT id, package_id, destination_id, time_delay, type "
-				+ "FROM " + Job.TABLE_NAME + " " + "WHERE id = ?";
+		String strSQL = "SELECT package_id, destination_id, time_delay, type "
+				+ "FROM " + Job.TABLE_NAME + " " + "WHERE joblist_id = ?";
 
 		PreparedStatement preparedStatement = ConnectionPool.getConnection()
 				.prepareStatement(strSQL);
 
 		preparedStatement.setInt(1, id_joblist);
 		ResultSet resultSet = preparedStatement.executeQuery();
+		int jobId=1;
 
 		while (resultSet.next()) {
 			Job job = null;
-
-			int timestamp = resultSet.getInt("timestamp");
-			int destinationId = resultSet.getInt("destinationId");
-			int packageId = resultSet.getInt("packageId");
+            
+			int timestamp = resultSet.getInt("time_delay");
+			int destinationId = resultSet.getInt("destination_id");
+			int packageId = resultSet.getInt("package_id");
 			int type=resultSet.getInt("type");
 
-			job = new Job(type,timestamp,packageId, destinationId);
+			job = new Job(jobId,type,timestamp,packageId, destinationId);
 
 			if (job != null) {
-
 				lstJobs.add(job);
 			}
+			jobId++;
 		}
 
 		resultSet.close();

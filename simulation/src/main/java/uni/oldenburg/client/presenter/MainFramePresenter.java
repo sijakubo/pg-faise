@@ -206,11 +206,13 @@ public class MainFramePresenter extends Presenter {
 	private void addAddJobsButtonListener() {
 		display.getAddJobsButton().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				lstJobs.addRandomJobs(10); //FIXME: use spinner
+				lstJobs.addRandomJobs(10, MainFramePresenter.this.display.getJobTable().getRowCount()+1); //FIXME: use spinner
 				setupJobTable();
 			}
 		});
+		 
 	}
+	
 
 	private void addStrategiesButtonListener() {
 		display.getStrategiesButton().addClickHandler(new ClickHandler() {
@@ -711,7 +713,7 @@ public class MainFramePresenter extends Presenter {
 				});
 
 		// edit menu
-		this.display.getEditMenuBar().addItem("Auftragsliste laden",
+		this.display.getEditMenuBar().addItem("Laden",
 				new Command() {
 					public void execute() {
 						getJoblistTitlesFromServerAndShow();
@@ -719,14 +721,14 @@ public class MainFramePresenter extends Presenter {
 				});
 
 		this.display.getEditMenuBar().addItem(
-				"Auftragsliste speichern", new Command() {
+				"Speichern", new Command() {
 					public void execute() {
 						trySaveJoblist(MainFramePresenter.this.getActualJoblist());
 					}
 				});
 		
 		this.display.getEditMenuBar().addItem(
-				"Auftragsliste speichern unter...", new Command() {
+				"Speichern unter...", new Command() {
 					public void execute() {
 						// Open Save as Dialog
 						DialogBoxSaveAsJoblist dialog = new DialogBoxSaveAsJoblist(
