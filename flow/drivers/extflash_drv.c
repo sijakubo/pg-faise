@@ -112,7 +112,8 @@ uint8_t extflash_tr_byte(uint8_t spiOut, uint8_t isRead){
 		
 		// Eventuell auf Gültigkeit des Ausgangs-Signals warten und recv setzen
 		if(isRead){
-			clock_wait(1);
+			_NOP();
+			_NOP();
 			if((PIND & (1<<EXTFLASH_RXD))){
 				recv |= 1<<(i-1);
 			}

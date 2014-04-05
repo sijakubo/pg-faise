@@ -9,6 +9,7 @@
 #ifndef EXTFLASH_SERVICE_H_
 #define EXTFLASH_SERVICE_H_
 
+#include "drivers/extflash_drv.h"
 
 void extflash_write_page_to_buffer1(uint16_t page);
 void extflash_write_page_to_buffer2(uint16_t page);

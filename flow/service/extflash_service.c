@@ -8,7 +8,14 @@
 #include "extflash_service.h"
 
 void extflash_write_page_to_buffer1(uint16_t page){
+	sreg = SREG;
+	cli();
 	
+	extflash_enable();
+	
+	exflash_disable();
+	
+	SREG = sreg;
 }
 
 void extflash_write_page_to_buffer2(uint16_t page){
