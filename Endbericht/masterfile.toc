@@ -25,3 +25,7 @@
 \contentsline {subsubsection}{\numberline {2.4.2}FTS beim Automobilhersteller BMW im Werk Leipzig}{14}{subsubsection.2.4.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {3}Projektorganisation}{15}{section.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.1}Organisation in drei Teilgruppen}{15}{subsection.3.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.2}Vorgehensmodell}{15}{subsection.3.2}
