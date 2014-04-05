@@ -7,7 +7,7 @@
  */
 
 #include "drivers/extflash_drv.h"
-
+#define _NOP() asm volatile("nop")
 #define DEBUG 1
 
 #if DEBUG
@@ -142,6 +142,7 @@ uint8_t extflash_read_status_register(void)
 	status_register = extflash_tr_byte(EXTFLASH_DONT_CARE, 1);
 	
 	SREG = sreg;
+	extflash_disable();
 	
 	return status_register;
 }

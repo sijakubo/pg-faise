@@ -22,5 +22,8 @@ uint8_t extflash_compare_buffer2_to_mem(uint16_t page);
 void extflash_write_buffer1_to_mem(uint16_t page);
 void extflash_write_buffer2_to_mem(uint16_t page);
 
+void exflash_read_buffer1(uint16_t address, uint8_t* buffer, uint8_t len);
+void extflash_read_buffer2(uint16_t address, uint8_t* buffer, uint8_t len);
+
 
 #endif /* EXTFLASH_SERVICE_H_ */
