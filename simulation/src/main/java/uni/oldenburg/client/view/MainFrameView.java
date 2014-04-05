@@ -9,11 +9,12 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.ToggleButton;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class MainFrameView extends Composite implements MainFramePresenter.IDisplay {
@@ -24,13 +25,14 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	private CellTable<Job>	ctJobTable = new CellTable<Job>();
 	private Button			btnAddJobs;
 	private Button         	btnStrategies;
-	private ToggleButton	tbVirtualHybridSwitch;
+	
 	// conveyor menu
 	private Label			lblConveyor;
 	private Button			btnConveyorRamp;
 	private Button			btnConveyorVehicle;
 	private Button			btnConveyorWall;
 	// -------------
+	private TextBox 		txtJobCount;
 	private Label			lblUserName;
 	private TextArea 		txtDebug;	
 	
@@ -76,15 +78,23 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	    vp.add(pager);
 	    vpLeftFrame.add(vp);
 	    
-	    btnAddJobs = new Button("10 Auftr" + (char)228 + "ge hinzuf" + (char)252 + "gen");
-	    btnAddJobs.setText("10 Auftr" + (char)228 + "ge hinzuf" + (char)252 + "gen");
-	    vpLeftFrame.add(btnAddJobs);
+	    // generate random job entries control
+	    HorizontalPanel hpGenerateJobs = new HorizontalPanel();
+	    hpGenerateJobs.setSpacing(10);
+	    hpGenerateJobs.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
 	    
-	    //togglebutton for switching between hybrid and virtual mode
+	    hpGenerateJobs.add(new Label("Auftraege: "));
 	    
-		tbVirtualHybridSwitch = new ToggleButton("Virtuell / Hybrid");
-		tbVirtualHybridSwitch.setText("Virtuell / Hybrid");
-		vpLeftFrame.add(tbVirtualHybridSwitch);
+	    txtJobCount = new TextBox();
+	    txtJobCount.setText("1");
+	    txtJobCount.setMaxLength(4);
+	    txtJobCount.setWidth("30px");
+	    hpGenerateJobs.add(txtJobCount);
+
+	    btnAddJobs = new Button("hinzufuegen");
+	    hpGenerateJobs.add(btnAddJobs);
+	    
+	    vpLeftFrame.add(hpGenerateJobs);
 		
 		//button for changing pathfinding strategy
 		
@@ -146,10 +156,6 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
         return btnStrategies;
     }
 
-    public HasClickHandlers getVirtualHybridButton() {
-        return tbVirtualHybridSwitch;
-    }
-
     public CellTable<Job> getJobTable() {
         return ctJobTable;
     }
@@ -192,5 +198,9 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 
 	public void log(String log) {
 		this.txtDebug.setText(log + "\n" + this.txtDebug.getText());
+	}
+
+	public HasText getJobCount() {
+		return txtJobCount;
 	}
 }

@@ -19,6 +19,7 @@ import uni.oldenburg.shared.model.Szenario;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
+import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -34,11 +35,13 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.Widget;
@@ -56,10 +59,11 @@ public class MainFramePresenter extends Presenter {
 		
 		HasClickHandlers getAddJobsButton();
 		HasClickHandlers getStrategiesButton();
-		HasClickHandlers getVirtualHybridButton();
 		HasClickHandlers getConveyorRampButton();
 		HasClickHandlers getConveyorVehicleButton();
 		HasClickHandlers getConveyorWallButton();
+		
+		HasText	getJobCount();
 
 		MenuBar getMenuBar();
 		MenuBar getSimulationMenuBar();
@@ -154,9 +158,9 @@ public class MainFramePresenter extends Presenter {
 
 				// conveyor drag & drop
 				if (event.getNativeButton() == NativeEvent.BUTTON_LEFT) {
-					// conveyor hinzufügen
+					// add conveyor
 					if (myConveyor != null) {
-						// wenn platz noch frei ist
+						// when spot available
 						if (isSpotAvailable(event.getX(), event.getY())) {
 							MainFramePresenter.this.currentSzenario
 									.addConveyor(myConveyor);
@@ -164,11 +168,11 @@ public class MainFramePresenter extends Presenter {
 							loadSzenario(MainFramePresenter.this.currentSzenario);
 						}
 					} else {
-						// conveyor verschieben
+						// grab & move conveyor
 						grabConveyor(event.getX(), event.getY());
 					}
 				} else if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT) {
-					// rampe rotieren
+					// rotate conveyors
 					if (myConveyor == null)
 						return;
 
@@ -200,25 +204,31 @@ public class MainFramePresenter extends Presenter {
 		});
 	}
 
+	/**
+	 * add random jobs
+	 * 
+	 * @author Matthias
+	 */
 	private void addAddJobsButtonListener() {
 		display.getAddJobsButton().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				lstJobs.addRandomJobs(10); //FIXME: use spinner
-				setupJobTable();
+				String jobCount = MainFramePresenter.this.display.getJobCount().getText();
+				
+				if (!jobCount.matches("^\\d+$")) {
+					Window.alert("Fehler: Es wurde keine Zahl eingetragen!");
+				}
+				else {
+					lstJobs.addRandomJobs(Integer.parseInt(jobCount));
+					setupJobTable();
+				}
+				
+				MainFramePresenter.this.display.getJobCount().setText("1");
 			}
 		});
 	}
 
 	private void addStrategiesButtonListener() {
 		display.getStrategiesButton().addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				// TODO
-			}
-		});
-	}
-
-	private void addVirtualHybridButtonListener() {
-		display.getVirtualHybridButton().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				// TODO
 			}
@@ -265,9 +275,9 @@ public class MainFramePresenter extends Presenter {
 	}
 	
 	/**
-	 * @author Christopher
+	 * @author Christopher Matthias
 	 */
-	private void setupJobTable() {
+	private void setupJobTable() {		
 		TextColumn<Job> idColumn = new TextColumn<Job>() {
 			@Override
 			public String getValue(Job object) {
@@ -290,12 +300,12 @@ public class MainFramePresenter extends Presenter {
 			@Override
 			public String getValue(Job object) {
 				if (object.getDestinationId() == 0) {
-					return "Zwischenlager";
+					return "Lager";
 				}
 				return "" + object.getDestinationId();
 			}
 		};
-
+		
 		while(display.getJobTable().getColumnCount() > 0) {
 			display.getJobTable().removeColumn(0);
 		}
@@ -303,6 +313,40 @@ public class MainFramePresenter extends Presenter {
 		display.getJobTable().addColumn(timestampColumn, "Zeit");
 		display.getJobTable().addColumn(packageColumn, "Paket");
 		display.getJobTable().addColumn(destinationColumn, "Ziel");
+		
+		// add clickable action button column
+		ActionCell<Job> actionDeleteCell = new ActionCell<Job>("-", new ActionCell.Delegate<Job>() {
+			public void execute(Job job) {
+				List<Job> lstJobDeleteable = new ArrayList<Job>();
+				// mark selected job as deleteable
+				lstJobDeleteable.add(job);
+				
+				if (job.getType() == Job.INCOMING) {
+					// delete linked outgoing job too
+					for (Job jobEntry : MainFramePresenter.this.lstJobs.getJobList()) {
+						if (jobEntry.getPackageId() == job.getPackageId()) {
+							lstJobDeleteable.add(jobEntry);
+						}
+					}	
+				}
+				
+				// delete in actual joblist
+				for (Job jobEntry : lstJobDeleteable) {
+					MainFramePresenter.this.lstJobs.removeJob(jobEntry);	
+				}
+				
+				// update joblist
+				MainFramePresenter.this.setupJobTable();
+			}
+		});
+		
+		display.getJobTable().addColumn(new Column<Job, Job>(actionDeleteCell) {
+			@Override
+			public Job getValue(Job job) {
+				return job;
+			}
+		}, "Aktion");
+		// ----------------------------------
 
 		final JobList jobList = this.lstJobs;
 
@@ -534,7 +578,6 @@ public class MainFramePresenter extends Presenter {
 		this.initializeMenuBars();
 		this.addAddJobsButtonListener();
 		this.addStrategiesButtonListener();
-		this.addVirtualHybridButtonListener();
 		this.addConveyorRampButtonListener();
 		this.addConveyorVehicleButtonListener();
 		this.addConveyorWallButtonListener();

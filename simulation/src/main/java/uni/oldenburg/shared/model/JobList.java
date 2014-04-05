@@ -11,6 +11,7 @@ import java.util.Random;
 
 @SuppressWarnings("serial")
 public class JobList implements Serializable {
+	private static int idCounterPacket = 0;
 	
 	private String name;
 	private List<Job> jobList;
@@ -43,17 +44,24 @@ public class JobList implements Serializable {
 	
 	public void addRandomJobs(int numberOfJobs) {
 		for(int i = 0; i < numberOfJobs; i++) {
+			int destinationId = (Math.random() < 0.5) ? 0 : -1;
+			int type = destinationId == 0 ? Job.INCOMING : Job.OUTGOING;
+			int packageId = 1;
 			
-			int type = (Math.random() < 0.5) ? Job.INCOMING : Job.OUTGOING;
-			int destinationId = (int)(Math.random() * 1000);
-			int packageId = (int)(Math.random() * 1000);
-						
+			if (type == Job.INCOMING)
+				packageId = ++idCounterPacket;
+			else {
+				packageId = (int)((Math.random() * 10000) % idCounterPacket);
+				
+				if (Math.random() < 0.1 || idCounterPacket < 5)
+					packageId += 5+ (packageId / 10);
+			}
+				
 			int expectedValue = 500;
 			int standardDeviation = 100;
-			
 			long timestamp = (long) (expectedValue + (standardDeviation * new Random().nextGaussian())) % 1000;
 			
-			addJob(new Job(type, timestamp, destinationId, packageId));
+			addJob(new Job(type, timestamp, packageId, destinationId));
 		}
 	}
 	
@@ -61,8 +69,8 @@ public class JobList implements Serializable {
 		return name;
 	}
 	
-	public Job getJob(int index) {
-		return jobList.get(index);
+	public List<Job> getJobList() {
+		return jobList;
 	}
 	
 	public int size() {
@@ -71,5 +79,9 @@ public class JobList implements Serializable {
 	
 	public List<Job> subList(int start, int end) {
 		return jobList.subList(start, end);
+	}
+	
+	public void removeJob(Job job) {
+		jobList.remove(job);
 	}
 }
