@@ -1,36 +1,31 @@
 /*
- * uart_service.c
+ * com_service.c
  *
- * Created: 10.03.2014 10:05:14
- *  Author: JanGerd
+ * Created: 05.04.2014 12:37:14
+ *  Author: Malte Falk und Jan-Gerd Meﬂ
  */ 
 
-#include "drivers/uart_drv.h"
-#include "service/uart_service.h"
-#include "net/rime.h"
-#include "leds.h"
+#include "service/com_service.h"
 
 extern struct broadcast_conn broadcast;
 
-void uart0_send_command(uint8_t com, uint8_t* args){
-	int num_args = 0;
-	
-	if(com == UART_LED_GREEN_COMMAND || com == UART_LED_RED_COMMAND)
-		num_args = UART_LED_COMMAND_ARGS;
-	
-	uint8_t pDelimiter = UART0_LINE_END;
-	
-	uart0_send(&com, 1);
-	uart0_send(&pDelimiter, 1);
-	uart0_send(args, num_args);
-}
-
-void uart0_dispatch_message(uint8_t* msg){
+void com_receive(uint8_t* msg){
+	if (msg[0]==COM_CMD_RECEIVE_PACKAGE)
+	{
+		printf("%u: Package %u%u arrived at Ramp %u%u", node_id, msg[1], msg[2], msg[3], msg[4]);
+	}
+	else if (msg[0]==COM_CMD_DELIVER_PACKAGE)
+	{
+		
+	}
+	else if (msg[0]==COM_CMD_RET_COST)
+	{
+	}
 	if(msg[0] == UART_LED_GREEN_COMMAND){
 		if(msg[1])
-			leds_on(LEDS_GREEN);
+		leds_on(LEDS_GREEN);
 		else
-			leds_off(LEDS_GREEN);
+		leds_off(LEDS_GREEN);
 	}
 	else if(msg[0] == UART_LED_RED_COMMAND){
 		if(msg[1])
@@ -57,5 +52,14 @@ void uart0_dispatch_message(uint8_t* msg){
 		packetbuf_copyfrom(msg, 1);
 		broadcast_send(&broadcast);
 		printf("Release and Separate Package...\n");
+	}
+}
+
+void com_send(uint8_t* msg, uint8_t len){
+	if ((msg[0] | 0x7f) == 0x7f)
+	{
+		uart0_send(msg, len);
+	} else {
+		// To-Do: WIRELESS COMMUNIACTION
 	}
 }

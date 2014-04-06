@@ -30,6 +30,7 @@ void uart0_send(uint8_t *buf, uint8_t size)
 		putchar(*buf++);
 		size--;
 	}
+	putchar(UART0_LINE_END);
 }
 
 /**
@@ -100,7 +101,7 @@ PROCESS_THREAD(uart0_recv_process, ev, data)
       } else {
         buf[ptr++] = 0x0a;
 
-        uart0_dispatch_message(buf);
+        com_receive(buf);
 
         ptr = 0;
       }
