@@ -68,14 +68,10 @@ void extflash_disable(){
  * \author	Jan-Gerd Meß
  */	
 void extflash_wait_idle(){
-	EXTFLASH_SPI_PORT &= ~(1<<EXTFLASH_CLK | 1<<EXTFLASH_TXD);
-	clock_wait(1);
-	while(!(PIND & (1<<EXTFLASH_RXD))){
-		// CLOCK TICK
-		EXTFLASH_SPI_PORT |= 1<<EXTFLASH_CLK;
-		EXTFLASH_SPI_PORT &= ~(1<<EXTFLASH_CLK);
-		clock_wait(1);
+	while(!(extflash_read_status_register() & 0x80)){
+		clock_delay(1);
 	}
+	extflash_enable();
 }
 
 /**
@@ -95,7 +91,7 @@ uint8_t extflash_tr_byte(uint8_t spiOut, uint8_t isRead){
 	PRINTF("SPI SENT: %u\n", spiOut);
 	
 	// Warte auf Operationen im Speicher
-	extflash_wait_idle();
+	//extflash_wait_idle();
 	
 	// Starte Übertragung, MSB zuerst
 	for(;i >= 1; i--){	
@@ -112,8 +108,7 @@ uint8_t extflash_tr_byte(uint8_t spiOut, uint8_t isRead){
 		
 		// Eventuell auf Gültigkeit des Ausgangs-Signals warten und recv setzen
 		if(isRead){
-			_NOP();
-			_NOP();
+			//clock_delay(100);
 			if((PIND & (1<<EXTFLASH_RXD))){
 				recv |= 1<<(i-1);
 			}

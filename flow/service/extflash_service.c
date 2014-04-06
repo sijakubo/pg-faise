@@ -15,7 +15,7 @@ void extflash_write_page_to_buffer1(uint16_t page){
 	cli();
 	
 	extflash_enable();
-	
+	extflash_wait_idle();
 	extflash_tr_byte(EXTFLASH_OP_MEM2BUF1, 0);
 	extflash_tr_byte((uint8_t)(0xf0 | page >> 7), 0);
 	extflash_tr_byte((uint8_t)(0x01 | page << 1), 0);
@@ -33,7 +33,7 @@ void extflash_write_page_to_buffer2(uint16_t page){
 	cli();
 	
 	extflash_enable();
-	
+	extflash_wait_idle();
 	extflash_tr_byte(EXTFLASH_OP_MEM2BUF2, 0);
 	extflash_tr_byte((uint8_t)(0xf0 | page >> 7), 0);
 	extflash_tr_byte((uint8_t)(0x01 | page << 1), 0);
@@ -51,8 +51,9 @@ void extflash_write_buffer1(uint16_t address, uint8_t len, uint8_t* data){
 	cli();
 	
 	extflash_enable();
-	
+	extflash_wait_idle();
 	extflash_tr_byte(EXTFLASH_OP_WRBUF1, 0);
+	extflash_tr_byte(EXTFLASH_DONT_CARE, 0);
 	extflash_tr_byte((uint8_t)(0x01 & address >> 8), 0);
 	extflash_tr_byte((uint8_t)address, 0);
 	while(len > 0){
@@ -60,7 +61,6 @@ void extflash_write_buffer1(uint16_t address, uint8_t len, uint8_t* data){
 		data++;
 		len--;
 	}
-	extflash_tr_byte(EXTFLASH_DONT_CARE, 0);
 	
 	extflash_disable();
 	
@@ -74,8 +74,9 @@ void extflash_write_buffer2(uint16_t address, uint8_t len, uint8_t* data){
 	cli();
 	
 	extflash_enable();
-	
+	extflash_wait_idle();
 	extflash_tr_byte(EXTFLASH_OP_WRBUF2, 0);
+	extflash_tr_byte(EXTFLASH_DONT_CARE, 0);
 	extflash_tr_byte((uint8_t)(0x01 & address >> 8), 0);
 	extflash_tr_byte((uint8_t)address, 0);
 	while(len > 0){
@@ -83,7 +84,6 @@ void extflash_write_buffer2(uint16_t address, uint8_t len, uint8_t* data){
 		data++;
 		len--;
 	}
-	extflash_tr_byte(EXTFLASH_DONT_CARE, 0);
 	
 	extflash_disable();
 	
@@ -97,7 +97,7 @@ uint8_t extflash_compare_buffer1_to_mem(uint16_t page){
 	cli();
 	
 	extflash_enable();
-	
+	extflash_wait_idle();
 	extflash_tr_byte(EXTFLASH_OP_BUF1CMP, 0);
 	extflash_tr_byte((uint8_t)(0xf0 | page >> 7), 0);
 	extflash_tr_byte((uint8_t)(0x01 | page << 1), 0);
@@ -117,7 +117,7 @@ uint8_t extflash_compare_buffer2_to_mem(uint16_t page){
 	cli();
 	
 	extflash_enable();
-	
+	extflash_wait_idle();
 	extflash_tr_byte(EXTFLASH_OP_BUF2CMP, 0);
 	extflash_tr_byte((uint8_t)(0xf0 | page >> 7), 0);
 	extflash_tr_byte((uint8_t)(0x01 | page << 1), 0);
@@ -137,7 +137,7 @@ void extflash_write_buffer1_to_mem(uint16_t page){
 	cli();
 	
 	extflash_enable();
-	
+	extflash_wait_idle();
 	extflash_tr_byte(EXTFLASH_OP_BUF12MEM, 0);
 	extflash_tr_byte((uint8_t)(0xf0 | page >> 7), 0);
 	extflash_tr_byte((uint8_t)(0x01 | page << 1), 0);
@@ -155,7 +155,7 @@ void extflash_write_buffer2_to_mem(uint16_t page){
 	cli();
 	
 	extflash_enable();
-	
+	extflash_wait_idle();
 	extflash_tr_byte(EXTFLASH_OP_BUF22MEM, 0);
 	extflash_tr_byte((uint8_t)(0xf0 | page >> 7), 0);
 	extflash_tr_byte((uint8_t)(0x01 | page << 1), 0);
@@ -166,7 +166,7 @@ void extflash_write_buffer2_to_mem(uint16_t page){
 	SREG = sreg;
 }
 
-void exflash_read_buffer1(uint16_t address, uint8_t* buffer, uint8_t len){
+void extflash_read_buffer1(uint16_t address, uint8_t* buffer, uint8_t len){
 	int sreg;
 	address &= 0x01FF;
 	
@@ -174,9 +174,12 @@ void exflash_read_buffer1(uint16_t address, uint8_t* buffer, uint8_t len){
 	cli();
 	
 	extflash_enable();
+	extflash_wait_idle();
 	extflash_tr_byte(EXTFLASH_OP_RDBUF1, 0);
+	extflash_tr_byte(EXTFLASH_DONT_CARE, 0);
 	extflash_tr_byte((uint8_t)(0x01 & address >> 8), 0);
 	extflash_tr_byte((uint8_t)address, 0);
+	extflash_tr_byte(EXTFLASH_DONT_CARE, 0);
 	while(len > 0){
 		*buffer = extflash_tr_byte(EXTFLASH_DONT_CARE, 1);
 		buffer =  buffer+1;
@@ -196,9 +199,12 @@ void extflash_read_buffer2(uint16_t address, uint8_t* buffer, uint8_t len){
 	cli();
 	
 	extflash_enable();
+	extflash_wait_idle();
 	extflash_tr_byte(EXTFLASH_OP_RDBUF2, 0);
+	extflash_tr_byte(EXTFLASH_DONT_CARE, 0);
 	extflash_tr_byte((uint8_t)(0x01 & address >> 8), 0);
 	extflash_tr_byte((uint8_t)address, 0);
+	extflash_tr_byte(EXTFLASH_DONT_CARE, 0);
 	while(len > 0){
 		*buffer = extflash_tr_byte(EXTFLASH_DONT_CARE, 1);
 		buffer =  buffer+1;
