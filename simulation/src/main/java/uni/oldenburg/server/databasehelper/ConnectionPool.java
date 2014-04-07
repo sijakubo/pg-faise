@@ -16,12 +16,15 @@ public final class ConnectionPool {
    private ConnectionPool() {
    }
 
+   /**
+    * @author sijakubo
+    */
    public static Connection getConnection() {
       try {
-         Logger logger = Logger.getLogger(ConnectionPool.class);
-         logger.log(Level.ERROR, "Unable to find Postgres-Database Driver");
-
          if (connection == null || connection.isClosed()) {
+            Logger logger = Logger.getLogger(ConnectionPool.class);
+            logger.log(Level.INFO, "Connection established to Database");
+
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection("jdbc:postgresql://134.106.13.165:5432/faisedb", "faiseuser", "sonne15");
          }

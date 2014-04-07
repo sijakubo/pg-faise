@@ -17,16 +17,14 @@
         <servlet-name>sessionInformationService</servlet-name>
         <servlet-class>uni.oldenburg.server.service.SessionInformationServiceImpl</servlet-class>
     </servlet>
-
    <servlet>
-      <servlet-name>remoteLogging</servlet-name>
-      <servlet-class>com.google.gwt.logging.server.RemoteLoggingServiceImpl</servlet-class>
+      <servlet-name>loggingService</servlet-name>
+      <servlet-class>uni.oldenburg.server.service.LoggingServiceImpl</servlet-class>
    </servlet>
 
-
    <servlet-mapping>
-      <servlet-name>remoteLogging</servlet-name>
-      <url-pattern>/simulation/remote_logging</url-pattern>
+      <servlet-name>loggingService</servlet-name>
+      <url-pattern>/simulation/loggingService</url-pattern>
    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>simulationService</servlet-name>
@@ -41,7 +39,7 @@
         <url-pattern>/simulation/sessionInformationService</url-pattern>
     </servlet-mapping>
 
-    <!-- Default page to serve -->
+   <!-- Default page to serve -->
     <welcome-file-list>
         <welcome-file>simulation.html</welcome-file>
     </welcome-file-list>
