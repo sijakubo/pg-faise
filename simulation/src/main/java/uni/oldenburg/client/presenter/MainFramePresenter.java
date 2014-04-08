@@ -165,8 +165,7 @@ public class MainFramePresenter extends Presenter {
 					if (myConveyor != null) {
 						// when spot available
 						if (isSpotAvailable(event.getX(), event.getY())) {
-							MainFramePresenter.this.currentSzenario
-									.addConveyor(myConveyor);
+							MainFramePresenter.this.currentSzenario.addConveyor(myConveyor);
 							MainFramePresenter.this.dropableConveyor = null;
 							loadSzenario(MainFramePresenter.this.currentSzenario);
 						}
@@ -179,14 +178,17 @@ public class MainFramePresenter extends Presenter {
 					if (myConveyor == null)
 						return;
 
-					if (myConveyor.getType().compareTo(ConveyorRamp.TYPE) == 0 || 
-						myConveyor.getType().compareTo(ConveyorVehicle.TYPE) == 0) {
+					if (myConveyor.getType().compareTo(ConveyorRamp.CONVEYOR_TYPE) == 0 || 
+						myConveyor.getType().compareTo(ConveyorVehicle.CONVEYOR_TYPE) == 0) {
 						myConveyor.rotateClockwise();
 
 						loadSzenario(MainFramePresenter.this.currentSzenario);
 						drawConveyor(myConveyor);
 
 						display.getCanvas().setFocus(true);
+						
+						//if (myConveyor.getType().compareTo(ConveyorRamp.CONVEYOR_TYPE) == 0)
+							//MainFramePresenter.this.display.log("Ramptype: " + ((ConveyorRamp)myConveyor).getRampType());
 					}
 				}
 			}

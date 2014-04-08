@@ -197,13 +197,13 @@ public class SzenarioDao {
 			int posY = resultSet.getInt("pos_y");
 			int direction = resultSet.getInt("direction");
 
-			if (type.compareTo(ConveyorRamp.TYPE) == 0) {
+			if (type.compareTo(ConveyorRamp.CONVEYOR_TYPE) == 0) {
 				newConveyor = new ConveyorRamp(posX, posY);
 			}
-			else if (type.compareTo(ConveyorVehicle.TYPE) == 0) {
+			else if (type.compareTo(ConveyorVehicle.CONVEYOR_TYPE) == 0) {
 				newConveyor = new ConveyorVehicle(posX, posY);
 			} 
-			else if (type.compareTo(ConveyorWall.TYPE) == 0) {
+			else if (type.compareTo(ConveyorWall.CONVEYOR_TYPE) == 0) {
 				newConveyor = new ConveyorWall(posX, posY);
 			}
 

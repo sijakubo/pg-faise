@@ -1,5 +1,7 @@
 package uni.oldenburg.shared.model;
 
+import uni.oldenburg.client.view.MainFrameView;
+
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
@@ -12,10 +14,16 @@ import com.google.gwt.canvas.dom.client.CssColor;
 
 @SuppressWarnings("serial")
 public class ConveyorRamp extends Conveyor {
-	public static final String TYPE = "Rampe";
+	public static final String CONVEYOR_TYPE = "Rampe";
+	
+	public final int RAMP_STOREAGE = 0;	
+	public final int RAMP_ENTRANCE = 1;
+	public final int RAMP_EXIT = 2;
+	
 	private boolean bVertical = true;
 	private int numBlocks = 3;
-
+	private int rampType = RAMP_STOREAGE;
+	
 	public ConveyorRamp() {
 		this.setVertical(bVertical);
 	}
@@ -40,20 +48,20 @@ public class ConveyorRamp extends Conveyor {
 		
 		switch(this.getDirection()) {
 			case DIRECTION_UP:
-				drawEntry(context, CONVEYOR_COLOR_ENTER, 0, 0, this.getWidth(), ENTRY_BORDER_SIZE);
-				drawEntry(context, CONVEYOR_COLOR_EXIT , 0, this.getHeight() - ENTRY_BORDER_SIZE, this.getWidth(), ENTRY_BORDER_SIZE);
+				drawEntry(context, CONVEYOR_COLOR_INPUT, 0, 0, this.getWidth(), ENTRY_BORDER_SIZE);
+				drawEntry(context, CONVEYOR_COLOR_OUTPUT, 0, this.getHeight() - ENTRY_BORDER_SIZE, this.getWidth(), ENTRY_BORDER_SIZE);
 				break;
 			case DIRECTION_LEFT:
-				drawEntry(context, CONVEYOR_COLOR_ENTER, this.getWidth() - ENTRY_BORDER_SIZE, 0, ENTRY_BORDER_SIZE, this.getWidth());
-				drawEntry(context, CONVEYOR_COLOR_EXIT , 0, 0, ENTRY_BORDER_SIZE, this.getWidth());
+				drawEntry(context, CONVEYOR_COLOR_INPUT, this.getWidth() - ENTRY_BORDER_SIZE, 0, ENTRY_BORDER_SIZE, this.getWidth());
+				drawEntry(context, CONVEYOR_COLOR_OUTPUT, 0, 0, ENTRY_BORDER_SIZE, this.getWidth());
 				break;
 			case DIRECTION_DOWN:
-				drawEntry(context, CONVEYOR_COLOR_ENTER, 0, this.getHeight() - ENTRY_BORDER_SIZE, this.getWidth(), ENTRY_BORDER_SIZE);				
-				drawEntry(context, CONVEYOR_COLOR_EXIT , 0, 0, this.getWidth(), ENTRY_BORDER_SIZE);
+				drawEntry(context, CONVEYOR_COLOR_INPUT, 0, this.getHeight() - ENTRY_BORDER_SIZE, this.getWidth(), ENTRY_BORDER_SIZE);				
+				drawEntry(context, CONVEYOR_COLOR_OUTPUT, 0, 0, this.getWidth(), ENTRY_BORDER_SIZE);
 				break;
 			case DIRECTION_RIGHT:
-				drawEntry(context, CONVEYOR_COLOR_ENTER, 0, 0, ENTRY_BORDER_SIZE, this.getWidth());				
-				drawEntry(context, CONVEYOR_COLOR_EXIT , this.getWidth() - ENTRY_BORDER_SIZE, 0, ENTRY_BORDER_SIZE, this.getWidth());
+				drawEntry(context, CONVEYOR_COLOR_INPUT, 0, 0, ENTRY_BORDER_SIZE, this.getWidth());				
+				drawEntry(context, CONVEYOR_COLOR_OUTPUT , this.getWidth() - ENTRY_BORDER_SIZE, 0, ENTRY_BORDER_SIZE, this.getWidth());
 				break;
 		}			
 		
@@ -62,7 +70,53 @@ public class ConveyorRamp extends Conveyor {
 
 	@Override
 	public String getType() {
-		return ConveyorRamp.TYPE;
+		return ConveyorRamp.CONVEYOR_TYPE;
+	}
+	
+	public int getRampType() {
+		return rampType;
+	}
+		
+	/**
+	 * auto-set type based on location of conveyor
+	 * 
+	 * @author Matthias
+	 */
+	public void setPosition(int x, int y) {
+		super.setPosition(x, y);
+		
+		rampType = RAMP_STOREAGE;
+		
+		switch(getDirection()) {
+			case DIRECTION_UP:
+				if (getY() == 0)
+					rampType = RAMP_EXIT;	
+				else if (getY() == (MainFrameView.canvasHeight - getHeight()))  
+					rampType = RAMP_ENTRANCE;
+					
+				break;
+			case DIRECTION_RIGHT:
+				if (getX() == 0)
+					rampType = RAMP_ENTRANCE;	
+				else if (getX() == (MainFrameView.canvasWidth - getWidth())) 
+					rampType = RAMP_EXIT;
+					
+				break;
+			case DIRECTION_DOWN:
+				if (getY() == 0)
+					rampType = RAMP_ENTRANCE;	
+				else if (getY() == (MainFrameView.canvasHeight - getHeight()))  
+					rampType = RAMP_EXIT;
+				
+				break;
+			case DIRECTION_LEFT:
+				if (getX() == 0)
+					rampType = RAMP_EXIT;
+				else if (getX() == (MainFrameView.canvasWidth - getWidth()))
+					rampType = RAMP_ENTRANCE;
+				
+				break;				
+		}
 	}
 	
 	/**

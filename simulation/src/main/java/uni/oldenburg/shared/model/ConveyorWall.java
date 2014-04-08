@@ -12,7 +12,7 @@ import com.google.gwt.canvas.dom.client.CssColor;
 
 @SuppressWarnings("serial")
 public class ConveyorWall extends Conveyor {
-	public static final String TYPE = "Wand";
+	public static final String CONVEYOR_TYPE = "Wand";
 	
 	public ConveyorWall() {
 		super(0, 0, Conveyor.getRastersize(), Conveyor.getRastersize());
@@ -35,7 +35,7 @@ public class ConveyorWall extends Conveyor {
 
 	@Override
 	public String getType() {
-		return ConveyorWall.TYPE;
+		return ConveyorWall.CONVEYOR_TYPE;
 	}
 
 }

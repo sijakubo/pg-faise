@@ -38,8 +38,8 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	
 	private Canvas			canvas;
 	
-	private final int canvasWidth  = 800;
-	private final int canvasHeight = 480;
+	public static final int canvasWidth  = 800;
+	public static final int canvasHeight = 480;
 	
 	public MainFrameView() {
 		VerticalPanel   vpMainFrame = new VerticalPanel();
