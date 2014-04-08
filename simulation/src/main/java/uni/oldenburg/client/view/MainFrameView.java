@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -20,13 +21,15 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class MainFrameView extends Composite implements MainFramePresenter.IDisplay {
 	private MenuBar			menuBar;	
 	private MenuBar			simMenuBar;
-	private MenuBar			editMenuBar;
+	private MenuBar			jobMenuBar;
 	
 	private CellTable<Job>	ctJobTable = new CellTable<Job>();
 	private Button			btnAddJobs;
 	private Button         	btnStrategies;
 	
 	// conveyor menu
+	private VerticalPanel 	vpConveyor;
+	
 	private Label			lblConveyor;
 	private Button			btnConveyorRamp;
 	private Button			btnConveyorVehicle;
@@ -56,8 +59,8 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		
 		//edit menu
 		
-		editMenuBar = new MenuBar(true);
-		editMenuBar.setAnimationEnabled(true);
+		jobMenuBar = new MenuBar(true);
+		jobMenuBar.setAnimationEnabled(true);
 		
 		//menu bar
 		
@@ -103,7 +106,7 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		vpLeftFrame.add(btnStrategies);
 		
 		// conveyor list
-		VerticalPanel vpConveyor = new VerticalPanel();
+		vpConveyor = new VerticalPanel();
 		vpConveyor.addStyleName("conveyor_panel");
 		
 		lblConveyor = new Label("Stetigf" + (char)246 + "rderer");
@@ -184,8 +187,8 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		return this.simMenuBar;
 	}
 
-	public MenuBar getEditMenuBar() {
-		return this.editMenuBar;
+	public MenuBar getJobMenuBar() {
+		return this.jobMenuBar;
 	}
 
 	public HasClickHandlers getConveyorWallButton() {
@@ -202,5 +205,9 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 
 	public HasText getJobCount() {
 		return txtJobCount;
+	}
+
+	public Panel getConveyorPanel() {
+		return vpConveyor;
 	}
 }

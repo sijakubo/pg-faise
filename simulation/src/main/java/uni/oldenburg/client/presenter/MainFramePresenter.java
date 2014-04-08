@@ -1,7 +1,9 @@
 package uni.oldenburg.client.presenter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import uni.oldenburg.client.service.ServiceAsync;
 import uni.oldenburg.client.service.SimulationServiceAsync;
@@ -47,6 +49,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
@@ -56,6 +60,11 @@ public class MainFramePresenter extends Presenter {
 	private Szenario currentSzenario;
 	Conveyor dropableConveyor;
 	JobList lstJobs = new JobList();
+	
+	private boolean bSimulationRunning = false;
+	
+	Map<String, MenuItem> mapSimMenuItems = new HashMap<String, MenuItem>();
+	Map<String, MenuItem> mapJobMenuItems = new HashMap<String, MenuItem>();
 
 	public interface IDisplay {
 		CellTable<Job> getJobTable();
@@ -66,11 +75,13 @@ public class MainFramePresenter extends Presenter {
 		HasClickHandlers getConveyorVehicleButton();
 		HasClickHandlers getConveyorWallButton();
 		
+		Panel getConveyorPanel();
+		
 		HasText	getJobCount();
 
 		MenuBar getMenuBar();
 		MenuBar getSimulationMenuBar();
-		MenuBar getEditMenuBar();
+		MenuBar getJobMenuBar();
 		Label getLabelUserName();
 		Canvas getCanvas();
 		
@@ -87,8 +98,11 @@ public class MainFramePresenter extends Presenter {
 
 	public Widget getDisplay() {
 		return (Widget) display;
-
 	}
+	
+	public boolean isSimulationRunning() {
+		return bSimulationRunning;
+	}	
 
 	/**
 	 * Method gets UserName from Server and writes it into the Label
@@ -709,78 +723,87 @@ public class MainFramePresenter extends Presenter {
 
 		// file menu
 
-		this.display.getSimulationMenuBar().addItem("Laden", new Command() {
+		String menuName = "Laden";
+		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar().addItem(menuName, new Command() {
 			public void execute() {
 				getScenarioTitlesFromServerAndShow();
 			}
-		});
+		}));
 
-		this.display.getSimulationMenuBar().addItem("Speichern", new Command() {
+		menuName = "Speichern";
+		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar().addItem(menuName, new Command() {
 			public void execute() {
 				trySaveSzenario(MainFramePresenter.this.getActualSzenario());
 			}
-		});
-		this.display.getSimulationMenuBar().addItem("Speichern unter...",
-				new Command() {
-					public void execute() {
-						// Open Save as Dialog
-						DialogBoxSaveAs dialog = new DialogBoxSaveAs(
-								MainFramePresenter.this);
-						dialog.show();
-					}
-				});
+		}));
+		
+		menuName = "Speichern unter...";
+		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar().addItem(menuName, new Command() {
+			public void execute() {
+				// Open Save as Dialog
+				DialogBoxSaveAs dialog = new DialogBoxSaveAs(MainFramePresenter.this);
+				dialog.show();
+			}
+		}));
 
 		this.display.getSimulationMenuBar().addSeparator();
 
-		this.display.getSimulationMenuBar().addItem("Einstellungen",
-				new Command() {
-					public void execute() {
+		menuName = "Einstellungen";
+		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar().addItem(menuName, new Command() {
+			public void execute() {
 
-					}
-				});
+			}
+		}));
 
 		this.display.getSimulationMenuBar().addSeparator();
 
-		this.display.getSimulationMenuBar().addItem("Starten/Anhalten",
-				new Command() {
-					public void execute() {
-
-					}
-				});
+		menuName = "Starten/Anhalten";
+		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar().addItem(menuName, new Command() {
+			public void execute() {
+				bSimulationRunning = !bSimulationRunning;
+				
+				mapSimMenuItems.get("Laden").setEnabled(!isSimulationRunning());
+				mapSimMenuItems.get("Speichern").setEnabled(!isSimulationRunning());
+				mapSimMenuItems.get("Speichern unter...").setEnabled(!isSimulationRunning());
+				mapSimMenuItems.get("Einstellungen").setEnabled(!isSimulationRunning());
+				
+				mapJobMenuItems.get("Laden").setEnabled(!isSimulationRunning());
+				mapJobMenuItems.get("Speichern").setEnabled(!isSimulationRunning());
+				mapJobMenuItems.get("Speichern unter...").setEnabled(!isSimulationRunning());
+				
+				display.getConveyorPanel().setVisible(!isSimulationRunning());
+			}
+		}));
 
 		// edit menu
-		this.display.getEditMenuBar().addItem("Laden",
-				new Command() {
-					public void execute() {
-						getJoblistTitlesFromServerAndShow();
-					}
-				});
+		menuName = "Laden";
+		mapJobMenuItems.put(menuName, this.display.getJobMenuBar().addItem(menuName, new Command() {
+			public void execute() {
+				getJoblistTitlesFromServerAndShow();
+			}
+		}));
 
-		this.display.getEditMenuBar().addItem(
-				"Speichern", new Command() {
-					public void execute() {
-						trySaveJoblist(MainFramePresenter.this.getActualJoblist());
-					}
-				});
+		menuName = "Speichern";
+		mapJobMenuItems.put(menuName, this.display.getJobMenuBar().addItem(menuName, new Command() {
+			public void execute() {
+				trySaveJoblist(MainFramePresenter.this.getActualJoblist());
+			}
+		}));
 		
-		this.display.getEditMenuBar().addItem(
-				"Speichern unter...", new Command() {
-					public void execute() {
-						// Open Save as Dialog
-						DialogBoxSaveAsJoblist dialog = new DialogBoxSaveAsJoblist(
-								MainFramePresenter.this);
-						dialog.show();
-					}
-				});
+		menuName = "Speichern unter...";
+		mapJobMenuItems.put(menuName, this.display.getJobMenuBar().addItem(menuName, new Command() {
+			public void execute() {
+				// Open Save as Dialog
+				DialogBoxSaveAsJoblist dialog = new DialogBoxSaveAsJoblist(MainFramePresenter.this);
+				dialog.show();
+			}
+		}));
 
 		// menu bar
 
-		this.display.getMenuBar().addItem("Simulation",
-				this.display.getSimulationMenuBar());
+		this.display.getMenuBar().addItem("Simulation", this.display.getSimulationMenuBar());
 		this.display.getMenuBar().addSeparator();
-
-		this.display.getMenuBar().addItem("Auftragsliste",
-				this.display.getEditMenuBar());
+		this.display.getMenuBar().addItem("Auftragsliste", this.display.getJobMenuBar());
 	}
 
 	public Szenario getActualSzenario() {
