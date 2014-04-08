@@ -1,6 +1,7 @@
 package uni.oldenburg.server.service;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+
 import uni.oldenburg.client.service.SessionInformationService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpSession;
 /**
  * @author sijakubo
  */
+@SuppressWarnings("serial")
 public class SessionInformationServiceImpl extends RemoteServiceServlet implements SessionInformationService {
 
    public boolean isUserLoggedInInSession() {

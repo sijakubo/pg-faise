@@ -222,7 +222,7 @@ public class MainFramePresenter extends Presenter {
 					Window.alert("Fehler: Es wurde keine Zahl eingetragen!");
 				}
 				else {
-					lstJobs.addRandomJobs(Integer.parseInt(jobCount), MainFramePresenter.this.display.getJobTable().getRowCount()+1);
+					lstJobs.addRandomJobs(Integer.parseInt(jobCount));
 					setupJobTable();
 				}
 				
@@ -285,12 +285,6 @@ public class MainFramePresenter extends Presenter {
 	 * @author Christopher Matthias
 	 */
 	private void setupJobTable() {		
-		TextColumn<Job> idColumn = new TextColumn<Job>() {
-			@Override
-			public String getValue(Job object) {
-				return "" + object.getId();
-			}
-		};
 		TextColumn<Job> timestampColumn = new TextColumn<Job>() {
 			@Override
 			public String getValue(Job object) {
@@ -316,7 +310,6 @@ public class MainFramePresenter extends Presenter {
 		while(display.getJobTable().getColumnCount() > 0) {
 			display.getJobTable().removeColumn(0);
 		}
-		display.getJobTable().addColumn(idColumn, "Id");
 		display.getJobTable().addColumn(timestampColumn, "Zeit");
 		display.getJobTable().addColumn(packageColumn, "Paket");
 		display.getJobTable().addColumn(destinationColumn, "Ziel");
@@ -586,10 +579,7 @@ public class MainFramePresenter extends Presenter {
 	 * 
 	 * @author Raschid
 	 */
-	public void loadJoblist(JobList list) {
-
-		
-
+	public void loadJoblist() {
 		this.setupJobTable();
 	}
 
@@ -607,7 +597,7 @@ public class MainFramePresenter extends Presenter {
 
 					public void onSuccess(JobList list) {
 						MainFramePresenter.this.lstJobs = list;
-						loadJoblist(list);
+						loadJoblist();
 					}
 				});
 	}
@@ -639,7 +629,6 @@ public class MainFramePresenter extends Presenter {
 	 * @author Raschid
 	 */
 	public void trySaveJoblist(JobList joblist) {
-
 		// Check if Szenario already exists
 		((SimulationServiceAsync) rpcService).checkIfJobListExists(
 				joblist.getName(), new AsyncCallback<Boolean>() {

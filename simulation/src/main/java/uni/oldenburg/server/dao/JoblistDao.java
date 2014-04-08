@@ -7,14 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uni.oldenburg.server.databasehelper.ConnectionPool;
-import uni.oldenburg.shared.model.Conveyor;
-import uni.oldenburg.shared.model.ConveyorRamp;
-import uni.oldenburg.shared.model.ConveyorVehicle;
-import uni.oldenburg.shared.model.ConveyorWall;
 import uni.oldenburg.shared.model.Job;
 import uni.oldenburg.shared.model.JobList;
-import uni.oldenburg.shared.model.SimulationUser;
-import uni.oldenburg.shared.model.Szenario;
 
 public class JoblistDao {
 	/**
@@ -73,7 +67,7 @@ public class JoblistDao {
 	/**
 	 * Persists a Joblist into the Database by executing an Insert
 	 * 
-	 * @author Raschid
+	 * @author Raschid Matthias
 	 */
 	public void persistJoblist(JobList joblist) throws SQLException {
 		
@@ -113,20 +107,17 @@ public class JoblistDao {
 				.prepareStatement(
 						"INSERT INTO "
 								+ Job.TABLE_NAME
-								+ " (id, joblist_id, package_id, destination_id, time_delay, type) "
+								+ " (id, joblist_id, destination_id, time_delay) "
 								+ "VALUES ("
-								+ "(SELECT CASE WHEN MAX(ID) IS NULL THEN 0 ELSE MAX(ID)+1 END FROM job) , (SELECT id FROM joblist WHERE name = ?), ?, ?, ?, ?) ");
+								+ "(SELECT CASE WHEN MAX(ID) IS NULL THEN 0 ELSE MAX(ID)+1 END FROM job) , (SELECT id FROM joblist WHERE name = ?), ?, ?) ");
 
 		// Persisting the Conveyors
 		List<Job> lstJobs = joblist.getJoblist();
 
 		for (Job job : lstJobs) {
-			
 			prepStatement.setString(1, joblist.getName());
-			prepStatement.setInt(2, job.getPackageId());
-			prepStatement.setInt(3, job.getDestinationId());
-			prepStatement.setInt(4, job.getTimestamp());
-			prepStatement.setInt(5, job.getType());
+			prepStatement.setInt(2, job.getDestinationId());
+			prepStatement.setInt(3, job.getTimestamp());
 		
 			prepStatement.executeUpdate();
 		}
@@ -137,7 +128,7 @@ public class JoblistDao {
 	 * loads the Joblist by a name and intializes the Joblist and Jobs Objects
 	 * with
 	 * 
-	 * @author Raschid
+	 * @author Raschid Matthias
 	 */
 	public JobList loadJobList(String name) throws SQLException {
 		String strSQL = "SELECT id, name " + "FROM " + JobList.TABLE_NAME + " "
@@ -157,7 +148,7 @@ public class JoblistDao {
 
 		JobList jobList = new JobList(resultSet.getString("name"));
 
-		List<Job> lstJob = loadJob(idJoblist);
+		List<Job> lstJob = loadJobs(idJoblist);
 
 		for (Job newJob : lstJob) {
 			jobList.addJob(newJob);
@@ -174,33 +165,26 @@ public class JoblistDao {
 	 * 
 	 * @author Raschid
 	 */
-	private List<Job> loadJob(int id_joblist) throws SQLException {
+	private List<Job> loadJobs(int id_joblist) throws SQLException {
 		List<Job> lstJobs = new ArrayList<Job>();
 
-		String strSQL = "SELECT package_id, destination_id, time_delay, type "
+		String strSQL = "SELECT destination_id, time_delay "
 				+ "FROM " + Job.TABLE_NAME + " " + "WHERE joblist_id = ?";
 
-		PreparedStatement preparedStatement = ConnectionPool.getConnection()
-				.prepareStatement(strSQL);
+		PreparedStatement preparedStatement = ConnectionPool.getConnection().prepareStatement(strSQL);
 
 		preparedStatement.setInt(1, id_joblist);
 		ResultSet resultSet = preparedStatement.executeQuery();
-		int jobId=1;
 
 		while (resultSet.next()) {
-			Job job = null;
-            
 			int timestamp = resultSet.getInt("time_delay");
 			int destinationId = resultSet.getInt("destination_id");
-			int packageId = resultSet.getInt("package_id");
-			int type=resultSet.getInt("type");
 
-			job = new Job(jobId,type,timestamp,packageId, destinationId);
+			Job job = new Job(timestamp, destinationId);
 
 			if (job != null) {
 				lstJobs.add(job);
 			}
-			jobId++;
 		}
 
 		resultSet.close();

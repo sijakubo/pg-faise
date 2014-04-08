@@ -14,14 +14,12 @@ import java.util.List;
 public class Szenario implements Serializable {
 	public static final String TABLE_NAME = "szenario";
 	
-	private int id;
 	private String title;
 	private String time_created;
 	private String created_by_user;
 	private List<Conveyor> lstConveyor;
 	
 	public Szenario () {
-		this.id = -1;
 		this.title = "new Szenario";
 		this.time_created = "now";
 		this.created_by_user = "unknown user";
@@ -29,17 +27,12 @@ public class Szenario implements Serializable {
 		lstConveyor = new ArrayList<Conveyor>();
 	};
 		
-	public Szenario (int id, String title, String time_created, String created_by_user) {
-		this.id = id;
+	public Szenario (String title, String time_created, String created_by_user) {
 		this.title = title;
 		this.time_created = time_created;
 		this.created_by_user = created_by_user;
 		
 		lstConveyor = new ArrayList<Conveyor>();
-	}
-	
-	public int getID() {
-		return this.id;
 	}
 	
 	public void addConveyor(Conveyor newConveyor) {

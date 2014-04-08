@@ -155,11 +155,12 @@ public class SzenarioDao {
 					+ name);
 		}
 
-		Szenario newSzenario = new Szenario(resultSet.getInt("id"), name,
+		Szenario newSzenario = new Szenario(
+				name,
 				resultSet.getString("time_created"),
 				resultSet.getString("user_name"));
 
-		List<Conveyor> lstConveyor = loadConveyor(newSzenario.getID());
+		List<Conveyor> lstConveyor = loadConveyor(resultSet.getInt("id"));
 
 		for (Conveyor newConveyor : lstConveyor) {
 			newSzenario.addConveyor(newConveyor);

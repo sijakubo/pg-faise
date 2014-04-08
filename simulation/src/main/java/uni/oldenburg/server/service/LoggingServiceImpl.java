@@ -1,11 +1,13 @@
 package uni.oldenburg.server.service;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import org.apache.log4j.BasicConfigurator;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
 import uni.oldenburg.client.service.LoggingService;
 
+@SuppressWarnings("serial")
 public class LoggingServiceImpl extends RemoteServiceServlet implements LoggingService {
 
    /**

@@ -169,6 +169,7 @@ public class SimulationServiceImpl extends RemoteServiceServlet implements Simul
 		boolean result = false;
 		try {
 			result = joblistDao.checkIfJoblistExists(title);
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
