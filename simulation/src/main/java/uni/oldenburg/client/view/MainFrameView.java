@@ -19,12 +19,12 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class MainFrameView extends Composite implements MainFramePresenter.IDisplay {
-	private MenuBar			menuBar;	
+   private MenuBar			menuBar;
 	private MenuBar			simMenuBar;
 	private MenuBar			jobMenuBar;
 	
 	private CellTable<Job>	ctJobTable = new CellTable<Job>();
-	private Button			btnAddJobs;
+	private Button			   btnAddJobs;
 	private Button         	btnStrategies;
 	
 	// conveyor menu
@@ -34,6 +34,7 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	private Button			btnConveyorRamp;
 	private Button			btnConveyorVehicle;
 	private Button			btnConveyorWall;
+   private Button       btnStartAgentPlattform;
 	// -------------
 	private TextBox 		txtJobCount;
 	private Label			lblUserName;
@@ -116,23 +117,23 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		btnConveyorVehicle = new Button("Fahrzeug");
 		btnConveyorVehicle.addStyleName("conveyor_vehicle");
 		btnConveyorWall = new Button("Wand");
-		btnConveyorWall.addStyleName("conveyor_wall");		
-		
+		btnConveyorWall.addStyleName("conveyor_wall");
+
 		vpConveyor.add(lblConveyor);
 		vpConveyor.add(btnConveyorRamp);
 		vpConveyor.add(btnConveyorVehicle);
 		vpConveyor.add(btnConveyorWall);
-		
 		vpLeftFrame.add(vpConveyor);
 		
 		
-		lblUserName = new Label("Test");
-		
+		lblUserName = new Label();
 		vpLeftFrame.add(lblUserName);
-		
-		
-		
-		// -------------
+
+      btnStartAgentPlattform = new Button("Start Simulation");
+      btnStartAgentPlattform.addStyleName("startAgentPlatformBtn");
+      vpLeftFrame.add(btnStartAgentPlattform);
+
+      // -------------
 		
 		hpSubFrame.add(vpLeftFrame);
 		
@@ -178,6 +179,10 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	public HasClickHandlers getConveyorVehicleButton() {
 		return btnConveyorVehicle;
 	}
+
+   public HasClickHandlers getStartAgentPlatformButton() {
+      return btnStartAgentPlattform;
+   }
 
 	public MenuBar getMenuBar() {
 		return this.menuBar;

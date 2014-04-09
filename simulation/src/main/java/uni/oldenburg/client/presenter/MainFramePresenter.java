@@ -5,8 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.GWT;
+import uni.oldenburg.client.service.AgentPlatformService;
+import uni.oldenburg.client.service.AgentPlatformServiceAsync;
 import uni.oldenburg.client.service.ServiceAsync;
 import uni.oldenburg.client.service.SimulationServiceAsync;
+import uni.oldenburg.client.util.EmptyAsyncCallback;
 import uni.oldenburg.client.view.DialogBoxJoblistSelection;
 import uni.oldenburg.client.view.DialogBoxOverwrite;
 import uni.oldenburg.client.view.DialogBoxOverwriteJoblist;
@@ -74,6 +78,7 @@ public class MainFramePresenter extends Presenter {
 		HasClickHandlers getConveyorRampButton();
 		HasClickHandlers getConveyorVehicleButton();
 		HasClickHandlers getConveyorWallButton();
+      HasClickHandlers getStartAgentPlatformButton();
 		
 		Panel getConveyorPanel();
 		
@@ -296,7 +301,21 @@ public class MainFramePresenter extends Presenter {
 			}
 		});
 	}
-	
+
+   /**
+	 * start AgentPlatform
+	 *
+	 * @author sijakubo
+	 */
+	private void addStartAgentPlatformButtonListener() {
+		display.getStartAgentPlatformButton().addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+            AgentPlatformServiceAsync agentPlatformService = GWT.create(AgentPlatformService.class);
+            agentPlatformService.startSimulation(new EmptyAsyncCallback());
+         }
+		});
+	}
+
 	/**
 	 * @author Christopher Matthias
 	 */
@@ -704,7 +723,8 @@ public class MainFramePresenter extends Presenter {
 		this.addConveyorRampButtonListener();
 		this.addConveyorVehicleButtonListener();
 		this.addConveyorWallButtonListener();
-		this.addCanvasListener();
+		this.addStartAgentPlatformButtonListener();
+      this.addCanvasListener();
 		this.setupJobTable();
 		this.setLabelUserName();
 
