@@ -1,15 +1,19 @@
 package uni.oldenburg.server.service;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+
 import jade.core.Agent;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
 import uni.oldenburg.client.service.AgentPlatformService;
 
+@SuppressWarnings("serial")
 public class AgentPlatformServiceImpl extends RemoteServiceServlet implements AgentPlatformService {
    private Logger logger = Logger.getLogger(AgentPlatformServiceImpl.class);
    private ContainerController container;
