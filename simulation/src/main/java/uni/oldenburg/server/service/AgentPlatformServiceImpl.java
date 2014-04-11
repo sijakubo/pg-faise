@@ -23,6 +23,9 @@ public class AgentPlatformServiceImpl extends RemoteServiceServlet implements Ag
    }
 
    /**
+    * Erstellt den JADE-Runtime Container. An den Container können Agenten angemeldet werden,
+    * die miteinander innerhalb des Containers kommunizieren können.
+    *
     * @author sijakubo
     */
    private void startAgentPlatform() {
