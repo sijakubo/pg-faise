@@ -1,10 +1,10 @@
-package uni.oldenburg.agent;
+package uni.oldenburg.server.agent;
 
-import uni.oldenburg.agent.helper.AgentHelper;
+import uni.oldenburg.server.agent.helper.AgentHelper;
 import jade.core.Agent;
 
 @SuppressWarnings("serial")
-public class RampRoutingAgent extends Agent {
+public class VehicleRoutingAgent extends Agent {
 	// init
 	protected void setup() {
 		AgentHelper.registerAgent(this, this.getClass().getSimpleName());

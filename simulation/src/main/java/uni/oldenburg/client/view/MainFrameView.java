@@ -34,7 +34,6 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	private Button			btnConveyorRamp;
 	private Button			btnConveyorVehicle;
 	private Button			btnConveyorWall;
-   private Button       btnStartAgentPlattform;
 	// -------------
 	private TextBox 		txtJobCount;
 	private Label			lblUserName;
@@ -129,10 +128,6 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		lblUserName = new Label();
 		vpLeftFrame.add(lblUserName);
 
-      btnStartAgentPlattform = new Button("Start Simulation");
-      btnStartAgentPlattform.addStyleName("startAgentPlatformBtn");
-      vpLeftFrame.add(btnStartAgentPlattform);
-
       // -------------
 		
 		hpSubFrame.add(vpLeftFrame);
@@ -179,10 +174,6 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	public HasClickHandlers getConveyorVehicleButton() {
 		return btnConveyorVehicle;
 	}
-
-   public HasClickHandlers getStartAgentPlatformButton() {
-      return btnStartAgentPlattform;
-   }
 
 	public MenuBar getMenuBar() {
 		return this.menuBar;

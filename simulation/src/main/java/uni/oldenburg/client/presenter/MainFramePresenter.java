@@ -78,17 +78,16 @@ public class MainFramePresenter extends Presenter {
 		HasClickHandlers getConveyorRampButton();
 		HasClickHandlers getConveyorVehicleButton();
 		HasClickHandlers getConveyorWallButton();
-      HasClickHandlers getStartAgentPlatformButton();
 		
-		Panel getConveyorPanel();
+		Panel 	getConveyorPanel();
 		
 		HasText	getJobCount();
 
 		MenuBar getMenuBar();
 		MenuBar getSimulationMenuBar();
 		MenuBar getJobMenuBar();
-		Label getLabelUserName();
-		Canvas getCanvas();
+		Label 	getLabelUserName();
+		Canvas 	getCanvas();
 		
 		void log(String log);		
 	}
@@ -156,6 +155,9 @@ public class MainFramePresenter extends Presenter {
 		display.getCanvas().addMouseMoveHandler(new MouseMoveHandler() {
 			public void onMouseMove(MouseMoveEvent event) {
 				Conveyor myConveyor = MainFramePresenter.this.dropableConveyor;
+				
+				if (isSimulationRunning())
+					return;
 
 				if (myConveyor == null)
 					return;
@@ -177,6 +179,9 @@ public class MainFramePresenter extends Presenter {
 		display.getCanvas().addMouseUpHandler(new MouseUpHandler() {
 			public void onMouseUp(MouseUpEvent event) {
 				Conveyor myConveyor = MainFramePresenter.this.dropableConveyor;
+				
+				if (isSimulationRunning())
+					return;
 
 				// conveyor drag & drop
 				if (event.getNativeButton() == NativeEvent.BUTTON_LEFT) {
@@ -205,9 +210,6 @@ public class MainFramePresenter extends Presenter {
 						drawConveyor(myConveyor);
 
 						display.getCanvas().setFocus(true);
-						
-						//if (myConveyor.getType().compareTo(ConveyorRamp.CONVEYOR_TYPE) == 0)
-							//MainFramePresenter.this.display.log("Ramptype: " + ((ConveyorRamp)myConveyor).getRampType());
 					}
 				}
 			}
@@ -220,6 +222,9 @@ public class MainFramePresenter extends Presenter {
 		 */
 		display.getCanvas().addKeyUpHandler(new KeyUpHandler() {
 			public void onKeyUp(KeyUpEvent event) {
+				if (isSimulationRunning())
+					return;
+				
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ESCAPE) {
 					MainFramePresenter.this.dropableConveyor = null;
 					loadSzenario(MainFramePresenter.this.currentSzenario);
@@ -248,12 +253,9 @@ public class MainFramePresenter extends Presenter {
 				}
 				
 				MainFramePresenter.this.display.getJobCount().setText("1");
-
 			}
 		});
-		 
 	}
-	
 
 	private void addStrategiesButtonListener() {
 		display.getStrategiesButton().addClickHandler(new ClickHandler() {
@@ -302,20 +304,6 @@ public class MainFramePresenter extends Presenter {
 		});
 	}
 
-   /**
-	 * start AgentPlatform
-	 *
-	 * @author sijakubo
-	 */
-	private void addStartAgentPlatformButtonListener() {
-		display.getStartAgentPlatformButton().addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-            AgentPlatformServiceAsync agentPlatformService = GWT.create(AgentPlatformService.class);
-            agentPlatformService.startSimulation(new EmptyAsyncCallback());
-         }
-		});
-	}
-
 	/**
 	 * @author Christopher Matthias
 	 */
@@ -335,9 +323,12 @@ public class MainFramePresenter extends Presenter {
 		TextColumn<Job> destinationColumn = new TextColumn<Job>() {
 			@Override
 			public String getValue(Job object) {
-				if (object.getDestinationId() == 0) {
-					return "Lager";
-				}
+				if (object.getDestinationId() == 0)
+					return "Eingang";
+				
+				if (object.getDestinationId() == -1)
+					return "Ausgang";
+				
 				return "" + object.getDestinationId();
 			}
 		};
@@ -723,8 +714,7 @@ public class MainFramePresenter extends Presenter {
 		this.addConveyorRampButtonListener();
 		this.addConveyorVehicleButtonListener();
 		this.addConveyorWallButtonListener();
-		this.addStartAgentPlatformButtonListener();
-      this.addCanvasListener();
+		this.addCanvasListener();
 		this.setupJobTable();
 		this.setLabelUserName();
 
@@ -792,6 +782,16 @@ public class MainFramePresenter extends Presenter {
 				mapJobMenuItems.get("Speichern unter...").setEnabled(!isSimulationRunning());
 				
 				display.getConveyorPanel().setVisible(!isSimulationRunning());
+				
+				MainFramePresenter.this.dropableConveyor = null;
+				
+				if (isSimulationRunning()) {
+		            AgentPlatformServiceAsync agentPlatformService = GWT.create(AgentPlatformService.class);
+		            agentPlatformService.startSimulation(new EmptyAsyncCallback());
+				}
+				else {
+					// invoke stop simulation here
+				}
 			}
 		}));
 

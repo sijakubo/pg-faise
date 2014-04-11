@@ -1,4 +1,4 @@
-package uni.oldenburg.agent.helper;
+package uni.oldenburg.server.agent.helper;
 
 import java.util.ArrayList;
 import java.util.List;
