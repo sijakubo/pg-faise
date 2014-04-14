@@ -6,6 +6,8 @@
  * \date    14.04.2014
  */ 
 
+#include "drivers/proficonn_driver.h"
+
 #define _NOP() asm volatile("nop")
 
 /**
@@ -82,7 +84,7 @@ uint8_t proficonn_tr_byte(uint8_t spiOut){
 		
 		// CLOCK Tick
 		PROFICON_SPI_PORT |= 1<<PROFICON_CLK;
-		EXTFLASH_SPI_PORT &= ~(1<<PROFICON_CLK);
+		PROFICON_SPI_PORT &= ~(1<<PROFICON_CLK);
 		
 		if((PIND & (1<<PROFICON_RXD))){
 			recv |= 1<<(i-1);

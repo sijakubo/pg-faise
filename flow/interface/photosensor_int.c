@@ -1,15 +1,31 @@
-/*
- * photosensor_int.c
+/**
+ * \file photosensor_int.c
+ * \brief	Interface für die Lichtschranken
  *
- * Created: 24.02.2014 16:43:37
- *  Author: JanGerd
+ * \author	Jan-Gerd Meß
+ * \date    24.02.2014
  */ 
+
 #include "drivers/photosensor_drv.h"
 
+/**
+ * \fn	void photosensor_init(void)
+ * \brief	Initialisiert das Lichtschranken-Interface:
+ *
+ * \author	Jan-Gerd Meß
+ */
 void photosensor_init(void){
 	photosensor_drv_init();
 }
 
+/**
+ * \fn	uint8_t photosensor_is_bay_occupied(uint8_t i)
+ * \brief	Prüft, ob ein Platz auf der Rampe belegt ist
+ *
+ * \param i Platz auf der Rampe 1 <= i <= 4
+ *
+ * \author	Jan-Gerd Meß
+ */
 uint8_t photosensor_is_bay_occupied(uint8_t i){
 	if(i == 1)
 		return ((uint8_t)((1<<PHOTOSENSOR_1) & get_photosensors()));
@@ -23,11 +39,23 @@ uint8_t photosensor_is_bay_occupied(uint8_t i){
 	return 0;
 }
 
+/**
+ * \fn	uint8_t photosensor_is_first_bay_occupied()
+ * \brief	Prüft, ob auf dem ersten Platz einer Rampe ein Paket liegt
+ *
+ * \author	Jan-Gerd Meß
+ */
 uint8_t photosensor_is_first_bay_occupied(){
 	return photosensor_is_bay_occupied(1);
 }
 
-uint8_t photosensor_num_packages(void){
+/**
+ * \fn	uint8_t photosensor_num_packages()
+ * \brief	Zählt die Anzahl der Pakete auf der Rampe
+ *
+ * \author	Jan-Gerd Meß
+ */
+uint8_t photosensor_num_packages(){
 	uint8_t i = 1, n = 0;
 	for(i = 0; i<5;i++)
 		if(photosensor_is_bay_occupied(i))

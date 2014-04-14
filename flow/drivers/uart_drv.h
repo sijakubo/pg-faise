@@ -13,14 +13,15 @@
 #define BUFSIZE 16
 #endif
 
+/** Zeilenende für zeilenbasiert serielle Kommunikation */
 #define UART0_LINE_END 0x0a
 
 #include "contiki.h"
 #include "contiki-conf.h"
 
-void uart0_send(uint8_t *buf, uint8_t size);
-
 extern process_event_t serial_line_event_message;
+
+void uart0_send(uint8_t *buf, uint8_t size);
 
 int uart0_line_input_byte(unsigned char c);
 

@@ -1,8 +1,9 @@
-/*
- * bolt_int.h
+/**
+ * \file bolt_int.h
+ * \brief	Interface für die Bolzen
  *
- * Created: 24.02.2014 10:25:26
- *  Author: JanGerd
+ * \author	Jan-Gerd Meß
+ * \date    24.02.2014
  */ 
 
 
@@ -12,10 +13,16 @@
 #include "contiki.h"
 #include "sys/clock.h"
 
+// Zeit, die ein Paket benötigt, um die Rampe herunter zu rutschen
 #define BOLT_SLIDE_TIME CLOCK_SECOND*2
+
+// Zeit, bis der Bolzen geöffnet oder geschlossen ist
 #define BOLT_TIMEOUT CLOCK_SECOND/2
 
+// unterer Bolzen
 #define BOLT_LOWER 0x01
+
+// oberer Bolzen
 #define BOLT_UPPER 0x02
 
 void bolt_init(void);

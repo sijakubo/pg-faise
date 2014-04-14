@@ -10,6 +10,9 @@
 #ifndef PROFICON_DRIVER_H_
 #define PROFICON_DRIVER_H_
 
+#include "contiki.h"
+#include "contiki-conf.h"
+
 /** Port für den SPI-Bus zum proficonn */
 #define PROFICON_SPI_PORT PORTD
 
@@ -57,7 +60,7 @@ void proficonn_reset();
 void proficonn_enable();
 void proficonn_disable();
 
-uint8_t proficonn_tr_byte(uint8_t spiOut, uint8_t isRead);
+uint8_t proficonn_tr_byte(uint8_t spiOut);
 
 uint8_t proficonn_is_irq(void);
 

@@ -1,10 +1,10 @@
-/*
- * photosensor_int.h
+/**
+ * \file photosensor_int.h
+ * \brief	Interface für die Lichtschranken
  *
- * Created: 24.02.2014 16:43:59
- *  Author: JanGerd
+ * \author	Jan-Gerd Meß
+ * \date    24.02.2014
  */ 
-
 
 #ifndef PHOTOSENSOR_INT_H_
 #define PHOTOSENSOR_INT_H_

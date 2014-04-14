@@ -54,16 +54,30 @@
 
 /** Opcode Statusregister */
 #define EXTFLASH_OP_RDST 0x57
+
+/** Opcode Memory-Page in Buffer 1 */
 #define EXTFLASH_OP_MEM2BUF1 0x53
+
+/** Opcode Memory-Page in Buffer 2 */
 #define EXTFLASH_OP_MEM2BUF2 0x55
+
+/** Opcode Lesen aus Buffer 1 */
 #define EXTFLASH_OP_RDBUF1 0x54
+
+/** Opcode Lesen aus Buffer 2 */
 #define EXTFLASH_OP_RDBUF2 0x56
+
+/** Opcode Schreiben in Buffer 1 */
 #define EXTFLASH_OP_WRBUF1 0x84
+
+/** Opcode Schreiben in Buffer 2 */
 #define EXTFLASH_OP_WRBUF2 0x87
+
+/** Opcode Schreibe Buffer 1 in Memory */
 #define EXTFLASH_OP_BUF12MEM 0x83
+
+/** Opcode Schreibe Buffer 2 in Memory */
 #define EXTFLASH_OP_BUF22MEM 0x86
-#define EXTFLASH_OP_BUF1CMP 0x60
-#define EXTFLASH_OP_BUF2CMP 0x61
 
 /** Byte, das zur Übertragung von Dont-Care-Werten genutzt wird*/
 #define EXTFLASH_DONT_CARE 0xFF
@@ -72,7 +86,7 @@
 
 void extflash_init();
 
-uint8_t extflash_tr_byte(uint8_t spiOut, uint8_t isRead);
+uint8_t extflash_tr_byte(uint8_t spiOut);
 
 uint8_t extflash_read_status_register(void);
 

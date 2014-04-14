@@ -8,13 +8,6 @@
 
 #include "drivers/extflash_drv.h"
 #define _NOP() asm volatile("nop")
-#define DEBUG 1
-
-#if DEBUG
-#define PRINTF(...) printf(__VA_ARGS__)
-#else
-#define PRINTF(...)
-#endif
 
 /**
  * \fn	void extflash_init()
@@ -83,12 +76,10 @@ void extflash_wait_idle(){
  *
  * \author	Jan-Gerd Meﬂ
  */	
-uint8_t extflash_tr_byte(uint8_t spiOut, uint8_t isRead){
+uint8_t extflash_tr_byte(uint8_t spiOut){
 	
 	uint8_t recv = 0;
 	uint8_t i = 8;
-
-	PRINTF("SPI SENT: %u\n", spiOut);
 	
 	// Warte auf Operationen im Speicher
 	//extflash_wait_idle();
@@ -106,15 +97,10 @@ uint8_t extflash_tr_byte(uint8_t spiOut, uint8_t isRead){
 		EXTFLASH_SPI_PORT |= 1<<EXTFLASH_CLK;
 		EXTFLASH_SPI_PORT &= ~(1<<EXTFLASH_CLK);
 		
-		// Eventuell auf G¸ltigkeit des Ausgangs-Signals warten und recv setzen
-		if(isRead){
-			//clock_delay(100);
-			if((PIND & (1<<EXTFLASH_RXD))){
-				recv |= 1<<(i-1);
-			}
+		if((PIND & (1<<EXTFLASH_RXD))){
+			recv |= 1<<(i-1);
 		}
 	}
-	PRINTF("RECEIVED: %u\n\n", recv);
 	return recv;
 }
 
@@ -133,8 +119,8 @@ uint8_t extflash_read_status_register(void)
 	cli();
 	
 	extflash_enable();
-	extflash_tr_byte(EXTFLASH_OP_RDST, 0);
-	status_register = extflash_tr_byte(EXTFLASH_DONT_CARE, 1);
+	extflash_tr_byte(EXTFLASH_OP_RDST);
+	status_register = extflash_tr_byte(EXTFLASH_DONT_CARE);
 	
 	SREG = sreg;
 	extflash_disable();

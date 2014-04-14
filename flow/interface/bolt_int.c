@@ -1,20 +1,32 @@
-/*
- * bolt_int.c
+/**
+ * \file bolt_int.c
+ * \brief	Interface für die Bolzen
  *
- * Created: 24.02.2014 10:25:15
- *  Author: JanGerd
+ * \author	Jan-Gerd Meß
+ * \date    24.02.2014
  */ 
+
 #include "sys/rtimer.h"
 #include "drivers/bolt_drv.h"
 #include "interface/bolt_int.h"
 
-PROCESS(bolt_int_release, "Separate Package"); 
+/** Prozess, der ein Paket ausgibt */
+PROCESS(bolt_int_release, "Release Package"); 
+
+/** Prozess, der ein Paket ausgibt und das nächste separiert */
 PROCESS(bolt_int_release_and_separate, "Release and Separate Package");
+
+/** Prozess, der ein Paket separiert */
 PROCESS(bolt_int_separate, "Separate Package");
 
 static struct etimer bolt_timer;
 static uint8_t bolt_state = 0;
 
+/**
+ * \brief	Prozess für die Ausgabe eines Pakets. Zeitbasierter Zustandsautomat.
+ *
+ * \author	Jan-Gerd Meß
+ */
 PROCESS_THREAD(bolt_int_release, ev, data)
 {
 	uint16_t timeout = 0;
@@ -39,6 +51,11 @@ PROCESS_THREAD(bolt_int_release, ev, data)
 	PROCESS_END();
 }
 
+/**
+ * \brief	Prozess für die Ausgabe und das Separieren eines Pakets. Zeitbasierter Zustandsautomat.
+ *
+ * \author	Jan-Gerd Meß
+ */
 PROCESS_THREAD(bolt_int_release_and_separate, ev, data)
 {
 	uint16_t timeout = 0;
@@ -69,6 +86,11 @@ PROCESS_THREAD(bolt_int_release_and_separate, ev, data)
 	PROCESS_END();
 }
 
+/**
+ * \brief	Prozess für das Separieren eines Pakets. Zeitbasierter Zustandsautomat.
+ *
+ * \author	Jan-Gerd Meß
+ */
 PROCESS_THREAD(bolt_int_separate, ev, data)
 {
 	uint16_t timeout = 0;
@@ -93,18 +115,42 @@ PROCESS_THREAD(bolt_int_separate, ev, data)
 	PROCESS_END();
 }
 
+/**
+ * \fn	void bolt_release()
+ * \brief	Startet den Release-Prozess
+ *
+ * \author	Jan-Gerd Meß
+ */
 void bolt_release(){
 	process_start(&bolt_int_release, NULL);
 }
 
+/**
+ * \fn	void bolt_release_and_separate()
+ * \brief	Startet den Release-And-Separate-Prozess
+ *
+ * \author	Jan-Gerd Meß
+ */
 void bolt_release_and_separate(){
 	process_start(&bolt_int_release_and_separate, NULL);
 }
 
+/**
+ * \fn	void bolt_separate()
+ * \brief	Startet den Separate-Prozess
+ *
+ * \author	Jan-Gerd Meß
+ */
 void bolt_separate(){
 	process_start(&bolt_int_separate, NULL);
 }
 
+/**
+ * \fn	void bolt_init()
+ * \brief	Initialisiert die Bolzen
+ *
+ * \author	Jan-Gerd Meß
+ */
 void bolt_init(void){
 	bolt_drv_init();
 }
