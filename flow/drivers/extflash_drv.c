@@ -51,7 +51,7 @@ void extflash_enable(){
 }
 
 /**
- * \fn	void extflash_enable()
+ * \fn	void extflash_disable()
  * \brief	Deaktiviert den Speicher, indem der Chipselect (low active) auf 1 gesetzt wird.
  *
  * \author	Jan-Gerd Meﬂ
