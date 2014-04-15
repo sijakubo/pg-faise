@@ -44,6 +44,8 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	public static final int canvasWidth  = 800;
 	public static final int canvasHeight = 480;
 	
+	private static int logLineCount = 0;
+	
 	public MainFrameView() {
 		VerticalPanel   vpMainFrame = new VerticalPanel();
 		HorizontalPanel hpSubFrame = new HorizontalPanel();
@@ -195,8 +197,8 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		return this.lblUserName;
 	}
 
-	public void log(String log) {
-		this.txtDebug.setText(log + "\n" + this.txtDebug.getText());
+	public void log(String log) {		
+		this.txtDebug.setText(++logLineCount + ": " + log + "\n" + this.txtDebug.getText());
 	}
 
 	public HasText getJobCount() {

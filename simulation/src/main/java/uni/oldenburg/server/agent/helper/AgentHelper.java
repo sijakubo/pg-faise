@@ -17,11 +17,11 @@ public class AgentHelper {
 	 * @author Matthias
 	 *
 	 */
-	public static void registerAgent(Agent myAgent, String serviceName) {
+	public static void registerAgent(int szenarioID, Agent myAgent, String serviceName) {
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(myAgent.getAID());
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType("FAISE");
+		sd.setType("FAISE-" + szenarioID);
 		sd.setName(serviceName);
 		dfd.addServices(sd);
 		
@@ -52,12 +52,12 @@ public class AgentHelper {
 	 * @author Matthias
 	 *
 	 */
-	public static List<AID> getAgentList(Agent myAgent) {
+	public static List<AID> getAgentList(int szenarioID, Agent myAgent) {
 		List<AID> lstAgentName = new ArrayList<AID>();
 		
 		DFAgentDescription dfd = new DFAgentDescription();
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType("FAISE");
+		sd.setType("FAISE-" + szenarioID);
 		dfd.addServices(sd);
 		
 		try {
@@ -71,5 +71,15 @@ public class AgentHelper {
 		}
 		
 		return lstAgentName;		
+	}
+	
+	/**
+	 * compute unique name for agents
+	 * 
+	 * @author Matthias
+	 *
+	 */	
+	public static String getUniqueNickname(String nickname, int conveyorID, int szenarioID) {
+		return nickname + "-" + szenarioID + "-" + conveyorID;
 	}
 }

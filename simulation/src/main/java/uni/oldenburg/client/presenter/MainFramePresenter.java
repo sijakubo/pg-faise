@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
+
 import uni.oldenburg.client.service.AgentPlatformService;
 import uni.oldenburg.client.service.AgentPlatformServiceAsync;
 import uni.oldenburg.client.service.ServiceAsync;
@@ -40,6 +41,8 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.shared.HandlerManager;
@@ -64,6 +67,8 @@ public class MainFramePresenter extends Presenter {
 	private Szenario currentSzenario;
 	Conveyor dropableConveyor;
 	JobList lstJobs = new JobList();
+	
+    private AgentPlatformServiceAsync agentPlatformService = null;
 	
 	private boolean bSimulationRunning = false;
 	
@@ -98,6 +103,8 @@ public class MainFramePresenter extends Presenter {
 		this.display = view;
 		this.currentSzenario = new Szenario();
 		this.dropableConveyor = null;
+		
+		agentPlatformService = GWT.create(AgentPlatformService.class);
 	}
 
 	public Widget getDisplay() {
@@ -154,20 +161,37 @@ public class MainFramePresenter extends Presenter {
 		 */
 		display.getCanvas().addMouseMoveHandler(new MouseMoveHandler() {
 			public void onMouseMove(MouseMoveEvent event) {
-				Conveyor myConveyor = MainFramePresenter.this.dropableConveyor;
+				Conveyor myConveyor = MainFramePresenter.this.dropableConveyor;			
 				
-				if (isSimulationRunning())
+				if (isSimulationRunning()) {
 					return;
+				}
 
-				if (myConveyor == null)
-					return;
+				if (myConveyor == null) {
+					return;	
+				}
 
 				myConveyor.setPosition(event.getX(), event.getY());
-
+				
 				loadSzenario(MainFramePresenter.this.currentSzenario);
 				drawConveyor(myConveyor);
 
 				display.getCanvas().setFocus(true);
+			}
+		});
+		
+		/**
+		 * remove drag&drop-able object when mouse leaves canvas object
+		 * 
+		 * @author Matthias
+		 */
+		display.getCanvas().addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				if (isSimulationRunning())
+					return;
+				
+				MainFramePresenter.this.dropableConveyor = null;
+				loadSzenario(MainFramePresenter.this.currentSzenario);
 			}
 		});
 
@@ -391,14 +415,13 @@ public class MainFramePresenter extends Presenter {
 	}
 
 	/**
-	 * draw conveyor von main canvas
+	 * draw conveyor in main canvas
 	 * 
 	 * @author Matthias
 	 */
 	private void drawConveyor(Conveyor myConveyor) {
 		Context2d context = display.getCanvas().getContext2d();
-		context.drawImage(myConveyor.getCanvasElement(), myConveyor.getX(),
-				myConveyor.getY());
+		context.drawImage(myConveyor.getCanvasElement(), myConveyor.getX(), myConveyor.getY());
 	}
 
 	/**
@@ -513,7 +536,7 @@ public class MainFramePresenter extends Presenter {
 						Window.alert(arg0.getLocalizedMessage());
 					}
 
-					public void onSuccess(Szenario szenario) {
+					public void onSuccess(Szenario szenario) {						
 						MainFramePresenter.this.currentSzenario = szenario;
 						loadSzenario(szenario);
 					}
@@ -706,6 +729,37 @@ public class MainFramePresenter extends Presenter {
 
 				});
 	}
+	
+	/**
+	 * (de)activate simulation state
+	 * 
+	 * @author Matthias
+	 */
+	public void setSimulationState(boolean running) {
+		bSimulationRunning = running;
+		
+		mapSimMenuItems.get("Laden").setEnabled(!isSimulationRunning());
+		mapSimMenuItems.get("Speichern").setEnabled(!isSimulationRunning());
+		mapSimMenuItems.get("Speichern unter...").setEnabled(!isSimulationRunning());
+		mapSimMenuItems.get("Einstellungen").setEnabled(!isSimulationRunning());
+		
+		mapJobMenuItems.get("Laden").setEnabled(!isSimulationRunning());
+		mapJobMenuItems.get("Speichern").setEnabled(!isSimulationRunning());
+		mapJobMenuItems.get("Speichern unter...").setEnabled(!isSimulationRunning());
+		
+		display.getConveyorPanel().setVisible(!isSimulationRunning());
+		
+		MainFramePresenter.this.dropableConveyor = null;
+	}
+	
+	/**
+	 * toggle simulation state
+	 * 
+	 * @author Matthias
+	 */	
+	public void toggleSimulationState() {
+		setSimulationState(!isSimulationRunning());
+	}
 
 	public void bind() {
 		this.initializeMenuBars();
@@ -767,30 +821,32 @@ public class MainFramePresenter extends Presenter {
 
 		this.display.getSimulationMenuBar().addSeparator();
 
+		/**
+		 * start / stop simulation
+		 * 
+		 * @author Matthias
+		 */	
 		menuName = "Starten/Anhalten";
 		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar().addItem(menuName, new Command() {
 			public void execute() {
-				bSimulationRunning = !bSimulationRunning;
-				
-				mapSimMenuItems.get("Laden").setEnabled(!isSimulationRunning());
-				mapSimMenuItems.get("Speichern").setEnabled(!isSimulationRunning());
-				mapSimMenuItems.get("Speichern unter...").setEnabled(!isSimulationRunning());
-				mapSimMenuItems.get("Einstellungen").setEnabled(!isSimulationRunning());
-				
-				mapJobMenuItems.get("Laden").setEnabled(!isSimulationRunning());
-				mapJobMenuItems.get("Speichern").setEnabled(!isSimulationRunning());
-				mapJobMenuItems.get("Speichern unter...").setEnabled(!isSimulationRunning());
-				
-				display.getConveyorPanel().setVisible(!isSimulationRunning());
-				
-				MainFramePresenter.this.dropableConveyor = null;
-				
-				if (isSimulationRunning()) {
-		            AgentPlatformServiceAsync agentPlatformService = GWT.create(AgentPlatformService.class);
-		            agentPlatformService.startSimulation(new EmptyAsyncCallback());
+				// doesn't run yet?
+				if (!isSimulationRunning()) {
+					// start simulation
+		            agentPlatformService.startSimulation(MainFramePresenter.this.currentSzenario, new AsyncCallback<Integer>() {
+						public void onFailure(Throwable caught) {
+							Window.alert("Simulation error: An error occured during start of simulation!");
+						}
+
+						public void onSuccess(Integer id) {
+							MainFramePresenter.this.currentSzenario.setId(id);
+							MainFramePresenter.this.setSimulationState(true);
+						}
+		            });
 				}
 				else {
-					// invoke stop simulation here
+					// stop simulation
+					agentPlatformService.stopSimulation(new EmptyAsyncCallback());
+					MainFramePresenter.this.setSimulationState(false);
 				}
 			}
 		}));

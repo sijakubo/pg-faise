@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import uni.oldenburg.client.view.MainFrameView;
+
 /**
  * szenario class to store and handle related information
  * 
@@ -14,10 +16,14 @@ import java.util.List;
 public class Szenario implements Serializable {
 	public static final String TABLE_NAME = "szenario";
 	
+	private int id;
 	private String title;
 	private String time_created;
 	private String created_by_user;
 	private List<Conveyor> lstConveyor;
+	
+	private int width = MainFrameView.canvasWidth;
+	private int height = MainFrameView.canvasHeight;	
 	
 	public Szenario () {
 		this.title = "new Szenario";
@@ -25,8 +31,8 @@ public class Szenario implements Serializable {
 		this.created_by_user = "unknown user";
 		
 		lstConveyor = new ArrayList<Conveyor>();
-	};
-		
+	}
+
 	public Szenario (String title, String time_created, String created_by_user) {
 		this.title = title;
 		this.time_created = time_created;
@@ -70,4 +76,20 @@ public class Szenario implements Serializable {
 	public List<Conveyor> getConveyorList() {
 		return lstConveyor;
 	}
+	
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}	
 }
