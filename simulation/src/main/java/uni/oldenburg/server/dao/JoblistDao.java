@@ -148,7 +148,7 @@ public class JoblistDao {
 
 		JobList jobList = new JobList(resultSet.getString("name"));
 
-		List<Job> lstJob = loadJobs(idJoblist);
+		List<Job> lstJob = loadJobs(idJoblist, jobList);
 
 		for (Job newJob : lstJob) {
 			jobList.addJob(newJob);
@@ -165,7 +165,7 @@ public class JoblistDao {
 	 * 
 	 * @author Raschid
 	 */
-	private List<Job> loadJobs(int id_joblist) throws SQLException {
+	private List<Job> loadJobs(int id_joblist, JobList jobList) throws SQLException {
 		List<Job> lstJobs = new ArrayList<Job>();
 
 		String strSQL = "SELECT destination_id, time_delay "
@@ -180,7 +180,7 @@ public class JoblistDao {
 			int timestamp = resultSet.getInt("time_delay");
 			int destinationId = resultSet.getInt("destination_id");
 
-			Job job = new Job(timestamp, destinationId);
+			Job job = new Job(timestamp, destinationId, jobList);
 
 			if (job != null) {
 				lstJobs.add(job);

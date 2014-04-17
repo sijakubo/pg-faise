@@ -2,6 +2,7 @@ package uni.oldenburg.shared.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -14,7 +15,8 @@ public class JobList implements Serializable {
 	public static final String TABLE_NAME = "joblist";
 
 	private String name = "undefined";
-	private List<Job> jobList = new ArrayList<Job>();;
+	private List<Job> jobList = new ArrayList<Job>();
+	private List<Integer> lstOutgoingPackageIDs = new ArrayList<Integer>();
 
 	public JobList() {}
 
@@ -23,21 +25,10 @@ public class JobList implements Serializable {
 	}
 
 	public void addJob(Job job) {
-		int index = 0;
-
-		// sort by timestamp
-		while (index < jobList.size()
-				&& jobList.get(index).getTimestamp() < job.getTimestamp()) {
-			index++;
-		}
-
-		if (index == jobList.size()) {
-			jobList.add(job);
-		} else {
-			jobList.add(index, job);
-		}
+		jobList.add(job);
+		Collections.sort(jobList);
 	}
-
+	
 	public void addRandomJobs(int numberOfJobs) {
 		for (int i = 0; i < numberOfJobs; i++) {
 			int destinationId = (Math.random() < 0.5) ? 0 : -1;
@@ -47,9 +38,18 @@ public class JobList implements Serializable {
 
 			int timestamp = (int) ((expectedValue + (standardDeviation * new Random().nextGaussian())) % 1000);
 
-			addJob(new Job(timestamp, destinationId));
-
+			addJob(new Job(timestamp, destinationId, this));
 		}
+	}
+	
+	public boolean isPackageIDAvailableOutgoing(int packageId) {
+		return !lstOutgoingPackageIDs.contains(packageId);
+	}
+	
+	public void registerOutgoingPacketID(int packageId) {
+		// only add once
+		if (!lstOutgoingPackageIDs.contains(packageId))
+			lstOutgoingPackageIDs.add(packageId);
 	}
 
 	public String getName() {
@@ -74,6 +74,9 @@ public class JobList implements Serializable {
 	}
 
 	public void removeJob(Job job) {
+		if (job.getType() == Job.INCOMING)
+			this.registerOutgoingPacketID(job.getPackageId());
+		
 		jobList.remove(job);
 	}
 
