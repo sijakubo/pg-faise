@@ -1,11 +1,20 @@
 package uni.oldenburg.server.agent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import uni.oldenburg.server.agent.Behaviour.TimeoutReceiverBehaviour;
 import uni.oldenburg.server.agent.helper.AgentHelper;
+import uni.oldenburg.server.agent.message.MessageType;
+import uni.oldenburg.shared.model.ConveyorRamp;
+import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.OneShotBehaviour;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 
 @SuppressWarnings("serial")
 public class JobAgent extends Agent {
@@ -15,6 +24,21 @@ public class JobAgent extends Agent {
 	
 	private Logger logger = Logger.getLogger(JobAgent.class);
 	
+	private List<AID> lstRampIncoming = new ArrayList<AID>();
+	private List<AID> lstRampOutgoing = new ArrayList<AID>();
+	
+	public int getSzenarioID() {
+		return this.szenarioID;
+	}
+	
+	public List<AID> getRampListIncoming() {
+		return lstRampIncoming;
+	}
+
+	public List<AID> getRampListOutgoing() {
+		return lstRampOutgoing;
+	}
+
 	/**
      * @author Matthias
      */
@@ -25,11 +49,10 @@ public class JobAgent extends Agent {
 			szenarioID = (Integer) args[0];
 		}
 		
-		addBehaviour(new SendJobBehaviour());		
+		addBehaviour(new RequestRampInfosBehaviour());
+		addBehaviour(new ReceiveRampInfosBehaviour(this, 10000, MessageTemplate.MatchPerformative(MessageType.RETRIEVE_RAMP_INFO)));
 		
 		AgentHelper.registerAgent(szenarioID, this, JobAgent.NAME);
-		
-		logger.log(Level.INFO, JobAgent.NAME + " started");	
 	}
 	
 	// destructor 
@@ -37,13 +60,46 @@ public class JobAgent extends Agent {
 		AgentHelper.unregister(this);
 	}
 	
-	private class SendJobBehaviour extends Behaviour {
+	private class RequestRampInfosBehaviour extends OneShotBehaviour {
 		public void action() {
-			
+			// send message
+			ACLMessage msg = new ACLMessage(MessageType.REQUEST_RAMP_INFO);
+			AgentHelper.addReceivers(((JobAgent)myAgent).getSzenarioID(), myAgent, msg);
+			logger.log(Level.INFO, myAgent.getLocalName() + " -> REQUEST_RAMP_INFO");
+			send(msg);
+		}
+	}
+	
+	private class ReceiveRampInfosBehaviour extends TimeoutReceiverBehaviour {
+		public ReceiveRampInfosBehaviour(Agent myAgent, int timeoutMS, MessageTemplate mt) {
+			super(myAgent, timeoutMS, mt);
 		}
 
-		public boolean done() {
-			return false;
+		public void onMessage(ACLMessage msg) {
+			logger.log(Level.INFO, myAgent.getLocalName() + " <- RETRIEVE_RAMP_INFO");
+			logger.log(Level.INFO, "Content: " + msg.getContent());
+			
+			AID senderAID = msg.getSender();
+			int rampType = Integer.parseInt(msg.getContent());			
+			
+			if (rampType == ConveyorRamp.RAMP_ENTRANCE) {
+				((JobAgent)myAgent).getRampListIncoming().add(senderAID);	
+			}
+			else if (rampType == ConveyorRamp.RAMP_EXIT) {
+				((JobAgent)myAgent).getRampListOutgoing().add(senderAID);	
+			}
 		}
+
+		public void onTimeout() {
+			// get job
+			// read dstID
+			// use right list
+			// ask ramps for available space
+			// retrieve info
+			// choose "best" ramp or random
+			// send packageid to chosen ramp
+			// delete job from joblist(?)
+		}
+		
 	}
 }

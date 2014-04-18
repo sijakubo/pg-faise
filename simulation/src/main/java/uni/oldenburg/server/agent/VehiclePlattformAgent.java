@@ -1,12 +1,8 @@
 package uni.oldenburg.server.agent;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.shared.model.Conveyor;
 import jade.core.Agent;
-import jade.core.behaviours.Behaviour;
 
 @SuppressWarnings("serial")
 public class VehiclePlattformAgent extends Agent {
@@ -15,7 +11,7 @@ public class VehiclePlattformAgent extends Agent {
 	private int conveyorID = 0;
 	private int szenarioID = 0;
 	
-	private Logger logger = Logger.getLogger(VehiclePlattformAgent.class);
+	//private Logger logger = Logger.getLogger(VehiclePlattformAgent.class);
 	
 	/**
      * @author Matthias
@@ -30,27 +26,16 @@ public class VehiclePlattformAgent extends Agent {
 			conveyorID = myConveyor.getID();
 		}
 		
-		addBehaviour(new IsFreeForTransportBehaviour());
+		//addBehaviour(new IsFreeForTransportBehaviour());
 		
 		String nickname = AgentHelper.getUniqueNickname(VehiclePlattformAgent.NAME, conveyorID, szenarioID);		
 		AgentHelper.registerAgent(szenarioID, this, nickname);
 		
-		logger.log(Level.INFO, nickname + " started");
+		//logger.log(Level.INFO, nickname + " started");
 	}
 	
 	// destructor 
 	protected void takeDown() {
 		AgentHelper.unregister(this);
-	}
-	
-	private class IsFreeForTransportBehaviour extends Behaviour {
-
-		public void action() {
-			
-		}
-
-		public boolean done() {
-			return false;
-		}
 	}
 }
