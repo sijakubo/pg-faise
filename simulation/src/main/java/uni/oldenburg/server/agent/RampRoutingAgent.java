@@ -49,6 +49,10 @@ public class RampRoutingAgent extends Agent {
 		AgentHelper.unregister(this);
 	}
 
+	public int getConveyorID() {
+		return this.conveyorID;
+	}
+
 	public int getSzenarioID() {
 		return this.szenarioID;
 	}
@@ -71,7 +75,17 @@ public class RampRoutingAgent extends Agent {
 		public void action() {
 			// send message
 			ACLMessage msg = new ACLMessage(MessageType.START_AUCTION);
-			logger.log(Level.INFO, myAgent.getLocalName() + " -> START_AUCTION");
+			
+			String auctionId = "tbd";
+			String sourceId = "" + ((RampRoutingAgent)myAgent).getConveyorID();
+			String destinationId = "tbd";
+			
+			msg.addUserDefinedParameter("auctionId", auctionId);
+			msg.addUserDefinedParameter("sourceId", sourceId);
+			msg.addUserDefinedParameter("destinationId", destinationId);
+			
+			AgentHelper.addReceivers(((RampRoutingAgent)myAgent).getSzenarioID(), myAgent, msg);
+			if(Debugging.showAuctionMessages)logger.log(Level.INFO, myAgent.getLocalName() + " sent START_AUCTION message");
 			send(msg);
 		}
 	}

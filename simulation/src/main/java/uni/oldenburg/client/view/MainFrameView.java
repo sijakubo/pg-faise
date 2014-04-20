@@ -88,7 +88,7 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	    hpGenerateJobs.setSpacing(10);
 	    hpGenerateJobs.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
 	    
-	    hpGenerateJobs.add(new Label("Auftraege: "));
+	    hpGenerateJobs.add(new Label("Auftr" + (char)228 + "ge: "));
 	    
 	    txtJobCount = new TextBox();
 	    txtJobCount.setText("1");
@@ -96,7 +96,7 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	    txtJobCount.setWidth("30px");
 	    hpGenerateJobs.add(txtJobCount);
 
-	    btnAddJobs = new Button("hinzufuegen");
+	    btnAddJobs = new Button("hinzuf" + (char)252 + "gen");
 	    hpGenerateJobs.add(btnAddJobs);
 	    
 	    vpLeftFrame.add(hpGenerateJobs);

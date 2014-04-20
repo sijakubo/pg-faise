@@ -9,6 +9,7 @@ import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.lang.acl.ACLMessage;
 
 public class AgentHelper {
 	/**
@@ -71,6 +72,20 @@ public class AgentHelper {
 		}
 		
 		return lstAgentName;		
+	}
+
+	/**
+	 * set all agents in current szenario as revievers
+	 * 
+	 * @author Matthias
+	 *
+	 */
+	public static void addReceivers(int szenarioID, Agent myAgent, ACLMessage msg) {
+		List<AID> lstAID = getAgentList(szenarioID, myAgent);
+		
+		for (AID myAID : lstAID) {	
+			msg.addReceiver(myAID);
+		}
 	}
 	
 	/**
