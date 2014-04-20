@@ -16,9 +16,9 @@ import com.google.gwt.canvas.dom.client.CssColor;
 public class ConveyorRamp extends Conveyor {
 	public static final String CONVEYOR_TYPE = "Rampe";
 	
-	public final int RAMP_STOREAGE = 0;	
-	public final int RAMP_ENTRANCE = 1;
-	public final int RAMP_EXIT = 2;
+	public final static int RAMP_STOREAGE = 0;	
+	public final static int RAMP_ENTRANCE = 1;
+	public final static int RAMP_EXIT = 2;
 	
 	private boolean bVertical = true;
 	private int numBlocks = 3;

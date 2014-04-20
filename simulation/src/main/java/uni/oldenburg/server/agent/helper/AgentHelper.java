@@ -11,7 +11,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 
-public class AgentHelper {
+public class AgentHelper {	
 	/**
 	 * register agent for global identification
 	 * 
@@ -75,7 +75,7 @@ public class AgentHelper {
 	}
 
 	/**
-	 * set all agents in current szenario as revievers
+	 * set all agents in current szenario as receivers
 	 * 
 	 * @author Matthias
 	 *

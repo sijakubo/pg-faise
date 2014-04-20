@@ -41,7 +41,8 @@ public class RampRoutingAgent extends Agent {
 		String nickname = AgentHelper.getUniqueNickname(RampRoutingAgent.NAME, conveyorID, szenarioID);		
 		AgentHelper.registerAgent(szenarioID, this, nickname);
 		
-		if(Debugging.showAgentStartupMessages)logger.log(Level.INFO, nickname + " started");
+		if(Debugging.showAgentStartupMessages)
+			logger.log(Level.INFO, nickname + " started");
 	}
 	
 	// destructor 
@@ -85,7 +86,10 @@ public class RampRoutingAgent extends Agent {
 			msg.addUserDefinedParameter("destinationId", destinationId);
 			
 			AgentHelper.addReceivers(((RampRoutingAgent)myAgent).getSzenarioID(), myAgent, msg);
-			if(Debugging.showAuctionMessages)logger.log(Level.INFO, myAgent.getLocalName() + " sent START_AUCTION message");
+			
+			if(Debugging.showAuctionMessages)
+				logger.log(Level.INFO, myAgent.getLocalName() + " sent START_AUCTION message");
+			
 			send(msg);
 		}
 	}

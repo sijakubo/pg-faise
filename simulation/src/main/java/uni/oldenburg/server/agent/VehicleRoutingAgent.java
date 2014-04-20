@@ -43,7 +43,8 @@ public class VehicleRoutingAgent extends Agent {
 		String nickname = AgentHelper.getUniqueNickname(VehicleRoutingAgent.NAME, conveyorID, szenarioID);		
 		AgentHelper.registerAgent(szenarioID, this, nickname);
 		
-		if(Debugging.showAgentStartupMessages)logger.log(Level.INFO, nickname + " started");
+		if(Debugging.showAgentStartupMessages)
+			logger.log(Level.INFO, nickname + " started");
 	}
 	
 	// destructor 
