@@ -3,6 +3,7 @@ package uni.oldenburg.server.agent;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -29,7 +30,7 @@ public class JobAgent extends Agent {
 		
 		AgentHelper.registerAgent(szenarioID, this, JobAgent.NAME);
 		
-		logger.log(Level.INFO, JobAgent.NAME + " started");	
+		if(Debugging.showAgentStartupMessages)logger.log(Level.INFO, JobAgent.NAME + " started");	
 	}
 	
 	// destructor 

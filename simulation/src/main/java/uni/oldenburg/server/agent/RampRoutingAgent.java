@@ -3,10 +3,14 @@ package uni.oldenburg.server.agent;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.helper.AgentHelper;
+import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.OneShotBehaviour;
+import jade.lang.acl.ACLMessage;
 
 @SuppressWarnings("serial")
 public class RampRoutingAgent extends Agent {
@@ -31,13 +35,13 @@ public class RampRoutingAgent extends Agent {
 		}
 		
 		addBehaviour(new AssignVehicleForPackageBehaviour());
-		addBehaviour(new FindVehicleBehaviour());
+		addBehaviour(new StartAuctionBehaviour());
 		addBehaviour(new ReceiveEstimationBehaviour());
 		
 		String nickname = AgentHelper.getUniqueNickname(RampRoutingAgent.NAME, conveyorID, szenarioID);		
 		AgentHelper.registerAgent(szenarioID, this, nickname);
 		
-		logger.log(Level.INFO, nickname + " started");
+		if(Debugging.showAgentStartupMessages)logger.log(Level.INFO, nickname + " started");
 	}
 	
 	// destructor 
@@ -45,6 +49,10 @@ public class RampRoutingAgent extends Agent {
 		AgentHelper.unregister(this);
 	}
 
+	public int getSzenarioID() {
+		return this.szenarioID;
+	}
+	
 	private class AssignVehicleForPackageBehaviour extends Behaviour {
 
 		public void action() {
@@ -56,14 +64,15 @@ public class RampRoutingAgent extends Agent {
 		}
 	}
 
-	private class FindVehicleBehaviour extends Behaviour {
-
+	/**
+	 * @author Christopher
+	 */
+	private class StartAuctionBehaviour extends OneShotBehaviour {
 		public void action() {
-			
-		}
-
-		public boolean done() {
-			return false;
+			// send message
+			ACLMessage msg = new ACLMessage(MessageType.START_AUCTION);
+			logger.log(Level.INFO, myAgent.getLocalName() + " -> START_AUCTION");
+			send(msg);
 		}
 	}
 	

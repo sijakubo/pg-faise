@@ -3,6 +3,7 @@ package uni.oldenburg.server.agent;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.shared.model.Conveyor;
 import jade.core.Agent;
@@ -37,7 +38,7 @@ public class RampPlattformAgent extends Agent {
 		String nickname = AgentHelper.getUniqueNickname(RampRoutingAgent.NAME, conveyorID, szenarioID);
 		AgentHelper.registerAgent(szenarioID, this, nickname);
 		
-		logger.log(Level.INFO, nickname + " started");
+		if(Debugging.showAgentStartupMessages)logger.log(Level.INFO, nickname + " started");
 	}
 	
 	// destructor 
