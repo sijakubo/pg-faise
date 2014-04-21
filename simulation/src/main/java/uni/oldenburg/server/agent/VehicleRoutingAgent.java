@@ -38,7 +38,6 @@ public class VehicleRoutingAgent extends Agent {
 		addBehaviour(new StartAuctionBehaviour());
 		addBehaviour(new InitializePacketAgentBehaviour());
 		addBehaviour(new IsFreeForTransportBehaviour());
-		addBehaviour(new SendEstimationBehaviour());
 		
 		String nickname = AgentHelper.getUniqueNickname(VehicleRoutingAgent.NAME, conveyorID, szenarioID);		
 		AgentHelper.registerAgent(szenarioID, this, nickname);
@@ -63,6 +62,14 @@ public class VehicleRoutingAgent extends Agent {
 		}
 	}
 
+	public int getConveyorID() {
+		return this.conveyorID;
+	}
+
+	public int getSzenarioID() {
+		return this.szenarioID;
+	}
+	
 	/**
 	 * @author Christopher
 	 */
@@ -70,22 +77,57 @@ public class VehicleRoutingAgent extends Agent {
 
 		public void action() {
 
+			int auctionID;
+			int sourceID;
+			int destinationID;
+			
 			// wait for message
 			MessageTemplate mt = MessageTemplate.MatchPerformative(MessageType.START_AUCTION);
-			ACLMessage msg = myAgent.blockingReceive(mt);
+			ACLMessage msgIn = myAgent.blockingReceive(mt);
 
-			String auctionId = msg.getUserDefinedParameter("auctionId");
-			String sourceId = msg.getUserDefinedParameter("sourceId");
-			String destinationId = msg.getUserDefinedParameter("destinationId");
+			try {
+				auctionID = Integer.valueOf(msgIn.getUserDefinedParameter("auctionID"));
+			} catch(NumberFormatException e) {
+				auctionID = -1;
+			}
+			try {
+				sourceID = Integer.valueOf(msgIn.getUserDefinedParameter("sourceID"));
+			} catch(NumberFormatException e) {
+				sourceID = -1;
+			}
+			try {
+				destinationID = Integer.valueOf(msgIn.getUserDefinedParameter("destinationID"));
+			} catch(NumberFormatException e) {
+				destinationID = -1;
+			}
 			
 			if(Debugging.showAuctionMessages) {
-				logger.log(Level.INFO, myAgent.getLocalName() + " received START_AUCTION message #" + auctionId + " from " + sourceId + " to " + destinationId);
+				logger.log(Level.INFO, myAgent.getLocalName() + " received START_AUCTION message #" + auctionID + " from " + sourceID + " to " + destinationID);
 			}
+			
+			//send estimation
+			int estimation = calculateEstimation(sourceID, destinationID);
+			ACLMessage msgOut = new ACLMessage(MessageType.SEND_ESTIMATION);
+			
+			msgOut.addUserDefinedParameter("auctionID", "" + auctionID);
+			msgOut.addUserDefinedParameter("estimation", "" + estimation);
+			
+			AgentHelper.addReceivers(((VehicleRoutingAgent)myAgent).getSzenarioID(), myAgent, msgOut);
+			
+			if(Debugging.showAuctionMessages)
+				logger.log(Level.INFO, myAgent.getLocalName() + " sent SEND_ESTIMATION message");
+			
+			send(msgOut);
+			
 		}
 
 		public boolean done() {
 			return false;
 		}
+	}
+	
+	private int calculateEstimation(int sourceID, int destinationID) {
+		return -1;
 	}
 	
 	private class InitializePacketAgentBehaviour extends Behaviour {
@@ -100,17 +142,6 @@ public class VehicleRoutingAgent extends Agent {
 	}
 	
 	private class IsFreeForTransportBehaviour extends Behaviour {
-
-		public void action() {
-			
-		}
-
-		public boolean done() {
-			return false;
-		}
-	}
-	
-	private class SendEstimationBehaviour extends Behaviour {
 
 		public void action() {
 			

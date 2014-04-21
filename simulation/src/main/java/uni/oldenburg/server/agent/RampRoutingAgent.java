@@ -11,6 +11,7 @@ import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 
 @SuppressWarnings("serial")
 public class RampRoutingAgent extends Agent {
@@ -77,13 +78,13 @@ public class RampRoutingAgent extends Agent {
 			// send message
 			ACLMessage msg = new ACLMessage(MessageType.START_AUCTION);
 			
-			String auctionId = "tbd";
-			String sourceId = "" + ((RampRoutingAgent)myAgent).getConveyorID();
-			String destinationId = "tbd";
+			String auctionID = "tbd";
+			String sourceID = "" + ((RampRoutingAgent)myAgent).getConveyorID();
+			String destinationID = "tbd";
 			
-			msg.addUserDefinedParameter("auctionId", auctionId);
-			msg.addUserDefinedParameter("sourceId", sourceId);
-			msg.addUserDefinedParameter("destinationId", destinationId);
+			msg.addUserDefinedParameter("auctionID", auctionID);
+			msg.addUserDefinedParameter("sourceID", sourceID);
+			msg.addUserDefinedParameter("destinationID", destinationID);
 			
 			AgentHelper.addReceivers(((RampRoutingAgent)myAgent).getSzenarioID(), myAgent, msg);
 			
@@ -94,9 +95,33 @@ public class RampRoutingAgent extends Agent {
 		}
 	}
 	
+	/**
+	 * @author Christopher
+	 */
 	private class ReceiveEstimationBehaviour extends Behaviour {
 
 		public void action() {
+			
+			int auctionID;
+			int estimation;
+
+			// wait for message
+			MessageTemplate mt = MessageTemplate.MatchPerformative(MessageType.SEND_ESTIMATION);
+			ACLMessage msg = myAgent.blockingReceive(mt);
+			try {
+				auctionID = Integer.valueOf(msg.getUserDefinedParameter("auctionID"));
+			} catch(NumberFormatException e) {
+				auctionID = -1;
+			}
+			try {
+				estimation = Integer.valueOf(msg.getUserDefinedParameter("estimation"));
+			} catch(NumberFormatException e) {
+				estimation = -1;
+			}
+			
+			if(Debugging.showAuctionMessages) {
+				logger.log(Level.INFO, myAgent.getLocalName() + " received SEND_ESTIMATION message #" + auctionID + ": " + estimation);
+			}
 			
 		}
 
