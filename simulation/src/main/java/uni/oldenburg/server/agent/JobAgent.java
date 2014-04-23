@@ -8,14 +8,15 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import uni.oldenburg.Debugging;
-import uni.oldenburg.server.agent.Behaviour.TimeoutReceiverBehaviour;
+import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
+import uni.oldenburg.server.agent.behaviour.TimeoutReceiverBehaviour;
+import uni.oldenburg.server.agent.data.PackageData;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.Job;
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -33,7 +34,7 @@ public class JobAgent extends Agent {
 	private List<AID> lstRampOutgoing = new ArrayList<AID>();
 	
 	// to test job distribution	
-	private Job currentJob = null;
+	//private PackageData currentPackage = null;
 	
 	public int getSzenarioID() {
 		return this.szenarioID;
@@ -59,8 +60,8 @@ public class JobAgent extends Agent {
 		
 		addBehaviour(new RequestRampInfosBehaviour());
 		addBehaviour(new ReceiveRampInfosBehaviour(this, 1000, MessageTemplate.MatchPerformative(MessageType.SEND_RAMP_INFO)));
-		addBehaviour(new DistributeJobBehaviour());
-		addBehaviour(new AssignDestinationRampBehaviour());
+		addBehaviour(new DistributeJobBehaviour(MessageTemplate.MatchPerformative(MessageType.SEND_JOB)));
+		addBehaviour(new AssignDestinationRampBehaviour(MessageTemplate.MatchPerformative(MessageType.PACKAGE_SPACE_AVAILABLE)));
 		
 		AgentHelper.registerAgent(szenarioID, this, JobAgent.NAME);
 		
@@ -74,13 +75,15 @@ public class JobAgent extends Agent {
 	}
 	
 	/**
+	 * request info about ramp types
+	 * 
      * @author Matthias
      */
 	private class RequestRampInfosBehaviour extends OneShotBehaviour {
 		public void action() {
 			// send ramp info request
 			ACLMessage msg = new ACLMessage(MessageType.REQUEST_RAMP_INFO);
-			AgentHelper.addReceivers(((JobAgent)myAgent).getSzenarioID(), myAgent, msg);
+			AgentHelper.addReceivers(msg, myAgent, ((JobAgent)myAgent).getSzenarioID());
 			
 			if(Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName() + " -> REQUEST_RAMP_INFO");
@@ -90,6 +93,9 @@ public class JobAgent extends Agent {
 	}
 	
 	/**
+	 * - receive ramp info (f.e. incoming/outgoing/storage)
+	 * - add a basic job to test job behaviour functionality
+	 * 
      * @author Matthias
      */
 	private class ReceiveRampInfosBehaviour extends TimeoutReceiverBehaviour {
@@ -115,23 +121,19 @@ public class JobAgent extends Agent {
 			}
 		}
 
-		public void onTimeout() {
+		public void onTimeout() throws IOException {
 			if(Debugging.showInfoMessages) {
 				logger.log(Level.INFO, "Incoming Ramp Count: " + ((JobAgent)myAgent).getRampListIncoming().size());
 				logger.log(Level.INFO, "Outgoing Ramp Count: " + ((JobAgent)myAgent).getRampListOutgoing().size());	
 			}
 			
-			// retrieve job
-			Job myJob = new Job(100, 0);
+			// store relevant job data in here
+			PackageData currentPackage = new PackageData(1, 0);
 			
 			ACLMessage msg = new ACLMessage(MessageType.SEND_JOB);
 			msg.addReceiver(myAgent.getAID());
 			
-			try {
-				msg.setContentObject(myJob);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			msg.setContentObject(currentPackage);
 			
 			if(Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName() + " -> SEND_JOB");		
@@ -141,84 +143,102 @@ public class JobAgent extends Agent {
 	}
 	
 	/**
+	 * - get incoming job data
+	 * - ask incoming or outgoing ramps for available space
+	 * 
      * @author Matthias
      */
-	private class DistributeJobBehaviour extends CyclicBehaviour {
-		public void action() {
-			// get job
-			MessageTemplate mt = MessageTemplate.MatchPerformative(MessageType.SEND_JOB);
-			ACLMessage msg = myAgent.receive(mt);
+	private class DistributeJobBehaviour extends CyclicReceiverBehaviour {
+		protected DistributeJobBehaviour(MessageTemplate mt) {
+			super(mt);
+		}
+
+		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+			if(Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName() + " <- SEND_JOB");
 			
-			if (msg != null) {
-				if(Debugging.showInfoMessages)
-					logger.log(Level.INFO, myAgent.getLocalName() + " <- SEND_JOB");
-				
-				try {
-					currentJob = (Job)msg.getContentObject();
-				} catch (UnreadableException e) {
-					e.printStackTrace();
-				}
-				
-				// send ramp space request
-				ACLMessage msgInfo = new ACLMessage(MessageType.PACKAGE_SPACE_AVAILABLE);
-				
-				switch(currentJob.getType()) {
-					case Job.INCOMING:
-						AgentHelper.addReceivers(msgInfo, lstRampIncoming);
-						break;
-					case Job.OUTGOING:
-						AgentHelper.addReceivers(msgInfo, lstRampOutgoing);
-						break;
-				}
-				
-				if(Debugging.showInfoMessages)
-					logger.log(Level.INFO, myAgent.getLocalName() + " -> PACKAGE_SPACE_AVAILABLE");
-				
-				send(msgInfo);	
+			PackageData currentPackage = (PackageData)msg.getContentObject();
+			
+			// send ramp space request
+			ACLMessage msgInfo = new ACLMessage(MessageType.PACKAGE_SPACE_AVAILABLE);
+			msgInfo.setContentObject(currentPackage);
+			
+			switch(currentPackage.getDestinationID()) {
+				case Job.INCOMING:
+					AgentHelper.addReceivers(msgInfo, lstRampIncoming);
+					break;
+				case Job.OUTGOING:
+					AgentHelper.addReceivers(msgInfo, lstRampOutgoing);
+					break;
 			}
-			else {
-				block();
-			}
+			
+			if(Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName() + " -> PACKAGE_SPACE_AVAILABLE");
+			
+			send(msgInfo);				
 		}
 	}
 	
 	/**
+	 * - get info about ramps with available space
+	 * - wait till everyone answered
+	 * - reserve space on a random free one
+	 * 
      * @author Matthias
      */
-	private class AssignDestinationRampBehaviour extends CyclicBehaviour {
+	private class AssignDestinationRampBehaviour extends CyclicReceiverBehaviour {
 		int rampsResponded = 0;
 		int rampCount = 0;
-		
+		List<AID> selectedList = null;
 		List<AID> lstRampsWithSpace = new ArrayList<AID>();
 		
-		public void action() {
-			MessageTemplate mt = MessageTemplate.MatchPerformative(MessageType.PACKAGE_SPACE_AVAILABLE);
-			ACLMessage msg = myAgent.receive(mt);
-			
-			if (msg != null) {
-				if (lstRampIncoming.contains(msg.getSender()))
-					rampCount = lstRampIncoming.size();
-				else
-					rampCount = lstRampOutgoing.size();
-				
-				++rampsResponded;
-				
-				if (msg.getUserDefinedParameter("space_available") == "1") {
-					lstRampsWithSpace.add(msg.getSender());
-				}
-				
-				if(Debugging.showInfoMessages)
-					logger.log(Level.INFO, "Ramps responsed: " + rampsResponded + "/" + rampCount);
-				
-				if (rampsResponded == rampCount) {
-					if(Debugging.showInfoMessages)
-						logger.log(Level.INFO, "Available Ramp Count: " + lstRampsWithSpace.size());
-					
-					
-				}
+		PackageData pendingPackage = null;
+		
+		protected AssignDestinationRampBehaviour(MessageTemplate mt) {
+			super(mt);
+		}
+
+		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+			if (lstRampIncoming.contains(msg.getSender())) {
+				rampCount = lstRampIncoming.size();	
+				selectedList = lstRampIncoming;
 			}
 			else {
-				block();
+				rampCount = lstRampOutgoing.size();
+				selectedList = lstRampOutgoing;
+			}
+			
+			++rampsResponded;
+			
+			pendingPackage = (PackageData)msg.getContentObject();
+			
+			// remember those who have space
+			if (msg.getUserDefinedParameter("space_available") == "1") {
+				lstRampsWithSpace.add(msg.getSender());
+			}
+			
+			if(Debugging.showInfoMessages)
+				logger.log(Level.INFO, "Ramps responsed: " + rampsResponded + "/" + rampCount);
+			
+			// pick one of the available ramps with free space
+			if (rampsResponded == rampCount) {
+				if(Debugging.showInfoMessages)
+					logger.log(Level.INFO, "Available Ramp Count: " + lstRampsWithSpace.size());
+				
+				int randomRamp = ((int)(Math.random() * 1000)) % lstRampsWithSpace.size();
+				
+				ACLMessage msgReply = new ACLMessage(MessageType.RESERVE_SPACE);
+				
+				String target = lstRampsWithSpace.get(randomRamp).toString();
+				msgReply.addUserDefinedParameter("RampAID", target);
+				msgReply.setContentObject(pendingPackage);
+				
+				AgentHelper.addReceivers(msgReply, selectedList);
+				
+				if(Debugging.showInfoMessages)
+					logger.log(Level.INFO, myAgent.getLocalName() + " -> RESERVE_SPACE: " + target);
+				
+				send(msgReply);
 			}
 		}
 	}

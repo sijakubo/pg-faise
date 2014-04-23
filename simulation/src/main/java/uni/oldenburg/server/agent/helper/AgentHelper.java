@@ -75,6 +75,23 @@ public class AgentHelper {
 	}
 	
 	/**
+	 * add receiver with specific agent name / address
+	 * 
+     * @author Matthias
+     */
+	public static void addReceiver(ACLMessage msg, Agent myAgent, String targetAgentName, int conveyorID, int szenarioID) {
+		List<AID> lstAID = getAgentList(szenarioID, myAgent);
+		
+		String nickname = AgentHelper.getUniqueNickname(targetAgentName, conveyorID, szenarioID);
+		
+		for (AID myAID : lstAID) {
+			if (myAID.toString().contains(nickname)) {
+				msg.addReceiver(myAID);
+			}
+		}
+	}
+	
+	/**
 	 * set list of AIDs as receivers
 	 * 
 	 * @author Matthias
@@ -92,12 +109,10 @@ public class AgentHelper {
 	 * @author Matthias
 	 *
 	 */
-	public static void addReceivers(int szenarioID, Agent myAgent, ACLMessage msg) {
+	public static void addReceivers(ACLMessage msg, Agent myAgent, int szenarioID) {
 		List<AID> lstAID = getAgentList(szenarioID, myAgent);
 		
-		for (AID myAID : lstAID) {	
-			msg.addReceiver(myAID);
-		}
+		AgentHelper.addReceivers(msg, lstAID);
 	}
 	
 	/**

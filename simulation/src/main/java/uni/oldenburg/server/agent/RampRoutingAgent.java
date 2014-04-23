@@ -86,7 +86,7 @@ public class RampRoutingAgent extends Agent {
 			msg.addUserDefinedParameter("sourceID", sourceID);
 			msg.addUserDefinedParameter("destinationID", destinationID);
 			
-			AgentHelper.addReceivers(((RampRoutingAgent)myAgent).getSzenarioID(), myAgent, msg);
+			AgentHelper.addReceivers(msg, myAgent, ((RampRoutingAgent)myAgent).getSzenarioID());
 			
 			if(Debugging.showAuctionMessages)
 				logger.log(Level.INFO, myAgent.getLocalName() + " sent START_AUCTION message");
