@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 
+import uni.oldenburg.Debugging;
 import uni.oldenburg.client.service.AgentPlatformService;
 import uni.oldenburg.client.service.AgentPlatformServiceAsync;
 import uni.oldenburg.client.service.ServiceAsync;
@@ -97,14 +98,17 @@ public class MainFramePresenter extends Presenter {
 		void log(String log);		
 	}
 
-	public MainFramePresenter(SimulationServiceAsync rpcService,
-			HandlerManager eventBus, IDisplay view) {
+	public MainFramePresenter(SimulationServiceAsync rpcService, HandlerManager eventBus, IDisplay view) {
 		super(rpcService, eventBus);
 		this.display = view;
 		this.currentSzenario = new Szenario();
 		this.dropableConveyor = null;
 		
 		agentPlatformService = GWT.create(AgentPlatformService.class);
+		
+		if (Debugging.isDebugging) {			
+			this.loadSzenario("TestSzenario");
+		}
 	}
 
 	public Widget getDisplay() {
@@ -216,6 +220,9 @@ public class MainFramePresenter extends Presenter {
 							MainFramePresenter.this.currentSzenario.addConveyor(myConveyor);
 							MainFramePresenter.this.dropableConveyor = null;
 							loadSzenario(MainFramePresenter.this.currentSzenario);
+							
+							if (myConveyor instanceof ConveyorRamp)
+								MainFramePresenter.this.display.log("" +((ConveyorRamp)myConveyor).getRampType());
 						}
 					} else {
 						// grab & move conveyor

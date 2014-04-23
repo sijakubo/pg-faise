@@ -18,8 +18,9 @@ public abstract class TimeoutReceiverBehaviour extends SimpleBehaviour {
 	MessageTemplate mt = null;
 	
 	boolean reachedTimeout = false;
-	
 	private ACLMessage msg = null;
+	
+	boolean timeoutEventTriggered = false;
 	
 	public TimeoutReceiverBehaviour(Agent myAgent, int timeoutMS, MessageTemplate mt) {
 		super(myAgent);
@@ -28,9 +29,7 @@ public abstract class TimeoutReceiverBehaviour extends SimpleBehaviour {
 	}
 
 	public void onStart() {
-		timeoutTime = timeoutMS < 0 ? 1000 : System.currentTimeMillis() + timeoutMS;
-		this.msg = null;
-		this.reachedTimeout = false;
+		this.reset();
 		super.onStart();
 	}
 	
@@ -47,19 +46,25 @@ public abstract class TimeoutReceiverBehaviour extends SimpleBehaviour {
 			onMessage(msg);
 		
 		if (System.currentTimeMillis() < timeoutTime)
-			block(10);
+			block(1);
 		else
 			reachedTimeout = true;
 	}
 
 	public boolean done() {
-		onTimeout();
+		if (!timeoutEventTriggered && reachedTimeout) {
+			timeoutEventTriggered = true;
+			onTimeout();
+		}
 		return reachedTimeout;
 	}
 	
 	public void reset() {
-		this.msg = null;
-		this.reachedTimeout = false;
+		msg = null;
+		reachedTimeout = false;
+		timeoutEventTriggered = false;
+		timeoutTime = timeoutMS < 0 ? 1000 : System.currentTimeMillis() + timeoutMS;
+		
 		super.reset();
 	}	
 }

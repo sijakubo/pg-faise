@@ -16,10 +16,12 @@ public class ConveyorVehicle extends Conveyor {
 	
 	public ConveyorVehicle() {
 		super(0, 0, Conveyor.getRastersize(), Conveyor.getRastersize());
+		this.packageCountMax = 1;
 	}
 	
 	public ConveyorVehicle(int x, int y) {
 		super(x, y, Conveyor.getRastersize(), Conveyor.getRastersize());
+		this.packageCountMax = 1;		
 	}
 
 	/**

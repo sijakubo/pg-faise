@@ -36,6 +36,9 @@ public abstract class Conveyor implements Serializable {
 	
 	private int direction = DIRECTION_UP;
 
+	private int packageCount = 0;
+	protected int packageCountMax = 0;
+
 	private transient Canvas canvas;
 	protected String strType;
 
@@ -185,5 +188,20 @@ public abstract class Conveyor implements Serializable {
 	
 	public static int getRastersize() {
 		return rasterSize;
+	}
+	
+	public int getPackageCount() {
+		return packageCount;
+	}
+	
+	public void setPackageCount(int packageCount) {
+		if (packageCount >= getPackageCountMax())
+			packageCount = getPackageCountMax();
+		
+		this.packageCount = packageCount;
+	}
+	
+	public int getPackageCountMax() {
+		return packageCountMax;
 	}
 }

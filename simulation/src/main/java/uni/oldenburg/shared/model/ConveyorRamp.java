@@ -1,7 +1,6 @@
 package uni.oldenburg.shared.model;
 
 import uni.oldenburg.client.view.MainFrameView;
-
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
@@ -25,10 +24,12 @@ public class ConveyorRamp extends Conveyor {
 	private int rampType = RAMP_STOREAGE;
 	
 	public ConveyorRamp() {
+		this.packageCountMax = 4;		
 		this.setVertical(bVertical);
 	}
 	
 	public ConveyorRamp(int x, int y) {
+		this.packageCountMax = 4;		
 		setPosition(x, y);
 		this.setVertical(bVertical);
 	}
@@ -85,6 +86,42 @@ public class ConveyorRamp extends Conveyor {
 	public void setPosition(int x, int y) {
 		super.setPosition(x, y);
 		
+		assignRampType();	
+	}
+	
+	/**
+	 * flip vertical status based in entry rotation angle 
+	 * 
+	 * @author Matthias
+	 */
+	public void rotateClockwise() {
+		super.rotateClockwise();
+		
+		this.setVertical(((this.getDirection() % 2) == 0));
+	}
+	
+	/**
+	 * flip vertical status based on given entry direction 
+	 * 
+	 * @author Matthias
+	 */
+	public boolean rotate(int direction) {
+		boolean bResult = super.rotate(direction);
+		
+		if (bResult)
+			this.setVertical(((direction % 2) == 0));
+		
+		assignRampType();
+		
+		return bResult;
+	}
+	
+	/**
+	 * set ramp type based in location and direction
+	 * 
+	 * @author Matthias
+	 */
+	private void assignRampType() {
 		rampType = RAMP_STOREAGE;
 		
 		switch(getDirection()) {
@@ -115,33 +152,8 @@ public class ConveyorRamp extends Conveyor {
 				else if (getX() == (MainFrameView.canvasWidth - getWidth()))
 					rampType = RAMP_ENTRANCE;
 				
-				break;				
+				break;
 		}
-	}
-	
-	/**
-	 * flip vertical status based in entry rotation angle 
-	 * 
-	 * @author Matthias
-	 */
-	public void rotateClockwise() {
-		super.rotateClockwise();
-		
-		this.setVertical(((this.getDirection() % 2) == 0));
-	}
-	
-	/**
-	 * flip vertical status based on given entry direction 
-	 * 
-	 * @author Matthias
-	 */
-	public boolean rotate(int direction) {
-		boolean bResult = super.rotate(direction);
-		
-		if (bResult)
-			this.setVertical(((direction % 2) == 0));
-		
-		return bResult;
 	}
 	
 	/**

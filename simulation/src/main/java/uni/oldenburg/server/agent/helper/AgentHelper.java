@@ -73,6 +73,18 @@ public class AgentHelper {
 		
 		return lstAgentName;		
 	}
+	
+	/**
+	 * set list of AIDs as receivers
+	 * 
+	 * @author Matthias
+	 *
+	 */
+	public static void addReceivers(ACLMessage msg, List<AID> lstAID) {
+		for (AID myAID : lstAID) {	
+			msg.addReceiver(myAID);
+		}
+	}
 
 	/**
 	 * set all agents in current szenario as receivers
