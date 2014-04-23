@@ -1,4 +1,6 @@
-package uni.oldenburg.server.agent.Behaviour;
+package uni.oldenburg.server.agent.behaviour;
+
+import java.io.IOException;
 
 import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
@@ -34,7 +36,7 @@ public abstract class TimeoutReceiverBehaviour extends SimpleBehaviour {
 	}
 	
 	public abstract void onMessage(ACLMessage msg);
-	public abstract void onTimeout();
+	public abstract void onTimeout() throws IOException;
 
 	public void action() {
 		if (mt == null)
@@ -54,7 +56,12 @@ public abstract class TimeoutReceiverBehaviour extends SimpleBehaviour {
 	public boolean done() {
 		if (!timeoutEventTriggered && reachedTimeout) {
 			timeoutEventTriggered = true;
-			onTimeout();
+			
+			try {
+				onTimeout();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return reachedTimeout;
 	}
