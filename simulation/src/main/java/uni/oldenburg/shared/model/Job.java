@@ -5,7 +5,6 @@ import java.io.Serializable;
 /**
  * @author Christopher Matthias
  */
-
 @SuppressWarnings("serial")
 public class Job implements Serializable, Comparable<Job> {
 	public static final String TABLE_NAME = "job";
@@ -83,11 +82,12 @@ public class Job implements Serializable, Comparable<Job> {
     	return timestamp;
     }
 
+    // used for sorting
     public int compareTo(Job job) {
-		if (this.packageId < job.packageId)
+		if (this.timestamp < job.timestamp)
             return -1;
 		
-        if (this.packageId == job.packageId)
+        if (this.timestamp == job.timestamp)
             return 0;
            
         return 1;
