@@ -7,7 +7,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import uni.oldenburg.Debugging;
-import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
+import uni.oldenburg.server.agent.behaviour01.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.data.PackageData;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;

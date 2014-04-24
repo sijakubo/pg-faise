@@ -1,4 +1,4 @@
-package uni.oldenburg.server.agent.behaviour;
+package uni.oldenburg.server.agent.behaviour01;
 
 import java.io.IOException;
 
