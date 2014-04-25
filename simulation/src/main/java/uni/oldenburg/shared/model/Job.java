@@ -36,10 +36,13 @@ public class Job implements Serializable, Comparable<Job> {
 		}      	
     }
     
-    private boolean createOutgoing(JobList jobList) {
+    private boolean createOutgoing(JobList lstJob) {
     	boolean foundUseablePackageID = false;
     	final int iCounterMax = 10;    	
     	int iCounter = 0;
+    	
+    	if (lstJob == null)
+    		return false;
     	
     	do {
 			this.packageId = (int) ((Math.random() * 100000) % idCounterPacket);
@@ -50,12 +53,12 @@ public class Job implements Serializable, Comparable<Job> {
 			if (Math.random() < 0.1 || idCounterPacket < 5)
 				packageId += 5 + (packageId / 10);
 			
-			foundUseablePackageID = jobList.isPackageIDAvailableOutgoing(this.packageId);
+			foundUseablePackageID = lstJob.isPackageIDAvailableOutgoing(this.packageId);
 		} while(!foundUseablePackageID && (++iCounter <= iCounterMax));
     	
     	// avoid using the same packageId again
     	if (foundUseablePackageID)
-    		jobList.registerOutgoingPacketID(this.packageId);
+    		lstJob.registerOutgoingPacketID(this.packageId);
     	
     	return foundUseablePackageID;
     }

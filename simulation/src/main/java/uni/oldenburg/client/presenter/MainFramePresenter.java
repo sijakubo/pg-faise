@@ -291,7 +291,6 @@ public class MainFramePresenter extends Presenter {
 	private void addStrategiesButtonListener() {
 		display.getStrategiesButton().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				// TODO
 			}
 		});
 	}

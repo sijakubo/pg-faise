@@ -63,6 +63,7 @@ public class AgentHelper {
 		
 		try {
 			DFAgentDescription[] result = DFService.search(myAgent, dfd);
+
 			for (int i = 0; i < result.length; i++) {
 				lstAgentName.add(result[i].getName());
 			}
@@ -122,6 +123,11 @@ public class AgentHelper {
 	 *
 	 */	
 	public static String getUniqueNickname(String nickname, int conveyorID, int szenarioID) {
-		return nickname + "-" + szenarioID + "-" + conveyorID;
+		nickname += "-" + szenarioID;
+		
+		if (conveyorID > 0)
+			nickname += "-" + conveyorID;
+		
+		return nickname;
 	}
 }

@@ -11,4 +11,5 @@ public class MessageType {
 	public final static int ADD_PACKAGE				= 0x07; // PackageAgent
 	public final static int GET_PACKAGE_COUNT		= 0x08; // PackageAgent
 	public final static int REMOVE_PACKAGE			= 0x09; // PackageAgent
+	public final static int ASSIGN_JOB				= 0x0A; // JobAgent
 }

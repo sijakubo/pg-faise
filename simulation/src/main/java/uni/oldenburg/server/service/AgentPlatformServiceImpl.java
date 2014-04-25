@@ -1,7 +1,10 @@
 package uni.oldenburg.server.service;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -9,6 +12,7 @@ import jade.core.Agent;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
+import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
@@ -25,9 +29,11 @@ import uni.oldenburg.server.agent.RampRoutingAgent;
 import uni.oldenburg.server.agent.VehiclePlattformAgent;
 import uni.oldenburg.server.agent.VehicleRoutingAgent;
 import uni.oldenburg.server.agent.helper.AgentHelper;
+import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.ConveyorVehicle;
+import uni.oldenburg.shared.model.Job;
 import uni.oldenburg.shared.model.Szenario;
 
 @SuppressWarnings("serial")
@@ -36,8 +42,31 @@ public class AgentPlatformServiceImpl extends RemoteServiceServlet implements Ag
    private ContainerController container = null;
    private List<AgentController> lstAgent = null;
    private static int szenarioID = 0;
+   Map<Integer, JobAgent> mapJobAgent = new HashMap<Integer, JobAgent>();
 
    /**
+    * puts job from client into simulation
+    * 
+    * @author Matthias
+    */
+   public void addJob(int szenarioID, Job myJob) {	   
+	   Agent myAgent = mapJobAgent.get(szenarioID);
+	   
+	   ACLMessage msg = new ACLMessage(MessageType.ASSIGN_JOB);			
+	   msg.addReceiver(myAgent.getAID());
+	   
+	   try {
+		   msg.setContentObject(myJob);
+		   myAgent.send(msg);   		
+	   }
+	   catch (IOException e) {
+		   e.printStackTrace();
+	   }
+   }
+   
+   /**
+    * start simulation
+    * 
     * @author sijakubo Matthias
     */
    public int startSimulation(Szenario szenario) {
@@ -129,8 +158,8 @@ public class AgentPlatformServiceImpl extends RemoteServiceServlet implements Ag
 	   if (container == null) {
 		   Profile profile = new ProfileImpl();
 		   // can be read from every assigned agent
-		   profile.setParameter("width", "" + szenario.getWidth());
-		   profile.setParameter("height", "" +szenario.getHeight());
+		   profile.setParameter("width",  "" + szenario.getWidth());
+		   profile.setParameter("height", "" + szenario.getHeight());
 		   
 		   logger.log(Level.INFO, "Agent Platform started");
 		   Runtime runtimeInstance = Runtime.instance();
@@ -146,16 +175,20 @@ public class AgentPlatformServiceImpl extends RemoteServiceServlet implements Ag
     * 
     * @author sijakubo Matthias
     */
-   private void addAgentToSimulation(int conveyorID, int simulationID, Object[] args, String nickname, Agent agent) {
+   private void addAgentToSimulation(int conveyorID, int szenarioID, Object[] args, String nickname, Agent myAgent) {
 	   AgentController myAgentController = null;
 	   
 	   try {
-		   nickname = AgentHelper.getUniqueNickname(nickname, conveyorID, simulationID);
+		   nickname = AgentHelper.getUniqueNickname(nickname, conveyorID, szenarioID);
 		   
-		   agent.setArguments(args);   
+		   myAgent.setArguments(args);   
 		   
-		   myAgentController = container.acceptNewAgent(nickname, agent);
+		   myAgentController = container.acceptNewAgent(nickname, myAgent);
 		   lstAgent.add(myAgentController);
+		   
+		   if (myAgent instanceof JobAgent) {
+			   mapJobAgent.put(szenarioID, (JobAgent)myAgent);   
+		   }
 	   } 
 	   catch (StaleProxyException e) {
 		   e.printStackTrace();

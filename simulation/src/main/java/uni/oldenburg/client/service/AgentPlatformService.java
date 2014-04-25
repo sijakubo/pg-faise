@@ -1,5 +1,6 @@
 package uni.oldenburg.client.service;
 
+import uni.oldenburg.shared.model.Job;
 import uni.oldenburg.shared.model.Szenario;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -12,4 +13,5 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface AgentPlatformService extends RemoteService {
 	int startSimulation(Szenario szenario);
 	void stopSimulation();
+	void addJob(int szenarioID, Job myJob);
 }

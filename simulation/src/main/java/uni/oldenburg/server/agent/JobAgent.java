@@ -33,9 +33,6 @@ public class JobAgent extends Agent {
 	private List<AID> lstRampIncoming = new ArrayList<AID>();
 	private List<AID> lstRampOutgoing = new ArrayList<AID>();
 	
-	// to test job distribution	
-	//private PackageData currentPackage = null;
-	
 	public int getSzenarioID() {
 		return this.szenarioID;
 	}
@@ -62,6 +59,7 @@ public class JobAgent extends Agent {
 		addBehaviour(new ReceiveRampInfosBehaviour(this, 1000, MessageTemplate.MatchPerformative(MessageType.SEND_RAMP_INFO)));
 		addBehaviour(new DistributeJobBehaviour(MessageTemplate.MatchPerformative(MessageType.SEND_JOB)));
 		addBehaviour(new AssignDestinationRampBehaviour(MessageTemplate.MatchPerformative(MessageType.PACKAGE_SPACE_AVAILABLE)));
+		addBehaviour(new DelegateIncomingJob(MessageTemplate.MatchPerformative(MessageType.ASSIGN_JOB)));
 		
 		AgentHelper.registerAgent(szenarioID, this, JobAgent.NAME);
 		
@@ -126,19 +124,36 @@ public class JobAgent extends Agent {
 				logger.log(Level.INFO, "Incoming Ramp Count: " + ((JobAgent)myAgent).getRampListIncoming().size());
 				logger.log(Level.INFO, "Outgoing Ramp Count: " + ((JobAgent)myAgent).getRampListOutgoing().size());	
 			}
+		}
+	}
+	
+	/**
+	 * processes incoming job orders
+	 * 
+     * @author Matthias
+     */
+	private class DelegateIncomingJob extends CyclicReceiverBehaviour {
+		protected DelegateIncomingJob(MessageTemplate mt) {
+			super(mt);
+		}
+
+		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+			if(Debugging.showInfoMessages)
+				logger.log(Level.INFO, "Incoming Job!");
 			
-			// store relevant job data in here
-			PackageData currentPackage = new PackageData(1, 0);
+			Job myJob = (Job)msg.getContentObject();
 			
-			ACLMessage msg = new ACLMessage(MessageType.SEND_JOB);
-			msg.addReceiver(myAgent.getAID());
+			PackageData currentPackage = new PackageData(myJob.getPackageId(), myJob.getDestinationId());
 			
-			msg.setContentObject(currentPackage);
+			ACLMessage msgReply = new ACLMessage(MessageType.SEND_JOB);
+			msgReply.addReceiver(myAgent.getAID());
+
+			msgReply.setContentObject(currentPackage);
 			
 			if(Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName() + " -> SEND_JOB");		
 			
-			send(msg);
+			send(msgReply);
 		}
 	}
 	
