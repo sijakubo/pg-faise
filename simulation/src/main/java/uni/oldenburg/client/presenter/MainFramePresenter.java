@@ -233,8 +233,7 @@ public class MainFramePresenter extends Presenter {
 					if (myConveyor == null)
 						return;
 
-					if (myConveyor.getType().compareTo(ConveyorRamp.CONVEYOR_TYPE) == 0 || 
-						myConveyor.getType().compareTo(ConveyorVehicle.CONVEYOR_TYPE) == 0) {
+					if (myConveyor instanceof ConveyorRamp || myConveyor instanceof ConveyorVehicle) {
 						myConveyor.rotateClockwise();
 
 						loadSzenario(MainFramePresenter.this.currentSzenario);
