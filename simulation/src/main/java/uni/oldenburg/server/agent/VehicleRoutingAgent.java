@@ -51,10 +51,46 @@ public class VehicleRoutingAgent extends Agent {
 		AgentHelper.unregister(this);
 	}
 
+	/**
+	 * @author Christopher
+	 */
 	private class AssignVehicleForPackageBehaviour extends Behaviour {
 
 		public void action() {
+
+			int sourceID;
+			int destinationID;
+			int botID;
+			int packageID;
 			
+			// wait for message
+			MessageTemplate mt = MessageTemplate.MatchPerformative(MessageType.ASSIGN_VEHICLE_FOR_PACKAGE);
+			ACLMessage msgIn = myAgent.blockingReceive(mt);
+
+			try {
+				sourceID = Integer.valueOf(msgIn.getUserDefinedParameter("sourceID"));
+			} catch(NumberFormatException e) {
+				sourceID = -1;
+			}
+			try {
+				destinationID = Integer.valueOf(msgIn.getUserDefinedParameter("destinationID"));
+			} catch(NumberFormatException e) {
+				destinationID = -1;
+			}
+			try {
+				botID = Integer.valueOf(msgIn.getUserDefinedParameter("botID"));
+			} catch(NumberFormatException e) {
+				botID = -1;
+			}
+			try {
+				packageID = Integer.valueOf(msgIn.getUserDefinedParameter("packageID"));
+			} catch(NumberFormatException e) {
+				packageID = -1;
+			}
+			
+			if(Debugging.showAuctionMessages) {
+				logger.log(Level.INFO, myAgent.getLocalName() + " received ASSIGN_VEHICLE_FOR_TRANSPORT message for bot " + botID + " to carry " + packageID + " from " + sourceID + " to " + destinationID);
+			}
 		}
 
 		public boolean done() {

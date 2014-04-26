@@ -59,14 +59,30 @@ public class RampRoutingAgent extends Agent {
 		return this.szenarioID;
 	}
 	
-	private class AssignVehicleForPackageBehaviour extends Behaviour {
-
+	/**
+	 * @author Christopher
+	 */
+	private class AssignVehicleForPackageBehaviour extends OneShotBehaviour {
 		public void action() {
+			// send message
+			ACLMessage msg = new ACLMessage(MessageType.ASSIGN_VEHICLE_FOR_PACKAGE);
 			
-		}
+			String sourceID = "" + ((RampRoutingAgent)myAgent).getConveyorID();
+			String destinationID = "tbd";
+			String botID = "tbd";
+			String packageID = "tbd";
 
-		public boolean done() {
-			return false;
+			msg.addUserDefinedParameter("sourceID", sourceID);
+			msg.addUserDefinedParameter("destinationID", destinationID);
+			msg.addUserDefinedParameter("botID", botID);
+			msg.addUserDefinedParameter("packageID", packageID);
+			
+			AgentHelper.addReceivers(msg, myAgent, ((RampRoutingAgent)myAgent).getSzenarioID());
+			
+			if(Debugging.showAuctionMessages)
+				logger.log(Level.INFO, myAgent.getLocalName() + " sent ASSIGN_VEHICLE_FOR_TRANSPORT message");
+
+			send(msg);
 		}
 	}
 
