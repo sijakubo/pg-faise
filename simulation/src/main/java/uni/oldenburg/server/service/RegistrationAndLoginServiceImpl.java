@@ -1,14 +1,10 @@
 package uni.oldenburg.server.service;
 
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-
-import de.novanic.eventservice.client.event.domain.DomainFactory;
 import de.novanic.eventservice.service.RemoteEventServiceServlet;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import uni.oldenburg.client.event.HelloEvent;
 import uni.oldenburg.client.service.RegistrationAndLoginService;
 import uni.oldenburg.server.dao.SimulationUserDao;
 import uni.oldenburg.shared.model.SimulationUser;
@@ -49,9 +45,6 @@ public class RegistrationAndLoginServiceImpl extends RemoteEventServiceServlet i
         SimulationUserDao simulationUserDao = new SimulationUserDao();
         SimulationUser user = null;
         
-        HelloEvent event=new HelloEvent();
-        addEvent(DomainFactory.getDomain("Test"), event);
-
         try {
             user = simulationUserDao.findUserForUsernameAndPassword(email, password);
         } catch (SQLException e) {

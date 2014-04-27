@@ -26,6 +26,8 @@ import uni.oldenburg.shared.model.ConveyorWall;
 import uni.oldenburg.shared.model.Job;
 import uni.oldenburg.shared.model.JobList;
 import uni.oldenburg.shared.model.Szenario;
+import uni.oldenburg.shared.model.event.SimStartedEvent;
+import uni.oldenburg.shared.model.event.SimStoppedEvent;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
@@ -63,14 +65,26 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 
+import de.novanic.eventservice.client.event.Event;
+import de.novanic.eventservice.client.event.RemoteEventService;
+import de.novanic.eventservice.client.event.RemoteEventServiceFactory;
+import de.novanic.eventservice.client.event.domain.DomainFactory;
+import de.novanic.eventservice.client.event.listener.RemoteEventListener;
+
 public class MainFramePresenter extends Presenter {
+	public final static String DOMAIN_NAME = "uni.oldenburg.faise";
+	
 	private final IDisplay display;
 	private Szenario currentSzenario;
 	Conveyor dropableConveyor;
 	JobList lstJobs = new JobList();
 	
     private AgentPlatformServiceAsync agentPlatformService = null;
+    private RemoteEventService myRES = null;
 	
+    // client started simulation
+	private boolean bSimulationStarted = false;
+	// server started simulation
 	private boolean bSimulationRunning = false;
 	
 	Map<String, MenuItem> mapSimMenuItems = new HashMap<String, MenuItem>();
@@ -105,6 +119,7 @@ public class MainFramePresenter extends Presenter {
 		this.dropableConveyor = null;
 		
 		agentPlatformService = GWT.create(AgentPlatformService.class);
+		handleEvents();
 		
 		if (Debugging.isDebugging) {			
 			this.loadSzenario("TestSzenario");
@@ -115,9 +130,23 @@ public class MainFramePresenter extends Presenter {
 		return (Widget) display;
 	}
 	
+	/**
+	 * client simulation state
+	 * 
+	 * @author Matthias
+	 */
+	public boolean hasSimulationStarted() {
+		return bSimulationStarted;
+	}	
+	
+	/**
+	 * server simulation state
+	 * 
+	 * @author Matthias
+	 */
 	public boolean isSimulationRunning() {
 		return bSimulationRunning;
-	}	
+	}
 
 	/**
 	 * Method gets UserName from Server and writes it into the Label
@@ -740,19 +769,19 @@ public class MainFramePresenter extends Presenter {
 	 * 
 	 * @author Matthias
 	 */
-	public void setSimulationState(boolean running) {
-		bSimulationRunning = running;
+	public void setSimulationState(boolean started) {
+		bSimulationStarted = started;
 		
-		mapSimMenuItems.get("Laden").setEnabled(!isSimulationRunning());
-		mapSimMenuItems.get("Speichern").setEnabled(!isSimulationRunning());
-		mapSimMenuItems.get("Speichern unter...").setEnabled(!isSimulationRunning());
-		mapSimMenuItems.get("Einstellungen").setEnabled(!isSimulationRunning());
+		mapSimMenuItems.get("Laden").setEnabled(!hasSimulationStarted());
+		mapSimMenuItems.get("Speichern").setEnabled(!hasSimulationStarted());
+		mapSimMenuItems.get("Speichern unter...").setEnabled(!hasSimulationStarted());
+		mapSimMenuItems.get("Einstellungen").setEnabled(!hasSimulationStarted());
 		
-		mapJobMenuItems.get("Laden").setEnabled(!isSimulationRunning());
-		mapJobMenuItems.get("Speichern").setEnabled(!isSimulationRunning());
-		mapJobMenuItems.get("Speichern unter...").setEnabled(!isSimulationRunning());
+		mapJobMenuItems.get("Laden").setEnabled(!hasSimulationStarted());
+		mapJobMenuItems.get("Speichern").setEnabled(!hasSimulationStarted());
+		mapJobMenuItems.get("Speichern unter...").setEnabled(!hasSimulationStarted());
 		
-		display.getConveyorPanel().setVisible(!isSimulationRunning());
+		display.getConveyorPanel().setVisible(!hasSimulationStarted());
 		
 		MainFramePresenter.this.dropableConveyor = null;
 	}
@@ -897,5 +926,38 @@ public class MainFramePresenter extends Presenter {
 
 	public ServiceAsync getService() {
 		return this.rpcService;
+	}
+	
+	private void handleEvents() {
+		myRES = RemoteEventServiceFactory.getInstance().getRemoteEventService();
+		myRES.removeListeners();
+		
+		myRES.addListener(DomainFactory.getDomain(DOMAIN_NAME), new RemoteEventListener() {
+			public void apply(Event anEvent) {
+				if (anEvent instanceof SimStartedEvent) {
+					bSimulationRunning = true;
+					
+					if (Debugging.isDebugging) {
+						Job myJob = new Job(0, 0, null);
+						MainFramePresenter.this.agentPlatformService.addJob(
+								MainFramePresenter.this.currentSzenario.getId(), 
+								myJob, 
+								new EmptyAsyncCallback());
+					}
+					
+					display.log("Simulation started!");
+					
+					return;
+				}
+				
+				if (anEvent instanceof SimStoppedEvent) {
+					bSimulationRunning = false;
+					
+					display.log("Simulation stopped!");
+					
+					return;
+				}
+			}
+		});
 	}
 }

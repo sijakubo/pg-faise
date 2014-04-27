@@ -7,14 +7,18 @@ import java.util.List;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import de.novanic.eventservice.client.event.domain.DomainFactory;
 import uni.oldenburg.Debugging;
+import uni.oldenburg.client.presenter.MainFramePresenter;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.behaviour.TimeoutReceiverBehaviour;
 import uni.oldenburg.server.agent.data.PackageData;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
+import uni.oldenburg.server.service.RemoteEventService;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.Job;
+import uni.oldenburg.shared.model.event.SimStartedEvent;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
@@ -124,6 +128,9 @@ public class JobAgent extends Agent {
 				logger.log(Level.INFO, "Incoming Ramp Count: " + ((JobAgent)myAgent).getRampListIncoming().size());
 				logger.log(Level.INFO, "Outgoing Ramp Count: " + ((JobAgent)myAgent).getRampListOutgoing().size());	
 			}
+			
+			// fire SimStartedEvent
+			new RemoteEventService().addEvent(DomainFactory.getDomain(MainFramePresenter.DOMAIN_NAME), new SimStartedEvent());
 		}
 	}
 	
