@@ -939,10 +939,7 @@ public class MainFramePresenter extends Presenter {
 					
 					if (Debugging.isDebugging) {
 						Job myJob = new Job(0, 0, null);
-						MainFramePresenter.this.agentPlatformService.addJob(
-								MainFramePresenter.this.currentSzenario.getId(), 
-								myJob, 
-								new EmptyAsyncCallback());
+						agentPlatformService.addJob(currentSzenario.getId(), myJob, new EmptyAsyncCallback());
 					}
 					
 					display.log("Simulation started!");
