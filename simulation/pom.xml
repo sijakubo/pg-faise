@@ -72,6 +72,16 @@
 			<artifactId>eventservice-rpc</artifactId>
 			<version>1.2.1</version>
 		</dependency>
+		<dependency>
+			<groupId>de.novanic.gwteventservice</groupId>
+			<artifactId>eventservice</artifactId>
+			<version>1.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>de.novanic.gwteventservice</groupId>
+			<artifactId>gwteventservice</artifactId>
+			<version>1.2.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>

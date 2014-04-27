@@ -25,6 +25,10 @@
       <servlet-name>agentPlatformService</servlet-name>
       <servlet-class>uni.oldenburg.server.service.AgentPlatformServiceImpl</servlet-class>
    </servlet>
+   <servlet>
+		<servlet-name>eventServiceImpl</servlet-name>
+		<servlet-class>de.novanic.eventservice.service.EventServiceImpl</servlet-class>
+	</servlet>
 
    <servlet-mapping>
       <servlet-name>loggingService</servlet-name>
@@ -46,6 +50,10 @@
       <servlet-name>agentPlatformService</servlet-name>
       <url-pattern>/simulation/agentPlatformService</url-pattern>
    </servlet-mapping>
+   <servlet-mapping>
+		<servlet-name>eventServiceImpl</servlet-name>
+		<url-pattern>/simulation/gwteventservice</url-pattern>
+	</servlet-mapping>
 
    <!-- Default page to serve -->
     <welcome-file-list>
