@@ -2,7 +2,7 @@
  * com_service.h
  *
  * Created: 05.04.2014 12:37:44
- *  Author: vmsieben
+ *  Author: Malte Falk
  */ 
 
 
