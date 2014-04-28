@@ -247,6 +247,8 @@ public class JobAgent extends Agent {
 				if(Debugging.showInfoMessages)
 					logger.log(Level.INFO, "Available Ramp Count: " + lstRampsWithSpace.size());
 				
+				rampsResponded = 0;
+				
 				int randomRamp = ((int)(Math.random() * 1000)) % lstRampsWithSpace.size();
 				
 				ACLMessage msgReply = new ACLMessage(MessageType.RESERVE_SPACE);
