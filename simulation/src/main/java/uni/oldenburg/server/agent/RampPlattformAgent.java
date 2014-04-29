@@ -25,7 +25,6 @@ public class RampPlattformAgent extends Agent {
 	private int conveyorID = 0;
 	private int szenarioID = 0;
 	private int rampType = 0;
-	private int packageCount = 0;
 	private int packageCountMax = 0;
 	
 	private Logger logger = Logger.getLogger(RampPlattformAgent.class);
@@ -42,7 +41,6 @@ public class RampPlattformAgent extends Agent {
 			Conveyor myConveyor = (Conveyor) args[1];
 			conveyorID = myConveyor.getID();
 			rampType = ((ConveyorRamp)myConveyor).getRampType();
-			packageCount = myConveyor.getPackageCount();
 			packageCountMax = myConveyor.getPackageCountMax();
 		}
 		
@@ -97,6 +95,7 @@ public class RampPlattformAgent extends Agent {
      */
 	private class IsPackageSpaceAvailableBehaviour extends CyclicBehaviour {		
 		int step = 0;
+		int packageCount = 0;
 		
 		public void action() {
 			RampPlattformAgent currentAgent = (RampPlattformAgent)myAgent;
@@ -131,7 +130,7 @@ public class RampPlattformAgent extends Agent {
 						if(Debugging.showPackageMessages)
 							logger.log(Level.INFO, myAgent.getLocalName() + " <- GET_PACKAGE_COUNT");
 						
-						int packageCount = Integer.parseInt(msgPackageRes.getUserDefinedParameter("package_count"));
+						packageCount = Integer.parseInt(msgPackageRes.getUserDefinedParameter("package_count"));
 						int packageCountMax = currentAgent.packageCountMax;
 						String isSpaceAvailable = packageCount < packageCountMax ? "1" : "0";
 						
@@ -171,31 +170,24 @@ public class RampPlattformAgent extends Agent {
 					
 					// reserve/add space in ramp if target matches 
 					if (target.compareTo(myAgent.getAID().toString()) == 0) {
-						// only reserve for incoming, outgoing have unlimited space to "fall of the wagon"
-						if (currentAgent.rampType == ConveyorRamp.RAMP_ENTRANCE) {
-							++currentAgent.packageCount;
+						ACLMessage msgAddPackage = new ACLMessage(MessageType.ADD_PACKAGE);
+						AgentHelper.addReceiver(msgAddPackage, currentAgent, PackageAgent.NAME, conveyorID, szenarioID);
+						
+						++packageCount;
 							
-							ACLMessage msgAddPackage = new ACLMessage(MessageType.ADD_PACKAGE);
-							AgentHelper.addReceiver(msgAddPackage, currentAgent, PackageAgent.NAME, conveyorID, szenarioID);
-								
-							try {
-								msgAddPackage.setContentObject(msg.getContentObject());
-								send(msgAddPackage);
-							}
-							catch (IOException e) {
-								e.printStackTrace();
-							}
-							catch (UnreadableException e) {
-								e.printStackTrace();
-							}
-							
-							if(Debugging.showInfoMessages)
-								logger.log(Level.INFO, myAgent.getLocalName() + " - space reserved: " + currentAgent.packageCount + "/" + currentAgent.packageCountMax);							
+						try {
+							msgAddPackage.setContentObject(msg.getContentObject());
+							send(msgAddPackage);
 						}
-						else {
-							if(Debugging.showInfoMessages)
-								logger.log(Level.INFO, myAgent.getLocalName() + " - space reserved");
+						catch (IOException e) {
+							e.printStackTrace();
 						}
+						catch (UnreadableException e) {
+							e.printStackTrace();
+						}
+						
+						if(Debugging.showInfoMessages)
+							logger.log(Level.INFO, myAgent.getLocalName() + " - space reserved: " + packageCount + "/" + currentAgent.packageCountMax);
 					}
 					
 					step = 0;
