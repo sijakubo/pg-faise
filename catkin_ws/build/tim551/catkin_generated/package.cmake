@@ -1,7 +1,0 @@
-set(_CATKIN_CURRENT_PACKAGE "sick_tim3xx")
-set(sick_tim3xx_MAINTAINER "Martin Günther <mguenthe@uos.de>")
-set(sick_tim3xx_DEPRECATED "")
-set(sick_tim3xx_VERSION "0.0.1")
-set(sick_tim3xx_BUILD_DEPENDS "sensor_msgs" "diagnostic_updater" "dynamic_reconfigure" "driver_base" "libusb-1.0-0-dev")
-set(sick_tim3xx_RUN_DEPENDS "sensor_msgs" "diagnostic_updater" "dynamic_reconfigure" "driver_base" "libusb-1.0-0")
-set(sick_tim3xx_BUILDTOOL_DEPENDS "catkin")

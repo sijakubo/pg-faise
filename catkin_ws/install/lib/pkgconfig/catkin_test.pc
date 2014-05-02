@@ -1,8 +1,0 @@
-prefix=/home/pg/catkin_ws/install
-
-Name: catkin_test
-Description: Description of catkin_test
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/pg/catkin_ws/install/lib 
-Requires: 
