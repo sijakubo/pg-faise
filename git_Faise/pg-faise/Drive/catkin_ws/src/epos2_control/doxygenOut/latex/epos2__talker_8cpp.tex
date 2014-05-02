@@ -1,0 +1,78 @@
+\hypertarget{epos2__talker_8cpp}{\section{src/epos2\-\_\-talker.cpp File Reference}
+\label{epos2__talker_8cpp}\index{src/epos2\-\_\-talker.\-cpp@{src/epos2\-\_\-talker.\-cpp}}
+}
+{\ttfamily \#include \char`\"{}Sample\-Moving.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ros/ros.\-h\char`\"{}}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{epos2__talker_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{main} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{epos2__talker_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{\index{epos2\-\_\-talker.\-cpp@{epos2\-\_\-talker.\-cpp}!main@{main}}
+\index{main@{main}!epos2_talker.cpp@{epos2\-\_\-talker.\-cpp}}
+\subsubsection[{main}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+\item[{int}]{argc, }
+\item[{char $\ast$$\ast$}]{argv}
+\end{DoxyParamCaption}
+)}}\label{epos2__talker_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}
+
+
+Definition at line 13 of file epos2\-\_\-talker.\-cpp.
+
+
+\begin{DoxyCode}
+\{
+        ros::init(argc, argv, \textcolor{stringliteral}{"epos2\_talker"});
+        ros::NodeHandle roshandle;
+
+        \textcolor{comment}{//Elemente von talkerStruct:    speedStepSize   - in part of the
+       maximum speed (<- read from the parameter-server)}
+        \textcolor{comment}{//                                                              
+      refreshRate             - with this rate a new speed-message will be send; in Hz}
+        \textcolor{comment}{//                                                              angle                   
+      - angle between right and left; takes only effect when input:=sinus}
+
+        \textcolor{keywordtype}{double} speedStepSize = 0.2, refreshRate = 11;
+        \textcolor{keywordtype}{int} angle = 90;
+
+        ros::param::get(\textcolor{stringliteral}{"~speedStep"}, speedStepSize);
+        ros::param::get(\textcolor{stringliteral}{"~speedUpdateRate"}, refreshRate);
+
+        std::string  getParam;
+        \textcolor{keywordtype}{int} getInfoFrom=\hyperlink{classSampleMoving_a9dc6d3f457a44d12d41046db335a451ba7c0a083c39ec97797c0b28909fa3474b}{SampleMoving::nodrive};
+        \textcolor{keywordtype}{int} msgType = \hyperlink{classSampleMoving_a2232a24e64abc3c99b1bcc32b9acaa7eafa273e9ac9cc895eb7a6cb70f55ff19c}{SampleMoving::noMsg};
+
+        \textcolor{keywordflow}{if} (ros::param::get(\textcolor{stringliteral}{"~input"}, getParam)) \{
+                \textcolor{keywordflow}{if} (strstr(getParam.c\_str(), \textcolor{stringliteral}{"humanInterface"}) != NULL) \{
+      getInfoFrom=\hyperlink{classSampleMoving_a9dc6d3f457a44d12d41046db335a451ba965c7cf26ddac600016e6d8e003bb70c}{SampleMoving::humanInterface};\}
+                \textcolor{comment}{//if (strstr(getParam.c\_str(), "keyboard") != NULL)
+       \{getInfoFrom=SampleMoving::keyboard;\}}
+                \textcolor{keywordflow}{if} (strstr(getParam.c\_str(), \textcolor{stringliteral}{"sinus"}) != NULL) \{getInfoFrom=
+      \hyperlink{classSampleMoving_a9dc6d3f457a44d12d41046db335a451ba40b19ec7388083907df9c6d5284e89cd}{SampleMoving::sinus};\}
+                \textcolor{comment}{//if (strstr(getParam.c\_str(), "gamepad") != NULL)
+       \{getInfoFrom=SampleMoving::gamepad;\}}
+        \}
+
+        \textcolor{keywordflow}{if} (ros::param::get(\textcolor{stringliteral}{"~msgType"}, getParam)) \{
+                \textcolor{keywordflow}{if} (strstr(getParam.c\_str(), \textcolor{stringliteral}{"cmdVel"}) != NULL) \{msgType=
+      \hyperlink{classSampleMoving_a2232a24e64abc3c99b1bcc32b9acaa7ea06732e1094ab62068d0edca312788d5c}{SampleMoving::cmdVel};\}
+                \textcolor{keywordflow}{if} (strstr(getParam.c\_str(), \textcolor{stringliteral}{"SI"}) != NULL) \{msgType=
+      \hyperlink{classSampleMoving_a2232a24e64abc3c99b1bcc32b9acaa7ea4875b4f467dbf540a6bf9f93b182fcd2}{SampleMoving::SI};\}
+                \textcolor{keywordflow}{if} (strstr(getParam.c\_str(), \textcolor{stringliteral}{"navStack"}) != NULL) \{msgType=
+      \hyperlink{classSampleMoving_a2232a24e64abc3c99b1bcc32b9acaa7ea1e92f96bda560fb7a34fdb799c795834}{SampleMoving::navStack};\}
+                \textcolor{keywordflow}{if} (strstr(getParam.c\_str(), \textcolor{stringliteral}{"onlyTF"}) != NULL) \{msgType=
+      \hyperlink{classSampleMoving_a2232a24e64abc3c99b1bcc32b9acaa7ea4b7bd49d49b96a78a07ed55aecbb39cd}{SampleMoving::onlyTF};\}
+        \}
+
+        \hyperlink{classSampleMoving}{SampleMoving} startMove(roshandle, msgType, getInfoFrom, 
+      refreshRate, speedStepSize, angle);
+
+        ros::spin();
+
+        \textcolor{keywordflow}{return} 1;
+\}
+\end{DoxyCode}

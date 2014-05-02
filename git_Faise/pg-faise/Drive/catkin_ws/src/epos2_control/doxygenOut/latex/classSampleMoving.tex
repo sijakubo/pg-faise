@@ -1,0 +1,1044 @@
+\hypertarget{classSampleMoving}{\section{Sample\-Moving Class Reference}
+\label{classSampleMoving}\index{Sample\-Moving@{Sample\-Moving}}
+}
+
+
+Sample\-Moving-\/\-Class.  
+
+
+
+
+{\ttfamily \#include $<$Sample\-Moving.\-h$>$}
+
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structSampleMoving_1_1axesStruct}{axes\-Struct}
+\begin{DoxyCompactList}\small\item\em structure with all relevant driving informations of a wheel or gamepad. \end{DoxyCompactList}\item 
+struct \hyperlink{structSampleMoving_1_1odom}{odom}
+\begin{DoxyCompactList}\small\item\em structure with orientation-\/data calculated with the velocity-\/data sent to the Tank\-Steering-\/class by R\-O\-S-\/messages \end{DoxyCompactList}\item 
+struct \hyperlink{structSampleMoving_1_1orientation}{orientation}
+\begin{DoxyCompactList}\small\item\em describing the orientation of the robot in a 2\-D-\/case depending to a parent-\/frame \end{DoxyCompactList}\item 
+struct \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct}{sample\-Moving\-Setting\-Struct}
+\begin{DoxyCompactList}\small\item\em Settings Structure with all relevant values and R\-O\-S. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ \hyperlink{classSampleMoving_a41123bbf6a4408e82424c92a414fa524a7c0a083c39ec97797c0b28909fa3474b}{nodrive}, 
+\hyperlink{classSampleMoving_a41123bbf6a4408e82424c92a414fa524a40b19ec7388083907df9c6d5284e89cd}{sinus}, 
+\hyperlink{classSampleMoving_a41123bbf6a4408e82424c92a414fa524a965c7cf26ddac600016e6d8e003bb70c}{human\-Interface}
+ \}
+\begin{DoxyCompactList}\small\item\em Enumeration for the input parameter get\-Info\-From. \end{DoxyCompactList}\item 
+enum \{ \\*
+\hyperlink{classSampleMoving_a68852e46a4c2887978990a7dd92bc66eafa273e9ac9cc895eb7a6cb70f55ff19c}{no\-Msg}, 
+\hyperlink{classSampleMoving_a68852e46a4c2887978990a7dd92bc66ea06732e1094ab62068d0edca312788d5c}{cmd\-Vel}, 
+\hyperlink{classSampleMoving_a68852e46a4c2887978990a7dd92bc66ea4875b4f467dbf540a6bf9f93b182fcd2}{S\-I}, 
+\hyperlink{classSampleMoving_a68852e46a4c2887978990a7dd92bc66ea1e92f96bda560fb7a34fdb799c795834}{nav\-Stack}, 
+\\*
+\hyperlink{classSampleMoving_a68852e46a4c2887978990a7dd92bc66ea4b7bd49d49b96a78a07ed55aecbb39cd}{only\-T\-F}
+ \}
+\begin{DoxyCompactList}\small\item\em Enumeration to describe the type of sending messages over R\-O\-S to the Epos2\-Motor\-Controller-\/\-Class-\/\-Instances. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classSampleMoving_a3d8c3d0412d76542a2a58d7fb9995d47}{Sample\-Moving} (ros\-::\-Node\-Handle sample\-Moving\-Roshandle, int get\-Info\-From, int msg\-Type=\hyperlink{classSampleMoving_a68852e46a4c2887978990a7dd92bc66eafa273e9ac9cc895eb7a6cb70f55ff19c}{no\-Msg}, double refresh\-Rate=5.\-0, double Speed\-Step\-Size=0.\-2, int angle=0)
+\begin{DoxyCompactList}\small\item\em Constructor of a Sample\-Moving-\/object. \end{DoxyCompactList}\item 
+\hyperlink{classSampleMoving_ad6989eb3ac1c3647b16eae588353272b}{$\sim$\-Sample\-Moving} ()
+\begin{DoxyCompactList}\small\item\em Release the Sample\-Moving-\/object. \end{DoxyCompactList}\item 
+double \hyperlink{classSampleMoving_a40aff4fa58009d08161ce9720c0ea4ef}{next\-To\-Zero} (double arg1, double arg2)
+\begin{DoxyCompactList}\small\item\em return the input-\/number with the smallest absolute value \end{DoxyCompactList}\item 
+int \hyperlink{classSampleMoving_a0b5fbcfe6d0bf2d3de142758089f560b}{sign} (double number, int zero\-Is\-Positiv=0)
+\begin{DoxyCompactList}\small\item\em return 1 for positive values and -\/1 for negative values. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ {\bfseries left}, 
+{\bfseries right}
+ \}
+\begin{DoxyCompactList}\small\item\em enumeration for naming the E\-P\-O\-S2s \end{DoxyCompactList}\item 
+enum \hyperlink{classSampleMoving_ad495d48e1ec2093a36601548bfad852d}{interface\-Type} \{ \hyperlink{classSampleMoving_ad495d48e1ec2093a36601548bfad852da4ba2232b260456be1ed027bb3bde6b0d}{no\-Joy}, 
+\hyperlink{classSampleMoving_ad495d48e1ec2093a36601548bfad852dafd942ead788c486efb6c26363e68acff}{game\-Pad}, 
+\hyperlink{classSampleMoving_ad495d48e1ec2093a36601548bfad852da003251f50ad3e22d0ab96167b517d017}{wheel}
+ \}
+\begin{DoxyCompactList}\small\item\em internal state which kind of human\-Interface was detected (gamepads / wheels) \end{DoxyCompactList}\item 
+enum \hyperlink{classSampleMoving_ad45933bb8e660772ea25747d3446bd8a}{game\-Pad\-Mode} \{ \hyperlink{classSampleMoving_ad45933bb8e660772ea25747d3446bd8aa34ec1e09ac95890b7840157db35fe828}{two\-Stick}, 
+\hyperlink{classSampleMoving_ad45933bb8e660772ea25747d3446bd8aaf949a715587ed74b5cb1f8199e3f369d}{one\-Stick}, 
+\hyperlink{classSampleMoving_ad45933bb8e660772ea25747d3446bd8aaa424c4ac1573cab2407925cf755474ba}{tank\-Stick}
+ \}
+\begin{DoxyCompactList}\small\item\em state which indicates the current connected gamepad-\/mode \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classSampleMoving_a822882ed03def337114e48822c8527bb}{init} (int msg\-Type, int get\-Info\-From)
+\begin{DoxyCompactList}\small\item\em set all starting values -\/ Including some values from the Parameter-\/\-Server and all R\-O\-S-\/\-Components (timer, publisher and subscriber.) \end{DoxyCompactList}\item 
+void \hyperlink{classSampleMoving_a1e43a9772d305ba33a96dc688efda406}{publish\-Speed} (const ros\-::\-Timer\-Event \&event)
+\begin{DoxyCompactList}\small\item\em publish with the defined refresh\-Rate new velocity-\/messages. \end{DoxyCompactList}\item 
+void \hyperlink{classSampleMoving_afa12c68ab6da0b3602d4e6adb19b6d35}{gamepad\-Callback} (const sensor\-\_\-msgs\-::\-Joy joymsg)
+\begin{DoxyCompactList}\small\item\em run every time, a new joy-\/message arrives from the connected gamepad or steering wheel. \end{DoxyCompactList}\item 
+void \hyperlink{classSampleMoving_aa573ef15d611d47b7510d49a1bec1ecd}{sine\-Callback} (const ros\-::\-Timer\-Event \&event)
+\begin{DoxyCompactList}\small\item\em publish with the defined refresh\-Rate new velocity-\/messages. \end{DoxyCompactList}\item 
+void \hyperlink{classSampleMoving_aeb90b5d883a76dfee266d55b81a8e671}{keyboard\-Init} ()
+\begin{DoxyCompactList}\small\item\em Set the terminal to catch the keys for driving. \end{DoxyCompactList}\item 
+void \hyperlink{classSampleMoving_a83fa32ef4b2ccfc7ae7a43629adf0d5c}{keyboard\-Callback} (const ros\-::\-Timer\-Event \&event)
+\begin{DoxyCompactList}\small\item\em try to catch a key from the input-\/terminal and set the velocity values according to this key (zero if no key is pressed). \end{DoxyCompactList}\item 
+void \hyperlink{classSampleMoving_ac7ba11bc1bd16a55bc217079d2f5b963}{smooth\-Velocity} (double input\-Velocity\mbox{[}2\mbox{]}, double $\ast$output\-Velocity\-Left, double $\ast$output\-Velocity\-Right, double speed\-Step\-Size=0.\-2, int use\-Delta=0)
+\begin{DoxyCompactList}\small\item\em Prevent the velocity from higher steps than the speed\-Step\-Size according to the current velocity. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+ros\-::\-Node\-Handle \hyperlink{classSampleMoving_aea05328d2394f244adba6fa37e3912d9}{roshandle}
+\begin{DoxyCompactList}\small\item\em the handle on a R\-O\-S\-Node to open Timers, Subscribers, Publishers... \end{DoxyCompactList}\item 
+\hypertarget{classSampleMoving_ab1781f18e06dc454ff2d65073f48e630}{struct \hyperlink{structSampleMoving_1_1odom}{Sample\-Moving\-::odom} \hyperlink{classSampleMoving_ab1781f18e06dc454ff2d65073f48e630}{pos}}\label{classSampleMoving_ab1781f18e06dc454ff2d65073f48e630}
+
+\begin{DoxyCompactList}\small\item\em Temporary memory for the calculation of the wanted position. \end{DoxyCompactList}\item 
+\hypertarget{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{struct \\*
+\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct}{Sample\-Moving\-::sample\-Moving\-Setting\-Struct} \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sample\-Moving\-Set}}\label{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}
+
+\begin{DoxyCompactList}\small\item\em the main settings-\/structure for the Sample\-Moving-\/\-Class \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Sample\-Moving-\/\-Class. 
+
+It's used to send velocitys by twist-\/messages or speed-\/messages and the wanted position by tf-\/framework. The messages will be generated from a gamepad, a steering wheel, the keyboard or automatically. 
+
+Definition at line 42 of file Sample\-Moving.\-h.
+
+
+
+\subsection{Member Enumeration Documentation}
+\hypertarget{classSampleMoving_a41123bbf6a4408e82424c92a414fa524}{\subsubsection[{anonymous enum}]{\setlength{\rightskip}{0pt plus 5cm}anonymous enum}}\label{classSampleMoving_a41123bbf6a4408e82424c92a414fa524}
+
+
+Enumeration for the input parameter get\-Info\-From. 
+
+\begin{Desc}
+\item[Enumerator\-: ]\par
+\begin{description}
+\index{nodrive@{nodrive}!Sample\-Moving@{Sample\-Moving}}\index{Sample\-Moving@{Sample\-Moving}!nodrive@{nodrive}}\item[{\em 
+\hypertarget{classSampleMoving_a41123bbf6a4408e82424c92a414fa524a7c0a083c39ec97797c0b28909fa3474b}{nodrive}\label{classSampleMoving_a41123bbf6a4408e82424c92a414fa524a7c0a083c39ec97797c0b28909fa3474b}
+}]nothing chosen -\/ nothing will happen \index{sinus@{sinus}!Sample\-Moving@{Sample\-Moving}}\index{Sample\-Moving@{Sample\-Moving}!sinus@{sinus}}\item[{\em 
+\hypertarget{classSampleMoving_a41123bbf6a4408e82424c92a414fa524a40b19ec7388083907df9c6d5284e89cd}{sinus}\label{classSampleMoving_a41123bbf6a4408e82424c92a414fa524a40b19ec7388083907df9c6d5284e89cd}
+}]the velocity of the motors connected to the E\-P\-O\-S2 will change in this way\-: v=sin(t) \index{human\-Interface@{human\-Interface}!Sample\-Moving@{Sample\-Moving}}\index{Sample\-Moving@{Sample\-Moving}!human\-Interface@{human\-Interface}}\item[{\em 
+\hypertarget{classSampleMoving_a41123bbf6a4408e82424c92a414fa524a965c7cf26ddac600016e6d8e003bb70c}{human\-Interface}\label{classSampleMoving_a41123bbf6a4408e82424c92a414fa524a965c7cf26ddac600016e6d8e003bb70c}
+}]you can either use a gamepad or the keyboard of your P\-C to control the E\-P\-O\-S2s \end{description}
+\end{Desc}
+
+
+
+Definition at line 104 of file Sample\-Moving.\-h.
+
+
+\begin{DoxyCode}
+        \{
+            \hyperlink{classSampleMoving_a41123bbf6a4408e82424c92a414fa524a7c0a083c39ec97797c0b28909fa3474b}{nodrive}, 
+            \hyperlink{classSampleMoving_a41123bbf6a4408e82424c92a414fa524a40b19ec7388083907df9c6d5284e89cd}{sinus}, 
+            \hyperlink{classSampleMoving_a41123bbf6a4408e82424c92a414fa524a965c7cf26ddac600016e6d8e003bb70c}{humanInterface}    
+        \};
+\end{DoxyCode}
+\hypertarget{classSampleMoving_a68852e46a4c2887978990a7dd92bc66e}{\subsubsection[{anonymous enum}]{\setlength{\rightskip}{0pt plus 5cm}anonymous enum}}\label{classSampleMoving_a68852e46a4c2887978990a7dd92bc66e}
+
+
+Enumeration to describe the type of sending messages over R\-O\-S to the Epos2\-Motor\-Controller-\/\-Class-\/\-Instances. 
+
+The position will be send in each case additional by the tf-\/framework. \begin{Desc}
+\item[Enumerator\-: ]\par
+\begin{description}
+\index{no\-Msg@{no\-Msg}!Sample\-Moving@{Sample\-Moving}}\index{Sample\-Moving@{Sample\-Moving}!no\-Msg@{no\-Msg}}\item[{\em 
+\hypertarget{classSampleMoving_a68852e46a4c2887978990a7dd92bc66eafa273e9ac9cc895eb7a6cb70f55ff19c}{no\-Msg}\label{classSampleMoving_a68852e46a4c2887978990a7dd92bc66eafa273e9ac9cc895eb7a6cb70f55ff19c}
+}]no message type was chosen -\/ it will automatically switch to \char`\"{}\-S\-I\char`\"{} \index{cmd\-Vel@{cmd\-Vel}!Sample\-Moving@{Sample\-Moving}}\index{Sample\-Moving@{Sample\-Moving}!cmd\-Vel@{cmd\-Vel}}\item[{\em 
+\hypertarget{classSampleMoving_a68852e46a4c2887978990a7dd92bc66ea06732e1094ab62068d0edca312788d5c}{cmd\-Vel}\label{classSampleMoving_a68852e46a4c2887978990a7dd92bc66ea06732e1094ab62068d0edca312788d5c}
+}]twist-\/messages will be send \index{S\-I@{S\-I}!Sample\-Moving@{Sample\-Moving}}\index{Sample\-Moving@{Sample\-Moving}!S\-I@{S\-I}}\item[{\em 
+\hypertarget{classSampleMoving_a68852e46a4c2887978990a7dd92bc66ea4875b4f467dbf540a6bf9f93b182fcd2}{S\-I}\label{classSampleMoving_a68852e46a4c2887978990a7dd92bc66ea4875b4f467dbf540a6bf9f93b182fcd2}
+}]velocitys separated for left and right E\-P\-O\-S2 will be send \index{nav\-Stack@{nav\-Stack}!Sample\-Moving@{Sample\-Moving}}\index{Sample\-Moving@{Sample\-Moving}!nav\-Stack@{nav\-Stack}}\item[{\em 
+\hypertarget{classSampleMoving_a68852e46a4c2887978990a7dd92bc66ea1e92f96bda560fb7a34fdb799c795834}{nav\-Stack}\label{classSampleMoving_a68852e46a4c2887978990a7dd92bc66ea1e92f96bda560fb7a34fdb799c795834}
+}]velocity-\/messages will be send with the actionlib-\/\-Move\-Base\-Goal -\/ not working by now on ros\-::groovy \index{only\-T\-F@{only\-T\-F}!Sample\-Moving@{Sample\-Moving}}\index{Sample\-Moving@{Sample\-Moving}!only\-T\-F@{only\-T\-F}}\item[{\em 
+\hypertarget{classSampleMoving_a68852e46a4c2887978990a7dd92bc66ea4b7bd49d49b96a78a07ed55aecbb39cd}{only\-T\-F}\label{classSampleMoving_a68852e46a4c2887978990a7dd92bc66ea4b7bd49d49b96a78a07ed55aecbb39cd}
+}]only shows the wanted position of the robot with respective to the world-\/coordinate-\/frame \end{description}
+\end{Desc}
+
+
+
+Definition at line 114 of file Sample\-Moving.\-h.
+
+
+\begin{DoxyCode}
+        \{
+            \hyperlink{classSampleMoving_a68852e46a4c2887978990a7dd92bc66eafa273e9ac9cc895eb7a6cb70f55ff19c}{noMsg}, 
+            \hyperlink{classSampleMoving_a68852e46a4c2887978990a7dd92bc66ea06732e1094ab62068d0edca312788d5c}{cmdVel},   
+            \hyperlink{classSampleMoving_a68852e46a4c2887978990a7dd92bc66ea4875b4f467dbf540a6bf9f93b182fcd2}{SI},   
+            \hyperlink{classSampleMoving_a68852e46a4c2887978990a7dd92bc66ea1e92f96bda560fb7a34fdb799c795834}{navStack},   
+            \hyperlink{classSampleMoving_a68852e46a4c2887978990a7dd92bc66ea4b7bd49d49b96a78a07ed55aecbb39cd}{onlyTF}    
+        \};
+\end{DoxyCode}
+\hypertarget{classSampleMoving_ad45933bb8e660772ea25747d3446bd8a}{\index{Sample\-Moving@{Sample\-Moving}!game\-Pad\-Mode@{game\-Pad\-Mode}}
+\index{game\-Pad\-Mode@{game\-Pad\-Mode}!SampleMoving@{Sample\-Moving}}
+\subsubsection[{game\-Pad\-Mode}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf Sample\-Moving\-::game\-Pad\-Mode}\hspace{0.3cm}{\ttfamily [private]}}}\label{classSampleMoving_ad45933bb8e660772ea25747d3446bd8a}
+
+
+state which indicates the current connected gamepad-\/mode 
+
+\begin{Desc}
+\item[Enumerator\-: ]\par
+\begin{description}
+\index{two\-Stick@{two\-Stick}!Sample\-Moving@{Sample\-Moving}}\index{Sample\-Moving@{Sample\-Moving}!two\-Stick@{two\-Stick}}\item[{\em 
+\hypertarget{classSampleMoving_ad45933bb8e660772ea25747d3446bd8aa34ec1e09ac95890b7840157db35fe828}{two\-Stick}\label{classSampleMoving_ad45933bb8e660772ea25747d3446bd8aa34ec1e09ac95890b7840157db35fe828}
+}]left Stick back-\/ and forward; right stick left and right \index{one\-Stick@{one\-Stick}!Sample\-Moving@{Sample\-Moving}}\index{Sample\-Moving@{Sample\-Moving}!one\-Stick@{one\-Stick}}\item[{\em 
+\hypertarget{classSampleMoving_ad45933bb8e660772ea25747d3446bd8aaf949a715587ed74b5cb1f8199e3f369d}{one\-Stick}\label{classSampleMoving_ad45933bb8e660772ea25747d3446bd8aaf949a715587ed74b5cb1f8199e3f369d}
+}]like two\-Stick but both axis (left -\/ right \& back -\/ forward) are on the left Stick \index{tank\-Stick@{tank\-Stick}!Sample\-Moving@{Sample\-Moving}}\index{Sample\-Moving@{Sample\-Moving}!tank\-Stick@{tank\-Stick}}\item[{\em 
+\hypertarget{classSampleMoving_ad45933bb8e660772ea25747d3446bd8aaa424c4ac1573cab2407925cf755474ba}{tank\-Stick}\label{classSampleMoving_ad45933bb8e660772ea25747d3446bd8aaa424c4ac1573cab2407925cf755474ba}
+}]left stick = left side; right stick = right side \end{description}
+\end{Desc}
+
+
+
+Definition at line 61 of file Sample\-Moving.\-h.
+
+
+\begin{DoxyCode}
+        \{
+            \hyperlink{classSampleMoving_ad45933bb8e660772ea25747d3446bd8aa34ec1e09ac95890b7840157db35fe828}{twoStick},   
+            \hyperlink{classSampleMoving_ad45933bb8e660772ea25747d3446bd8aaf949a715587ed74b5cb1f8199e3f369d}{oneStick},   
+            \hyperlink{classSampleMoving_ad45933bb8e660772ea25747d3446bd8aaa424c4ac1573cab2407925cf755474ba}{tankStick}, 
+        \};
+\end{DoxyCode}
+\hypertarget{classSampleMoving_ad495d48e1ec2093a36601548bfad852d}{\index{Sample\-Moving@{Sample\-Moving}!interface\-Type@{interface\-Type}}
+\index{interface\-Type@{interface\-Type}!SampleMoving@{Sample\-Moving}}
+\subsubsection[{interface\-Type}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf Sample\-Moving\-::interface\-Type}\hspace{0.3cm}{\ttfamily [private]}}}\label{classSampleMoving_ad495d48e1ec2093a36601548bfad852d}
+
+
+internal state which kind of human\-Interface was detected (gamepads / wheels) 
+
+\begin{Desc}
+\item[Enumerator\-: ]\par
+\begin{description}
+\index{no\-Joy@{no\-Joy}!Sample\-Moving@{Sample\-Moving}}\index{Sample\-Moving@{Sample\-Moving}!no\-Joy@{no\-Joy}}\item[{\em 
+\hypertarget{classSampleMoving_ad495d48e1ec2093a36601548bfad852da4ba2232b260456be1ed027bb3bde6b0d}{no\-Joy}\label{classSampleMoving_ad495d48e1ec2093a36601548bfad852da4ba2232b260456be1ed027bb3bde6b0d}
+}]no joy\-\_\-node-\/\-Tool (wheel or gamepad) was detected -\/ only in this mode keyboard input is allowed \index{game\-Pad@{game\-Pad}!Sample\-Moving@{Sample\-Moving}}\index{Sample\-Moving@{Sample\-Moving}!game\-Pad@{game\-Pad}}\item[{\em 
+\hypertarget{classSampleMoving_ad495d48e1ec2093a36601548bfad852dafd942ead788c486efb6c26363e68acff}{game\-Pad}\label{classSampleMoving_ad495d48e1ec2093a36601548bfad852dafd942ead788c486efb6c26363e68acff}
+}]a gamepad was detected \index{wheel@{wheel}!Sample\-Moving@{Sample\-Moving}}\index{Sample\-Moving@{Sample\-Moving}!wheel@{wheel}}\item[{\em 
+\hypertarget{classSampleMoving_ad495d48e1ec2093a36601548bfad852da003251f50ad3e22d0ab96167b517d017}{wheel}\label{classSampleMoving_ad495d48e1ec2093a36601548bfad852da003251f50ad3e22d0ab96167b517d017}
+}]steering wheel with two pedals, 2 or 3 axis in joy\-\_\-msg \end{description}
+\end{Desc}
+
+
+
+Definition at line 51 of file Sample\-Moving.\-h.
+
+
+\begin{DoxyCode}
+        \{
+            \hyperlink{classSampleMoving_ad495d48e1ec2093a36601548bfad852da4ba2232b260456be1ed027bb3bde6b0d}{noJoy}, 
+            \hyperlink{classSampleMoving_ad495d48e1ec2093a36601548bfad852dafd942ead788c486efb6c26363e68acff}{gamePad}, 
+            \hyperlink{classSampleMoving_ad495d48e1ec2093a36601548bfad852da003251f50ad3e22d0ab96167b517d017}{wheel}  
+        \};
+\end{DoxyCode}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classSampleMoving_a3d8c3d0412d76542a2a58d7fb9995d47}{\index{Sample\-Moving@{Sample\-Moving}!Sample\-Moving@{Sample\-Moving}}
+\index{Sample\-Moving@{Sample\-Moving}!SampleMoving@{Sample\-Moving}}
+\subsubsection[{Sample\-Moving}]{\setlength{\rightskip}{0pt plus 5cm}Sample\-Moving\-::\-Sample\-Moving (
+\begin{DoxyParamCaption}
+\item[{ros\-::\-Node\-Handle}]{sample\-Moving\-Roshandle, }
+\item[{int}]{get\-Info\-From, }
+\item[{int}]{msg\-Type = {\ttfamily {\bf no\-Msg}}, }
+\item[{double}]{refresh\-Rate = {\ttfamily 5.0}, }
+\item[{double}]{Speed\-Step\-Size = {\ttfamily 0.2}, }
+\item[{int}]{angle = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}}\label{classSampleMoving_a3d8c3d0412d76542a2a58d7fb9995d47}
+
+
+Constructor of a Sample\-Moving-\/object. 
+
+initialize all variables by callling \hyperlink{classSampleMoving_a822882ed03def337114e48822c8527bb}{init()}
+
+
+\begin{DoxyParams}{Parameters}
+{\em sample\-Moving\-Roshandle} & the ros\-::nodehandle on which all timers, publishers and subscribers will be set up \\
+\hline
+{\em get\-Info\-From} & from which source the velocity-\/messages should be generated (human\-Interface or sine) \\
+\hline
+{\em msg\-Type} & the way a velocity-\/message should be published (S\-I, cmd\-\_\-vel, ...) \\
+\hline
+{\em refresh\-Rate} & \mbox{[}1/s\mbox{]} with this frequency all timers will be called \\
+\hline
+{\em Speed\-Step\-Size} & \mbox{[}1\mbox{]} the highest allowed change of velocity in one step. with respective to the maximum velocity \\
+\hline
+{\em angle} & \mbox{[}degree\mbox{]} Angular offset between right and left E\-P\-O\-S in input-\/mode = sinus \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 11 of file Sample\-Moving.\-cpp.
+
+
+\begin{DoxyCode}
+\{
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_ad60b9d7d4202a20facc5f14707657366}{sineAngle} = angle%360;
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a6e0c54b02f6c570887fb9026388feb30}{refreshRate} = refreshRate;
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a7149b75955e1f42194433bc451688da5}{SpeedStepSize} = 
+      keyboardSpeedStepSize;
+
+    \hyperlink{classSampleMoving_aea05328d2394f244adba6fa37e3912d9}{roshandle} = sampleMovingRoshandle;
+
+    \hyperlink{classSampleMoving_a822882ed03def337114e48822c8527bb}{init}(msgType, getInfoFrom);
+\}
+\end{DoxyCode}
+\hypertarget{classSampleMoving_ad6989eb3ac1c3647b16eae588353272b}{\index{Sample\-Moving@{Sample\-Moving}!$\sim$\-Sample\-Moving@{$\sim$\-Sample\-Moving}}
+\index{$\sim$\-Sample\-Moving@{$\sim$\-Sample\-Moving}!SampleMoving@{Sample\-Moving}}
+\subsubsection[{$\sim$\-Sample\-Moving}]{\setlength{\rightskip}{0pt plus 5cm}Sample\-Moving\-::$\sim$\-Sample\-Moving (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classSampleMoving_ad6989eb3ac1c3647b16eae588353272b}
+
+
+Release the Sample\-Moving-\/object. 
+
+Reset the keyboard-\/settings for the terminal 
+
+Definition at line 22 of file Sample\-Moving.\-cpp.
+
+
+\begin{DoxyCode}
+\{
+    \textcolor{keywordtype}{int} kfd=0;\textcolor{comment}{//SDTIN\_FILEN0;}
+
+    tcsetattr(kfd, TCSANOW, &(\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_ada495f188f63cdcfef79f02ed3cce32b}{oldKeyboardIO}
+      ));  \textcolor{comment}{//restore terminal settings}
+\}
+\end{DoxyCode}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classSampleMoving_afa12c68ab6da0b3602d4e6adb19b6d35}{\index{Sample\-Moving@{Sample\-Moving}!gamepad\-Callback@{gamepad\-Callback}}
+\index{gamepad\-Callback@{gamepad\-Callback}!SampleMoving@{Sample\-Moving}}
+\subsubsection[{gamepad\-Callback}]{\setlength{\rightskip}{0pt plus 5cm}void Sample\-Moving\-::gamepad\-Callback (
+\begin{DoxyParamCaption}
+\item[{const sensor\-\_\-msgs\-::\-Joy}]{joymsg}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}}\label{classSampleMoving_afa12c68ab6da0b3602d4e6adb19b6d35}
+
+
+run every time, a new joy-\/message arrives from the connected gamepad or steering wheel. 
+
+As long as the velocity on both sides of the robot is unequal to zero the input with the keyboard is blocked.
+
+
+\begin{DoxyParams}{Parameters}
+{\em joymsg} & include all axes and button informations from the joy-\/input (gamepad or steering wheel) \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 146 of file Sample\-Moving.\-cpp.
+
+
+\begin{DoxyCode}
+\{
+    \textcolor{keywordtype}{double} targetSpeed[2] = \{0,0\};
+    \textcolor{keywordtype}{int} moving = \textcolor{keyword}{false};
+    \textcolor{keywordtype}{int} lastJoyControll = \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_abcbeb9363905012770950c4908a4e1aa}{joyControll}
+      ;
+    \textcolor{keywordtype}{int} lastGamepadMode = \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a1b3cbdffd2c270871b009022b1f65eb0}{gamepadMode}
+      ;
+    std::string padMode=\textcolor{stringliteral}{""};
+    std::string gamePadType=\textcolor{stringliteral}{""};
+    axesStruct axesRemap;
+
+    \textcolor{comment}{//init of axesRemap}
+    axesRemap.leftx = 0;
+    axesRemap.lefty = 0;
+    axesRemap.rightx = 0;
+    axesRemap.righty = 0;
+    axesRemap.switchButton = 0;
+    axesRemap.quickStopButton = 0;
+
+\textcolor{comment}{//----------Switching of interfaces--------------------------//}
+    \textcolor{keywordflow}{switch} (joymsg.axes.size()) \{
+        \textcolor{keywordflow}{case} 2: \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_abcbeb9363905012770950c4908a4e1aa}{joyControll}=\hyperlink{classSampleMoving_ad495d48e1ec2093a36601548bfad852da003251f50ad3e22d0ab96167b517d017}{wheel}
+      ;
+                axesRemap.lefty = joymsg.axes[1];
+                \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a14089eeff8e96683e056b50c6ae6a998}{ableToMove} = \textcolor{keyword}{true};
+                padMode = \textcolor{stringliteral}{"steering wheel with two pedals"};
+                gamePadType = \hyperlink{classSampleMoving_ad495d48e1ec2093a36601548bfad852da003251f50ad3e22d0ab96167b517d017}{wheel};
+                \textcolor{keywordflow}{break};
+        \textcolor{keywordflow}{case} 3: axesRemap.lefty=(joymsg.axes[1] - joymsg.axes[2])/2;
+                gamePadType = \hyperlink{classSampleMoving_ad495d48e1ec2093a36601548bfad852da003251f50ad3e22d0ab96167b517d017}{wheel};
+                padMode = \textcolor{stringliteral}{"steering wheel with two pedals"};
+                \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_abcbeb9363905012770950c4908a4e1aa}{joyControll}=\hyperlink{classSampleMoving_ad495d48e1ec2093a36601548bfad852da003251f50ad3e22d0ab96167b517d017}{wheel}
+      ;
+
+                \textcolor{keywordflow}{if} (\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a14089eeff8e96683e056b50c6ae6a998}{ableToMove} == \textcolor{keyword}{
+      false}) \{
+                    padMode = \textcolor{stringliteral}{"steering wheel with two pedals - but not
+       initialed (press both pedals once)"};
+                    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_abcbeb9363905012770950c4908a4e1aa}{joyControll}=\hyperlink{classSampleMoving_ad495d48e1ec2093a36601548bfad852da4ba2232b260456be1ed027bb3bde6b0d}{noJoy}
+      ;
+                \}
+                \textcolor{keywordflow}{if} (joymsg.axes[1] == -1 && joymsg.axes[2] == -1) \{
+                    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a14089eeff8e96683e056b50c6ae6a998}{ableToMove} = \textcolor{keyword}{true};
+                \}
+                \textcolor{comment}{//ROS\_ERROR("xvel: %.4f, axes1: %.4f, axes2: %.4f", xVelocity,
+       joymsg.axes[1], joymsg.axes[2]);}
+                \textcolor{keywordflow}{break};
+        \textcolor{keywordflow}{case} 4: \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_abcbeb9363905012770950c4908a4e1aa}{joyControll} = \hyperlink{classSampleMoving_ad495d48e1ec2093a36601548bfad852dafd942ead788c486efb6c26363e68acff}{gamePad}
+      ;
+                gamePadType = \textcolor{stringliteral}{"normal Gamepad"};
+                axesRemap.leftx = joymsg.axes[0];
+                axesRemap.lefty = joymsg.axes[1];
+                axesRemap.rightx = joymsg.axes[2];
+                axesRemap.righty = joymsg.axes[3];
+                axesRemap.switchButton = joymsg.buttons[7];
+                \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a14089eeff8e96683e056b50c6ae6a998}{ableToMove} = \textcolor{keyword}{true};
+                \textcolor{keywordflow}{break};
+        \textcolor{keywordflow}{case} 6: \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_abcbeb9363905012770950c4908a4e1aa}{joyControll} = \hyperlink{classSampleMoving_ad495d48e1ec2093a36601548bfad852dafd942ead788c486efb6c26363e68acff}{gamePad}
+      ;
+                gamePadType = \textcolor{stringliteral}{"Logitech F710 DirectInput"};
+                axesRemap.leftx = joymsg.axes[0];
+                axesRemap.lefty = joymsg.axes[1];
+                axesRemap.rightx = joymsg.axes[2];
+                axesRemap.righty = joymsg.axes[3];
+                axesRemap.switchButton = joymsg.buttons[5];
+                axesRemap.quickStopButton = joymsg.buttons[2];
+                \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a14089eeff8e96683e056b50c6ae6a998}{ableToMove} = \textcolor{keyword}{true};
+                \textcolor{keywordflow}{break};
+        \textcolor{keywordflow}{case} 8: \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_abcbeb9363905012770950c4908a4e1aa}{joyControll} = \hyperlink{classSampleMoving_ad495d48e1ec2093a36601548bfad852dafd942ead788c486efb6c26363e68acff}{gamePad}
+      ;
+                gamePadType = \textcolor{stringliteral}{"Logitech F710 XInput"};
+                axesRemap.leftx = joymsg.axes[0];
+                axesRemap.lefty = joymsg.axes[1];
+                axesRemap.rightx = joymsg.axes[3];
+                axesRemap.righty = joymsg.axes[4];
+                axesRemap.switchButton = joymsg.buttons[5];
+                axesRemap.quickStopButton = joymsg.buttons[1];
+                \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a14089eeff8e96683e056b50c6ae6a998}{ableToMove} = \textcolor{keyword}{true};
+                \textcolor{keywordflow}{break};
+    \}
+
+    \textcolor{comment}{//switching of gamepad-modes}
+    \textcolor{keywordflow}{if} (axesRemap.leftx != 0 || axesRemap.lefty != 0 || axesRemap.rightx != 0 
+      || axesRemap.righty != 0) \{moving = \textcolor{keyword}{true};\}
+
+    \textcolor{keywordflow}{if} (\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_abcbeb9363905012770950c4908a4e1aa}{joyControll} == \hyperlink{classSampleMoving_ad495d48e1ec2093a36601548bfad852dafd942ead788c486efb6c26363e68acff}{gamePad}
+       && axesRemap.switchButton == 1  && moving == \textcolor{keyword}{false}) \{
+        \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a1b3cbdffd2c270871b009022b1f65eb0}{gamepadMode} = (\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{
+      sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a1b3cbdffd2c270871b009022b1f65eb0}{gamepadMode} + 1) % 3;
+
+        \textcolor{keywordflow}{switch} (\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a1b3cbdffd2c270871b009022b1f65eb0}{gamepadMode}) \{
+            \textcolor{keywordflow}{case} \hyperlink{classSampleMoving_ad45933bb8e660772ea25747d3446bd8aaf949a715587ed74b5cb1f8199e3f369d}{oneStick}:  padMode = \textcolor{stringliteral}{"oneStick: left Stick controls
+       the robot (back- & forward + left & right)"};
+                            \textcolor{keywordflow}{break};
+            \textcolor{keywordflow}{case} \hyperlink{classSampleMoving_ad45933bb8e660772ea25747d3446bd8aa34ec1e09ac95890b7840157db35fe828}{twoStick}:  padMode = \textcolor{stringliteral}{"twoStick: left Stick back- and
+       forward; right stick left and right"};
+                            \textcolor{keywordflow}{break};
+            \textcolor{keywordflow}{case} \hyperlink{classSampleMoving_ad45933bb8e660772ea25747d3446bd8aaa424c4ac1573cab2407925cf755474ba}{tankStick}: padMode = \textcolor{stringliteral}{"tankStick: left stick = left
+       side; right stick = right side"};
+                            \textcolor{keywordflow}{break};
+        \}
+    \}
+
+    \textcolor{comment}{//output new mode and interface}
+    \textcolor{keywordflow}{if}( lastJoyControll != \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_abcbeb9363905012770950c4908a4e1aa}{joyControll}
+       || lastGamepadMode != \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a1b3cbdffd2c270871b009022b1f65eb0}{gamepadMode}) \{
+        ROS\_ERROR(\textcolor{stringliteral}{"change humanInterface mode: (%s) %s (Count of Axis: %i)"}, 
+      gamePadType.c\_str(), padMode.c\_str(), joymsg.axes.size());
+    \}
+
+\textcolor{comment}{//----------Changing of Speed depending on mode---------------//}
+    \textcolor{keywordflow}{if} (\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a14089eeff8e96683e056b50c6ae6a998}{ableToMove} == \textcolor{keyword}{true}) \{
+        \textcolor{keywordtype}{double} Ratio;   \textcolor{comment}{//pretend against values higher 1}
+        \textcolor{keywordtype}{float} r\_min = 0.3, r\_delta = 1; \textcolor{comment}{//in meter - wheel}
+        \textcolor{keywordtype}{double} sideShift = 0, radius;   \textcolor{comment}{//wheel}
+
+        \textcolor{keywordflow}{switch} (\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_abcbeb9363905012770950c4908a4e1aa}{joyControll}) \{
+            \textcolor{keywordflow}{case} \hyperlink{classSampleMoving_ad495d48e1ec2093a36601548bfad852dafd942ead788c486efb6c26363e68acff}{gamePad}:
+                \textcolor{keywordflow}{switch} (\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a1b3cbdffd2c270871b009022b1f65eb0}{gamepadMode}) 
+      \{
+                    \textcolor{keywordflow}{case} \hyperlink{classSampleMoving_ad45933bb8e660772ea25747d3446bd8aaf949a715587ed74b5cb1f8199e3f369d}{oneStick}: \textcolor{comment}{//left Stick controls the robot
+       (back- & forward + left & right)}
+                        Ratio = fabs(axesRemap.lefty) + fabs(axesRemap.leftx);
+                        \textcolor{keywordflow}{if} (Ratio < 1) \{Ratio = 1;\}
+                        targetSpeed[left] = (axesRemap.lefty - axesRemap.leftx)
+       / Ratio;
+                        targetSpeed[right] =(axesRemap.lefty + axesRemap.leftx)
+       / Ratio;
+                        \textcolor{keywordflow}{break};
+                    \textcolor{keywordflow}{case} \hyperlink{classSampleMoving_ad45933bb8e660772ea25747d3446bd8aa34ec1e09ac95890b7840157db35fe828}{twoStick}:  \textcolor{comment}{//left Stick back- and forward;
+       right stick left and right}
+                        Ratio = fabs(axesRemap.lefty) + fabs(axesRemap.rightx);
+                        \textcolor{keywordflow}{if} (Ratio < 1) \{Ratio = 1;\}
+                        targetSpeed[left] = (axesRemap.lefty - axesRemap.rightx
+      ) / Ratio;
+                        targetSpeed[right] =(axesRemap.lefty + axesRemap.rightx
+      ) / Ratio;
+                        \textcolor{keywordflow}{break};
+                    \textcolor{keywordflow}{case} \hyperlink{classSampleMoving_ad45933bb8e660772ea25747d3446bd8aaa424c4ac1573cab2407925cf755474ba}{tankStick}:    \textcolor{comment}{//left stick=left side; right
+       stick = right side}
+                        targetSpeed[left]=axesRemap.lefty;
+                        targetSpeed[right]=axesRemap.righty;
+                        \textcolor{keywordflow}{break};
+                \}
+                \textcolor{keywordflow}{break};
+            \textcolor{keywordflow}{case} \hyperlink{classSampleMoving_ad495d48e1ec2093a36601548bfad852da003251f50ad3e22d0ab96167b517d017}{wheel}:    \textcolor{comment}{//left stick only, because the steering wheel
+       got only two axes}
+                \textcolor{keywordflow}{if} (fabs(joymsg.axes[0]) > 0.001) \{ \textcolor{comment}{//get radius and depending
+       on it the delta between both sides}
+                    radius = ( r\_min + r\_delta * (1 - fabs(joymsg.axes[0])) ) *
+       \hyperlink{classSampleMoving_a0b5fbcfe6d0bf2d3de142758089f560b}{sign}(joymsg.axes[0]);
+                    sideShift = \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a72168d31106a7f5e12c2eb303a487515}{axisLength}
+       * 0.5 / radius;
+                \}
+                \textcolor{keywordflow}{if} ( ( fabs(axesRemap.lefty) * (1 + fabs(sideShift)) ) > 1) \{\textcolor{comment}{//
+      prevent against values greater 1 or less -1}
+                    axesRemap.lefty = 1 / (1 + fabs(sideShift)) * \hyperlink{classSampleMoving_a0b5fbcfe6d0bf2d3de142758089f560b}{sign}(
+      axesRemap.lefty);
+                \}
+                \textcolor{comment}{//ROS\_ERROR("xVelocity: %.4lf & sideShift: %.4lf", xVelocity,
+       sideShift);}
+                targetSpeed[left] = axesRemap.lefty * (1 - sideShift);
+                targetSpeed[right]= axesRemap.lefty * (1 + sideShift);
+                \textcolor{keywordflow}{break};
+        \}\textcolor{comment}{//end switch joyControll}
+    \}\textcolor{comment}{//end if ableToMove}
+
+    \textcolor{comment}{//ROS\_ERROR("targetSpeed\_left: %.4lf & targetSpeed\_right: %.4lf",
+       targetSpeed[left], targetSpeed[right]);}
+
+    \textcolor{keywordtype}{double} smoothVeloLeft = targetSpeed[left], smoothVeloRight = targetSpeed[
+      right];
+    \textcolor{comment}{//smoothVelocity(targetSpeed, &smoothVeloLeft, &smoothVeloRight,
+       sampleMovingSet.SpeedStepSize); //changes will only take effect with new joy-Messages}
+    ROS\_ERROR(\textcolor{stringliteral}{"[gamepad] left: %.2f & right: %.2f"}, smoothVeloLeft, 
+      smoothVeloRight);
+
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_aa1245c04ef0560d0192ff60ef7daace8}{joyInUse} = ( fabs(smoothVeloLeft) < 
+      0.001 && fabs(smoothVeloRight) < 0.001 ) ? 0 : 1;
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a1fd52fce6a806d0ee764867ab142b255}{targetVelocity}[left] = 
+      smoothVeloLeft;
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a1fd52fce6a806d0ee764867ab142b255}{targetVelocity}[right] = 
+      smoothVeloRight;
+\}
+\end{DoxyCode}
+\hypertarget{classSampleMoving_a822882ed03def337114e48822c8527bb}{\index{Sample\-Moving@{Sample\-Moving}!init@{init}}
+\index{init@{init}!SampleMoving@{Sample\-Moving}}
+\subsubsection[{init}]{\setlength{\rightskip}{0pt plus 5cm}void Sample\-Moving\-::init (
+\begin{DoxyParamCaption}
+\item[{int}]{msg\-Type, }
+\item[{int}]{get\-Info\-From}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}}\label{classSampleMoving_a822882ed03def337114e48822c8527bb}
+
+
+set all starting values -\/ Including some values from the Parameter-\/\-Server and all R\-O\-S-\/\-Components (timer, publisher and subscriber.) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg\-Type} & the way a velocity-\/message should be published (S\-I, cmd\-\_\-vel, ...) \\
+\hline
+{\em get\-Info\-From} & from which source the velocity-\/messages should be generated (human\-Interface or sine) \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 30 of file Sample\-Moving.\-cpp.
+
+
+\begin{DoxyCode}
+\{
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a5e6f9645c99c0b227827d8f69e0eaa3f}{epos2MPS} = \hyperlink{classSampleMoving_aea05328d2394f244adba6fa37e3912d9}{roshandle}.
+      advertise<epos2\_control::velocity>(\textcolor{stringliteral}{"epos2\_MPS\_left\_right"}, 1000);
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a5029964881beda76675cce0dd7a3d21f}{epos2Twist} = \hyperlink{classSampleMoving_aea05328d2394f244adba6fa37e3912d9}{roshandle}.
+      advertise<geometry\_msgs::Twist>(\textcolor{stringliteral}{"cmd\_vel"}, 1000);
+
+    ros::param::get(\textcolor{stringliteral}{"/epos2\_control/max\_mps"}, \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.
+      \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a293fb79eebdf2c0f45aa196070391c82}{maxMPS});
+    ros::param::get(\textcolor{stringliteral}{"/epos2\_control/wheelBase"}, \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.
+      \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a9606973b8c9b90b8dc360855397505f9}{wheelBase});
+    ros::param::get(\textcolor{stringliteral}{"/epos2\_control/axisLength"}, \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}
+      .\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a72168d31106a7f5e12c2eb303a487515}{axisLength});
+    ros::param::get(\textcolor{stringliteral}{"/epos2\_control/wheelPerimeter"}, \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}
+      .\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a3c927853f6d6514e45fb40e0f4c0b783}{wheelPerimeter});
+
+    \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=left; i<=right; i++) \{ \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.
+      \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a1fd52fce6a806d0ee764867ab142b255}{targetVelocity}[i] = 0; \}  \textcolor{comment}{//starting speed}
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a14089eeff8e96683e056b50c6ae6a998}{ableToMove} = \textcolor{keyword}{false};    \textcolor{comment}{//only for
+       3-axis wheel against bad init}
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_afa71f7ba92e0214107179417d59aa7d6}{sineCurrentAngle} = 42;
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_abcbeb9363905012770950c4908a4e1aa}{joyControll}=\hyperlink{classSampleMoving_ad495d48e1ec2093a36601548bfad852da4ba2232b260456be1ed027bb3bde6b0d}{noJoy};
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a1b3cbdffd2c270871b009022b1f65eb0}{gamepadMode} = \hyperlink{classSampleMoving_ad45933bb8e660772ea25747d3446bd8aa34ec1e09ac95890b7840157db35fe828}{twoStick};
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_aa1245c04ef0560d0192ff60ef7daace8}{joyInUse}=0;
+
+    \textcolor{keywordflow}{if} (msgType == \hyperlink{classSampleMoving_a68852e46a4c2887978990a7dd92bc66eafa273e9ac9cc895eb7a6cb70f55ff19c}{noMsg}) \{
+        ROS\_ERROR(\textcolor{stringliteral}{"No valid Message Type given to the epos2\_talker. Use the
+       argument \(\backslash\)"msgType:=\(\backslash\)" (default is \(\backslash\)"SI\(\backslash\)").\(\backslash\)nPossible Message Types are: cmdVel;
+       SI; navStack; onlyTF. msgType will be set to default."});
+        \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_af9c784abc287cfcfc6df641c99b52c47}{msgType} = \hyperlink{classSampleMoving_a68852e46a4c2887978990a7dd92bc66ea4875b4f467dbf540a6bf9f93b182fcd2}{SI};
+    \} \textcolor{keywordflow}{else} \{
+        \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_af9c784abc287cfcfc6df641c99b52c47}{msgType} = msgType;
+    \}
+
+    \textcolor{comment}{/*if (msgType == navStack) \{}
+\textcolor{comment}{        while(!action.waitForServer(ros::Duration(5.0)))\{ ROS\_INFO("Waiting for
+       the move\_base action server to come up"); \}}
+\textcolor{comment}{    \}*/}
+
+    \hyperlink{classSampleMoving_aeb90b5d883a76dfee266d55b81a8e671}{keyboardInit}();
+
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a240644f39badda2df91ce13a783e29db}{epos2SetSpeedTimer} = 
+      \hyperlink{classSampleMoving_aea05328d2394f244adba6fa37e3912d9}{roshandle}.createTimer(ros::Rate(\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.
+      \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a6e0c54b02f6c570887fb9026388feb30}{refreshRate}), &\hyperlink{classSampleMoving_a1e43a9772d305ba33a96dc688efda406}{SampleMoving::publishSpeed},
+       \textcolor{keyword}{this});
+
+    ROS\_ERROR(\textcolor{stringliteral}{"[Talker] maxMPS: %.3f, speedStep: %.3f and speedUpdateRate: %.3f
+      "}, \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a293fb79eebdf2c0f45aa196070391c82}{maxMPS}, \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.
+      \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a7149b75955e1f42194433bc451688da5}{SpeedStepSize} , \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a6e0c54b02f6c570887fb9026388feb30}{refreshRate}
+      );
+    ROS\_ERROR(\textcolor{stringliteral}{"[Talker] wheelBase: %.4lf, axisLength: %.4lf, wheelPerimeter:
+       %.4lf"}, \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a9606973b8c9b90b8dc360855397505f9}{wheelBase}, \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}
+      .\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a72168d31106a7f5e12c2eb303a487515}{axisLength}, \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a3c927853f6d6514e45fb40e0f4c0b783}{wheelPerimeter}
+      );
+
+
+    \textcolor{comment}{//start the callbacks depending on input}
+    \textcolor{keywordflow}{if} (getInfoFrom == \hyperlink{classSampleMoving_a41123bbf6a4408e82424c92a414fa524a40b19ec7388083907df9c6d5284e89cd}{sinus}) \{
+        \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a10791b15fe90cef7888ae50740d871c3}{sineTimer} = \hyperlink{classSampleMoving_aea05328d2394f244adba6fa37e3912d9}{roshandle}.
+      createTimer(ros::Rate(\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a6e0c54b02f6c570887fb9026388feb30}{refreshRate}), &
+      \hyperlink{classSampleMoving_aa573ef15d611d47b7510d49a1bec1ecd}{SampleMoving::sineCallback}, \textcolor{keyword}{this});
+    \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (getInfoFrom == \hyperlink{classSampleMoving_a41123bbf6a4408e82424c92a414fa524a965c7cf26ddac600016e6d8e003bb70c}{humanInterface}) \{
+        \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a792129ba4ea06e5aa6993f82e0ce5d7b}{keyboardTimer} = \hyperlink{classSampleMoving_aea05328d2394f244adba6fa37e3912d9}{roshandle}
+      .createTimer(ros::Rate(\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a6e0c54b02f6c570887fb9026388feb30}{refreshRate}), &
+      \hyperlink{classSampleMoving_a83fa32ef4b2ccfc7ae7a43629adf0d5c}{SampleMoving::keyboardCallback}, \textcolor{keyword}{this});
+        \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a0f3fc50e06f462a7a1e88053be100054}{gamepad\_sub} = \hyperlink{classSampleMoving_aea05328d2394f244adba6fa37e3912d9}{roshandle}
+      .subscribe(\textcolor{stringliteral}{"joy"}, 1000, &\hyperlink{classSampleMoving_afa12c68ab6da0b3602d4e6adb19b6d35}{SampleMoving::gamepadCallback}
+      , \textcolor{keyword}{this});
+    \} \textcolor{keywordflow}{else} \{
+        ROS\_ERROR(\textcolor{stringliteral}{"No valid command-source given to the epos2\_talker.\(\backslash\)nUse the
+       argument \(\backslash\)"input:=\(\backslash\)" (default is \(\backslash\)"humanInterface\(\backslash\)"). Possible sources are:
+       humanInterface; sinus"});
+    \}
+\}
+\end{DoxyCode}
+\hypertarget{classSampleMoving_a83fa32ef4b2ccfc7ae7a43629adf0d5c}{\index{Sample\-Moving@{Sample\-Moving}!keyboard\-Callback@{keyboard\-Callback}}
+\index{keyboard\-Callback@{keyboard\-Callback}!SampleMoving@{Sample\-Moving}}
+\subsubsection[{keyboard\-Callback}]{\setlength{\rightskip}{0pt plus 5cm}void Sample\-Moving\-::keyboard\-Callback (
+\begin{DoxyParamCaption}
+\item[{const ros\-::\-Timer\-Event \&}]{event}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}}\label{classSampleMoving_a83fa32ef4b2ccfc7ae7a43629adf0d5c}
+
+
+try to catch a key from the input-\/terminal and set the velocity values according to this key (zero if no key is pressed). 
+
+Only the keys W, S, A, D, Q and E will set a velocity unequal to zero. Only one key coudl't be recognized at once. The velocity will only be set when no input from a joy-\/input (gamepad or steering wheel) exist. If a velocity is set, \hyperlink{classSampleMoving_ac7ba11bc1bd16a55bc217079d2f5b963}{smooth\-Velocity()} will be called to prevent from (too) big velocity-\/steps.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & contains some time values according to the event \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 328 of file Sample\-Moving.\-cpp.
+
+
+\begin{DoxyCode}
+\{
+    \textcolor{keyword}{struct }timeval timeForKeys;
+    fd\_set rfds;
+    \textcolor{keywordtype}{char} latestChar[10];
+    \textcolor{keywordtype}{int} keyPressed=0, returnBit;
+    \textcolor{keywordtype}{double} targetSpeed[2] = \{0,0\};
+    \textcolor{keywordtype}{double} smoothVeloLeft = 0, smoothVeloRight = 0;
+
+    FD\_ZERO(&rfds);
+    FD\_SET(0, &rfds);
+    memcpy(&timeForKeys, &(\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a4d960897101facc5a4d0e0998d68728e}{timeForKeys}
+      ), \textcolor{keyword}{sizeof}(timeval)); \textcolor{comment}{//set time}
+
+    returnBit = select(1, &rfds, NULL, NULL, &timeForKeys); \textcolor{comment}{//wait for Key}
+
+    \textcolor{keywordflow}{if}(returnBit > 0)
+    \{
+        \textcolor{keywordflow}{if} (read(0, &latestChar, 5) >= 0) \{
+            \textcolor{comment}{//ROS\_INFO("last char: %s", latestChar);}
+
+            \textcolor{keywordflow}{switch}(latestChar[0]) \{
+            \textcolor{keywordflow}{case} KEYCODE\_W: targetSpeed[left] = 1;
+                            targetSpeed[right]= 1;
+                            \textcolor{keywordflow}{break};
+            \textcolor{keywordflow}{case} KEYCODE\_S: targetSpeed[left] = -1;
+                            targetSpeed[right]= -1;
+                            \textcolor{keywordflow}{break};
+            \textcolor{keywordflow}{case} KEYCODE\_A: targetSpeed[left] = -1;
+                            targetSpeed[right]= 1;
+                            \textcolor{keywordflow}{break};
+            \textcolor{keywordflow}{case} KEYCODE\_D: targetSpeed[left] = 1;
+                            targetSpeed[right]= -1;
+                            \textcolor{keywordflow}{break};
+            \textcolor{keywordflow}{case} KEYCODE\_Q: targetSpeed[left] = 0.5;
+                            targetSpeed[right]= 1;
+                            \textcolor{keywordflow}{break};
+            \textcolor{keywordflow}{case} KEYCODE\_E: targetSpeed[left] = 1;
+                            targetSpeed[right]= 0.5;
+                            \textcolor{keywordflow}{break};
+            \}
+        \}
+    \}
+
+    \textcolor{keywordflow}{if} (\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_abcbeb9363905012770950c4908a4e1aa}{joyControll} == \hyperlink{classSampleMoving_ad495d48e1ec2093a36601548bfad852da4ba2232b260456be1ed027bb3bde6b0d}{noJoy} || 
+      \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_aa1245c04ef0560d0192ff60ef7daace8}{joyInUse} == 0) \{
+        \hyperlink{classSampleMoving_ac7ba11bc1bd16a55bc217079d2f5b963}{smoothVelocity}(targetSpeed, &smoothVeloLeft, &
+      smoothVeloRight, \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a7149b75955e1f42194433bc451688da5}{SpeedStepSize}, 1);
+        ROS\_ERROR(\textcolor{stringliteral}{"[keyboard] left: %.2f & right: %.2f"}, smoothVeloLeft, 
+      smoothVeloRight);
+        \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a1fd52fce6a806d0ee764867ab142b255}{targetVelocity}[left] = 
+      smoothVeloLeft;
+        \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a1fd52fce6a806d0ee764867ab142b255}{targetVelocity}[right] = 
+      smoothVeloRight;
+    \}
+\}
+\end{DoxyCode}
+\hypertarget{classSampleMoving_aeb90b5d883a76dfee266d55b81a8e671}{\index{Sample\-Moving@{Sample\-Moving}!keyboard\-Init@{keyboard\-Init}}
+\index{keyboard\-Init@{keyboard\-Init}!SampleMoving@{Sample\-Moving}}
+\subsubsection[{keyboard\-Init}]{\setlength{\rightskip}{0pt plus 5cm}void Sample\-Moving\-::keyboard\-Init (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}}\label{classSampleMoving_aeb90b5d883a76dfee266d55b81a8e671}
+
+
+Set the terminal to catch the keys for driving. 
+
+Also calculate the time-\/values (seconds and microsecond) from the refresh\-Rate. 
+
+Definition at line 299 of file Sample\-Moving.\-cpp.
+
+
+\begin{DoxyCode}
+\{
+    \textcolor{keywordtype}{long} sec, usec;
+
+    \textcolor{comment}{//------set Terminal------------------------------//}
+    \textcolor{keywordtype}{int} kfd=0;\textcolor{comment}{//SDTIN\_FILEN0;}
+    \textcolor{keyword}{struct }termios new\_io;
+
+    tcgetattr( kfd, &(\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_ada495f188f63cdcfef79f02ed3cce32b}{oldKeyboardIO}
+      ) );
+    memcpy(&new\_io, &(\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_ada495f188f63cdcfef79f02ed3cce32b}{oldKeyboardIO}
+      ), \textcolor{keyword}{sizeof}(\textcolor{keyword}{struct} termios));
+    new\_io.c\_lflag &=~ (ICANON | ECHO);
+    new\_io.c\_cc[VEOL] = 1;
+    new\_io.c\_cc[VEOF] = 2;
+    tcsetattr(kfd, TCSANOW, &new\_io);
+    \textcolor{comment}{//------ set Terminal end------------------------//}
+
+
+    \textcolor{keywordflow}{if} (\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a6e0c54b02f6c570887fb9026388feb30}{refreshRate} > 0.01) \{ \textcolor{comment}{//
+       calculate the time to wait}
+        sec = (long) (1/\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a6e0c54b02f6c570887fb9026388feb30}{refreshRate});
+        usec = ((long) (1000000/\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a6e0c54b02f6c570887fb9026388feb30}{refreshRate}
+      ))%1000000;
+    \} \textcolor{keywordflow}{else} \{
+        sec = 100;
+        usec = 0;
+    \}
+
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a4d960897101facc5a4d0e0998d68728e}{timeForKeys}.tv\_sec = sec;
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a4d960897101facc5a4d0e0998d68728e}{timeForKeys}.tv\_usec = usec;
+\}
+\end{DoxyCode}
+\hypertarget{classSampleMoving_a40aff4fa58009d08161ce9720c0ea4ef}{\index{Sample\-Moving@{Sample\-Moving}!next\-To\-Zero@{next\-To\-Zero}}
+\index{next\-To\-Zero@{next\-To\-Zero}!SampleMoving@{Sample\-Moving}}
+\subsubsection[{next\-To\-Zero}]{\setlength{\rightskip}{0pt plus 5cm}double Sample\-Moving\-::next\-To\-Zero (
+\begin{DoxyParamCaption}
+\item[{double}]{arg1, }
+\item[{double}]{arg2}
+\end{DoxyParamCaption}
+)}}\label{classSampleMoving_a40aff4fa58009d08161ce9720c0ea4ef}
+
+
+return the input-\/number with the smallest absolute value 
+
+
+\begin{DoxyParams}{Parameters}
+{\em arg1} & first input-\/number \\
+\hline
+{\em arg2} & second input-\/number \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 409 of file Sample\-Moving.\-cpp.
+
+
+\begin{DoxyCode}
+\{
+    \textcolor{keywordflow}{return} ( fabs(arg1) < fabs(arg2) )?arg1:arg2;
+\}
+\end{DoxyCode}
+\hypertarget{classSampleMoving_a1e43a9772d305ba33a96dc688efda406}{\index{Sample\-Moving@{Sample\-Moving}!publish\-Speed@{publish\-Speed}}
+\index{publish\-Speed@{publish\-Speed}!SampleMoving@{Sample\-Moving}}
+\subsubsection[{publish\-Speed}]{\setlength{\rightskip}{0pt plus 5cm}void Sample\-Moving\-::publish\-Speed (
+\begin{DoxyParamCaption}
+\item[{const ros\-::\-Timer\-Event \&}]{event}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}}\label{classSampleMoving_a1e43a9772d305ba33a96dc688efda406}
+
+
+publish with the defined refresh\-Rate new velocity-\/messages. 
+
+It's independent from the setting-\/functions -\/ only the values in sample\-Moving\-Set.\-target\-Velocity will be put in the right message-\/type.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & contains some time values according to the event \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 77 of file Sample\-Moving.\-cpp.
+
+
+\begin{DoxyCode}
+\{
+    \textcolor{keywordtype}{double} speedMPS[2], pos\_delta[2];
+
+        \textcolor{comment}{//get velocity in meter per second}
+    \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=left; i<=right; i++) \{ speedMPS[i] = \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}
+      .\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a1fd52fce6a806d0ee764867ab142b255}{targetVelocity}[i] * \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a293fb79eebdf2c0f45aa196070391c82}{maxMPS}; 
+      \}
+    \textcolor{comment}{//ROS\_ERROR("[Talker-Publish] targetSpeed\_left: %.4lf & targetSpeed\_right:
+       %.4lf", sampleMovingSet.targetVelocity[left],
+       sampleMovingSet.targetVelocity[right]);}
+
+        \textcolor{comment}{//publish current velocity in meter per second}
+    \textcolor{keywordflow}{if} (\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_af9c784abc287cfcfc6df641c99b52c47}{msgType} == \hyperlink{classSampleMoving_a68852e46a4c2887978990a7dd92bc66ea4875b4f467dbf540a6bf9f93b182fcd2}{SI}) \{
+        epos2\_control::velocity speed;
+        speed.left=speedMPS[left];
+        speed.right=speedMPS[right];
+        \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a5e6f9645c99c0b227827d8f69e0eaa3f}{epos2MPS}.publish(speed);
+    \}
+        \textcolor{comment}{//publish current velocity in a cmd\_vel message}
+    \textcolor{keywordflow}{if} (\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_af9c784abc287cfcfc6df641c99b52c47}{msgType} == \hyperlink{classSampleMoving_a68852e46a4c2887978990a7dd92bc66ea06732e1094ab62068d0edca312788d5c}{cmdVel}) \{
+        geometry\_msgs::Twist speedVector;
+        speedVector.linear.x = ( speedMPS[right] + speedMPS[left] ) * 0.5;
+        speedVector.linear.y=0;
+        speedVector.linear.z=0;
+        speedVector.angular.x=0;
+        speedVector.angular.y=0;
+        speedVector.angular.z=(speedMPS[right] - speedMPS[left]) / 
+      \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a72168d31106a7f5e12c2eb303a487515}{axisLength};
+        \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a5029964881beda76675cce0dd7a3d21f}{epos2Twist}.publish(speedVector
+      );
+    \}
+
+        \textcolor{comment}{//calculate current position depending on last position}
+    \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=left; i<=right; i++) \{ pos\_delta[i] = speedMPS[i] * (\textcolor{keyword}{event}.
+      current\_real - \textcolor{keyword}{event}.last\_real).toSec(); \}
+
+    \textcolor{keywordtype}{double} polar\_s  =(pos\_delta[right] + pos\_delta[left] ) * 0.5;
+    \textcolor{keywordtype}{double} polar\_theta=(pos\_delta[right] - pos\_delta[left]) / \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}
+      .\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a72168d31106a7f5e12c2eb303a487515}{axisLength};
+    \textcolor{keywordtype}{double} delta\_r = (polar\_theta == 0) ? polar\_s : (polar\_s / polar\_theta) * 
+      sin(polar\_theta/2) * 2;
+
+    \hyperlink{classSampleMoving_ab1781f18e06dc454ff2d65073f48e630}{pos}.\hyperlink{structSampleMoving_1_1odom_aeebbed807958096ac7a676affca10901}{now}.\hyperlink{structSampleMoving_1_1orientation_af6ec71c21c051419ecbbf62bf7e7fef3}{x} = \hyperlink{classSampleMoving_ab1781f18e06dc454ff2d65073f48e630}{pos}.\hyperlink{structSampleMoving_1_1odom_a5a4a6741b9b5e5fb93fa21d962606c17}{last}.\hyperlink{structSampleMoving_1_1orientation_af6ec71c21c051419ecbbf62bf7e7fef3}{x} + delta\_r * cos(polar\_theta/2 + \hyperlink{classSampleMoving_ab1781f18e06dc454ff2d65073f48e630}{pos}
+      .\hyperlink{structSampleMoving_1_1odom_a5a4a6741b9b5e5fb93fa21d962606c17}{last}.\hyperlink{structSampleMoving_1_1orientation_a3468c7e5138d21e92bdad18dbc4ce805}{theta});
+    \hyperlink{classSampleMoving_ab1781f18e06dc454ff2d65073f48e630}{pos}.\hyperlink{structSampleMoving_1_1odom_aeebbed807958096ac7a676affca10901}{now}.\hyperlink{structSampleMoving_1_1orientation_aefcbb80b73ad331a7fdbd57c41ff9c9a}{y} = \hyperlink{classSampleMoving_ab1781f18e06dc454ff2d65073f48e630}{pos}.\hyperlink{structSampleMoving_1_1odom_a5a4a6741b9b5e5fb93fa21d962606c17}{last}.\hyperlink{structSampleMoving_1_1orientation_aefcbb80b73ad331a7fdbd57c41ff9c9a}{y} + delta\_r * sin(polar\_theta/2 + \hyperlink{classSampleMoving_ab1781f18e06dc454ff2d65073f48e630}{pos}
+      .\hyperlink{structSampleMoving_1_1odom_a5a4a6741b9b5e5fb93fa21d962606c17}{last}.\hyperlink{structSampleMoving_1_1orientation_a3468c7e5138d21e92bdad18dbc4ce805}{theta});
+    \hyperlink{classSampleMoving_ab1781f18e06dc454ff2d65073f48e630}{pos}.\hyperlink{structSampleMoving_1_1odom_aeebbed807958096ac7a676affca10901}{now}.\hyperlink{structSampleMoving_1_1orientation_a3468c7e5138d21e92bdad18dbc4ce805}{theta} = \hyperlink{classSampleMoving_ab1781f18e06dc454ff2d65073f48e630}{pos}.\hyperlink{structSampleMoving_1_1odom_a5a4a6741b9b5e5fb93fa21d962606c17}{last}.\hyperlink{structSampleMoving_1_1orientation_a3468c7e5138d21e92bdad18dbc4ce805}{theta} + polar\_theta;
+
+    \textcolor{comment}{//copy new position to last position for next turn}
+    \hyperlink{classSampleMoving_ab1781f18e06dc454ff2d65073f48e630}{pos}.\hyperlink{structSampleMoving_1_1odom_a5a4a6741b9b5e5fb93fa21d962606c17}{last}.\hyperlink{structSampleMoving_1_1orientation_af6ec71c21c051419ecbbf62bf7e7fef3}{x} = \hyperlink{classSampleMoving_ab1781f18e06dc454ff2d65073f48e630}{pos}.\hyperlink{structSampleMoving_1_1odom_aeebbed807958096ac7a676affca10901}{now}.\hyperlink{structSampleMoving_1_1orientation_af6ec71c21c051419ecbbf62bf7e7fef3}{x};
+    \hyperlink{classSampleMoving_ab1781f18e06dc454ff2d65073f48e630}{pos}.\hyperlink{structSampleMoving_1_1odom_a5a4a6741b9b5e5fb93fa21d962606c17}{last}.\hyperlink{structSampleMoving_1_1orientation_aefcbb80b73ad331a7fdbd57c41ff9c9a}{y} = \hyperlink{classSampleMoving_ab1781f18e06dc454ff2d65073f48e630}{pos}.\hyperlink{structSampleMoving_1_1odom_aeebbed807958096ac7a676affca10901}{now}.\hyperlink{structSampleMoving_1_1orientation_aefcbb80b73ad331a7fdbd57c41ff9c9a}{y};
+    \hyperlink{classSampleMoving_ab1781f18e06dc454ff2d65073f48e630}{pos}.\hyperlink{structSampleMoving_1_1odom_a5a4a6741b9b5e5fb93fa21d962606c17}{last}.\hyperlink{structSampleMoving_1_1orientation_a3468c7e5138d21e92bdad18dbc4ce805}{theta} = \hyperlink{classSampleMoving_ab1781f18e06dc454ff2d65073f48e630}{pos}.\hyperlink{structSampleMoving_1_1odom_aeebbed807958096ac7a676affca10901}{now}.\hyperlink{structSampleMoving_1_1orientation_a3468c7e5138d21e92bdad18dbc4ce805}{theta};
+
+    \textcolor{comment}{//sending actionLib-msg for NavStack ...doesn't work by now on ros::groovy}
+    \textcolor{comment}{/*if (targetSpeed.publishMsgType == navStack) \{}
+\textcolor{comment}{        move\_base\_msgs::MoveBaseGoal goal;}
+\textcolor{comment}{}
+\textcolor{comment}{        goal.target\_pose.header.frame\_id = "base\_link";}
+\textcolor{comment}{        goal.target\_pose.header.stamp = ros::Time::now();}
+\textcolor{comment}{}
+\textcolor{comment}{        goal.target\_pose.pose.position.x = pos.now.x;}
+\textcolor{comment}{        goal.target\_pose.pose.position.y = pos.now.y;}
+\textcolor{comment}{        goal.target\_pose.pose.orientation.w = pos.now.theta;}
+\textcolor{comment}{}
+\textcolor{comment}{        //ROS\_ERROR("Sending goal");}
+\textcolor{comment}{        action.sendGoal(goal);}
+\textcolor{comment}{        action.waitForResult();}
+\textcolor{comment}{}
+\textcolor{comment}{        if(action.getState() != actionlib::SimpleClientGoalState::SUCCEEDED) \{}
+\textcolor{comment}{            ROS\_ERROR("The base failed to move for some reason.");}
+\textcolor{comment}{        \}}
+\textcolor{comment}{    \}*/}
+
+    \textcolor{comment}{//publish tf base\_link}
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a552f745710950b527f2f202e5ba8a8dc}{transform}.setOrigin( tf::Vector3(\hyperlink{classSampleMoving_ab1781f18e06dc454ff2d65073f48e630}{
+      pos}.\hyperlink{structSampleMoving_1_1odom_aeebbed807958096ac7a676affca10901}{now}.\hyperlink{structSampleMoving_1_1orientation_af6ec71c21c051419ecbbf62bf7e7fef3}{x}, \hyperlink{classSampleMoving_ab1781f18e06dc454ff2d65073f48e630}{pos}.\hyperlink{structSampleMoving_1_1odom_aeebbed807958096ac7a676affca10901}{now}.\hyperlink{structSampleMoving_1_1orientation_aefcbb80b73ad331a7fdbd57c41ff9c9a}{y}, 0.0) );
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a552f745710950b527f2f202e5ba8a8dc}{transform}.setRotation(
+      tf::Quaternion( 0,0, sin(\hyperlink{classSampleMoving_ab1781f18e06dc454ff2d65073f48e630}{pos}.\hyperlink{structSampleMoving_1_1odom_aeebbed807958096ac7a676affca10901}{now}.\hyperlink{structSampleMoving_1_1orientation_a3468c7e5138d21e92bdad18dbc4ce805}{theta}/2), cos(\hyperlink{classSampleMoving_ab1781f18e06dc454ff2d65073f48e630}{pos}.\hyperlink{structSampleMoving_1_1odom_aeebbed807958096ac7a676affca10901}{now}.\hyperlink{structSampleMoving_1_1orientation_a3468c7e5138d21e92bdad18dbc4ce805}{theta}/2) ));
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_ab6d337f9b046e91b2921bf4494102796}{tfBroad}.sendTransform(
+      tf::StampedTransform(\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a552f745710950b527f2f202e5ba8a8dc}{transform}, event.current\_real, \textcolor{stringliteral}{"
+      odom"}, \textcolor{stringliteral}{"talker\_base"}));
+\}
+\end{DoxyCode}
+\hypertarget{classSampleMoving_a0b5fbcfe6d0bf2d3de142758089f560b}{\index{Sample\-Moving@{Sample\-Moving}!sign@{sign}}
+\index{sign@{sign}!SampleMoving@{Sample\-Moving}}
+\subsubsection[{sign}]{\setlength{\rightskip}{0pt plus 5cm}int Sample\-Moving\-::sign (
+\begin{DoxyParamCaption}
+\item[{double}]{number, }
+\item[{int}]{zero\-Is\-Positiv = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}}\label{classSampleMoving_a0b5fbcfe6d0bf2d3de142758089f560b}
+
+
+return 1 for positive values and -\/1 for negative values. 
+
+if the input is 0 the return value will be 0 or 1 depending on the zero\-Is\-Positiv-\/\-Parameter
+
+
+\begin{DoxyParams}{Parameters}
+{\em number} & the input which should be check to his sign \\
+\hline
+{\em zero\-Is\-Positiv} & if it is set to 1 a input-\/zero will be become a output-\/one otherwise a output-\/zero \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 414 of file Sample\-Moving.\-cpp.
+
+
+\begin{DoxyCode}
+\{
+    \textcolor{keywordflow}{return} (number>0) ? 1 : (number<0) ? -1 : (zeroIsPositiv == 1) ? 1 : 0;
+\}
+\end{DoxyCode}
+\hypertarget{classSampleMoving_aa573ef15d611d47b7510d49a1bec1ecd}{\index{Sample\-Moving@{Sample\-Moving}!sine\-Callback@{sine\-Callback}}
+\index{sine\-Callback@{sine\-Callback}!SampleMoving@{Sample\-Moving}}
+\subsubsection[{sine\-Callback}]{\setlength{\rightskip}{0pt plus 5cm}void Sample\-Moving\-::sine\-Callback (
+\begin{DoxyParamCaption}
+\item[{const ros\-::\-Timer\-Event \&}]{event}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}}\label{classSampleMoving_aa573ef15d611d47b7510d49a1bec1ecd}
+
+
+publish with the defined refresh\-Rate new velocity-\/messages. 
+
+The velocity will change their values like a sine-\/function. An offset between left and right is possible with the value in sample\-Moving\-Set.\-sine\-Angle .
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & contains some time values according to the event \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 291 of file Sample\-Moving.\-cpp.
+
+
+\begin{DoxyCode}
+\{
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_afa71f7ba92e0214107179417d59aa7d6}{sineCurrentAngle}=(
+      \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_afa71f7ba92e0214107179417d59aa7d6}{sineCurrentAngle} + 1) % 360;
+
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a1fd52fce6a806d0ee764867ab142b255}{targetVelocity}[left]=sin(
+      \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_afa71f7ba92e0214107179417d59aa7d6}{sineCurrentAngle} * pi / 180);
+    \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a1fd52fce6a806d0ee764867ab142b255}{targetVelocity}[right]=sin( (
+      \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_afa71f7ba92e0214107179417d59aa7d6}{sineCurrentAngle}+\hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}
+      .\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_ad60b9d7d4202a20facc5f14707657366}{sineAngle}) * pi / 180);
+\}
+\end{DoxyCode}
+\hypertarget{classSampleMoving_ac7ba11bc1bd16a55bc217079d2f5b963}{\index{Sample\-Moving@{Sample\-Moving}!smooth\-Velocity@{smooth\-Velocity}}
+\index{smooth\-Velocity@{smooth\-Velocity}!SampleMoving@{Sample\-Moving}}
+\subsubsection[{smooth\-Velocity}]{\setlength{\rightskip}{0pt plus 5cm}void Sample\-Moving\-::smooth\-Velocity (
+\begin{DoxyParamCaption}
+\item[{double}]{input\-Velocity\mbox{[}2\mbox{]}, }
+\item[{double $\ast$}]{output\-Velocity\-Left, }
+\item[{double $\ast$}]{output\-Velocity\-Right, }
+\item[{double}]{speed\-Step\-Size = {\ttfamily 0.2}, }
+\item[{int}]{use\-Delta = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}}\label{classSampleMoving_ac7ba11bc1bd16a55bc217079d2f5b963}
+
+
+Prevent the velocity from higher steps than the speed\-Step\-Size according to the current velocity. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em input\-Velocity} & the wanted velocity for the left and right side \\
+\hline
+{\em output\-Velocity\-Left} & the smoothed velocity for the left side \\
+\hline
+{\em output\-Velocity\-Right} & the smoothed velocity for the right side \\
+\hline
+{\em speed\-Step\-Size} & the highest allowed difference for a new velocity according to the current velocity \\
+\hline
+{\em use\-Delta} & if zero the velocity of both side will not depending each other. Only for keyboard-\/input it should be set to one. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 379 of file Sample\-Moving.\-cpp.
+
+
+\begin{DoxyCode}
+\{
+    \textcolor{keywordtype}{double} deltaDelta = 0, speedDelta = 0, currentVelocity[2];
+    \textcolor{keywordtype}{int}  deltaSign = 0;
+    \textcolor{keywordtype}{double} outputVelocity[2] = \{0,0\};
+
+    \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=left; i<=right; i++) \{
+        currentVelocity[i] = \hyperlink{classSampleMoving_af9c7dc0be1c4197469fbfa7aa105f1cc}{sampleMovingSet}.\hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a1fd52fce6a806d0ee764867ab142b255}{targetVelocity}
+      [i];
+    \}
+
+    deltaDelta = (inputVelocity[left] - inputVelocity[right]) - (
+      currentVelocity[left] - currentVelocity[right]);
+    deltaDelta *= useDelta;
+
+    \textcolor{keywordflow}{if} (deltaDelta == 0) \{
+        \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=left; i<=right; i++) \{
+            speedDelta = inputVelocity[i] - currentVelocity[i];
+            deltaSign = \hyperlink{classSampleMoving_a0b5fbcfe6d0bf2d3de142758089f560b}{sign}(speedDelta, 1);
+            outputVelocity[i] = \hyperlink{classSampleMoving_a40aff4fa58009d08161ce9720c0ea4ef}{nextToZero}(deltaSign, currentVelocity
+      [i] + deltaSign*\hyperlink{classSampleMoving_a40aff4fa58009d08161ce9720c0ea4ef}{nextToZero}(speedStepSize, fabs(speedDelta)) );
+        \}
+    \} \textcolor{keywordflow}{else} \{
+        deltaSign = \hyperlink{classSampleMoving_a0b5fbcfe6d0bf2d3de142758089f560b}{sign}(deltaDelta, 1);
+        outputVelocity[left] = \hyperlink{classSampleMoving_a40aff4fa58009d08161ce9720c0ea4ef}{nextToZero}(deltaSign, currentVelocity[
+      left] + deltaSign * \hyperlink{classSampleMoving_a40aff4fa58009d08161ce9720c0ea4ef}{nextToZero}(speedStepSize, fabs(deltaDelta)/2) );
+        outputVelocity[right]= \hyperlink{classSampleMoving_a40aff4fa58009d08161ce9720c0ea4ef}{nextToZero}((-1)*deltaSign, 
+      currentVelocity[right] - deltaSign * \hyperlink{classSampleMoving_a40aff4fa58009d08161ce9720c0ea4ef}{nextToZero}(speedStepSize, fabs(deltaDelta)/2
+      ) );
+    \}
+
+     *outputVelocityLeft = outputVelocity[left];
+     *outputVelocityRight = outputVelocity[right];
+    \textcolor{comment}{//ROS\_ERROR("[keyboard] left: %.2f & right: %.2f", outputVelocity[left],
+       outputVelocity[right]);}
+\}
+\end{DoxyCode}
+
+
+\subsection{Field Documentation}
+\hypertarget{classSampleMoving_aea05328d2394f244adba6fa37e3912d9}{\index{Sample\-Moving@{Sample\-Moving}!roshandle@{roshandle}}
+\index{roshandle@{roshandle}!SampleMoving@{Sample\-Moving}}
+\subsubsection[{roshandle}]{\setlength{\rightskip}{0pt plus 5cm}ros\-::\-Node\-Handle Sample\-Moving\-::roshandle\hspace{0.3cm}{\ttfamily [private]}}}\label{classSampleMoving_aea05328d2394f244adba6fa37e3912d9}
+
+
+the handle on a R\-O\-S\-Node to open Timers, Subscribers, Publishers... 
+
+
+
+Definition at line 68 of file Sample\-Moving.\-h.
+
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+src/epos2\-\_\-control/src/Sample\-Moving.\-h\item 
+src/epos2\-\_\-control/src/Sample\-Moving.\-cpp\end{DoxyCompactItemize}

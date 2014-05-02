@@ -1,0 +1,7 @@
+<launch>
+
+	<include file="$(find epos2_control)/launch/epos2_parameter_r4.launch"/>
+	
+	<include file="$(find epos2_control)/launch/epos2_init_robot.launch"/>
+	
+</launch>

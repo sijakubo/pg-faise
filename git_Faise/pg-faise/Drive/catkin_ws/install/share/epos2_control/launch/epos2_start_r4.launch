@@ -1,0 +1,8 @@
+<launch>
+
+	<include file="$(find epos2_control)/launch/epos2_state_output.launch"/>
+	<include file="$(find epos2_control)/launch/epos2_init_r4.launch"/>
+	
+	<include file="$(find epos2_control)/launch/epos2_start_remote.launch"/>
+	
+</launch>
