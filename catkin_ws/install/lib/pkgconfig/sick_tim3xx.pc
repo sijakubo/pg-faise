@@ -1,0 +1,8 @@
+prefix=/home/pg/catkin_ws/install
+
+Name: sick_tim3xx
+Description: Description of sick_tim3xx
+Version: 0.0.1
+Cflags: -I/home/pg/catkin_ws/install/include -I/usr/include/libusb-1.0
+Libs: -L/home/pg/catkin_ws/install/lib -l:/usr/lib/i386-linux-gnu/libusb-1.0.so
+Requires: sensor_msgs

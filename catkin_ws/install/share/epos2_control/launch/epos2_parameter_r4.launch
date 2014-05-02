@@ -1,0 +1,30 @@
+<launch>
+	
+		<!--Limitation by the user; in meter per second-->
+	<arg name="max_mps" default="0.5"/>
+		
+	<group ns="epos2_control">
+		<!--Geometry of the Roboter in meter-->
+			<!--distance between the middle of the last and the first wheel on one side of the roboter-->
+		<param name="wheelBase" value="0.290" type="double"/>
+			<!--distance between both wheels on one axis-->
+		<param name="axisLength" value="0.420" type="double"/>
+			<!--perimeter of one wheel-->
+		<param name="wheelPerimeter" value="0.805" type="double"/>
+		
+			<!--set max Rotation per Minutes-->
+		<param name="max_mps" value="$(arg max_mps)" type="double"/>
+		
+		<param name="leftNodeNr" value="2" type="int"/>
+		<param name="rightNodeNr" value="1" type="int"/>
+		<param name="reverseLeft" value="0" type="int"/>
+		<param name="reverseRight" value="1" type="int"/>
+	</group>
+	
+	<arg name="laserX" default="0.185"/>
+	<arg name="laserY" default="0.0"/>
+	<arg name="laserZ" default="0.1"/>
+		
+	<node name="laser_to_base" pkg="tf" type="static_transform_publisher" args="$(arg laserX) $(arg laserY) $(arg laserZ) 0 0 0 base_link base_laser 100" />
+		
+</launch>

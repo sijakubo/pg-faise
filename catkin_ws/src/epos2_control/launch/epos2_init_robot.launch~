@@ -1,0 +1,17 @@
+<launch>
+
+	<node pkg="epos2_control" name="epos2_driver" type="epos2_driver" respawn="true">
+		<param name="port" value="USB0" />
+		<!--param name="port" value="/dev/ttyS0" /-->	
+		<param name="baud" value="1000000" />
+		<!--param name="baud" value="115200" /-->
+		<param name="timeout" value="750" />		
+	</node>
+	
+	<!--node name="sicklms_scan" pkg="sicktoolbox_wrapper" type="sicklms" respawn="false">
+		<param name="port" value="/dev/ttyS1" />
+		<param name="baud" value="38400" />
+		<param name="frame_id" value="/base_laser" />
+	</node-->
+
+</launch>
