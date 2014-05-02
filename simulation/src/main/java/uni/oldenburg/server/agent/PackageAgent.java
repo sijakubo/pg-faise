@@ -31,7 +31,7 @@ public class PackageAgent extends Agent {
 
 	private int conveyorID = 0;
 	private int szenarioID = 0;
-	private int rampType = 0;
+	private int rampType = -1;
 
 	private List<PackageData> lstPackage = new ArrayList<PackageData>();
 
@@ -48,7 +48,9 @@ public class PackageAgent extends Agent {
 
 			Conveyor myConveyor = (Conveyor) args[1];
 			conveyorID = myConveyor.getID();
-			rampType = ((ConveyorRamp) myConveyor).getRampType();
+			if (myConveyor instanceof ConveyorRamp) {
+				rampType = ((ConveyorRamp) myConveyor).getRampType();
+			}
 
 		}
 
@@ -60,9 +62,19 @@ public class PackageAgent extends Agent {
 		addBehaviour(new RemovePackageBehaviour(
 				MessageTemplate.MatchPerformative(MessageType.REMOVE_PACKAGE)));
 
-		// If it is an Exit, than add the Behaviour, which is used for requesting an Package for an existing Job
-		if (rampType == 2) {
-          addBehaviour(new SearchForPackageBehaviour(this,3000));
+		// If it is an Exit, than add the Behaviour, which is used for
+		// requesting an Package for an existing Job
+		if (rampType == ConveyorRamp.RAMP_EXIT) {
+			addBehaviour(new SearchForPackageBehaviour(this, 3000));
+		}
+
+		// If it is an Storage it should answer the request from its own
+		// Orderagent, who was asked by an exit, and check if a
+		// Package for the requested Package id is contained
+		if (rampType == ConveyorRamp.RAMP_STOREAGE) {
+			addBehaviour(new AnswerIfPackageIsContainedBehaviour(
+					MessageTemplate
+							.MatchPerformative(MessageType.CHECK_IF_PACKAGE_IS_STORED)));
 		}
 
 		String nickname = AgentHelper.getUniqueNickname(PackageAgent.NAME,
@@ -192,18 +204,25 @@ public class PackageAgent extends Agent {
 				// Get the Package Data
 				PackageData pData = currentAgent.lstPackage.get(index);
 
-				// Send the Message
-				ACLMessage msgPackageSearch = new ACLMessage(
-						MessageType.SEARCH_FOR_PACKAGE);
-				AgentHelper.addReceiver(msgPackageSearch, myAgent,
-						RampOrderAgent.NAME, currentAgent.conveyorID,
-						currentAgent.szenarioID);
-				try {
-					msgPackageSearch.setContentObject(pData);
-					send(msgPackageSearch);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				// Send the Message, if the Package is not reserved
+				if (!pData.isReserved()) {
+					ACLMessage msgPackageSearch = new ACLMessage(
+							MessageType.SEARCH_FOR_PACKAGE);
+					AgentHelper.addReceiver(msgPackageSearch, myAgent,
+							RampOrderAgent.NAME, currentAgent.conveyorID,
+							currentAgent.szenarioID);
+
+					if (Debugging.showInfoMessages)
+						logger.log(Level.INFO, myAgent.getLocalName()
+								+ " -> SEARCH_FOR_PACKAGE");
+
+					try {
+						msgPackageSearch.setContentObject(pData);
+						send(msgPackageSearch);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 
 			}
@@ -211,20 +230,76 @@ public class PackageAgent extends Agent {
 		}
 
 	}
-	
+
 	/**
-	 * Behaviour should receive the request from its Storage Orderagent and should search the list and look if the requested Package exists
-	 * and then answer the Orderagent
+	 * Behaviour should receive the request from its Storage Orderagent and
+	 * should search the list and look if the requested Package exists and then
+	 * answer the Orderagent
+	 * 
 	 * @author Raschid
 	 */
-	private class CheckIfPackageIsContainedBehaviour extends CyclicBehaviour {
+	private class AnswerIfPackageIsContainedBehaviour extends
+			CyclicReceiverBehaviour {
+
+		protected AnswerIfPackageIsContainedBehaviour(MessageTemplate mt) {
+			super(mt);
+			// TODO Auto-generated constructor stub
+		}
 
 		@Override
-		public void action() {
-			
-			
-		}	
-		
+		public void onMessage(ACLMessage msg) throws UnreadableException,
+				IOException {
+			// Receive the Request from Orderagent
+			PackageAgent currentAgent = (PackageAgent) myAgent;
+			PackageData searchedPackage = null;
+
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()
+						+ " -> RECEIVE_REQUEST_FROM_PACKAGEAGENT");
+
+			searchedPackage = (PackageData) msg.getContentObject();
+			// get the Package id
+			int id = searchedPackage.getPackageID();
+
+			// Check if it is contained at the first position
+			int size = currentAgent.lstPackage.size();
+			if (size >= 1) {
+				PackageData firstPositionPackage = currentAgent.lstPackage
+						.get(size - 1);
+				if (id == firstPositionPackage.getPackageID()) {
+					// Answer the Orderagent with Yes
+					ACLMessage msgAnswer = new ACLMessage(
+							MessageType.ANSWER_IF_PACKAGE_IS_CONTAINED);
+					msgAnswer.addUserDefinedParameter("answer_if_contained",
+							"Yes");
+					msgAnswer.setContentObject(searchedPackage);
+					msgAnswer.addReceiver(msg.getSender());
+					send(msgAnswer);
+
+				} else {
+					// Answer the Orderagent with No
+					ACLMessage msgAnswer = new ACLMessage(
+							MessageType.ANSWER_IF_PACKAGE_IS_CONTAINED);
+					msgAnswer.addUserDefinedParameter("answer_if_contained",
+							"No");
+					msgAnswer.setContentObject(searchedPackage);
+					msgAnswer.addReceiver(msg.getSender());
+					send(msgAnswer);
+
+				}
+			} else {
+				// Answer the Orderagent with No if there is no Package in the
+				// list
+				ACLMessage msgAnswer = new ACLMessage(
+						MessageType.ANSWER_IF_PACKAGE_IS_CONTAINED);
+				msgAnswer.addUserDefinedParameter("answer_if_contained", "No");
+				msgAnswer.setContentObject(searchedPackage);
+				msgAnswer.addReceiver(msg.getSender());
+				send(msgAnswer);
+			}
+
+		}
+
 	}
 
 }

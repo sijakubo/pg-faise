@@ -17,9 +17,9 @@ public class MessageType {
 	public final static int ASSIGN_JOB				   = 0x0A; // JobAgent
 	public final static int ASSIGN_VEHICLE_FOR_PACKAGE = 0x0B; // RampRouting @ VehicleRouting
 	public final static int SEARCH_FOR_PACKAGE = 0x0C; //PackageAgent (Exit) @ OrderAgent (EXIT)
-	public final static int CHECK_IF_PACKAGE_EXISTS = 0x0D; // OrderAgent(Exit) @ OrderAgent (Storage)
+	public final static int ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS = 0x0D; // OrderAgent(Exit) @ OrderAgent (Storage)
 	public final static int CHECK_IF_PACKAGE_IS_STORED = 0xE; // OrderAgent(Storage) @ PackageAgent (Storage)
-	public final static int CHECK_IF_PACKAGE_IS_CONTAINED = 0xE; // PackageAgent (Storage)@ OrderAgent(Storage) 
-	public final static int GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT = 0xF; // OrderAgent (EXIT) @ PackageAgent (Exit)
-	public final static int PACKAGEAGENT_RECEIVE__IF_PACKAGE_IS_STORED_OR_NOT = 0x10; // PackageAgent (Exit)
+	public final static int ANSWER_IF_PACKAGE_IS_CONTAINED = 0xE; // PackageAgent (Storage)@ OrderAgent(Storage) 	
+	public final static int GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT = 0xF; // OrderAgent (Storage) @ OrderAgent (Exit)
+	//public final static int SET_PACKAGE_RESERVED = 0x10; // Orderagent (Exit)
 }

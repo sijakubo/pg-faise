@@ -11,6 +11,7 @@ import jade.util.leap.Serializable;
 public class PackageData implements Serializable {
 	int packageID = 0;
 	int destinationID = 0;
+	boolean reserved=false;
 	
 	public PackageData() {};
 	
@@ -34,4 +35,17 @@ public class PackageData implements Serializable {
 	public void setDestinationID(int destinationID) {
 		this.destinationID = destinationID;
 	}
+	
+	public boolean isReserved(){
+		return this.reserved;
+	}
+	
+	public void setReserved(){
+		this.reserved=true;
+	}
+	
+	public void setUnReserved(){
+		this.reserved=false;
+	}
+	
 }
