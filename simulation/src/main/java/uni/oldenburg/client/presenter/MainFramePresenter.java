@@ -54,6 +54,7 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Random;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasText;
@@ -86,6 +87,10 @@ public class MainFramePresenter extends Presenter {
 	private boolean bSimulationStarted = false;
 	// server started simulation
 	private boolean bSimulationRunning = false;
+	
+	private int elapsedTimeSec = 0;
+	
+	Timer tmrJobStarter = null;
 	
 	Map<String, MenuItem> mapSimMenuItems = new HashMap<String, MenuItem>();
 	Map<String, MenuItem> mapJobMenuItems = new HashMap<String, MenuItem>();
@@ -937,12 +942,14 @@ public class MainFramePresenter extends Presenter {
 				if (anEvent instanceof SimStartedEvent) {
 					bSimulationRunning = true;
 					
-					if (Debugging.isDebugging) {
+					/*if (Debugging.isDebugging) {
 						Job myJob = new Job(0, 0, null);
 						agentPlatformService.addJob(currentSzenario.getId(), myJob, new EmptyAsyncCallback());
-					}
+					}*/
 					
 					display.log("Simulation started!");
+					
+					startJobTimer();
 					
 					return;
 				}
@@ -952,9 +959,44 @@ public class MainFramePresenter extends Presenter {
 					
 					display.log("Simulation stopped!");
 					
+					stopJobTimer();
+					
 					return;
 				}
 			}
 		});
+	}
+	
+	
+	public void startJobTimer() {
+		if (tmrJobStarter != null)
+			return;
+			
+		tmrJobStarter = new Timer() {
+			public void run() {
+				elapsedTimeSec += 1;
+				
+				if (lstJobs.size() < 1)
+					return;	
+				
+				Job pendingJob = lstJobs.getJob(0);
+				
+				if (elapsedTimeSec >= pendingJob.getTimestamp()) {
+					lstJobs.removeJob(pendingJob);
+					agentPlatformService.addJob(currentSzenario.getId(), pendingJob, new EmptyAsyncCallback());
+				}
+			}
+		};
+		
+		tmrJobStarter.scheduleRepeating(1000);
+		tmrJobStarter.run();
+	}
+	
+	public void stopJobTimer() {
+		if (tmrJobStarter == null)
+			return;
+		
+		tmrJobStarter.cancel();
+		tmrJobStarter = null;
 	}
 }

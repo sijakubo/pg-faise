@@ -185,12 +185,17 @@ public class JobAgent extends Agent {
 			ACLMessage msgInfo = new ACLMessage(MessageType.PACKAGE_SPACE_AVAILABLE);
 			msgInfo.setContentObject(currentPackage);
 			
-			switch(currentPackage.getDestinationID()) {
+			switch(currentPackage.getType()) {
 				case Job.INCOMING:
 					AgentHelper.addReceivers(msgInfo, lstRampIncoming);
 					break;
 				case Job.OUTGOING:
 					AgentHelper.addReceivers(msgInfo, lstRampOutgoing);
+					
+					/*for (AID myAID : lstRampOutgoing) {
+						logger.log(Level.INFO, myAID.toString());
+					}*/
+					
 					break;
 			}
 			
@@ -247,8 +252,6 @@ public class JobAgent extends Agent {
 				if(Debugging.showInfoMessages)
 					logger.log(Level.INFO, "Available Ramp Count: " + lstRampsWithSpace.size());
 				
-				rampsResponded = 0;
-				
 				int randomRamp = ((int)(Math.random() * 1000)) % lstRampsWithSpace.size();
 				
 				ACLMessage msgReply = new ACLMessage(MessageType.RESERVE_SPACE);
@@ -256,6 +259,9 @@ public class JobAgent extends Agent {
 				String target = lstRampsWithSpace.get(randomRamp).toString();
 				msgReply.addUserDefinedParameter("RampAID", target);
 				msgReply.setContentObject(pendingPackage);
+				
+				rampsResponded = 0;				
+				lstRampsWithSpace.clear();
 				
 				AgentHelper.addReceivers(msgReply, selectedList);
 				

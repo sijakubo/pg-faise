@@ -1,5 +1,6 @@
 package uni.oldenburg.server.agent.data;
 
+import uni.oldenburg.shared.model.Job;
 import jade.util.leap.Serializable;
 
 /**
@@ -11,12 +12,15 @@ import jade.util.leap.Serializable;
 public class PackageData implements Serializable {
 	int packageID = 0;
 	int destinationID = 0;
+	int type = -1; // IMCOMING = 0 | OUTGOING = 1
 	
 	public PackageData() {};
 	
 	public PackageData(int packageID, int destinationID) {
 		this.setPackageID(packageID);
 		this.setDestinationID(destinationID);
+		
+		this.type = destinationID == 0 ? Job.INCOMING : Job.OUTGOING;		
 	}
 	
 	public int getPackageID() {
@@ -33,5 +37,9 @@ public class PackageData implements Serializable {
 	
 	public void setDestinationID(int destinationID) {
 		this.destinationID = destinationID;
+	}
+	
+	public int getType() {
+		return this.type;
 	}
 }

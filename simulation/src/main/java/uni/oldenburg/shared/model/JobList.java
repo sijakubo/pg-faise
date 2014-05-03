@@ -13,6 +13,7 @@ import java.util.Random;
 @SuppressWarnings("serial")
 public class JobList implements Serializable {
 	public static final String TABLE_NAME = "joblist";
+	private static int lastTimestamp = 0;
 
 	private String name = "undefined";
 	private List<Job> jobList = new ArrayList<Job>();
@@ -33,11 +34,12 @@ public class JobList implements Serializable {
 		for (int i = 0; i < numberOfJobs; i++) {
 			int destinationId = (Math.random() < 0.5) ? 0 : -1;
 
-			int expectedValue = 500;
-			int standardDeviation = 100;
+			int expectedValue = 6;
+			int standardDeviation = 3;
 
-			int timestamp = (int) ((expectedValue + (standardDeviation * new Random().nextGaussian())) % 1000);
-
+			int timestamp = (lastTimestamp) + (int) ((expectedValue + (standardDeviation * new Random().nextGaussian())) % 1000);
+			lastTimestamp = timestamp;
+			
 			addJob(new Job(timestamp, destinationId, this));
 		}
 	}
