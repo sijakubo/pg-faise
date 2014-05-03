@@ -1,0 +1,1 @@
+/usr/bin/c++  -fPIC    -shared -Wl,-soname,libSampleMoving.so -o /home/pg/catkin_ws/devel/lib/libSampleMoving.so CMakeFiles/SampleMoving.dir/src/SampleMoving.cpp.o 

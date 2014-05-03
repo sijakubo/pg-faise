@@ -1,0 +1,103 @@
+\hypertarget{structparameterStruct}{\section{parameter\-Struct Struct Reference}
+\label{structparameterStruct}\index{parameter\-Struct@{parameter\-Struct}}
+}
+
+
+Structure for all values read from the ros\-::parmaeter-\/server.  
+
+
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{structparameterStruct_a8b79a2ace446a6d9aa4ac314b02f6506}{int \hyperlink{structparameterStruct_a8b79a2ace446a6d9aa4ac314b02f6506}{node} \mbox{[}2\mbox{]}}\label{structparameterStruct_a8b79a2ace446a6d9aa4ac314b02f6506}
+
+\begin{DoxyCompactList}\small\item\em internal Node\-Numbers of the E\-P\-O\-S2s \end{DoxyCompactList}\item 
+int \hyperlink{structparameterStruct_ab17c626ad31a539fcc209bab7a1eb58f}{reverse} \mbox{[}2\mbox{]}
+\begin{DoxyCompactList}\small\item\em defines the positive direction of the rotation. \end{DoxyCompactList}\item 
+\hypertarget{structparameterStruct_ac07338a2130f2361513289245146dfe0}{double \hyperlink{structparameterStruct_ac07338a2130f2361513289245146dfe0}{max\-Meter\-Per\-Second}}\label{structparameterStruct_ac07338a2130f2361513289245146dfe0}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}m/s\mbox{]} highest allowed velocity of the robot \end{DoxyCompactList}\item 
+double \hyperlink{structparameterStruct_acf8bcc9f3ae045e1618bf779f151305f}{wheel\-Base}
+\begin{DoxyCompactList}\small\item\em \mbox{[}m\mbox{]} distance between the middle of the last and the first wheel on one side of the robot. \end{DoxyCompactList}\item 
+\hypertarget{structparameterStruct_a03d7ba511174783dee702ee4279a3481}{double \hyperlink{structparameterStruct_a03d7ba511174783dee702ee4279a3481}{axis\-Length}}\label{structparameterStruct_a03d7ba511174783dee702ee4279a3481}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}m\mbox{]} the distance between two wheels with the same axis of rotation (on opposite sites of the robot) \end{DoxyCompactList}\item 
+\hypertarget{structparameterStruct_a1869d72b411f51d29c68621b7c5777bb}{double \hyperlink{structparameterStruct_a1869d72b411f51d29c68621b7c5777bb}{wheel\-Perimeter}}\label{structparameterStruct_a1869d72b411f51d29c68621b7c5777bb}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}m\mbox{]} the perimeter of one wheel -\/ all motor-\/driven wheels should have the same perimeter and radius \end{DoxyCompactList}\item 
+std\-::string \hyperlink{structparameterStruct_aeae557e7b574ce3457b2089ed9599aa3}{port}
+\begin{DoxyCompactList}\small\item\em the name of the port you want to connect to (U\-S\-B0, U\-S\-B1, ... \end{DoxyCompactList}\item 
+unsigned long \hyperlink{structparameterStruct_a982408106af37061e986217861403eac}{baudrate}
+\begin{DoxyCompactList}\small\item\em \mbox{[}bit/s\mbox{]} the frequency for the communication. \end{DoxyCompactList}\item 
+unsigned long \hyperlink{structparameterStruct_afa1a24b4f578f635e115c817a5bc4c38}{timeout}
+\begin{DoxyCompactList}\small\item\em \mbox{[}ms\mbox{]} If there is no response from the E\-P\-O\-S2 within this time, you will get a communication error. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Structure for all values read from the ros\-::parmaeter-\/server. 
+
+Definition at line 14 of file epos2\-\_\-driver.\-cpp.
+
+
+
+\subsection{Field Documentation}
+\hypertarget{structparameterStruct_a982408106af37061e986217861403eac}{\index{parameter\-Struct@{parameter\-Struct}!baudrate@{baudrate}}
+\index{baudrate@{baudrate}!parameterStruct@{parameter\-Struct}}
+\subsubsection[{baudrate}]{\setlength{\rightskip}{0pt plus 5cm}unsigned long parameter\-Struct\-::baudrate}}\label{structparameterStruct_a982408106af37061e986217861403eac}
+
+
+\mbox{[}bit/s\mbox{]} the frequency for the communication. 
+
+If it's not set or zero, it will be set to 1000000 (U\-S\-B) or 115200 (R\-S232 -\/ Serial) 
+
+Definition at line 24 of file epos2\-\_\-driver.\-cpp.
+
+\hypertarget{structparameterStruct_aeae557e7b574ce3457b2089ed9599aa3}{\index{parameter\-Struct@{parameter\-Struct}!port@{port}}
+\index{port@{port}!parameterStruct@{parameter\-Struct}}
+\subsubsection[{port}]{\setlength{\rightskip}{0pt plus 5cm}std\-::string parameter\-Struct\-::port}}\label{structparameterStruct_aeae557e7b574ce3457b2089ed9599aa3}
+
+
+the name of the port you want to connect to (U\-S\-B0, U\-S\-B1, ... 
+
+or /dev/tty\-S0, /dev/tty\-S1, ...) 
+
+Definition at line 23 of file epos2\-\_\-driver.\-cpp.
+
+\hypertarget{structparameterStruct_ab17c626ad31a539fcc209bab7a1eb58f}{\index{parameter\-Struct@{parameter\-Struct}!reverse@{reverse}}
+\index{reverse@{reverse}!parameterStruct@{parameter\-Struct}}
+\subsubsection[{reverse}]{\setlength{\rightskip}{0pt plus 5cm}int parameter\-Struct\-::reverse\mbox{[}2\mbox{]}}}\label{structparameterStruct_ab17c626ad31a539fcc209bab7a1eb58f}
+
+
+defines the positive direction of the rotation. 
+
+one for each E\-P\-O\-S2 
+
+Definition at line 16 of file epos2\-\_\-driver.\-cpp.
+
+\hypertarget{structparameterStruct_afa1a24b4f578f635e115c817a5bc4c38}{\index{parameter\-Struct@{parameter\-Struct}!timeout@{timeout}}
+\index{timeout@{timeout}!parameterStruct@{parameter\-Struct}}
+\subsubsection[{timeout}]{\setlength{\rightskip}{0pt plus 5cm}unsigned long parameter\-Struct\-::timeout}}\label{structparameterStruct_afa1a24b4f578f635e115c817a5bc4c38}
+
+
+\mbox{[}ms\mbox{]} If there is no response from the E\-P\-O\-S2 within this time, you will get a communication error. 
+
+If it's zero or not set, a value of 750 will be used. 
+
+Definition at line 25 of file epos2\-\_\-driver.\-cpp.
+
+\hypertarget{structparameterStruct_acf8bcc9f3ae045e1618bf779f151305f}{\index{parameter\-Struct@{parameter\-Struct}!wheel\-Base@{wheel\-Base}}
+\index{wheel\-Base@{wheel\-Base}!parameterStruct@{parameter\-Struct}}
+\subsubsection[{wheel\-Base}]{\setlength{\rightskip}{0pt plus 5cm}double parameter\-Struct\-::wheel\-Base}}\label{structparameterStruct_acf8bcc9f3ae045e1618bf779f151305f}
+
+
+\mbox{[}m\mbox{]} distance between the middle of the last and the first wheel on one side of the robot. 
+
+will be read from the parameter-\/server. 
+
+Definition at line 19 of file epos2\-\_\-driver.\-cpp.
+
+
+
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+src/epos2\-\_\-control/src/epos2\-\_\-driver.\-cpp\end{DoxyCompactItemize}

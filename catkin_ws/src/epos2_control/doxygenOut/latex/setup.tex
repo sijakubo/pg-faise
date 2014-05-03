@@ -1,0 +1,45 @@
+In the following tutorial you will get an step-\/wise introduction how to setup a x86-\/\-P\-C for driving a Volksbot with E\-P\-O\-S2-\/\-Motor-\/driver\hypertarget{setup_setup_step1}{}\section{Step1\-: Install Xubuntu}\label{setup_setup_step1}
+At first you should install an Xubuntu-\/\-O\-S (also a Lubuntu is possible -\/ Kubuntu and Ubuntu should work also, but they need to much power for there Desktop-\/\-Interfaces). Please use the version 12.\-10 for 32bit-\/\-P\-Cs (i386). You can get it for free on \href{http://ftp.tu-chemnitz.de/pub/linux/ubuntu-cdimage/xubuntu/releases/12.10/release/}{\tt http\-://ftp.\-tu-\/chemnitz.\-de/pub/linux/ubuntu-\/cdimage/xubuntu/releases/12.\-10/release/}.\hypertarget{setup_setup_step2}{}\section{Step 2\-: Setup R\-O\-S\-::groovy}\label{setup_setup_step2}
+For detailed Information see here \href{http://ros.org/wiki/groovy/Installation/Ubuntu}{\tt http\-://ros.\-org/wiki/groovy/\-Installation/\-Ubuntu}. The commands you had to type are listed here (one per line).
+
+\begin{DoxyVerb}sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu quantal main" > /etc/apt/sources.list.d/ros-latest.list'
+
+wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
+
+sudo apt-get update
+
+sudo apt-get install ros-groovy-desktop-full
+
+sudo apt-get install ros-groovy-joystick-drivers
+
+sudo rosdep init
+
+rosdep update
+
+echo "source /opt/ros/groovy/setup.bash" >> ~/.bashrc
+\end{DoxyVerb}
+\hypertarget{setup_setup_step3}{}\section{Step 3\-: Copy the Source-\/\-Code to the Catkin-\/directory}\label{setup_setup_step3}
+At First you should create a directory which includes later your catkin-\/workspace. In this folder also a \char`\"{}src\char`\"{} folder should be created.
+
+\begin{DoxyVerb}mkdir ~/catkin_ws
+
+mkdir ~/catkin_ws/src
+\end{DoxyVerb}
+
+
+Unpack/\-Copy the source-\/folder (epos2\-\_\-control) into the $\sim$/catkin\-\_\-ws/src-\/directory.
+
+Add the setup.\-bash from the development-\/path of your catkin-\/workspace to the .bashrc.
+
+\begin{DoxyVerb}echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+\end{DoxyVerb}
+
+
+It's recommend to reboot your system before you continue with \hyperlink{setup_setup_step5}{Step 5\-: Compile the epos2\-\_\-control-\/\-Package}.
+
+\begin{DoxyNote}{Note}
+It should also be possible just to type \begin{DoxyVerb}source ~/.bashrc \end{DoxyVerb}
+ But this wasn't tested.
+\end{DoxyNote}
+\hypertarget{setup_setup_step4}{}\section{Step 4\-: Include the E\-P\-O\-S-\/ and F\-T\-D\-I-\/\-Library into your O\-S}\label{setup_setup_step4}
+\hypertarget{setup_setup_step5}{}\section{Step 5\-: Compile the epos2\-\_\-control-\/\-Package}\label{setup_setup_step5}

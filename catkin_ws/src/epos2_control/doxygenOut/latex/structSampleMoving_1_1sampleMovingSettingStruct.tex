@@ -1,0 +1,208 @@
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct}{\section{Sample\-Moving\-:\-:sample\-Moving\-Setting\-Struct Struct Reference}
+\label{structSampleMoving_1_1sampleMovingSettingStruct}\index{Sample\-Moving\-::sample\-Moving\-Setting\-Struct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}}
+}
+
+
+Settings Structure with all relevant values and R\-O\-S.  
+
+
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_a7149b75955e1f42194433bc451688da5}{double \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a7149b75955e1f42194433bc451688da5}{Speed\-Step\-Size}}\label{structSampleMoving_1_1sampleMovingSettingStruct_a7149b75955e1f42194433bc451688da5}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}1\mbox{]} with respective to the maximum speed \end{DoxyCompactList}\item 
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_a6e0c54b02f6c570887fb9026388feb30}{double \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a6e0c54b02f6c570887fb9026388feb30}{refresh\-Rate}}\label{structSampleMoving_1_1sampleMovingSettingStruct_a6e0c54b02f6c570887fb9026388feb30}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}1/s\mbox{]} with this rate a new speed-\/message will be send \end{DoxyCompactList}\item 
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_ad60b9d7d4202a20facc5f14707657366}{int \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_ad60b9d7d4202a20facc5f14707657366}{sine\-Angle}}\label{structSampleMoving_1_1sampleMovingSettingStruct_ad60b9d7d4202a20facc5f14707657366}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}degree\mbox{]} Angular offset between right and left E\-P\-O\-S in input-\/mode = sinus \end{DoxyCompactList}\item 
+int \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_afa71f7ba92e0214107179417d59aa7d6}{sine\-Current\-Angle}
+\begin{DoxyCompactList}\small\item\em \mbox{[}degree\mbox{]} this value will be increased with every time a new velocity was set. \end{DoxyCompactList}\item 
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_abcbeb9363905012770950c4908a4e1aa}{\hyperlink{classSampleMoving_ad495d48e1ec2093a36601548bfad852d}{interface\-Type} \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_abcbeb9363905012770950c4908a4e1aa}{joy\-Controll}}\label{structSampleMoving_1_1sampleMovingSettingStruct_abcbeb9363905012770950c4908a4e1aa}
+
+\begin{DoxyCompactList}\small\item\em indicates if a gamepad, steering wheel or no human\-Interface is connected \end{DoxyCompactList}\item 
+int \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a1b3cbdffd2c270871b009022b1f65eb0}{gamepad\-Mode}
+\begin{DoxyCompactList}\small\item\em mode of connected gamepad. \end{DoxyCompactList}\item 
+int \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_aa1245c04ef0560d0192ff60ef7daace8}{joy\-In\-Use}
+\begin{DoxyCompactList}\small\item\em indicates if the gamepad or wheel is used currently. \end{DoxyCompactList}\item 
+int \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a14089eeff8e96683e056b50c6ae6a998}{able\-To\-Move}
+\begin{DoxyCompactList}\small\item\em for initializing in human\-Interface-\/mode. \end{DoxyCompactList}\item 
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_af9c784abc287cfcfc6df641c99b52c47}{int \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_af9c784abc287cfcfc6df641c99b52c47}{msg\-Type}}\label{structSampleMoving_1_1sampleMovingSettingStruct_af9c784abc287cfcfc6df641c99b52c47}
+
+\begin{DoxyCompactList}\small\item\em the type of a published message \end{DoxyCompactList}\item 
+double \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a9606973b8c9b90b8dc360855397505f9}{wheel\-Base}
+\begin{DoxyCompactList}\small\item\em \mbox{[}m\mbox{]} distance between the middle of the last and the first wheel on one side of the robot. \end{DoxyCompactList}\item 
+double \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a72168d31106a7f5e12c2eb303a487515}{axis\-Length}
+\begin{DoxyCompactList}\small\item\em \mbox{[}m\mbox{]} distance between both wheels on one axis. \end{DoxyCompactList}\item 
+double \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a3c927853f6d6514e45fb40e0f4c0b783}{wheel\-Perimeter}
+\begin{DoxyCompactList}\small\item\em \mbox{[}m\mbox{]} perimeter of one wheel. \end{DoxyCompactList}\item 
+double \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a293fb79eebdf2c0f45aa196070391c82}{max\-M\-P\-S}
+\begin{DoxyCompactList}\small\item\em \mbox{[}m/s\mbox{]} highest allowed speed, which could be send. \end{DoxyCompactList}\item 
+double \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a1fd52fce6a806d0ee764867ab142b255}{target\-Velocity} \mbox{[}2\mbox{]}
+\begin{DoxyCompactList}\small\item\em \mbox{[}1\mbox{]} the velocity-\/value (with respect to the maximum allowed velocity) which should be reached. \end{DoxyCompactList}\item 
+struct timeval \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a4d960897101facc5a4d0e0998d68728e}{time\-For\-Keys}
+\begin{DoxyCompactList}\small\item\em time-\/value the terminal is waiting for a key-\/press. \end{DoxyCompactList}\item 
+struct termios \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_ada495f188f63cdcfef79f02ed3cce32b}{old\-Keyboard\-I\-O}
+\begin{DoxyCompactList}\small\item\em the saved settings for the terminal. \end{DoxyCompactList}\item 
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_a10791b15fe90cef7888ae50740d871c3}{ros\-::\-Timer \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a10791b15fe90cef7888ae50740d871c3}{sine\-Timer}}\label{structSampleMoving_1_1sampleMovingSettingStruct_a10791b15fe90cef7888ae50740d871c3}
+
+\begin{DoxyCompactList}\small\item\em the ros\-::timer-\/object for calling the sine-\/function \end{DoxyCompactList}\item 
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_a792129ba4ea06e5aa6993f82e0ce5d7b}{ros\-::\-Timer \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a792129ba4ea06e5aa6993f82e0ce5d7b}{keyboard\-Timer}}\label{structSampleMoving_1_1sampleMovingSettingStruct_a792129ba4ea06e5aa6993f82e0ce5d7b}
+
+\begin{DoxyCompactList}\small\item\em a ros\-::timer-\/object, calls the function for getting keyboard-\/inputs \end{DoxyCompactList}\item 
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_a0f3fc50e06f462a7a1e88053be100054}{ros\-::\-Subscriber \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a0f3fc50e06f462a7a1e88053be100054}{gamepad\-\_\-sub}}\label{structSampleMoving_1_1sampleMovingSettingStruct_a0f3fc50e06f462a7a1e88053be100054}
+
+\begin{DoxyCompactList}\small\item\em a ros\-::subscriber, which will call the gamepad-\/callback if a joy-\/messages will be received \end{DoxyCompactList}\item 
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_a5029964881beda76675cce0dd7a3d21f}{ros\-::\-Publisher \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a5029964881beda76675cce0dd7a3d21f}{epos2\-Twist}}\label{structSampleMoving_1_1sampleMovingSettingStruct_a5029964881beda76675cce0dd7a3d21f}
+
+\begin{DoxyCompactList}\small\item\em ros\-::publisher for sending the velocity in a twist-\/messages \end{DoxyCompactList}\item 
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_a5e6f9645c99c0b227827d8f69e0eaa3f}{ros\-::\-Publisher \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a5e6f9645c99c0b227827d8f69e0eaa3f}{epos2\-M\-P\-S}}\label{structSampleMoving_1_1sampleMovingSettingStruct_a5e6f9645c99c0b227827d8f69e0eaa3f}
+
+\begin{DoxyCompactList}\small\item\em ros\-::publisher for sending the velocity in a speed-\/messages, that means only one velocity for both sides of a tank\-Sterring\-Robot \end{DoxyCompactList}\item 
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_a240644f39badda2df91ce13a783e29db}{ros\-::\-Timer \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a240644f39badda2df91ce13a783e29db}{epos2\-Set\-Speed\-Timer}}\label{structSampleMoving_1_1sampleMovingSettingStruct_a240644f39badda2df91ce13a783e29db}
+
+\begin{DoxyCompactList}\small\item\em ros\-::timer which calls the function for sending the current velocity-\/values \end{DoxyCompactList}\item 
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_ab6d337f9b046e91b2921bf4494102796}{tf\-::\-Transform\-Broadcaster \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_ab6d337f9b046e91b2921bf4494102796}{tf\-Broad}}\label{structSampleMoving_1_1sampleMovingSettingStruct_ab6d337f9b046e91b2921bf4494102796}
+
+\begin{DoxyCompactList}\small\item\em a object for sending the current position to the tf-\/server \end{DoxyCompactList}\item 
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_a552f745710950b527f2f202e5ba8a8dc}{tf\-::\-Transform \hyperlink{structSampleMoving_1_1sampleMovingSettingStruct_a552f745710950b527f2f202e5ba8a8dc}{transform}}\label{structSampleMoving_1_1sampleMovingSettingStruct_a552f745710950b527f2f202e5ba8a8dc}
+
+\begin{DoxyCompactList}\small\item\em Structure with all necessary informations for the tf-\/server. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Settings Structure with all relevant values and R\-O\-S. 
+
+Definition at line 128 of file Sample\-Moving.\-h.
+
+
+
+\subsection{Field Documentation}
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_a14089eeff8e96683e056b50c6ae6a998}{\index{Sample\-Moving\-::sample\-Moving\-Setting\-Struct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}!able\-To\-Move@{able\-To\-Move}}
+\index{able\-To\-Move@{able\-To\-Move}!SampleMoving::sampleMovingSettingStruct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}}
+\subsubsection[{able\-To\-Move}]{\setlength{\rightskip}{0pt plus 5cm}int Sample\-Moving\-::sample\-Moving\-Setting\-Struct\-::able\-To\-Move}}\label{structSampleMoving_1_1sampleMovingSettingStruct_a14089eeff8e96683e056b50c6ae6a998}
+
+
+for initializing in human\-Interface-\/mode. 
+
+used for steering wheel with 3 axis -\/ first both pedals must be pressed down for starting 
+
+Definition at line 136 of file Sample\-Moving.\-h.
+
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_a72168d31106a7f5e12c2eb303a487515}{\index{Sample\-Moving\-::sample\-Moving\-Setting\-Struct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}!axis\-Length@{axis\-Length}}
+\index{axis\-Length@{axis\-Length}!SampleMoving::sampleMovingSettingStruct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}}
+\subsubsection[{axis\-Length}]{\setlength{\rightskip}{0pt plus 5cm}double Sample\-Moving\-::sample\-Moving\-Setting\-Struct\-::axis\-Length}}\label{structSampleMoving_1_1sampleMovingSettingStruct_a72168d31106a7f5e12c2eb303a487515}
+
+
+\mbox{[}m\mbox{]} distance between both wheels on one axis. 
+
+will be read from the parameter-\/server. 
+
+Definition at line 140 of file Sample\-Moving.\-h.
+
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_a1b3cbdffd2c270871b009022b1f65eb0}{\index{Sample\-Moving\-::sample\-Moving\-Setting\-Struct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}!gamepad\-Mode@{gamepad\-Mode}}
+\index{gamepad\-Mode@{gamepad\-Mode}!SampleMoving::sampleMovingSettingStruct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}}
+\subsubsection[{gamepad\-Mode}]{\setlength{\rightskip}{0pt plus 5cm}int Sample\-Moving\-::sample\-Moving\-Setting\-Struct\-::gamepad\-Mode}}\label{structSampleMoving_1_1sampleMovingSettingStruct_a1b3cbdffd2c270871b009022b1f65eb0}
+
+
+mode of connected gamepad. 
+
+normally is two\-Stick 
+
+Definition at line 134 of file Sample\-Moving.\-h.
+
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_aa1245c04ef0560d0192ff60ef7daace8}{\index{Sample\-Moving\-::sample\-Moving\-Setting\-Struct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}!joy\-In\-Use@{joy\-In\-Use}}
+\index{joy\-In\-Use@{joy\-In\-Use}!SampleMoving::sampleMovingSettingStruct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}}
+\subsubsection[{joy\-In\-Use}]{\setlength{\rightskip}{0pt plus 5cm}int Sample\-Moving\-::sample\-Moving\-Setting\-Struct\-::joy\-In\-Use}}\label{structSampleMoving_1_1sampleMovingSettingStruct_aa1245c04ef0560d0192ff60ef7daace8}
+
+
+indicates if the gamepad or wheel is used currently. 
+
+Blocks the Keyboard if set to 1. 
+
+Definition at line 135 of file Sample\-Moving.\-h.
+
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_a293fb79eebdf2c0f45aa196070391c82}{\index{Sample\-Moving\-::sample\-Moving\-Setting\-Struct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}!max\-M\-P\-S@{max\-M\-P\-S}}
+\index{max\-M\-P\-S@{max\-M\-P\-S}!SampleMoving::sampleMovingSettingStruct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}}
+\subsubsection[{max\-M\-P\-S}]{\setlength{\rightskip}{0pt plus 5cm}double Sample\-Moving\-::sample\-Moving\-Setting\-Struct\-::max\-M\-P\-S}}\label{structSampleMoving_1_1sampleMovingSettingStruct_a293fb79eebdf2c0f45aa196070391c82}
+
+
+\mbox{[}m/s\mbox{]} highest allowed speed, which could be send. 
+
+will be read from the parameter-\/server. 
+
+Definition at line 142 of file Sample\-Moving.\-h.
+
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_ada495f188f63cdcfef79f02ed3cce32b}{\index{Sample\-Moving\-::sample\-Moving\-Setting\-Struct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}!old\-Keyboard\-I\-O@{old\-Keyboard\-I\-O}}
+\index{old\-Keyboard\-I\-O@{old\-Keyboard\-I\-O}!SampleMoving::sampleMovingSettingStruct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}}
+\subsubsection[{old\-Keyboard\-I\-O}]{\setlength{\rightskip}{0pt plus 5cm}struct termios Sample\-Moving\-::sample\-Moving\-Setting\-Struct\-::old\-Keyboard\-I\-O}}\label{structSampleMoving_1_1sampleMovingSettingStruct_ada495f188f63cdcfef79f02ed3cce32b}
+
+
+the saved settings for the terminal. 
+
+will be reset in the destructor 
+
+Definition at line 147 of file Sample\-Moving.\-h.
+
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_afa71f7ba92e0214107179417d59aa7d6}{\index{Sample\-Moving\-::sample\-Moving\-Setting\-Struct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}!sine\-Current\-Angle@{sine\-Current\-Angle}}
+\index{sine\-Current\-Angle@{sine\-Current\-Angle}!SampleMoving::sampleMovingSettingStruct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}}
+\subsubsection[{sine\-Current\-Angle}]{\setlength{\rightskip}{0pt plus 5cm}int Sample\-Moving\-::sample\-Moving\-Setting\-Struct\-::sine\-Current\-Angle}}\label{structSampleMoving_1_1sampleMovingSettingStruct_afa71f7ba92e0214107179417d59aa7d6}
+
+
+\mbox{[}degree\mbox{]} this value will be increased with every time a new velocity was set. 
+
+only in sinus-\/mode. should be every time between 0 and 360 
+
+Definition at line 132 of file Sample\-Moving.\-h.
+
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_a1fd52fce6a806d0ee764867ab142b255}{\index{Sample\-Moving\-::sample\-Moving\-Setting\-Struct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}!target\-Velocity@{target\-Velocity}}
+\index{target\-Velocity@{target\-Velocity}!SampleMoving::sampleMovingSettingStruct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}}
+\subsubsection[{target\-Velocity}]{\setlength{\rightskip}{0pt plus 5cm}double Sample\-Moving\-::sample\-Moving\-Setting\-Struct\-::target\-Velocity\mbox{[}2\mbox{]}}}\label{structSampleMoving_1_1sampleMovingSettingStruct_a1fd52fce6a806d0ee764867ab142b255}
+
+
+\mbox{[}1\mbox{]} the velocity-\/value (with respect to the maximum allowed velocity) which should be reached. 
+
+will be sent by velocity-\/messages. 
+
+Definition at line 144 of file Sample\-Moving.\-h.
+
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_a4d960897101facc5a4d0e0998d68728e}{\index{Sample\-Moving\-::sample\-Moving\-Setting\-Struct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}!time\-For\-Keys@{time\-For\-Keys}}
+\index{time\-For\-Keys@{time\-For\-Keys}!SampleMoving::sampleMovingSettingStruct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}}
+\subsubsection[{time\-For\-Keys}]{\setlength{\rightskip}{0pt plus 5cm}struct timeval Sample\-Moving\-::sample\-Moving\-Setting\-Struct\-::time\-For\-Keys}}\label{structSampleMoving_1_1sampleMovingSettingStruct_a4d960897101facc5a4d0e0998d68728e}
+
+
+time-\/value the terminal is waiting for a key-\/press. 
+
+afterwards the velocity will be set. 
+
+Definition at line 146 of file Sample\-Moving.\-h.
+
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_a9606973b8c9b90b8dc360855397505f9}{\index{Sample\-Moving\-::sample\-Moving\-Setting\-Struct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}!wheel\-Base@{wheel\-Base}}
+\index{wheel\-Base@{wheel\-Base}!SampleMoving::sampleMovingSettingStruct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}}
+\subsubsection[{wheel\-Base}]{\setlength{\rightskip}{0pt plus 5cm}double Sample\-Moving\-::sample\-Moving\-Setting\-Struct\-::wheel\-Base}}\label{structSampleMoving_1_1sampleMovingSettingStruct_a9606973b8c9b90b8dc360855397505f9}
+
+
+\mbox{[}m\mbox{]} distance between the middle of the last and the first wheel on one side of the robot. 
+
+will be read from the parameter-\/server. 
+
+Definition at line 139 of file Sample\-Moving.\-h.
+
+\hypertarget{structSampleMoving_1_1sampleMovingSettingStruct_a3c927853f6d6514e45fb40e0f4c0b783}{\index{Sample\-Moving\-::sample\-Moving\-Setting\-Struct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}!wheel\-Perimeter@{wheel\-Perimeter}}
+\index{wheel\-Perimeter@{wheel\-Perimeter}!SampleMoving::sampleMovingSettingStruct@{Sample\-Moving\-::sample\-Moving\-Setting\-Struct}}
+\subsubsection[{wheel\-Perimeter}]{\setlength{\rightskip}{0pt plus 5cm}double Sample\-Moving\-::sample\-Moving\-Setting\-Struct\-::wheel\-Perimeter}}\label{structSampleMoving_1_1sampleMovingSettingStruct_a3c927853f6d6514e45fb40e0f4c0b783}
+
+
+\mbox{[}m\mbox{]} perimeter of one wheel. 
+
+will be read from the parameter-\/server. 
+
+Definition at line 141 of file Sample\-Moving.\-h.
+
+
+
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+src/epos2\-\_\-control/src/Sample\-Moving.\-h\end{DoxyCompactItemize}

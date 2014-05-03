@@ -1,0 +1,304 @@
+\hypertarget{epos2__driver_8cpp}{\section{src/epos2\-\_\-driver.cpp File Reference}
+\label{epos2__driver_8cpp}\index{src/epos2\-\_\-driver.\-cpp@{src/epos2\-\_\-driver.\-cpp}}
+}
+{\ttfamily \#include \char`\"{}Tank\-Steering.\-h\char`\"{}}\\*
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structparameterStruct}{parameter\-Struct}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{epos2__driver_8cpp_a400998ecc00fdf535efdc610e8cb7765}{read\-Parameter\-Server} ()
+\item 
+int \hyperlink{epos2__driver_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{main} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structparameterStruct}{parameter\-Struct} \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{epos2__driver_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{\index{epos2\-\_\-driver.\-cpp@{epos2\-\_\-driver.\-cpp}!main@{main}}
+\index{main@{main}!epos2_driver.cpp@{epos2\-\_\-driver.\-cpp}}
+\subsubsection[{main}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+\item[{int}]{argc, }
+\item[{char $\ast$$\ast$}]{argv}
+\end{DoxyParamCaption}
+)}}\label{epos2__driver_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}
+
+
+Definition at line 109 of file epos2\-\_\-driver.\-cpp.
+
+
+\begin{DoxyCode}
+                                \{
+
+        ros::init(argc, argv, \textcolor{stringliteral}{"epos2\_driver"});
+        ros::NodeHandle roshandle;
+
+        \hyperlink{classEpos2MotorController}{Epos2MotorController}* epos[2];
+
+
+        \textcolor{keywordflow}{if} (\hyperlink{epos2__driver_8cpp_a400998ecc00fdf535efdc610e8cb7765}{readParameterServer}()) \{
+
+                ROS\_ERROR(\textcolor{stringliteral}{"maxMPS: %.4lf, wheelBase: %.4lf, axisLength: %.4lf,
+       wheelPerimeter: %.4lf"}, \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_ac07338a2130f2361513289245146dfe0}{maxMeterPerSecond}, 
+      \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_acf8bcc9f3ae045e1618bf779f151305f}{wheelBase}, \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_a03d7ba511174783dee702ee4279a3481}{axisLength},
+       \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_a1869d72b411f51d29c68621b7c5777bb}{wheelPerimeter});
+
+                \textcolor{comment}{//ROS\_ERROR("port: %s", parameter.port);}
+                \hyperlink{classEpos2MotorController}{Epos2MotorController} leftEpos(\hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}
+      .\hyperlink{structparameterStruct_a8b79a2ace446a6d9aa4ac314b02f6506}{node}[\hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147ba2c0454fa22bb27ad412f12fbb3e59894}{TankSteering::left}], \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_ab17c626ad31a539fcc209bab7a1eb58f}{reverse}
+      [\hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147ba2c0454fa22bb27ad412f12fbb3e59894}{TankSteering::left}], \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_aeae557e7b574ce3457b2089ed9599aa3}{port}, \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}
+      .\hyperlink{structparameterStruct_afa1a24b4f578f635e115c817a5bc4c38}{timeout}, \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_a982408106af37061e986217861403eac}{baudrate});
+                leftEpos.nodeStr = (\textcolor{keywordtype}{char}*) \textcolor{stringliteral}{"left EPOS2"};
+
+                \textcolor{keywordflow}{if} (leftEpos.devhandle != 0) \{
+                        \hyperlink{classEpos2MotorController}{Epos2MotorController} rightEpos(
+      \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_a8b79a2ace446a6d9aa4ac314b02f6506}{node}[\hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147bab1b5a1aabed2fe239c3daaf49daf54d2}{TankSteering::right}], \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}
+      .\hyperlink{structparameterStruct_ab17c626ad31a539fcc209bab7a1eb58f}{reverse}[\hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147bab1b5a1aabed2fe239c3daaf49daf54d2}{TankSteering::right}], leftEpos.devhandle);
+                        rightEpos.nodeStr = (\textcolor{keywordtype}{char}*) \textcolor{stringliteral}{"right EPOS2"};
+                        epos[\hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147ba2c0454fa22bb27ad412f12fbb3e59894}{TankSteering::left}] = &leftEpos;
+                        epos[\hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147bab1b5a1aabed2fe239c3daaf49daf54d2}{TankSteering::right}] = &
+      rightEpos;
+
+                        \hyperlink{classTankSteering}{TankSteering} tank(roshandle, epos, \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{
+      parameter}.\hyperlink{structparameterStruct_a1869d72b411f51d29c68621b7c5777bb}{wheelPerimeter}, \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_a03d7ba511174783dee702ee4279a3481}{axisLength}
+      , \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_ac07338a2130f2361513289245146dfe0}{maxMeterPerSecond});
+
+                        \textcolor{comment}{//*/example how to read and edit regulator- and
+       motor-data}
+                        \hyperlink{structEpos2MotorController_1_1regulator}{Epos2MotorController::regulator}
+       controlParameter[2];
+                        \hyperlink{structEpos2MotorController_1_1motorData}{Epos2MotorController::motorData}
+       motorParameter[2];
+                        \hyperlink{structEpos2MotorController_1_1gearData}{Epos2MotorController::gearData}
+       gearParameter[2];
+                        \hyperlink{structEpos2MotorController_1_1accelerationData}{Epos2MotorController::accelerationData}
+       accelerationParameter[2];
+                        \textcolor{keywordtype}{double} maxRobotRPM[2];
+
+                        \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=\hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147ba2c0454fa22bb27ad412f12fbb3e59894}{TankSteering::left}; i<=
+      \hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147bab1b5a1aabed2fe239c3daaf49daf54d2}{TankSteering::right}; i++) \{
+                                epos[i]->\hyperlink{classEpos2MotorController_ad58ad9fe38c72ce0d457a286973f8a99}{disableEpos2}();
+
+                                epos[i]->\hyperlink{classEpos2MotorController_a84b2544d4e3facf75ae12a526da2735d}{getRegulatorParameter}
+      ( &(controlParameter[i]) );
+                                \textcolor{comment}{//controlParameter[i].positionGain.i++;}
+                                ROS\_ERROR(\textcolor{stringliteral}{"[main %s] (position)-> P: %i, I: %i,
+       D: %i"},(i==\hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147ba2c0454fa22bb27ad412f12fbb3e59894}{TankSteering::left})?\textcolor{stringliteral}{"left"}:\textcolor{stringliteral}{"right"}, 
+      controlParameter[i].positionGain.p, controlParameter[i].\hyperlink{structEpos2MotorController_1_1regulator_a93d907a48d76d4ca5df6f14346700c49}{positionGain}.\hyperlink{structEpos2MotorController_1_1regulatorPID_aa1e8852ec63ffd1be5620e410c9910d1}{i}, 
+      controlParameter[i].\hyperlink{structEpos2MotorController_1_1regulator_a93d907a48d76d4ca5df6f14346700c49}{positionGain}.\hyperlink{structEpos2MotorController_1_1regulatorPID_a1590d8278e005b2a25969e197ed07ebb}{d});
+                                ROS\_ERROR(\textcolor{stringliteral}{"[main %s] (feedforward)->
+       posFF-velo: %i, posFF-acc: %i, velFF-vel: %i, velFF-acc: %i"},(i==\hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147ba2c0454fa22bb27ad412f12fbb3e59894}{TankSteering::left}
+      )?\textcolor{stringliteral}{"left"}:\textcolor{stringliteral}{"right"}, controlParameter[i].positionFF.Velocity, controlParameter[i].
+      \hyperlink{structEpos2MotorController_1_1regulator_a8522a58ca0e1bce362c4a2fe41e5eb1c}{positionFF}.\hyperlink{structEpos2MotorController_1_1feedForward_ad1933dbf01444a9f5256abf61cc42306}{Acceleration}, controlParameter[i].\hyperlink{structEpos2MotorController_1_1regulator_a6f942e4618cb89d807597bc36569e917}{velocityFF}
+      .\hyperlink{structEpos2MotorController_1_1feedForward_af233a49c7dba92b20f086d64f1bf76cf}{Velocity}, controlParameter[i].\hyperlink{structEpos2MotorController_1_1regulator_a6f942e4618cb89d807597bc36569e917}{velocityFF}.\hyperlink{structEpos2MotorController_1_1feedForward_ad1933dbf01444a9f5256abf61cc42306}{Acceleration}
+      );
+                                ROS\_ERROR(\textcolor{stringliteral}{"[main %s] (velocity)-> P: %i, I: %i"}
+      ,(i==\hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147ba2c0454fa22bb27ad412f12fbb3e59894}{TankSteering::left})?\textcolor{stringliteral}{"left"}:\textcolor{stringliteral}{"right"}, controlParameter[i].
+      velocityGain.p, controlParameter[i].\hyperlink{structEpos2MotorController_1_1regulator_afed92a73f5245d9a0439aab3bf3538d0}{velocityGain}.\hyperlink{structEpos2MotorController_1_1regulatorPI_ab78a305f3015c88a455991a1345123bb}{i});
+                                ROS\_ERROR(\textcolor{stringliteral}{"[main %s] (current)-> P: %i, I: %i"},
+      (i==\hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147ba2c0454fa22bb27ad412f12fbb3e59894}{TankSteering::left})?\textcolor{stringliteral}{"left"}:\textcolor{stringliteral}{"right"}, controlParameter[i].
+      currentGain.p, controlParameter[i].\hyperlink{structEpos2MotorController_1_1regulator_a8aae642707272d3578b04cd0a66503b2}{currentGain}.\hyperlink{structEpos2MotorController_1_1regulatorPI_ab78a305f3015c88a455991a1345123bb}{i});
+                                \textcolor{comment}{//epos[i]->setRegulatorParameter(
+       &(controlParameter[i]) );}
+
+                                epos[i]->\hyperlink{classEpos2MotorController_a0b70bbbfed4fa0c78a9f15dfb593bb9f}{getMotorData}( &(
+      motorParameter[i]) );
+                                ROS\_ERROR(\textcolor{stringliteral}{"[main %s] (motor) maxCurrent: %i,
+       PeakCurrent: %i, ThermalTimeConstant: %i, maxMotorSpeed: %li"},(i==
+      \hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147ba2c0454fa22bb27ad412f12fbb3e59894}{TankSteering::left})?\textcolor{stringliteral}{"left"}:\textcolor{stringliteral}{"right"}, motorParameter[i].
+      continousCurrent, motorParameter[i].maxPeakCurrent, motorParameter[i].
+      thermalTimeConstantWinding, motorParameter[i].maxRPM);
+                                \textcolor{comment}{//motorParameter[i].thermalTimeConstantWinding
+       = 10;}
+                                \textcolor{comment}{//epos[i]->setMotorData( &(motorParameter[i])
+       );}
+
+                                epos[i]->\hyperlink{classEpos2MotorController_a43b5c84e3d2c891a98fae2c159d0a112}{getGearData}( &(
+      gearParameter[i]) );
+                                ROS\_ERROR(\textcolor{stringliteral}{"[main %s] (Gear)-> maxRPM: %li,
+       numerator: %li, denominator: %i"},(i==\hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147ba2c0454fa22bb27ad412f12fbb3e59894}{TankSteering::left})?\textcolor{stringliteral}{"left"}:\textcolor{stringliteral}{"
+      right"}, gearParameter[i].maxRPM, gearParameter[i].numerator, gearParameter[i].
+      denominator);
+
+                                epos[i]->\hyperlink{classEpos2MotorController_ae363c85bc1e9dbad81fd49b06d783ff9}{getMaxRPM}( &(maxRobotRPM[i]) 
+      );
+                                ROS\_ERROR(\textcolor{stringliteral}{"[main %s] maxRobotRPM: %.4lf"},(i==
+      \hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147ba2c0454fa22bb27ad412f12fbb3e59894}{TankSteering::left})?\textcolor{stringliteral}{"left"}:\textcolor{stringliteral}{"right"}, maxRobotRPM[i]);
+
+                                epos[i]->\hyperlink{classEpos2MotorController_af377092ba583206b56c74c6c65d45300}{getAccelartionData}( 
+      &(accelerationParameter[i]) );
+                                ROS\_ERROR(\textcolor{stringliteral}{"[main %s] (acceleration) maxAcc:
+       %.3lf m/s^2, profileAcc: %.3lf m/s^2, profileDec: %.3lf m/s^2, quickstopDec: %.3lf
+       m/s^2"},(i==\hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147ba2c0454fa22bb27ad412f12fbb3e59894}{TankSteering::left})?\textcolor{stringliteral}{"left"}:\textcolor{stringliteral}{"right"}, 
+      accelerationParameter[i].maxAcceleration, accelerationParameter[i].profileAcceleration, 
+      accelerationParameter[i].profileDeceleration, accelerationParameter[i].
+      quickstopDeceleration);
+
+                                epos[i]->\hyperlink{classEpos2MotorController_aeadc7a21fa6619a4104887f169b9d2fd}{enableEpos2}();
+                        \}\textcolor{comment}{//*/}
+
+                        ros::spin();
+
+                        ROS\_INFO(\textcolor{stringliteral}{"EPOS2-Driver finished successful\(\backslash\)n"});
+                        \textcolor{keywordflow}{return} 1;
+
+                \} \textcolor{keywordflow}{else} \{
+                        ROS\_FATAL(\textcolor{stringliteral}{"can't connect to the EPOS2 - if the EPOS2 is
+       plugged, disconnected it and plug it in again. Retry."});
+                        \textcolor{keywordflow}{return} 0;
+                \}
+
+        \} \textcolor{keywordflow}{else} \{
+
+                ROS\_FATAL(\textcolor{stringliteral}{"unable to read all necessary roboter parameter -
+       EPS2-Driver will be closed\(\backslash\)n"});
+                \textcolor{keywordflow}{return} 0;
+        \}
+
+
+
+
+
+
+
+        \textcolor{comment}{/*Epos2MotorController::engineDataStruct engineSet=\{\{1,2\}, \{0,0\}, 7000,
+       73.5\};}
+\textcolor{comment}{}
+\textcolor{comment}{        Epos2MotorController controller(roshandle, engineSet);}
+\textcolor{comment}{}
+\textcolor{comment}{        //controller.getInfoMsgs();}
+\textcolor{comment}{*/}
+
+
+
+\}
+\end{DoxyCode}
+\hypertarget{epos2__driver_8cpp_a400998ecc00fdf535efdc610e8cb7765}{\index{epos2\-\_\-driver.\-cpp@{epos2\-\_\-driver.\-cpp}!read\-Parameter\-Server@{read\-Parameter\-Server}}
+\index{read\-Parameter\-Server@{read\-Parameter\-Server}!epos2_driver.cpp@{epos2\-\_\-driver.\-cpp}}
+\subsubsection[{read\-Parameter\-Server}]{\setlength{\rightskip}{0pt plus 5cm}int read\-Parameter\-Server (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{epos2__driver_8cpp_a400998ecc00fdf535efdc610e8cb7765}
+
+
+Definition at line 25 of file epos2\-\_\-driver.\-cpp.
+
+
+\begin{DoxyCode}
+                          \{
+
+        \textcolor{keywordtype}{int} getParam, ok = 1;
+        std::string getParamChar;
+        \textcolor{keywordtype}{double} getDoubleParam;
+
+        \textcolor{keywordflow}{if} (ros::param::get(\textcolor{stringliteral}{"/epos2\_control/leftNodeNr"}, getParam)) \{
+                \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_a8b79a2ace446a6d9aa4ac314b02f6506}{node}[\hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147ba2c0454fa22bb27ad412f12fbb3e59894}{TankSteering::left}
+      ]=std::min(abs(getParam), 255);
+        \} \textcolor{keywordflow}{else} \{
+                \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_a8b79a2ace446a6d9aa4ac314b02f6506}{node}[\hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147ba2c0454fa22bb27ad412f12fbb3e59894}{TankSteering::left}
+      ]=1;
+                ROS\_ERROR(\textcolor{stringliteral}{"couldn't read left NodeNr - will use NodeNr 1"});
+        \}
+        \textcolor{keywordflow}{if} (ros::param::get(\textcolor{stringliteral}{"/epos2\_control/rightNodeNr"}, getParam)) \{
+                \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_a8b79a2ace446a6d9aa4ac314b02f6506}{node}[\hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147bab1b5a1aabed2fe239c3daaf49daf54d2}{TankSteering::right}
+      ]=std::min(abs(getParam), 255);
+        \} \textcolor{keywordflow}{else} \{
+                \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_a8b79a2ace446a6d9aa4ac314b02f6506}{node}[\hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147bab1b5a1aabed2fe239c3daaf49daf54d2}{TankSteering::right}
+      ]=2;
+                ROS\_ERROR(\textcolor{stringliteral}{"couldn't read right NodeNr - will use NodeNr 2"});
+        \}
+
+        \textcolor{keywordflow}{if} (ros::param::get(\textcolor{stringliteral}{"/epos2\_control/reverseLeft"}, getParam)) \{
+                \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_ab17c626ad31a539fcc209bab7a1eb58f}{reverse}[\hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147ba2c0454fa22bb27ad412f12fbb3e59894}{TankSteering::left}
+      ]=std::min(abs(getParam), 1);
+        \} \textcolor{keywordflow}{else} \{
+                \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_ab17c626ad31a539fcc209bab7a1eb58f}{reverse}[\hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147ba2c0454fa22bb27ad412f12fbb3e59894}{TankSteering::left}
+      ]=0;
+                ROS\_ERROR(\textcolor{stringliteral}{"couldn't read left reverse State - will use not
+       reversed"});
+        \}
+        \textcolor{keywordflow}{if} (ros::param::get(\textcolor{stringliteral}{"/epos2\_control/reverseRight"}, getParam)) \{
+                \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_ab17c626ad31a539fcc209bab7a1eb58f}{reverse}[\hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147bab1b5a1aabed2fe239c3daaf49daf54d2}{TankSteering::right}
+      ]=std::min(abs(getParam), 1);
+        \} \textcolor{keywordflow}{else} \{
+                \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_ab17c626ad31a539fcc209bab7a1eb58f}{reverse}[\hyperlink{classTankSteering_a32403795a4470a4cebbf78a89bf6147bab1b5a1aabed2fe239c3daaf49daf54d2}{TankSteering::right}
+      ]=1;
+                ROS\_ERROR(\textcolor{stringliteral}{"couldn't read right reverse State - will use
+       reversed"});
+        \}
+
+        \textcolor{keywordflow}{if} (ros::param::get(\textcolor{stringliteral}{"/epos2\_control/max\_mps"}, getDoubleParam)) \{
+                \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_ac07338a2130f2361513289245146dfe0}{maxMeterPerSecond} = 
+      std::max(fabs(getDoubleParam), 0.01);
+        \} \textcolor{keywordflow}{else} \{
+                ok=0;
+                ROS\_FATAL(\textcolor{stringliteral}{"couldn't read max\_mps - will not start Epos2"});
+        \}
+
+        \textcolor{keywordflow}{if} (ros::param::get(\textcolor{stringliteral}{"/epos2\_control/axisLength"}, getDoubleParam)) \{
+                \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_a03d7ba511174783dee702ee4279a3481}{axisLength} = std::max(fabs(
+      getDoubleParam), 0.01);
+        \} \textcolor{keywordflow}{else} \{
+                ok=0;
+                ROS\_FATAL(\textcolor{stringliteral}{"couldn't read axisLength - will not start Epos2"});
+        \}
+
+        \textcolor{keywordflow}{if} (ros::param::get(\textcolor{stringliteral}{"/epos2\_control/wheelPerimeter"}, getDoubleParam)) \{
+                \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_a1869d72b411f51d29c68621b7c5777bb}{wheelPerimeter} = std::max(fabs
+      (getDoubleParam), 0.03);
+        \} \textcolor{keywordflow}{else} \{
+                ok=0;
+                ROS\_FATAL(\textcolor{stringliteral}{"couldn't read wheelPerimeter - will not start Epos2"}
+      );
+        \}
+
+                \textcolor{keywordflow}{if} (ros::param::get(\textcolor{stringliteral}{"/epos2\_control/wheelBase"}, getDoubleParam)
+      ) \{
+                \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_acf8bcc9f3ae045e1618bf779f151305f}{wheelBase} = std::max(fabs(
+      getDoubleParam), (\textcolor{keywordtype}{double}) (\hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_a1869d72b411f51d29c68621b7c5777bb}{wheelPerimeter} / 3) );
+        \} \textcolor{keywordflow}{else} \{
+                ok=0;
+                ROS\_FATAL(\textcolor{stringliteral}{"couldn't read wheelBase - will not start Epos2"});
+        \}
+
+        \textcolor{keywordflow}{if} (ros::param::get(\textcolor{stringliteral}{"~port"}, getParamChar)) \{
+                \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_aeae557e7b574ce3457b2089ed9599aa3}{port} = getParamChar;
+        \} \textcolor{keywordflow}{else} \{
+                ok=0;
+                ROS\_FATAL(\textcolor{stringliteral}{"couldn't read port - will not start Epos2"});
+        \}
+
+        \textcolor{keywordflow}{if} (ros::param::get(\textcolor{stringliteral}{"~timeout"}, getParam)) \{
+                \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_afa1a24b4f578f635e115c817a5bc4c38}{timeout} = std::max(abs(getParam), 10)
+      ;
+        \} \textcolor{keywordflow}{else} \{
+                \textcolor{comment}{//ok=0;}
+                \textcolor{comment}{//ROS\_FATAL("couldn't read timeout - will not start Epos2");}
+        \}
+
+        \textcolor{keywordflow}{if} (ros::param::get(\textcolor{stringliteral}{"~baud"}, getParam)) \{
+                \hyperlink{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{parameter}.\hyperlink{structparameterStruct_a982408106af37061e986217861403eac}{baudrate} = std::max(abs(getParam), 1
+      00);
+        \} \textcolor{keywordflow}{else} \{
+                \textcolor{comment}{//ok=0;}
+                \textcolor{comment}{//ROS\_FATAL("couldn't read baud(rate) - will not start Epos2");}
+        \}
+
+        \textcolor{keywordflow}{return} ok;
+\}
+\end{DoxyCode}
+
+
+\subsection{Variable Documentation}
+\hypertarget{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}{\index{epos2\-\_\-driver.\-cpp@{epos2\-\_\-driver.\-cpp}!parameter@{parameter}}
+\index{parameter@{parameter}!epos2_driver.cpp@{epos2\-\_\-driver.\-cpp}}
+\subsubsection[{parameter}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf parameter\-Struct} parameter}}\label{epos2__driver_8cpp_ae9cc90a0aa3013bb3281885c1fe1b158}
