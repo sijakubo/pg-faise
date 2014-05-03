@@ -1,8 +1,0 @@
-prefix=/home/pg/catkin_ws/devel
-
-Name: epos2_control
-Description: Description of epos2_control
-Version: 0.0.0
-Cflags: -I/home/pg/catkin_ws/devel/include -I/home/pg/catkin_ws/src/epos2_control/include
-Libs: -L/home/pg/catkin_ws/devel/lib 
-Requires: actionlib geometry_msgs nav_msgs roscpp rospy sensor_msgs std_msgs tf bondcpp message_runtime

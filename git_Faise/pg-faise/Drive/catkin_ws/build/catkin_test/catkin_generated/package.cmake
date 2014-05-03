@@ -1,7 +1,0 @@
-set(_CATKIN_CURRENT_PACKAGE "catkin_test")
-set(catkin_test_MAINTAINER "pg <pg@todo.todo>")
-set(catkin_test_DEPRECATED "")
-set(catkin_test_VERSION "0.0.0")
-set(catkin_test_BUILD_DEPENDS "roscpp" "rospy" "std_msgs")
-set(catkin_test_RUN_DEPENDS "roscpp" "rospy" "std_msgs")
-set(catkin_test_BUILDTOOL_DEPENDS "catkin")

@@ -1,5 +1,0 @@
-<launch>
-
-  <node pkg="epos2_control" name="epos2_stateOutput" type="epos2_stateOutput"/>
-  
-</launch>
