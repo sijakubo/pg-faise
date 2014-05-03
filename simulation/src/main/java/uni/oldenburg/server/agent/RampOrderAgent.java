@@ -24,7 +24,7 @@ public class RampOrderAgent extends Agent {
 
 	private int conveyorID = 0;
 	private int szenarioID = 0;
-	private int rampType = 0;
+	private int rampType = -1;
 	private Logger logger = Logger.getLogger(RampOrderAgent.class);
 
 	/**
@@ -38,23 +38,26 @@ public class RampOrderAgent extends Agent {
 
 			Conveyor myConveyor = (Conveyor) args[1];
 			conveyorID = myConveyor.getID();
-			rampType = ((ConveyorRamp) myConveyor).getRampType();
+			if (myConveyor instanceof ConveyorRamp) {
+				rampType = ((ConveyorRamp) myConveyor).getRampType();
+			}
 		}
 
 		if (rampType == ConveyorRamp.RAMP_EXIT) {
 			addBehaviour(new AskOtherOrderagentsIfPackageExistsBehaviour(
 					MessageTemplate
 							.MatchPerformative(MessageType.SEARCH_FOR_PACKAGE)));
+			addBehaviour(new SetPackageReservedBehaviour(
+					MessageTemplate
+							.MatchPerformative(MessageType.GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT)));
+			
 		}
 
 		if (rampType == ConveyorRamp.RAMP_STOREAGE) {
 			addBehaviour(new CheckIfPackageIsStoredBehaviour(
 					MessageTemplate
 							.MatchPerformative(MessageType.ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS)));
-			addBehaviour(new SetPackageReservedBehaviour(
-					MessageTemplate
-							.MatchPerformative(MessageType.GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT)));
-
+			
 		}
 
 		// addBehaviour(new AssignDestinationBehaviour());

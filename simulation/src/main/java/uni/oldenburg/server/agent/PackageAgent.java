@@ -187,7 +187,8 @@ public class PackageAgent extends Agent {
 			if (sizePackageList >= 1) {
 				// Choose a Package randomly. To do that, you have to create a
 				// random Value depending on the size of the package list
-				int index = -1;
+				 int index = (int) ((Math.random() * 10) % sizePackageList);
+				/*
 				if (sizePackageList == 1) {
 					index = 0;
 				} else if (sizePackageList == 2) {
@@ -200,7 +201,7 @@ public class PackageAgent extends Agent {
 					Random random = new Random();
 					index = random.nextInt(3 - 2 + 1) + 2;
 				}
-
+                */
 				// Get the Package Data
 				PackageData pData = currentAgent.lstPackage.get(index);
 
@@ -255,7 +256,7 @@ public class PackageAgent extends Agent {
 
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()
-						+ " -> RECEIVE_REQUEST_FROM_PACKAGEAGENT");
+						+ " -> RECEIVE_REQUEST_FROM_ORDERAGENT");
 
 			searchedPackage = (PackageData) msg.getContentObject();
 			// get the Package id
