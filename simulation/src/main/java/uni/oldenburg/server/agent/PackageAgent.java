@@ -3,20 +3,21 @@ package uni.oldenburg.server.agent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import org.apache.log4j.Priority;
 import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
+import uni.oldenburg.server.agent.data.PackageDestinationData;
+import uni.oldenburg.server.agent.data.EnquiredPackageData;
 import uni.oldenburg.server.agent.data.PackageData;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import jade.core.Agent;
-import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -57,18 +58,19 @@ public class PackageAgent extends Agent {
 		addBehaviour(new AddPackageBehaviour(
 				MessageTemplate.MatchPerformative(MessageType.ADD_PACKAGE)));
 		addBehaviour(new GetPackageCountBehaviour(
-				MessageTemplate
-						.MatchPerformative(MessageType.GET_PACKAGE_COUNT)));
+				MessageTemplate.MatchPerformative(MessageType.GET_PACKAGE_COUNT)));
 		addBehaviour(new RemovePackageBehaviour(
 				MessageTemplate.MatchPerformative(MessageType.REMOVE_PACKAGE)));
+      addBehaviour(new AssignDestinationToPackageBehaviour(
+            MessageTemplate.MatchPerformative(MessageType.ASSIGN_PACKAGE_DESTINATION)));
 
 		// If it is an Exit, than add the Behaviour, which is used for
 		// requesting an Package for an existing Job
 		if (rampType == ConveyorRamp.RAMP_EXIT) {
 			addBehaviour(new SearchForPackageBehaviour(this, 3000));
 			addBehaviour(new PackageReservationBehaviour(
-					MessageTemplate
-							.MatchPerformative(MessageType.SET_PACKAGE_RESERVED)));
+					MessageTemplate.MatchPerformative(MessageType.SET_PACKAGE_RESERVED)));
+         addBehaviour(new PackageNeedInformationBehaviour(MessageType.CHECK_IF_PACKAGE_IS_NEEDED));
 		}
 
 		// If it is an Storage it should answer the request from its own
@@ -230,9 +232,7 @@ public class PackageAgent extends Agent {
 				}
 
 			}
-
 		}
-
 	}
 
 	/**
@@ -356,7 +356,58 @@ public class PackageAgent extends Agent {
 		}
 
 	}
-	
-	
 
+   /**
+    * Checks the internal packageList, if there is an outgoing Job for the given Package, answer the RampOrderAgent
+    * with PACKAGE_IS_NEEDED
+    *
+    * @author sijakubo
+    */
+   private class PackageNeedInformationBehaviour extends CyclicReceiverBehaviour {
+      protected PackageNeedInformationBehaviour(int messageType) {
+         super(MessageTemplate.MatchPerformative(messageType));
+      }
+
+      @Override
+      public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+         EnquiredPackageData enquiredPackageData = (EnquiredPackageData) msg.getContentObject();
+
+         for (PackageData requiredPackageData : lstPackage) {
+            if (enquiredPackageData.getPackageData().getPackageID() == requiredPackageData.getPackageID()) {
+               ACLMessage msgAnswer = new ACLMessage(MessageType.PACKAGE_IS_NEEDED);
+               msgAnswer.setContentObject(enquiredPackageData);
+               send(msgAnswer);
+            }
+         }
+      }
+   }
+
+   /**
+    * Behaviour to add a destinationId to a packageData
+    *
+    * @author sijakubo
+    */
+   private class AssignDestinationToPackageBehaviour extends CyclicReceiverBehaviour {
+
+      protected AssignDestinationToPackageBehaviour(MessageTemplate mt) {
+         super(mt);
+      }
+
+      @Override
+      public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+         PackageDestinationData packageDestinationData = ((PackageDestinationData) msg.getContentObject());
+
+         for (PackageData packageData : lstPackage) {
+            if (packageData.getPackageID() == packageDestinationData.getPackageId()
+                  && packageData.getDestinationID() != 0) {
+
+               packageData.setDestinationID(packageDestinationData.getRampDestination());
+               if (Debugging.showInfoMessages)
+                  logger.log(Level.INFO, myAgent.getLocalName()
+                        + ": destination from package " + packageData.getPackageID()
+                        + " changed to destination " + packageData.getDestinationID());
+            }
+         }
+      }
+   }
 }

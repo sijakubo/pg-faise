@@ -8,6 +8,8 @@ import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 
 /**
+ * Behaviour which implements Methods to simplify the receive of Messages.
+ *
  * @author Matthias
  */	
 @SuppressWarnings("serial")
