@@ -21,5 +21,6 @@ public class MessageType {
 	public final static int CHECK_IF_PACKAGE_IS_STORED = 0xE; // OrderAgent(Storage) @ PackageAgent (Storage)
 	public final static int ANSWER_IF_PACKAGE_IS_CONTAINED = 0xE; // PackageAgent (Storage)@ OrderAgent(Storage) 	
 	public final static int GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT = 0xF; // OrderAgent (Storage) @ OrderAgent (Exit)
-	//public final static int SET_PACKAGE_RESERVED = 0x10; // Orderagent (Exit)
+	public final static int SET_PACKAGE_RESERVED = 0x10; // Orderagent (Exit)@ PackageAgent (Exit)
+	public final static int PACKAGE_RESERVATION = 0x11; //  PackageAgent (Exit)
 }

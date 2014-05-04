@@ -24,7 +24,7 @@ public class RampOrderAgent extends Agent {
 
 	private int conveyorID = 0;
 	private int szenarioID = 0;
-	private int rampType = -1;
+	private int rampType = -1; //-1 represents a Vehicle
 	private Logger logger = Logger.getLogger(RampOrderAgent.class);
 
 	/**
@@ -104,14 +104,14 @@ public class RampOrderAgent extends Agent {
 
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()
-						+ " -> RECEIVE_REQUEST_FROM_PACKAGEAGENT");
+						+ " <- SEARCH_FOR_PACKAGE");
 
 			// Receive the Request from the Packageagent
 			searchedPackage = (PackageData) msg.getContentObject();
 
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()
-						+ " ->SEND_REQUEST_TO_OTHER_ORDERAGENTS");
+						+ " ->ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS");
 
 			// Send the Request to all Orderagents from Storage
 			ACLMessage msgPackage = new ACLMessage(
@@ -148,7 +148,7 @@ public class RampOrderAgent extends Agent {
 
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()
-						+ " -> RECEIVE_REQUEST_FROM_EXIT_ORDERAGENT");
+						+ " <- ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS");
 
 			// Receive the Message from the Exit
 			searchedPackage = (PackageData) msg.getContentObject();
@@ -161,14 +161,14 @@ public class RampOrderAgent extends Agent {
 					PackageAgent.NAME, conveyorID, szenarioID);
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()
-						+ " -> Ask Orderagent if Package is stored");
+						+ " -> CHECK_IF_PACKAGE_IS_STORED");
 
 			send(msgCheckPackage);
 
 			// Get the answer from Packageagent
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()
-						+ " ->Get Answer from Orderagent if Package is stored");
+						+ " <- ANSWER_IF_PACKAGE_IS_CONTAINED");
 			MessageTemplate mt = MessageTemplate
 					.MatchPerformative(MessageType.ANSWER_IF_PACKAGE_IS_CONTAINED);
 			ACLMessage msgAnswer = currentAgent.blockingReceive(mt);
@@ -186,7 +186,7 @@ public class RampOrderAgent extends Agent {
 					logger.log(
 							Level.INFO,
 							myAgent.getLocalName()
-									+ " ->Answer the Exit with Yes if Package is stored");
+									+ " -> GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT");
 				send(msgAnswer);
 
 				// Inform the Routingagent
@@ -229,13 +229,23 @@ public class RampOrderAgent extends Agent {
 
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()
-						+ " -> RECEIVE_ANSWER_FROM_STORAGE");
+						+ " <- GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT");
 			
 			searchedPackage=(PackageData) msg.getContentObject();
 			
-			//Set the Package reserved, so that it will not be checked again
+			//Tell the Packageagent to set the Package reserved, so that it will not be checked again
 			if(searchedPackage!=null){
-				searchedPackage.setReserved();
+				// Orderagent should ask his Packageagent to set a Package reserved
+				ACLMessage msgSetPackage = new ACLMessage(
+						MessageType.SET_PACKAGE_RESERVED);
+				msgSetPackage.setContentObject(searchedPackage);
+				AgentHelper.addReceiver(msgSetPackage, currentAgent,
+						PackageAgent.NAME, conveyorID, szenarioID);
+				if (Debugging.showInfoMessages)
+					logger.log(Level.INFO, myAgent.getLocalName()
+							+ " -> SET_PACKAGE_RESERVED");
+
+				send(msgSetPackage);
 			}
 
 		}

@@ -31,7 +31,7 @@ public class PackageAgent extends Agent {
 
 	private int conveyorID = 0;
 	private int szenarioID = 0;
-	private int rampType = -1;
+	private int rampType = -1;//-1 represents a Vehicle
 
 	private List<PackageData> lstPackage = new ArrayList<PackageData>();
 
@@ -66,6 +66,9 @@ public class PackageAgent extends Agent {
 		// requesting an Package for an existing Job
 		if (rampType == ConveyorRamp.RAMP_EXIT) {
 			addBehaviour(new SearchForPackageBehaviour(this, 3000));
+			addBehaviour(new PackageReservationBehaviour(
+					MessageTemplate
+							.MatchPerformative(MessageType.SET_PACKAGE_RESERVED)));
 		}
 
 		// If it is an Storage it should answer the request from its own
@@ -166,8 +169,8 @@ public class PackageAgent extends Agent {
 	}
 
 	/**
-	 * Behaviour should check cyclically if the Storage (Zwischenlager) has a
-	 * Package for which a Job exists at the Exit
+	 * Behaviour (Exit Behaviour) should cyclically choose a Job from the List and ask his Orderagent to ask
+	 * the Orderagents from the Exits if there is a Package, which belongs to the Job
 	 * 
 	 * @author Raschid
 	 */
@@ -256,7 +259,7 @@ public class PackageAgent extends Agent {
 
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()
-						+ " -> RECEIVE_REQUEST_FROM_ORDERAGENT");
+						+ " <- CHECK_IF_PACKAGE_IS_STORED");
 
 			searchedPackage = (PackageData) msg.getContentObject();
 			// get the Package id
@@ -275,6 +278,9 @@ public class PackageAgent extends Agent {
 							"Yes");
 					msgAnswer.setContentObject(searchedPackage);
 					msgAnswer.addReceiver(msg.getSender());
+					if (Debugging.showInfoMessages)
+						logger.log(Level.INFO, myAgent.getLocalName()
+								+ " -> ANSWER_IF_PACKAGE_IS_CONTAINED: "+msgAnswer.getUserDefinedParameter("answer_if_contained"));
 					send(msgAnswer);
 
 				} else {
@@ -285,6 +291,9 @@ public class PackageAgent extends Agent {
 							"No");
 					msgAnswer.setContentObject(searchedPackage);
 					msgAnswer.addReceiver(msg.getSender());
+					if (Debugging.showInfoMessages)
+						logger.log(Level.INFO, myAgent.getLocalName()
+								+ " -> ANSWER_IF_PACKAGE_IS_CONTAINED: "+msgAnswer.getUserDefinedParameter("answer_if_contained"));
 					send(msgAnswer);
 
 				}
@@ -296,11 +305,58 @@ public class PackageAgent extends Agent {
 				msgAnswer.addUserDefinedParameter("answer_if_contained", "No");
 				msgAnswer.setContentObject(searchedPackage);
 				msgAnswer.addReceiver(msg.getSender());
+				if (Debugging.showInfoMessages)
+					logger.log(Level.INFO, myAgent.getLocalName()
+							+ " -> ANSWER_IF_PACKAGE_IS_CONTAINED: "+msgAnswer.getUserDefinedParameter("answer_if_contained"));
 				send(msgAnswer);
 			}
 
 		}
 
 	}
+	
+	/**
+	 * Behaviour should set a Package Reserved
+	 * 
+	 * @author Raschid
+	 */
+	private class PackageReservationBehaviour extends
+			CyclicReceiverBehaviour {
+
+		protected PackageReservationBehaviour(MessageTemplate mt) {
+			super(mt);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public void onMessage(ACLMessage msg) throws UnreadableException,
+				IOException {
+			// Receive the Request from Orderagent
+			PackageAgent currentAgent = (PackageAgent) myAgent;
+			PackageData receivedPackage = (PackageData) msg.getContentObject();
+
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()
+						+ " <- SET_PACKAGE_RESERVED");
+
+			//Search the Package in the list and set it reserved
+			for(int i=0;i<currentAgent.lstPackage.size();i++){
+				PackageData dummy=currentAgent.lstPackage.get(i);
+				if(dummy.getPackageID()==receivedPackage.getPackageID()){
+					dummy.setReserved();
+					break;
+					
+					
+				}
+			}
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()
+						+ "PACKAGE_RESERVED");
+
+		}
+
+	}
+	
+	
 
 }
