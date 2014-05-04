@@ -21,9 +21,6 @@ public class RegistrationAndLoginServletTest {
 		RegistrationAndLoginServiceImpl servlet=new RegistrationAndLoginServiceImpl();
 		
 		Assert.assertFalse(servlet.registerUser(user));
-		
-		
-		
 	}
 
 }
