@@ -269,7 +269,7 @@ public class PackageAgent extends Agent {
 			int size = currentAgent.lstPackage.size();
 			if (size >= 1) {
 				PackageData firstPositionPackage = currentAgent.lstPackage
-						.get(size - 1);
+						.get(0);
 				if (id == firstPositionPackage.getPackageID()) {
 					// Answer the Orderagent with Yes
 					ACLMessage msgAnswer = new ACLMessage(
