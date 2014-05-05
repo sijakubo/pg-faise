@@ -9,6 +9,7 @@ import java.io.Serializable;
  *
  * @author sijakubo
  */
+@SuppressWarnings("serial")
 public class EnquiredPackageData implements Serializable {
 
    private AID enquirererAID;

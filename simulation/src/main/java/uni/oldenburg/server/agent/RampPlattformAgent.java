@@ -11,6 +11,7 @@ import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
+import uni.oldenburg.shared.model.Job;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
@@ -99,7 +100,7 @@ public class RampPlattformAgent extends Agent {
 		
 		public void action() {
 			RampPlattformAgent currentAgent = (RampPlattformAgent)myAgent;
-			PackageData pendingPackage = null;
+			Job pendingJob = null;
 			
 			if (step == 0) {
 				// get ramp space request
@@ -111,7 +112,7 @@ public class RampPlattformAgent extends Agent {
 						logger.log(Level.INFO, myAgent.getLocalName() + " <- PACKAGE_SPACE_AVAILABLE");
 					
 					try {
-						pendingPackage = (PackageData)msg.getContentObject();
+						pendingJob = (Job)msg.getContentObject();
 						
 						// get package count from packageagent
 						// request
@@ -134,10 +135,14 @@ public class RampPlattformAgent extends Agent {
 						int packageCountMax = currentAgent.packageCountMax;
 						String isSpaceAvailable = packageCount < packageCountMax ? "1" : "0";
 						
+						// always space available for outgoing ramps
+						if (currentAgent.rampType == ConveyorRamp.RAMP_EXIT)
+							isSpaceAvailable = "1";
+						
 						// send ramp space info
 						ACLMessage msgReply = new ACLMessage(MessageType.PACKAGE_SPACE_AVAILABLE);
 						msgReply.addUserDefinedParameter("space_available", isSpaceAvailable);
-						msgReply.setContentObject(pendingPackage);
+						msgReply.setContentObject(pendingJob);
 						msgReply.addReceiver(msg.getSender());
 						
 						if(Debugging.showInfoMessages)
@@ -176,7 +181,12 @@ public class RampPlattformAgent extends Agent {
 						++packageCount;
 							
 						try {
-							msgAddPackage.setContentObject(msg.getContentObject());
+							Job assigningJob = (Job)msg.getContentObject();
+							
+							// create packagedata from job infos
+							PackageData myPackageData = new PackageData(assigningJob.getPackageId(), assigningJob.getDestinationId());
+							
+							msgAddPackage.setContentObject(myPackageData);
 							send(msgAddPackage);
 						}
 						catch (IOException e) {

@@ -36,6 +36,14 @@ public class Job implements Serializable, Comparable<Job> {
 		}      	
     }
     
+    // used internally for cloning the job
+    private Job(int timestamp, int destinationId, int type, int packageId) {
+    	this.destinationId = destinationId;
+    	this.timestamp = timestamp;
+    	this.packageId = packageId;
+    	this.type = type;
+    }
+    
     private boolean createOutgoing(JobList lstJob) {
     	boolean foundUseablePackageID = false;
     	final int iCounterMax = 10;    	
@@ -95,4 +103,9 @@ public class Job implements Serializable, Comparable<Job> {
            
         return 1;
 	}
+    
+    // clone data, but overwrite timestamp
+    public Job clone(int newTimestamp) {
+		return new Job(newTimestamp, destinationId, type, packageId);
+    }
 }

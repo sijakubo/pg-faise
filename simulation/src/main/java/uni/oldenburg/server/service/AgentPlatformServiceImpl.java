@@ -8,7 +8,6 @@ import java.util.Map;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-import de.novanic.eventservice.client.event.domain.DomainFactory;
 import jade.core.Agent;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
@@ -21,7 +20,6 @@ import jade.wrapper.StaleProxyException;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import uni.oldenburg.client.presenter.MainFramePresenter;
 import uni.oldenburg.client.service.AgentPlatformService;
 import uni.oldenburg.server.agent.JobAgent;
 import uni.oldenburg.server.agent.PackageAgent;
@@ -31,6 +29,7 @@ import uni.oldenburg.server.agent.RampRoutingAgent;
 import uni.oldenburg.server.agent.VehiclePlattformAgent;
 import uni.oldenburg.server.agent.VehicleRoutingAgent;
 import uni.oldenburg.server.agent.helper.AgentHelper;
+import uni.oldenburg.server.agent.helper.EventHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
@@ -133,7 +132,7 @@ public class AgentPlatformServiceImpl extends RemoteServiceServlet implements Ag
 	   }
 	   
 		// fire SimStoppedEvent
-		new RemoteEventService().addEvent(DomainFactory.getDomain(MainFramePresenter.DOMAIN_NAME), new SimStoppedEvent());
+	   EventHelper.addEvent(new SimStoppedEvent());
 	   
 	   container = null;
    }
