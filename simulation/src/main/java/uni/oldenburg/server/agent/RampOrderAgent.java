@@ -44,19 +44,13 @@ public class RampOrderAgent extends Agent {
 		}
 
 		if (rampType == ConveyorRamp.RAMP_EXIT) {
-			addBehaviour(new AskOtherOrderagentsIfPackageExistsBehaviour(
-					MessageTemplate
-							.MatchPerformative(MessageType.SEARCH_FOR_PACKAGE)));
-			addBehaviour(new SetPackageReservedBehaviour(
-					MessageTemplate
-							.MatchPerformative(MessageType.GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT)));
+			addBehaviour(new AskOtherOrderagentsIfPackageExistsBehaviour(MessageTemplate.MatchPerformative(MessageType.SEARCH_FOR_PACKAGE)));
+			addBehaviour(new SetPackageReservedBehaviour(MessageTemplate.MatchPerformative(MessageType.GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT)));
 			
 		}
 
 		if (rampType == ConveyorRamp.RAMP_STOREAGE) {
-			addBehaviour(new CheckIfPackageIsStoredBehaviour(
-					MessageTemplate
-							.MatchPerformative(MessageType.ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS)));
+			addBehaviour(new CheckIfPackageIsStoredBehaviour(MessageTemplate.MatchPerformative(MessageType.ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS)));
 			
 		}
 
@@ -103,19 +97,16 @@ public class RampOrderAgent extends Agent {
 			PackageData searchedPackage = null;
 
 			if (Debugging.showInfoMessages)
-				logger.log(Level.INFO, myAgent.getLocalName()
-						+ " <- SEARCH_FOR_PACKAGE");
+				logger.log(Level.INFO, myAgent.getLocalName()+ " <- SEARCH_FOR_PACKAGE");
 
 			// Receive the Request from the Packageagent
 			searchedPackage = (PackageData) msg.getContentObject();
 
 			if (Debugging.showInfoMessages)
-				logger.log(Level.INFO, myAgent.getLocalName()
-						+ " ->ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS");
+				logger.log(Level.INFO, myAgent.getLocalName()+ " ->ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS");
 
 			// Send the Request to all Orderagents from Storage
-			ACLMessage msgPackage = new ACLMessage(
-					MessageType.ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS);
+			ACLMessage msgPackage = new ACLMessage(MessageType.ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS);
 			msgPackage.setContentObject(searchedPackage);
 			AgentHelper.addReceivers(msgPackage, currentAgent,
 					currentAgent.getSzenarioID());
@@ -159,12 +150,10 @@ public class RampOrderAgent extends Agent {
 			msgCheckPackage.setContentObject(searchedPackage);
 			AgentHelper.addReceiver(msgCheckPackage, currentAgent,
 					PackageAgent.NAME, conveyorID, szenarioID);
-			if (Debugging.showInfoMessages)
-				logger.log(Level.INFO, myAgent.getLocalName()
-						+ " -> CHECK_IF_PACKAGE_IS_STORED");
+			if (Debugging.showInfoMessages)logger.log(Level.INFO, myAgent.getLocalName()+ " -> CHECK_IF_PACKAGE_IS_STORED");
 
 			send(msgCheckPackage);
-
+			
 			// Get the answer from Packageagent
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()
@@ -174,8 +163,7 @@ public class RampOrderAgent extends Agent {
 			ACLMessage msgAnswer = currentAgent.blockingReceive(mt);
 			// If it is answered with Yes, then he should inform the Exit and
 			// his Routingagent to start an Auction
-			if (msgAnswer.getUserDefinedParameter("answer_if_contained") != null
-					&& msgAnswer.getUserDefinedParameter("answer_if_contained")
+			if (msgAnswer.getUserDefinedParameter("answer_if_contained") != null && msgAnswer.getUserDefinedParameter("answer_if_contained")
 							.equals("Yes")) {
 				// Inform the Exit
 				ACLMessage msgAnswerExit = new ACLMessage(
@@ -183,10 +171,7 @@ public class RampOrderAgent extends Agent {
 				msgAnswerExit.setContentObject(msgAnswer.getContentObject());
 				msgAnswerExit.addReceiver(msg.getSender());
 				if (Debugging.showInfoMessages)
-					logger.log(
-							Level.INFO,
-							myAgent.getLocalName()
-									+ " -> GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT");
+		            logger.log(Level.INFO, myAgent.getLocalName()+ " -> GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT");
 				send(msgAnswer);
 
 				// Inform the Routingagent
@@ -242,10 +227,8 @@ public class RampOrderAgent extends Agent {
 				AgentHelper.addReceiver(msgSetPackage, currentAgent,
 						PackageAgent.NAME, conveyorID, szenarioID);
 				if (Debugging.showInfoMessages)
-					logger.log(Level.INFO, myAgent.getLocalName()
-							+ " -> SET_PACKAGE_RESERVED");
-
-				send(msgSetPackage);
+					logger.log(Level.INFO, myAgent.getLocalName()+ " -> SET_PACKAGE_RESERVED");
+                send(msgSetPackage);
 			}
 
 		}

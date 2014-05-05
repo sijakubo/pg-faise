@@ -31,7 +31,7 @@ public class PackageAgent extends Agent {
 
 	private int conveyorID = 0;
 	private int szenarioID = 0;
-	private int rampType = -1;//-1 represents a Vehicle
+	private int rampType = -1;// -1 represents a Vehicle
 
 	private List<PackageData> lstPackage = new ArrayList<PackageData>();
 
@@ -169,8 +169,9 @@ public class PackageAgent extends Agent {
 	}
 
 	/**
-	 * Behaviour (Exit Behaviour) should cyclically choose a Job from the List and ask his Orderagent to ask
-	 * the Orderagents from the Exits if there is a Package, which belongs to the Job
+	 * Behaviour (Exit Behaviour) should cyclically choose a Job from the List
+	 * and ask his Orderagent to ask the Orderagents from the Exits if there is
+	 * a Package, which belongs to the Job
 	 * 
 	 * @author Raschid
 	 */
@@ -190,21 +191,16 @@ public class PackageAgent extends Agent {
 			if (sizePackageList >= 1) {
 				// Choose a Package randomly. To do that, you have to create a
 				// random Value depending on the size of the package list
-				 int index = (int) ((Math.random() * 10) % sizePackageList);
+				int index = (int) ((Math.random() * 10) % sizePackageList);
 				/*
-				if (sizePackageList == 1) {
-					index = 0;
-				} else if (sizePackageList == 2) {
-					Random random = new Random();
-					index = random.nextInt(1 - 0 + 1) + 0;
-				} else if (sizePackageList == 3) {
-					Random random = new Random();
-					index = random.nextInt(2 - 1 + 1) + 1;
-				} else if (sizePackageList == 4) {
-					Random random = new Random();
-					index = random.nextInt(3 - 2 + 1) + 2;
-				}
-                */
+				 * if (sizePackageList == 1) { index = 0; } else if
+				 * (sizePackageList == 2) { Random random = new Random(); index
+				 * = random.nextInt(1 - 0 + 1) + 0; } else if (sizePackageList
+				 * == 3) { Random random = new Random(); index =
+				 * random.nextInt(2 - 1 + 1) + 1; } else if (sizePackageList ==
+				 * 4) { Random random = new Random(); index = random.nextInt(3 -
+				 * 2 + 1) + 2; }
+				 */
 				// Get the Package Data
 				PackageData pData = currentAgent.lstPackage.get(index);
 
@@ -258,8 +254,7 @@ public class PackageAgent extends Agent {
 			PackageData searchedPackage = null;
 
 			if (Debugging.showInfoMessages)
-				logger.log(Level.INFO, myAgent.getLocalName()
-						+ " <- CHECK_IF_PACKAGE_IS_STORED");
+				logger.log(Level.INFO, myAgent.getLocalName()+ " <- CHECK_IF_PACKAGE_IS_STORED");
 
 			searchedPackage = (PackageData) msg.getContentObject();
 			// get the Package id
@@ -272,28 +267,22 @@ public class PackageAgent extends Agent {
 						.get(0);
 				if (id == firstPositionPackage.getPackageID()) {
 					// Answer the Orderagent with Yes
-					ACLMessage msgAnswer = new ACLMessage(
-							MessageType.ANSWER_IF_PACKAGE_IS_CONTAINED);
-					msgAnswer.addUserDefinedParameter("answer_if_contained",
-							"Yes");
+					ACLMessage msgAnswer = new ACLMessage(MessageType.ANSWER_IF_PACKAGE_IS_CONTAINED);
+					msgAnswer.addUserDefinedParameter("answer_if_contained","Yes");
 					msgAnswer.setContentObject(searchedPackage);
 					msgAnswer.addReceiver(msg.getSender());
 					if (Debugging.showInfoMessages)
-						logger.log(Level.INFO, myAgent.getLocalName()
-								+ " -> ANSWER_IF_PACKAGE_IS_CONTAINED: "+msgAnswer.getUserDefinedParameter("answer_if_contained"));
+						logger.log(Level.INFO, myAgent.getLocalName() + " -> ANSWER_IF_PACKAGE_IS_CONTAINED: "+ msgAnswer.getUserDefinedParameter("answer_if_contained"));
 					send(msgAnswer);
 
 				} else {
 					// Answer the Orderagent with No
-					ACLMessage msgAnswer = new ACLMessage(
-							MessageType.ANSWER_IF_PACKAGE_IS_CONTAINED);
-					msgAnswer.addUserDefinedParameter("answer_if_contained",
-							"No");
+					ACLMessage msgAnswer = new ACLMessage(MessageType.ANSWER_IF_PACKAGE_IS_CONTAINED);
+					msgAnswer.addUserDefinedParameter("answer_if_contained","No");
 					msgAnswer.setContentObject(searchedPackage);
 					msgAnswer.addReceiver(msg.getSender());
 					if (Debugging.showInfoMessages)
-						logger.log(Level.INFO, myAgent.getLocalName()
-								+ " -> ANSWER_IF_PACKAGE_IS_CONTAINED: "+msgAnswer.getUserDefinedParameter("answer_if_contained"));
+						logger.log(Level.INFO,myAgent.getLocalName() + " -> ANSWER_IF_PACKAGE_IS_CONTAINED: "+ msgAnswer.getUserDefinedParameter("answer_if_contained"));
 					send(msgAnswer);
 
 				}
@@ -306,22 +295,20 @@ public class PackageAgent extends Agent {
 				msgAnswer.setContentObject(searchedPackage);
 				msgAnswer.addReceiver(msg.getSender());
 				if (Debugging.showInfoMessages)
-					logger.log(Level.INFO, myAgent.getLocalName()
-							+ " -> ANSWER_IF_PACKAGE_IS_CONTAINED: "+msgAnswer.getUserDefinedParameter("answer_if_contained"));
+					logger.log(Level.INFO,myAgent.getLocalName() + " -> ANSWER_IF_PACKAGE_IS_CONTAINED: "+ msgAnswer.getUserDefinedParameter("answer_if_contained"));
 				send(msgAnswer);
 			}
 
 		}
 
 	}
-	
+
 	/**
 	 * Behaviour should set a Package Reserved
 	 * 
 	 * @author Raschid
 	 */
-	private class PackageReservationBehaviour extends
-			CyclicReceiverBehaviour {
+	private class PackageReservationBehaviour extends CyclicReceiverBehaviour {
 
 		protected PackageReservationBehaviour(MessageTemplate mt) {
 			super(mt);
@@ -336,27 +323,21 @@ public class PackageAgent extends Agent {
 			PackageData receivedPackage = (PackageData) msg.getContentObject();
 
 			if (Debugging.showInfoMessages)
-				logger.log(Level.INFO, myAgent.getLocalName()
-						+ " <- SET_PACKAGE_RESERVED");
+				logger.log(Level.INFO, myAgent.getLocalName()+ " <- SET_PACKAGE_RESERVED");
 
-			//Search the Package in the list and set it reserved
-			for(int i=0;i<currentAgent.lstPackage.size();i++){
-				PackageData dummy=currentAgent.lstPackage.get(i);
-				if(dummy.getPackageID()==receivedPackage.getPackageID()){
+			// Search the Package in the list and set it reserved
+			for (int i = 0; i < currentAgent.lstPackage.size(); i++) {
+				PackageData dummy = currentAgent.lstPackage.get(i);
+				if (dummy.getPackageID() == receivedPackage.getPackageID()) {
 					dummy.setReserved();
 					break;
-					
-					
+
 				}
 			}
 			if (Debugging.showInfoMessages)
-				logger.log(Level.INFO, myAgent.getLocalName()
-						+ "PACKAGE_RESERVED");
-
-		}
+				logger.log(Level.INFO, myAgent.getLocalName()+ "PACKAGE_RESERVED");
+        }
 
 	}
-	
-	
 
 }
