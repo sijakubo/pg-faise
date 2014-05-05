@@ -101,8 +101,7 @@ public class AgentPlatformServiceImpl extends RemoteServiceServlet implements Ag
 			   addAgentToSimulation(id, mySzenarioID, argsAgent, RampOrderAgent.NAME		, new RampOrderAgent());
 			   addAgentToSimulation(id, mySzenarioID, argsAgent, RampPlattformAgent.NAME 	, new RampPlattformAgent());
 			   addAgentToSimulation(id, mySzenarioID, argsAgent, RampRoutingAgent.NAME		, new RampRoutingAgent());
-		   }
-		   else if (myConveyor instanceof ConveyorVehicle) {
+		   } else if (myConveyor instanceof ConveyorVehicle) {
 			   addAgentToSimulation(id, mySzenarioID, argsAgent, PackageAgent.NAME			, new PackageAgent());
 			   addAgentToSimulation(id, mySzenarioID, argsAgent, VehiclePlattformAgent.NAME	, new VehiclePlattformAgent());
 			   addAgentToSimulation(id, mySzenarioID, argsAgent, VehicleRoutingAgent.NAME	, new VehicleRoutingAgent());
