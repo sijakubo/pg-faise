@@ -84,12 +84,12 @@
 
 
 
-void extflash_init();
+void ExtflashDriver_init();
 
-uint8_t extflash_tr_byte(uint8_t spiOut);
+uint8_t ExtflashDriver_tr_byte(uint8_t spiOut);
 
-uint8_t extflash_read_status_register(void);
+uint8_t ExtflashDriver_read_status_register(void);
 
-uint8_t extflash_get_last_compare(void);
+uint8_t ExtflashDriver_get_last_compare(void);
 
 #endif /* EXTFLASH_DRV_H_ */

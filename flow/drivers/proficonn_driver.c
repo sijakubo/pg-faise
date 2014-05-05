@@ -11,12 +11,12 @@
 #define _NOP() asm volatile("nop")
 
 /**
- * \fn	void proficonn_enable()
+ * \fn	void ProfibusDriver_enable()
  * \brief	Aktiviert den Speicher, indem der Chipselect (low active) auf 0 gesetzt wird.
  *
  * \author	Jan-Gerd Meﬂ
  */
-void proficonn_init(){
+void ProfibusDriver_init(){
 	// CLK und TXD auf LOW
 	PROFICON_SPI_PORT &= ~(1<<PROFICON_CLK | 1<<PROFICON_TXD);
 	
@@ -43,7 +43,7 @@ void proficonn_init(){
  *
  * \author	Jan-Gerd Meﬂ
  */
-void proficonn_enable(){
+void ProfibusDriver_enable(){
 	PROFICON_SPI_PORT &= ~(1<<PROFICON_CLK | 1<<PROFICON_TXD);
 	PROFICON_CONF_PORT &= ~(1<<PROFICON_CS);
 }
@@ -54,7 +54,7 @@ void proficonn_enable(){
  *
  * \author	Jan-Gerd Meﬂ
  */		
-void proficonn_disable(){
+void ProfibusDriver_disable(){
 	PROFICON_CONF_PORT |= 1<<PROFICON_CS;
 	PROFICON_SPI_PORT &= ~(1<<PROFICON_CLK | 1<<PROFICON_TXD);
 }
@@ -68,7 +68,7 @@ void proficonn_disable(){
  *
  * \author	Jan-Gerd Meﬂ
  */	
-uint8_t proficonn_tr_byte(uint8_t spiOut){
+uint8_t ProfibusDriver_tr_byte(uint8_t spiOut){
 
 	uint8_t recv = 0;
 	uint8_t i = 8;
@@ -99,7 +99,7 @@ uint8_t proficonn_tr_byte(uint8_t spiOut){
  *
  * \author	Jan-Gerd Meﬂ
  */	
-uint8_t proficonn_is_irq(){
+uint8_t ProfibusDriver_is_irq(){
 	return PINB & (1<<PROFICON_IRQ);
 }
 

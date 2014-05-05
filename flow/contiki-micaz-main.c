@@ -42,7 +42,7 @@
 
 #include <stdio.h>
 #include <avr/pgmspace.h>
-
+#include "defines/Defines.h"
 #include "contiki.h"
 #include "contiki-lib.h"
 #include "net/rime.h"
@@ -58,7 +58,7 @@
 #include "dev/ds2401.h"
 #include "sys/node-id.h"
 
-#include "drivers/extflash_drv.h"
+#include "interface/MemoryInterface/MemoryInterface.h"
 
 /*---------------------------------------------------------------------------*/
 void
@@ -85,7 +85,7 @@ main(void)
 
   leds_on(LEDS_RED);
   
-  extflash_init();
+  MemoryInterface_init();
 
   /* Initialize USART */
   
@@ -119,15 +119,15 @@ main(void)
  
   leds_off(LEDS_ALL);
   
-  bolt_init();
-  photosensor_init();
+  BoltInterface_init();
+  PhotosensorInterface_init();
 
   /* Autostart processes */
   autostart_start(autostart_processes);
   
-  uart0_line_init();
+  UartDriver_line_init();
   
-  rs232_set_input(RS232_PORT_0, uart0_line_input_byte) ;
+  rs232_set_input(RS232_PORT_0, UartDriver_line_input_byte) ;
 
   /* Main scheduler loop */
   do {

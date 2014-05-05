@@ -10,13 +10,13 @@
 #include "lib/ringbuf.h"
 
 /** Ringbuffer zum zeilenweisen Empfang */
-static struct ringbuf rxbuf;
+volatile struct ringbuf rxbuf;
 
 /** Speicher f¸r den Ringbuffer */
-static uint8_t rxbuf_data[BUFSIZE];
+volatile uint8_t rxbuf_data[BUFSIZE];
 
 /**
- * \fn	void uart0_send(uint8_t *buf, uint8_t size)
+ * \fn	void UartDriver_send(uint8_t *buf, uint8_t size)
  * \brief	Sendet byteweise Daten ¸ber die UART0-Schnittstelle
  *
  * \param buf Zeiger auf die Adresse der zu sendenden Daten
@@ -24,7 +24,7 @@ static uint8_t rxbuf_data[BUFSIZE];
  *
  * \author	Jan-Gerd Meﬂ
  */
-void uart0_send(uint8_t *buf, uint8_t size)
+void UartDriver_send(uint8_t *buf, uint8_t size)
 {
 	while(size > 0) {
 		putchar(*buf++);
@@ -34,14 +34,14 @@ void uart0_send(uint8_t *buf, uint8_t size)
 }
 
 /**
- * \fn	int uart0_line_input_byte(unsigned char c)
+ * \fn	int UartDriver_line_input_byte(unsigned char c)
  * \brief	Callback Funktion, die vom Interrupt aufgerufen wird, wenn ein Byte an UART0 empfangen wurde
  *
  * \param c Empfangenes Byte
  *
  * \author	Jan-Gerd Meﬂ
  */
-int uart0_line_input_byte(unsigned char c) 
+int UartDriver_line_input_byte(unsigned char c) 
 {
   /** Overflow Indikator des Ringbuffers */
   static uint8_t overflow;
@@ -61,7 +61,7 @@ int uart0_line_input_byte(unsigned char c)
     }
   }
 
-  process_poll(&uart0_recv_process);
+  process_poll(&UartDriver_recv_process);
   return 1;
 }
 
@@ -72,8 +72,8 @@ int uart0_line_input_byte(unsigned char c)
  *
  * \author	Jan-Gerd Meﬂ
  */
-PROCESS(uart0_recv_process, "uart0 driver");
-PROCESS_THREAD(uart0_recv_process, ev, data)
+PROCESS(UartDriver_recv_process, "uart0 driver");
+PROCESS_THREAD(UartDriver_recv_process, ev, data)
 {
   //Zeilenbuffer
   static uint8_t buf[BUFSIZE];
@@ -112,15 +112,15 @@ PROCESS_THREAD(uart0_recv_process, ev, data)
 }
 
 /**
- * \fn	void uart0_line_init(void)
+ * \fn	void UartDriver_line_init(void)
  * \brief	Initialisierung des Treibers: Initialisierung des Ringbuffers und Start des verarbeitenden Prozesses
  *
  * \param c Empfangenes Byte
  *
  * \author	Jan-Gerd Meﬂ
  */
-void uart0_line_init(void)
+void UartDriver_line_init(void)
 {
   ringbuf_init(&rxbuf, rxbuf_data, sizeof(rxbuf_data));
-  process_start(&uart0_recv_process, NULL);
+  process_start(&UartDriver_recv_process, NULL);
 }

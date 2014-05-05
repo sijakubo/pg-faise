@@ -53,15 +53,15 @@
 /** Byte, das zur Übertragung von Dont-Care-Werten genutzt wird*/
 #define EXTFLASH_DONT_CARE 0xFF
 
-void proficonn_init();
+void ProfibusDriver_init();
 
-void proficonn_reset();
+void ProfibusDriver_reset();
 
-void proficonn_enable();
-void proficonn_disable();
+void ProfibusDriver_enable();
+void ProfibusDriver_disable();
 
-uint8_t proficonn_tr_byte(uint8_t spiOut);
+uint8_t ProfibusDriver_tr_byte(uint8_t spiOut);
 
-uint8_t proficonn_is_irq(void);
+uint8_t ProfibusDriver_is_irq(void);
 
 #endif /* PROFICON_DRIVER_H_ */

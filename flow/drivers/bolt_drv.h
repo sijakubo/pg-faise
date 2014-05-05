@@ -26,10 +26,9 @@
 /** Outport für die Bolzen */
 #define BOLTS_PxOUT PORTC
 
-void bolt_drv_init(void);
-void bolts_up(unsigned char boltv);
-void bolts_down(unsigned char boltv);
-void bolts_toggle(unsigned char boltv);
-uint8_t get_bolts(void);
+void BoltDriver_init(void);
+void BoltDriver_up(unsigned char boltv);
+void BoltDriver_down(unsigned char boltv);
+uint8_t BoltDriver_get(void);
 
 #endif

@@ -9,14 +9,14 @@
 #include "extflash_service.h"
 
 /**
- * \fn	void extflash_write_page_to_buffer1(uint16_t page)
+ * \fn	void ExtflashService_write_page_to_buffer1(uint16_t page)
  * \brief	Schreibt eine Seite aus dem Speicher in Buffer 1
  *
  * \param page Die zu übertragende Seite
  *
  * \author	Jan-Gerd Meß
  */
-void extflash_write_page_to_buffer1(uint16_t page){
+void ExtflashService_write_page_to_buffer1(uint16_t page){
 	int sreg;
 	
 	page &= 0x07FF;
@@ -37,14 +37,14 @@ void extflash_write_page_to_buffer1(uint16_t page){
 
 
 /**
- * \fn	void extflash_write_page_to_buffer2(uint16_t page)
+ * \fn	void ExtflashService_write_page_to_buffer2(uint16_t page)
  * \brief	Schreibt eine Seite aus dem Speicher in Buffer 2
  *
  * \param page Die zu übertragende Seite
  *
  * \author	Jan-Gerd Meß
  */
-void extflash_write_page_to_buffer2(uint16_t page){
+void ExtflashService_write_page_to_buffer2(uint16_t page){
 	int sreg;
 	page &= 0x07FF;
 	sreg = SREG;
@@ -63,7 +63,7 @@ void extflash_write_page_to_buffer2(uint16_t page){
 }
 
 /**
- * \fn	void extflash_write_buffer1(uint16_t address, uint8_t len, uint8_t* data)
+ * \fn	void ExtflashService_write_buffer1(uint16_t address, uint8_t len, uint8_t* data)
  * \brief	Schreibt in Buffer 1
  *
  * \param address Adresse im Buffer zu übertragende Seite
@@ -72,7 +72,7 @@ void extflash_write_page_to_buffer2(uint16_t page){
  *
  * \author	Jan-Gerd Meß
  */
-void extflash_write_buffer1(uint16_t address, uint8_t len, uint8_t* data){
+void ExtflashService_write_buffer1(uint16_t address, uint8_t len, uint8_t* data){
 	int sreg;
 	address &= 0x01FF;
 	sreg = SREG;
@@ -96,7 +96,7 @@ void extflash_write_buffer1(uint16_t address, uint8_t len, uint8_t* data){
 }
 
 /**
- * \fn	void extflash_write_buffer2(uint16_t address, uint8_t len, uint8_t* data)
+ * \fn	void ExtflashService_write_buffer2(uint16_t address, uint8_t len, uint8_t* data)
  * \brief	Schreibt in Buffer 2
  *
  * \param address Adresse im Buffer zu übertragende Seite
@@ -105,7 +105,7 @@ void extflash_write_buffer1(uint16_t address, uint8_t len, uint8_t* data){
  *
  * \author	Jan-Gerd Meß
  */
-void extflash_write_buffer2(uint16_t address, uint8_t len, uint8_t* data){
+void ExtflashService_write_buffer2(uint16_t address, uint8_t len, uint8_t* data){
 	int sreg;
 	address &= 0x01FF;
 	sreg = SREG;
@@ -129,14 +129,14 @@ void extflash_write_buffer2(uint16_t address, uint8_t len, uint8_t* data){
 }
 
 /**
- * \fn	void extflash_write_buffer1_to_mem(uint16_t page)
+ * \fn	void ExtflashService_write_buffer1_to_mem(uint16_t page)
  * \brief	Schreibt Buffer 1 auf eine Seite in den Speicher
  *
  * \param page Ziel-Seite
  *
  * \author	Jan-Gerd Meß
  */
-void extflash_write_buffer1_to_mem(uint16_t page){
+void ExtflashService_write_buffer1_to_mem(uint16_t page){
 	int sreg;
 	page &= 0x07FF;
 	sreg = SREG;
@@ -155,14 +155,14 @@ void extflash_write_buffer1_to_mem(uint16_t page){
 }
 
 /**
- * \fn	void extflash_write_buffer2_to_mem(uint16_t page)
+ * \fn	void ExtflashService_write_buffer2_to_mem(uint16_t page)
  * \brief	Schreibt Buffer 2 auf eine Seite in den Speicher
  *
  * \param page Ziel-Seite
  *
  * \author	Jan-Gerd Meß
  */
-void extflash_write_buffer2_to_mem(uint16_t page){
+void ExtflashService_write_buffer2_to_mem(uint16_t page){
 	int sreg;
 	page &= 0x07FF;
 	sreg = SREG;
@@ -181,7 +181,7 @@ void extflash_write_buffer2_to_mem(uint16_t page){
 }
 
 /**
- * \fn	void extflash_read_buffer1(uint16_t address, uint8_t* buffer, uint8_t len)
+ * \fn	void ExtflashService_read_buffer1(uint16_t address, uint8_t* buffer, uint8_t len)
  * \brief	Liest aus Buffer 1
  *
  * \param address Startadresse im Buffer
@@ -190,7 +190,7 @@ void extflash_write_buffer2_to_mem(uint16_t page){
  *
  * \author	Jan-Gerd Meß
  */
-void extflash_read_buffer1(uint16_t address, uint8_t* buffer, uint8_t len){
+void ExtflashService_read_buffer1(uint16_t address, uint8_t* buffer, uint8_t len){
 	int sreg;
 	address &= 0x01FF;
 	
@@ -216,7 +216,7 @@ void extflash_read_buffer1(uint16_t address, uint8_t* buffer, uint8_t len){
 }
 
 /**
- * \fn	void extflash_read_buffer2(uint16_t address, uint8_t* buffer, uint8_t len)
+ * \fn	void ExtflashService_read_buffer2(uint16_t address, uint8_t* buffer, uint8_t len)
  * \brief	Liest aus Buffer 2
  *
  * \param address Startadresse im Buffer
@@ -225,7 +225,7 @@ void extflash_read_buffer1(uint16_t address, uint8_t* buffer, uint8_t len){
  *
  * \author	Jan-Gerd Meß
  */
-void extflash_read_buffer2(uint16_t address, uint8_t* buffer, uint8_t len){
+void ExtflashService_read_buffer2(uint16_t address, uint8_t* buffer, uint8_t len){
 	int sreg;
 	address &= 0x01FF;
 	

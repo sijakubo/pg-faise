@@ -10,12 +10,12 @@
 #define _NOP() asm volatile("nop")
 
 /**
- * \fn	void extflash_init()
+ * \fn	void ExtflashDriver_init()
  * \brief	Initialisiert den Speicher-Treiber: Setzt die Ports für CS, CLK SO als Ausgänge und SI als Eingang
  *
  * \author	Jan-Gerd Meß
  */
-void extflash_init(){
+void ExtflashDriver_init(){
 	// CLK und TXD auf LOW
 	EXTFLASH_SPI_PORT &= ~(1<<EXTFLASH_CLK | 1<<EXTFLASH_TXD);
 	
@@ -33,34 +33,34 @@ void extflash_init(){
 }
 
 /**
- * \fn	void extflash_enable()
+ * \fn	void ExtflashDriver_enable()
  * \brief	Aktiviert den Speicher, indem der Chipselect (low active) auf 0 gesetzt wird.
  *
  * \author	Jan-Gerd Meß
  */
-void extflash_enable(){
+void ExtflashDriver_enable(){
 	EXTFLASH_SPI_PORT &= ~(1<<EXTFLASH_CLK | 1<<EXTFLASH_TXD);
 	EXTFLASH_CS_PORT &= ~(1<<EXTFLASH_CS);
 }
 
 /**
- * \fn	void extflash_disable()
+ * \fn	void ExtflashDriver_disable()
  * \brief	Deaktiviert den Speicher, indem der Chipselect (low active) auf 1 gesetzt wird.
  *
  * \author	Jan-Gerd Meß
  */		
-void extflash_disable(){
+void ExtflashDriver_disable(){
 	EXTFLASH_CS_PORT |= 1<<EXTFLASH_CS;
 	EXTFLASH_SPI_PORT &= ~(1<<EXTFLASH_CLK) | 1<<EXTFLASH_TXD;
 }
 
 /**
- * \fn	void extflash_wait_idle()
+ * \fn	void ExtflashDriver_wait_idle()
  * \brief	Wartet darauf, dass der Speicher eine 1 sendet, was bedeutet, dass er nicht mehr mit internen Operationen beschäftigt ist.
  *
  * \author	Jan-Gerd Meß
  */	
-void extflash_wait_idle(){
+void ExtflashDriver_wait_idle(){
 	while(!(extflash_read_status_register() & 0x80)){
 		clock_delay(1);
 	}
@@ -68,7 +68,7 @@ void extflash_wait_idle(){
 }
 
 /**
- * \fn	uint8_t extflash_tr_byte(uint8_t spiOut, uint8_t isRead)
+ * \fn	uint8_t ExtflashDriver_tr_byte(uint8_t spiOut, uint8_t isRead)
  * \brief	Sendet ein Byte an den Speicher und gibt das gleichzeitig empfangene Byte zurück (SPI).
  *
  * \param spiOut Das zu sendende Byte
@@ -76,7 +76,7 @@ void extflash_wait_idle(){
  *
  * \author	Jan-Gerd Meß
  */	
-uint8_t extflash_tr_byte(uint8_t spiOut){
+uint8_t ExtflashDriver_tr_byte(uint8_t spiOut){
 	
 	uint8_t recv = 0;
 	uint8_t i = 8;
@@ -105,12 +105,12 @@ uint8_t extflash_tr_byte(uint8_t spiOut){
 }
 
 /**
- * \fn	uint8_t extflash_read_status_register(void)
+ * \fn	uint8_t ExtflashDriver_read_status_register(void)
  * \brief	Gibt das Statusregister des Speichers zurück.
  *
  * \author	Jan-Gerd Meß
  */	
-uint8_t extflash_read_status_register(void)
+uint8_t ExtflashDriver_read_status_register(void)
 {
 	int sreg;
 	uint8_t status_register;
@@ -130,11 +130,11 @@ uint8_t extflash_read_status_register(void)
 
 
 /**
- * \fn	uint8_t extflash_get_last_compare(void)
+ * \fn	uint8_t ExtflashDriver_get_last_compare(void)
  * \brief	Gibt zurück, ob der letzte Compare eines Buffers und des Speichers einen Diff ergeben hat (1) oder ob beide identisch waren (0)
  *
  * \author	Jan-Gerd Meß
  */	
-uint8_t extflash_get_last_compare(void){
+uint8_t ExtflashDriver_get_last_compare(void){
 	return (extflash_read_status_register() & 1<<EXTFLASH_ST_COMPARE);
 }

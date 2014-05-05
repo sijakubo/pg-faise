@@ -25,10 +25,10 @@
 // oberer Bolzen
 #define BOLT_UPPER 0x02
 
-void bolt_init(void);
-void bolt_release(void);
-void bolt_release_and_separate(void);
-void bolt_separate(void);
+void BoltInterface_init(void);
+void BoltInterface_release(void);
+void BoltInterface_release_and_separate(void);
+void BoltInterface_separate(void);
 
 PROCESS_NAME(bolt_int_release);
 PROCESS_NAME(bolt_int_release_and_separate);
