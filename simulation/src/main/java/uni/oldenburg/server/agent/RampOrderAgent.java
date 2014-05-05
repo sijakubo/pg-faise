@@ -130,6 +130,7 @@ public class RampOrderAgent extends Agent {
 
 			// Send the Request to all Orderagents from Storage
 			ACLMessage msgPackage = new ACLMessage(MessageType.ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS);
+			msgPackage.addUserDefinedParameter("conveyorId", ""+currentAgent.conveyorID);//Send the Conveyor id, so that the Storage knows for which destination an auction should be started
 			msgPackage.setContentObject(searchedPackage);
 			AgentHelper.addReceivers(msgPackage, currentAgent, currentAgent.getSzenarioID());
 			send(msgPackage);
@@ -170,8 +171,7 @@ public class RampOrderAgent extends Agent {
 			ACLMessage msgCheckPackage = new ACLMessage(
 					MessageType.CHECK_IF_PACKAGE_IS_STORED);
 			msgCheckPackage.setContentObject(searchedPackage);
-			AgentHelper.addReceiver(msgCheckPackage, currentAgent,
-					PackageAgent.NAME, conveyorID, szenarioID);
+			AgentHelper.addReceiver(msgCheckPackage, currentAgent,PackageAgent.NAME, conveyorID, szenarioID);
 			if (Debugging.showInfoMessages)logger.log(Level.INFO, myAgent.getLocalName()+ " -> CHECK_IF_PACKAGE_IS_STORED");
 
 			send(msgCheckPackage);
@@ -188,15 +188,22 @@ public class RampOrderAgent extends Agent {
 			if (msgAnswer.getUserDefinedParameter("answer_if_contained") != null && msgAnswer.getUserDefinedParameter("answer_if_contained")
 							.equals("Yes")) {
 				// Inform the Exit
-				ACLMessage msgAnswerExit = new ACLMessage(
-						MessageType.GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT);
+				ACLMessage msgAnswerExit = new ACLMessage(MessageType.GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT);
+				
 				msgAnswerExit.setContentObject(msgAnswer.getContentObject());
 				msgAnswerExit.addReceiver(msg.getSender());
 				if (Debugging.showInfoMessages)
 		            logger.log(Level.INFO, myAgent.getLocalName()+ " -> GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT");
 				send(msgAnswer);
 
-				// Inform the Routingagent
+				// Inform the PackageAgent of the Storage to set the Package as reserved and to set the Destination ID
+                ACLMessage msgAnswerPackageAgent = new ACLMessage(MessageType.SET_PACKAGE_DESTINATION_STORAGE);
+                msgAnswerPackageAgent.addUserDefinedParameter("conveyorId", msg.getUserDefinedParameter("conveyorId"));
+                msgAnswerPackageAgent.setContentObject(msgAnswer.getContentObject());
+                AgentHelper.addReceiver(msgAnswerPackageAgent, currentAgent,PackageAgent.NAME, conveyorID, szenarioID);
+				if (Debugging.showInfoMessages)
+		            logger.log(Level.INFO, myAgent.getLocalName()+ " -> SET_PACKAGE_DESTINATION_STORAGE");
+				send(msgAnswer);
 
 			}
 			/*

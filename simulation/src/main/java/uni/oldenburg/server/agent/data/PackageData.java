@@ -14,6 +14,7 @@ public class PackageData implements Serializable {
 	int destinationID = 0;
 	boolean reserved=false;
 	int type = -1; // IMCOMING = 0 | OUTGOING = 1
+	
 
 	
 	public PackageData() {};
@@ -58,5 +59,7 @@ public class PackageData implements Serializable {
 	public int getType() {
 		return this.type;
 	}
+	
+	
 
 }

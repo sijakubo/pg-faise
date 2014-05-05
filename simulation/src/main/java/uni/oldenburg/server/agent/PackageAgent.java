@@ -77,9 +77,14 @@ public class PackageAgent extends Agent {
 		// Orderagent, who was asked by an exit, and check if a
 		// Package for the requested Package id is contained
 		if (rampType == ConveyorRamp.RAMP_STOREAGE) {
-			addBehaviour(new AnswerIfPackageIsContainedBehaviour(
-					MessageTemplate
-							.MatchPerformative(MessageType.CHECK_IF_PACKAGE_IS_STORED)));
+			addBehaviour(new AnswerIfPackageIsContainedBehaviour(MessageTemplate.MatchPerformative(MessageType.CHECK_IF_PACKAGE_IS_STORED)));
+			addBehaviour (new SetPackageDestinationBehaviour(MessageTemplate.MatchPerformative(MessageType.SET_PACKAGE_DESTINATION_STORAGE)));
+			addBehaviour (new InitializeAuctionStartBehaviour(this,3000));
+			
+		}
+		
+		if(rampType==ConveyorRamp.RAMP_ENTRANCE){
+			addBehaviour (new InitializeAuctionStartBehaviour(this,3000));
 		}
 
 		String nickname = AgentHelper.getUniqueNickname(PackageAgent.NAME,
@@ -230,6 +235,54 @@ public class PackageAgent extends Agent {
 			}
 		}
 	}
+	
+	/**
+	 * Behaviour (Entry and Storage Behaviour) should cyclically check if the first package in the list is already reserved
+	 * and then tell the Routingagent to start the Auction
+	 * 
+	 * @author Raschid
+	 */
+	private class InitializeAuctionStartBehaviour extends TickerBehaviour {
+
+		public InitializeAuctionStartBehaviour(Agent a, long period) {
+			super(a, period);
+
+		}
+
+		@Override
+		protected void onTick() {
+			PackageAgent currentAgent = (PackageAgent) myAgent;
+
+			// Only if Jobs exists, there should be made a request
+			int sizePackageList = currentAgent.lstPackage.size();
+			if (sizePackageList >= 1) {
+				
+				// Get the Package Data
+				PackageData pData = currentAgent.lstPackage.get(0);
+
+				// Send the Message, if the Package is  reserved
+				if (pData.isReserved()) {
+					ACLMessage msgPackageAuctionStart = new ACLMessage(
+							MessageType.INITIALIZE_START_AUCTION_BEHAVIOUR);
+					msgPackageAuctionStart.addUserDefinedParameter("conveyorId",""+pData.getDestinationID());
+					AgentHelper.addReceiver(msgPackageAuctionStart, myAgent,RampRoutingAgent.NAME, currentAgent.conveyorID,currentAgent.szenarioID);
+
+					if (Debugging.showInfoMessages)
+						logger.log(Level.INFO, myAgent.getLocalName()
+								+ " -> INITIALIZE_START_AUCTION_BEHAVIOUR");
+
+					try {
+						msgPackageAuctionStart.setContentObject(pData);
+						send(msgPackageAuctionStart);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+
+			}
+		}
+	}
 
 	/**
 	 * Behaviour should receive the request from its Storage Orderagent and
@@ -304,7 +357,7 @@ public class PackageAgent extends Agent {
 	}
 
 	/**
-	 * Behaviour should set a Package Reserved
+	 * Behaviour should set a Package Reserved for an Exit
 	 * 
 	 * @author Raschid
 	 */
@@ -330,6 +383,45 @@ public class PackageAgent extends Agent {
 				PackageData dummy = currentAgent.lstPackage.get(i);
 				if (dummy.getPackageID() == receivedPackage.getPackageID()) {
 					dummy.setReserved();
+					break;
+
+				}
+			}
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ "PACKAGE_RESERVED");
+        }
+
+	}
+	
+	/**
+	 * Behaviour should set a Package Reserved and set its destination
+	 * 
+	 * @author Raschid
+	 */
+	private class SetPackageDestinationBehaviour extends CyclicReceiverBehaviour {
+
+		protected SetPackageDestinationBehaviour(MessageTemplate mt) {
+			super(mt);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public void onMessage(ACLMessage msg) throws UnreadableException,
+				IOException {
+			// Receive the Request from Orderagent
+			PackageAgent currentAgent = (PackageAgent) myAgent;
+			int destinationId= Integer.parseInt(msg.getUserDefinedParameter("conveyorId"));
+			PackageData receivedPackage = (PackageData) msg.getContentObject();
+
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " <- SET_PACKAGE_RESERVED");
+
+			// Search the Package in the list and set it reserved
+			for (int i = 0; i < currentAgent.lstPackage.size(); i++) {
+				PackageData dummy = currentAgent.lstPackage.get(i);
+				if (dummy.getPackageID() == receivedPackage.getPackageID()) {
+					dummy.setReserved();
+					dummy.setDestinationID(destinationId);//The destination id is setted
 					break;
 
 				}

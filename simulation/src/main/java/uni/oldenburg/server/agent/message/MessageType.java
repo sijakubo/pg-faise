@@ -23,14 +23,16 @@ public class MessageType {
 	public final static int GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT = 0xF; // OrderAgent (Storage) @ OrderAgent (Exit)
 	public final static int SET_PACKAGE_RESERVED = 0x10; // Orderagent (Exit)@ PackageAgent (Exit)
 	public final static int PACKAGE_RESERVATION = 0x11; //  PackageAgent (Exit)
+	public final static int SET_PACKAGE_DESTINATION_STORAGE = 0x12; //  PackageAgent (Exit)
+	public final static int INITIALIZE_START_AUCTION_BEHAVIOUR = 0x13; //  PackageAgent (Entry/Storage) @ Routingagent
 
-   public static final int START_RAMP_SEARCH_FOR_PACKAGE = 0x12;
-   public static final int ENQUIRE_OUTGOING_RAMP = 0x13;
-   public static final int CHECK_IF_PACKAGE_IS_NEEDED = 0x14;
-   public static final int PACKAGE_IS_NEEDED = 0x15;
-   public static final int START_RAMP_EXIT_PACKAGE_ENQUIRE = 0x16;
-   public static final int PACKAGE_IS_NEEDED_FROM_RAMP_EXIT = 0x17;
-   public static final int RESERVE_PACKAGE_SLOT_ON_RAMP = 0x18;
-   public static final int ASSIGN_PACKAGE_DESTINATION = 0x19;
+   public static final int START_RAMP_SEARCH_FOR_PACKAGE = 0x14;
+   public static final int ENQUIRE_OUTGOING_RAMP = 0x15;
+   public static final int CHECK_IF_PACKAGE_IS_NEEDED = 0x16;
+   public static final int PACKAGE_IS_NEEDED = 0x17;
+   public static final int START_RAMP_EXIT_PACKAGE_ENQUIRE = 0x18;
+   public static final int PACKAGE_IS_NEEDED_FROM_RAMP_EXIT = 0x19;
+   public static final int RESERVE_PACKAGE_SLOT_ON_RAMP = 0x20;
+   public static final int ASSIGN_PACKAGE_DESTINATION = 0x21;
 
 }
