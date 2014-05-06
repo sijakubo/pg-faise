@@ -7,8 +7,6 @@
 
 #include "service/com_service.h"
 
-extern struct broadcast_conn broadcast;
-
 void com_receive(uint8_t* msg){
 	if (msg[0]==COM_CMD_RECEIVE_PACKAGE)
 	{
@@ -22,8 +20,10 @@ void com_receive(uint8_t* msg){
 	{
 	}
 	if(msg[0] == UART_LED_GREEN_COMMAND){
-		if(msg[1])
-		leds_on(LEDS_GREEN);
+		if(msg[1]){
+			sendmessage(msg,2);
+			leds_on(LEDS_GREEN);
+		}
 		else
 		leds_off(LEDS_GREEN);
 	}
@@ -33,24 +33,14 @@ void com_receive(uint8_t* msg){
 		else
 			leds_off(LEDS_RED);
 	} else if(msg[0] == UART_RAMP_NUM_PACKAGES){
-		packetbuf_copyfrom(msg, 1);
-		broadcast_send(&broadcast);
 		printf("Asking for number of packages...\n");
 	} else if(msg[0] == UART_RAMP_BAY_STATUS){
-		packetbuf_copyfrom(msg, 2);
-		broadcast_send(&broadcast);
 		printf("Asking for Status of Bay %u...\n", msg[1]);
 	} else if(msg[0] == UART_RAMP_SEPARATE_PACKAGE){
-		packetbuf_copyfrom(msg, 1);
-		broadcast_send(&broadcast);
 		printf("Separating Package...\n");
 	} else if(msg[0] == UART_RAMP_RELEASE_PACKAGE){
-		packetbuf_copyfrom(msg, 1);
-		broadcast_send(&broadcast);
 		printf("Release Package...\n");
-	} else if(msg[0] == UART_RAMP_RELEASE_AND_SEPARATE_PACKAGE){
-		packetbuf_copyfrom(msg, 1);
-		broadcast_send(&broadcast);
+	}  else if(msg[0] == UART_RAMP_RELEASE_AND_SEPARATE_PACKAGE){
 		printf("Release and Separate Package...\n");
 	}
 }

@@ -2,7 +2,7 @@
  * com_service.h
  *
  * Created: 05.04.2014 12:37:44
- *  Author: vmsieben
+ *  Author: Malte Falk
  */ 
 
 
@@ -13,6 +13,7 @@
 #include "sys/node-id.h"
 #include "dev/leds.h"
 #include "drivers/uart_drv.h"
+
 
 #define COM_CMD_RECEIVE_PACKAGE 0x50
 #define COM_CMD_DELIVER_PACKAGE 0x55
