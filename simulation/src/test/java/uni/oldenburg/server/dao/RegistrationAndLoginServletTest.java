@@ -22,5 +22,29 @@ public class RegistrationAndLoginServletTest {
 		
 		Assert.assertFalse(servlet.registerUser(user));
 	}
+	@Ignore
+	@Test
+	public void testLoginUserTrue(){
+		//Test should secure that the Servlet returns true, if a -user is logged in
+		//which is already registered
+		
+		
+		
+		RegistrationAndLoginServiceImpl servlet=new RegistrationAndLoginServiceImpl();
+		
+		Assert.assertTrue(servlet.loginUser("ja","ja"));
+	}
+	
+	@Test
+	public void testLoginUserFalse(){
+		//Test should secure that the Servlet returns false, if a -user is logged in
+		//which is already registered
+		
+		RegistrationAndLoginServiceImpl servlet=new RegistrationAndLoginServiceImpl();
+		
+		Assert.assertFalse(servlet.loginUser("hexe","hexe"));
+		
+		
+	}
 
 }
