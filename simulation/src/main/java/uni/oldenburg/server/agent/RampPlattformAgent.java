@@ -86,14 +86,14 @@ public class RampPlattformAgent extends Agent {
 			send(msgReply);
 		}
 	}
-	
+
 	/**
 	 * send message if space is available for a package on this ramp
 	 * and wait for a response if a new space should be "reserved" or not
 	 * 
      * @author Matthias
      */
-	private class IsPackageSpaceAvailableBehaviour extends CyclicBehaviour {		
+	private class IsPackageSpaceAvailableBehaviour extends CyclicBehaviour {
 		int step = 0;
 		int packageCount = 0;
 		
@@ -137,7 +137,9 @@ public class RampPlattformAgent extends Agent {
 						// send ramp space info
 						ACLMessage msgReply = new ACLMessage(MessageType.PACKAGE_SPACE_AVAILABLE);
 						msgReply.addUserDefinedParameter("space_available", isSpaceAvailable);
-						msgReply.setContentObject(pendingPackage);
+						msgReply.addUserDefinedParameter("enquiring_ramp_conveyor_id",
+                        msg.getUserDefinedParameter("enquiring_ramp_conveyor_id"));
+                  msgReply.setContentObject(pendingPackage);
 						msgReply.addReceiver(msg.getSender());
 						
 						if(Debugging.showInfoMessages)

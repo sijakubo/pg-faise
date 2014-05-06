@@ -1,5 +1,7 @@
 package uni.oldenburg.server.agent.message;
 
+import jade.lang.acl.MessageTemplate;
+
 /**
  * @author Christopher Matthias
  */	
@@ -24,13 +26,25 @@ public class MessageType {
 	public final static int SET_PACKAGE_RESERVED = 0x10; // Orderagent (Exit)@ PackageAgent (Exit)
 	public final static int PACKAGE_RESERVATION = 0x11; //  PackageAgent (Exit)
 
-   public static final int START_RAMP_SEARCH_FOR_PACKAGE = 0x12;
-   public static final int ENQUIRE_OUTGOING_RAMP = 0x13;
+   public static final int START_EXIT_RAMP_SEARCH_FOR_PACKAGE = 0x21;
+   public static final int END_EXIT_RAMP_SEARCH_FOR_PACKAGE = 0x12;
+
+   public static final int ENQUIRE_EXIT_RAMP = 0x13;
+   public static final int ENQUIRE_STORAGE_RAMP = 0x13;
+
    public static final int CHECK_IF_PACKAGE_IS_NEEDED = 0x14;
+   public static final int CHECK_IF_PACKAGE_IS_STORABLE = 0x20;
    public static final int PACKAGE_IS_NEEDED = 0x15;
-   public static final int START_RAMP_EXIT_PACKAGE_ENQUIRE = 0x16;
-   public static final int PACKAGE_IS_NEEDED_FROM_RAMP_EXIT = 0x17;
+   public static final int START_TIMER_FOR_RAMP_ENQUIRE = 0x16;
+
+   public static final int PACKAGE_IS_NEEDED_FROM_EXIT_RAMP = 0x17;
+   public static final int PACKAGE_IS_STORABLE_FROM_STORAGE_RAMP = 0x20;
+
    public static final int RESERVE_PACKAGE_SLOT_ON_RAMP = 0x18;
    public static final int ASSIGN_PACKAGE_DESTINATION = 0x19;
 
+   public static final int SET_PACKAGE_RESERVED_FOR_STORAGE_RAMP = 0x20;
+
+   public static final int START_STORAGE_RAMP_SEARCH_FOR_PACKAGE = 0x22 ;
+   public static final int END_STORAGE_RAMP_SEARCH_FOR_PACKAGE = 0x21;
 }
