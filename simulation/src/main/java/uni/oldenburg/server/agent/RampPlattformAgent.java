@@ -60,6 +60,11 @@ public class RampPlattformAgent extends Agent {
 	}
 	
 	/**
+	 * Got message:
+	 * 		JobAgent::RequestRampInfosBehaviour
+	 * Send message: 
+	 * 		JobAgent::ReceiveRampInfosBehaviour
+	 * 
 	 * send information about the ramp type
 	 * 
      * @author Matthias
@@ -88,6 +93,18 @@ public class RampPlattformAgent extends Agent {
 	}
 
 	/**
+	 * Got message:
+	 * 		JobAgent::DistributeJobBehaviour
+	 * 		PackageAgent::GetPackageCountBehaviour
+	 * 		JobAgent::AssignDestinationRampBehaviour
+	 * 			[after ramp was chosen]
+	 * Send message:
+	 * 		PackageAgent::GetPackageCountBehaviour
+	 * 			[ask ramps for item count]
+	 * 		JobAgent::AssignDestinationRampBehaviour
+	 * 		PackageAgent::AddPackageBehaviour
+	 * 			[only if current ramp got the job]
+	 * 
 	 * send message if space is available for a package on this ramp
 	 * and wait for a response if a new space should be "reserved" or not
 	 * 

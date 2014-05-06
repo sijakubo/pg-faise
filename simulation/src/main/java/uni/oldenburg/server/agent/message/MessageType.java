@@ -1,7 +1,5 @@
 package uni.oldenburg.server.agent.message;
 
-import jade.lang.acl.MessageTemplate;
-
 /**
  * @author Christopher Matthias
  */	
