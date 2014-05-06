@@ -6,6 +6,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import uni.oldenburg.Debugging;
+import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.data.PackageData;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
@@ -46,6 +47,7 @@ public class RampPlattformAgent extends Agent {
 		
 		addBehaviour(new SendRampInfoBehaviour());
 		addBehaviour(new IsPackageSpaceAvailableBehaviour());
+		addBehaviour(new GivePackageBehaviour(MessageTemplate.MatchPerformative(MessageType.GIVE_PACKAGE)));
 		
 		String nickname = AgentHelper.getUniqueNickname(RampRoutingAgent.NAME, conveyorID, szenarioID);
 		AgentHelper.registerAgent(szenarioID, this, nickname);
@@ -198,4 +200,48 @@ public class RampPlattformAgent extends Agent {
 			}
 		}
 	}
+	
+	
+	/**Behaviour should receive a Request from a Volksbot and Get him the Package from the Packageagent
+	 * @author Raschid
+	 */
+	private class GivePackageBehaviour extends CyclicReceiverBehaviour {
+		protected GivePackageBehaviour(MessageTemplate mt) {
+			super(mt);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public void onMessage(ACLMessage msg) throws UnreadableException,
+				IOException {
+					
+			// send message to Packageagent
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " <- GIVE_PACKAGE");
+			
+			RampPlattformAgent currentAgent=(RampPlattformAgent)myAgent;
+			
+			ACLMessage msgGetPackage = new ACLMessage(MessageType.REMOVE_PACKAGE_AND_ANSWER);
+			msgGetPackage.addUserDefinedParameter("packageID", msgGetPackage.getUserDefinedParameter("packageID"));
+			AgentHelper.addReceiver(msgGetPackage, currentAgent,PackageAgent.NAME, currentAgent.conveyorID, currentAgent.szenarioID);
+			
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " -> REMOVE_PACKAGE_AND_ANSWER");
+			
+		    send(msgGetPackage);
+		    
+		    //Receive Answer from Packageagent and answer the Bot
+		    MessageTemplate mt = MessageTemplate.MatchPerformative(MessageType.PACKAGE_REMOVED);
+		    ACLMessage msgGetAnswer = myAgent.blockingReceive(mt);
+		    
+		    ACLMessage sendGetAnswerToBot = new ACLMessage(MessageType.ANSWER_BOT);
+		    sendGetAnswerToBot.setContentObject(msgGetAnswer.getContentObject());
+		    AgentHelper.addReceiver(sendGetAnswerToBot,currentAgent,PackageAgent.NAME,  currentAgent.conveyorID,  currentAgent.szenarioID);
+		    send(sendGetAnswerToBot);
+		   
+		    
+
+		}
+	}
+	
 }

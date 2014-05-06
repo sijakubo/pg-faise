@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-
 import org.apache.log4j.Priority;
+
 import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.data.PackageDestinationData;
@@ -63,6 +63,8 @@ public class PackageAgent extends Agent {
 				MessageTemplate.MatchPerformative(MessageType.REMOVE_PACKAGE)));
       addBehaviour(new AssignDestinationToPackageBehaviour(
             MessageTemplate.MatchPerformative(MessageType.ASSIGN_PACKAGE_DESTINATION)));
+      addBehaviour(new RemovePackageAndAnswerBehaviour(
+				MessageTemplate.MatchPerformative(MessageType.REMOVE_PACKAGE_AND_ANSWER)));
 
 		// If it is an Exit, than add the Behaviour, which is used for
 		// requesting an Package for an existing Job
@@ -86,6 +88,11 @@ public class PackageAgent extends Agent {
 		if(rampType==ConveyorRamp.RAMP_ENTRANCE){
 			addBehaviour (new InitializeAuctionStartBehaviour(this,3000));
 		}
+		
+		if(rampType==-1){//If it is an Vehicle
+			addBehaviour(new BotAddPackageBehaviour(MessageTemplate.MatchPerformative(MessageType.BOT_ADD_PACKAGE)));
+		}
+		
 
 		String nickname = AgentHelper.getUniqueNickname(PackageAgent.NAME,
 				conveyorID, szenarioID);
@@ -141,8 +148,7 @@ public class PackageAgent extends Agent {
 						+ " <- GET_PACKAGE_COUNT");
 
 			ACLMessage msgReply = new ACLMessage(MessageType.GET_PACKAGE_COUNT);
-			msgReply.addUserDefinedParameter("package_count", ""
-					+ currentAgent.lstPackage.size());
+			msgReply.addUserDefinedParameter("package_count", ""+ currentAgent.lstPackage.size());
 			msgReply.addReceiver(msg.getSender());
 
 			if (Debugging.showPackageMessages)
@@ -485,4 +491,87 @@ public class PackageAgent extends Agent {
          }
       }
    }
+   
+   /**
+	 * Behaviour should remove a Package in order to give it to the Volsbot
+	 * 
+	 * @author Raschid
+	 */
+	private class RemovePackageAndAnswerBehaviour extends CyclicReceiverBehaviour {
+
+		protected RemovePackageAndAnswerBehaviour(MessageTemplate mt) {
+			super(mt);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public void onMessage(ACLMessage msg) throws UnreadableException,
+				IOException {
+			// Receive the Request from Orderagent
+			PackageAgent currentAgent = (PackageAgent) myAgent;
+			int packageId =Integer.parseInt(msg.getUserDefinedParameter("packageID"));
+            PackageData packagee=null;
+			
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " <- REMOVE_PACKAGE_AND_ANSWER");
+
+			// Search the Package in the list and and remove it
+			for (int i = 0; i < currentAgent.lstPackage.size(); i++) {
+				packagee = currentAgent.lstPackage.get(i);
+				if (packagee.getPackageID() == packageId) {
+					packagee.setUnReserved();
+					currentAgent.lstPackage.remove(i);
+					break;
+				}
+			}
+			
+			//Answer the Plattformagent
+			ACLMessage msgPackageRemoved = new ACLMessage(MessageType.PACKAGE_REMOVED);
+			msgPackageRemoved.setContentObject(packagee);
+			AgentHelper.addReceiver(msgPackageRemoved, currentAgent,RampPlattformAgent.NAME, currentAgent.conveyorID, currentAgent.szenarioID);
+			
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ "->PACKAGE_REMOVED");
+			send(msgPackageRemoved);
+       }
+
+	}
+   
+	/**
+	 * Behaviour should charge a Package on the Bot
+	 * 
+	 * @author Raschid
+	 */
+	private class BotAddPackageBehaviour extends CyclicReceiverBehaviour {
+
+		protected BotAddPackageBehaviour(MessageTemplate mt) {
+			super(mt);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public void onMessage(ACLMessage msg) throws UnreadableException,
+				IOException {
+			// Receive the Request from Orderagent
+			PackageAgent currentAgent = (PackageAgent) myAgent;
+            PackageData packagee=(PackageData) msg.getContentObject();
+			
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " <- BOT_ADD_PACKAGE");
+
+			//Add the Package
+			
+			currentAgent.lstPackage.add(packagee);
+				
+			
+			
+       }
+
+	}
+	
+	
+	
+	
+	
+   
 }

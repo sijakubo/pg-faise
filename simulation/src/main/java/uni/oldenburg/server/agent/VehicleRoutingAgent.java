@@ -19,6 +19,7 @@ public class VehicleRoutingAgent extends Agent {
 	
 	private int conveyorID = 0;
 	private int szenarioID = 0;
+	private boolean reserved=false;
 	
 	private Logger logger = Logger.getLogger(VehicleRoutingAgent.class);
 	
@@ -66,7 +67,7 @@ public class VehicleRoutingAgent extends Agent {
 	private class SendEstimationBehaviour extends CyclicBehaviour {
 
 		public void action() {
-
+         
 			int auctionID;
 			int sourceID;
 			int destinationID;
@@ -76,7 +77,7 @@ public class VehicleRoutingAgent extends Agent {
 			ACLMessage msgIn = myAgent.receive(mt);
 			
 			if(msgIn != null) {
-
+			  if(!reserved){
 				try {
 					auctionID = Integer.valueOf(msgIn.getUserDefinedParameter("auctionID"));
 				} catch(NumberFormatException e) {
@@ -104,12 +105,14 @@ public class VehicleRoutingAgent extends Agent {
 				msgOut.addUserDefinedParameter("auctionID", "" + auctionID);
 				msgOut.addUserDefinedParameter("vehicleID", "" + conveyorID);
 				msgOut.addUserDefinedParameter("estimation", "" + estimation);
+				msgOut.addUserDefinedParameter("destinationID", "" + destinationID);
 				
 				AgentHelper.addReceivers(msgOut, myAgent, ((VehicleRoutingAgent)myAgent).getSzenarioID());
 				
 				if(Debugging.showAuctionMessages)
 					logger.log(Level.INFO, myAgent.getLocalName() + " sent SEND_ESTIMATION message with vehicleID " + conveyorID + " auctionID " + auctionID + " and estimation: " + estimation);
 				send(msgOut);
+			  }
 			} else {
 				block();
 			}
@@ -122,13 +125,22 @@ public class VehicleRoutingAgent extends Agent {
 		return conveyorID + sourceID - destinationID;
 	}
 
+	public boolean isReserved() {
+		return reserved;
+	}
+
+	public void setReserved(boolean reserved) {
+		this.reserved = reserved;
+	}
+
 	/**
-	 * @author Christopher
+	 * @author Christopher, Raschid
 	 */
 	private class AssignVehicleForPackageBehaviour extends CyclicBehaviour {
 
 		public void action() {
-
+			setReserved(true);
+			VehicleRoutingAgent currentAgent = (VehicleRoutingAgent) myAgent;
 			int sourceID;
 			int destinationID;
 			int botID;
@@ -163,6 +175,14 @@ public class VehicleRoutingAgent extends Agent {
 				if(Debugging.showAuctionMessages) {
 					logger.log(Level.INFO, myAgent.getLocalName() + " received ASSIGN_VEHICLE_FOR_TRANSPORT message for bot " + botID + " to carry " + packageID + " from " + sourceID + " to " + destinationID);
 				}
+				
+				//Tell the plattform Agent to get the Package from its Source
+				ACLMessage msgStartGetting = new ACLMessage(MessageType.GET_PACKAGE_FROM_SOURCE);
+				msgStartGetting.addUserDefinedParameter("destinationID", ""+destinationID);
+				msgStartGetting.addUserDefinedParameter("sourceID", ""+sourceID);
+				msgStartGetting.addUserDefinedParameter("packageID", ""+packageID);
+				AgentHelper.addReceiver(msgStartGetting, myAgent,VehiclePlattformAgent.NAME, currentAgent.conveyorID,currentAgent.szenarioID);
+				
 			} else {
 				block();
 			}

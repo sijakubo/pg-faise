@@ -34,5 +34,11 @@ public class MessageType {
    public static final int PACKAGE_IS_NEEDED_FROM_RAMP_EXIT = 0x19;
    public static final int RESERVE_PACKAGE_SLOT_ON_RAMP = 0x20;
    public static final int ASSIGN_PACKAGE_DESTINATION = 0x21;
-
+   public static final int GET_PACKAGE_FROM_SOURCE = 0x22;
+   public static final int GIVE_PACKAGE = 0x23;
+   public static final int REMOVE_PACKAGE_AND_ANSWER = 0x24;
+   public static final int PACKAGE_REMOVED = 0x25;
+   public static final int ANSWER_BOT = 0x26;
+   public static final int BOT_ADD_PACKAGE = 0x27;
+   public static final int BOT_GO_TO_DESTINATION = 0x28;
 }
