@@ -111,6 +111,9 @@ public class VehiclePlattformAgent extends Agent {
 			goDestination.addUserDefinedParameter("sourceID", msg.getUserDefinedParameter("sourceID"));
 			AgentHelper.addReceiver(addPackage, currentAgent,VehiclePlattformAgent.NAME, currentAgent.conveyorID, currentAgent.szenarioID);
 			
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " -> BOT_GO_TO_DESTINATION");
+			
 			send(goDestination);
 			
 		}
@@ -133,38 +136,56 @@ public class VehiclePlattformAgent extends Agent {
 		@Override
 		public void onMessage(ACLMessage msg) throws UnreadableException,
 				IOException {
+			//Receive the Message from itself and start asking the destination Ramp
 			VehiclePlattformAgent currentAgent = (VehiclePlattformAgent) myAgent;
 			if (Debugging.showInfoMessages)
-				logger.log(Level.INFO, myAgent.getLocalName()+ " <- GET_PACKAGE_FROM_SOURCE");
+				logger.log(Level.INFO, myAgent.getLocalName()+ " <- BOT_GO_TO_DESTINATION");
 			
-			//Tell the Rampplattformagent that he wants to have the Package and which Package he wants to have
-			ACLMessage msgPackage = new ACLMessage(MessageType.GIVE_PACKAGE);
-			msgPackage.addUserDefinedParameter("packageID", msg.getUserDefinedParameter("packageID"));
-			AgentHelper.addReceiver(msgPackage, myAgent,RampPlattformAgent.NAME, Integer.parseInt(msg.getUserDefinedParameter("sourceID")),currentAgent.szenarioID);
+			ACLMessage targetAchieved = new ACLMessage(MessageType.BOT_TARGET_ACHIEVED );
+			AgentHelper.addReceiver(targetAchieved, currentAgent,RampPlattformAgent.NAME, Integer.parseInt(msg.getUserDefinedParameter("sourceID")), currentAgent.szenarioID);
+			send(targetAchieved);
 			
 			if (Debugging.showInfoMessages)
-				logger.log(Level.INFO, myAgent.getLocalName()+ " -> GIVE_ME_PACKAGE");
-			
-			send(msgPackage);
+				logger.log(Level.INFO, myAgent.getLocalName()+ " -> BOT_TARGET_ACHIEVED");
 			
 			
-						
-            //Receive Message from Plattformagent and Get the Package and initialize the Packageagent with the Package
-			MessageTemplate mt = MessageTemplate.MatchPerformative(MessageType.PACKAGE_REMOVED);
+			//Receive Answer from Plattformagent
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " <- CAN_TAKE_PACKAGE");
+			MessageTemplate mt = MessageTemplate.MatchPerformative(MessageType.CAN_TAKE_PACKAGE);
 			ACLMessage msgGetAnswer = myAgent.blockingReceive(mt);
 			
-			ACLMessage addPackage = new ACLMessage(MessageType.BOT_ADD_PACKAGE);
-			addPackage.setContentObject(msgGetAnswer.getContentObject());
-			addPackage.addReceiver(msg.getSender());
-			
+			//Send Message to Packageagent, that he removes and overgives the package
 			if (Debugging.showInfoMessages)
-				logger.log(Level.INFO, myAgent.getLocalName()+ " <- ANSWER_BOT");
+				logger.log(Level.INFO, myAgent.getLocalName()+ " -> BOT_REMOVE_PACKAGE");
+			ACLMessage removePackage = new ACLMessage(MessageType.BOT_REMOVE_PACKAGE);
+			AgentHelper.addReceiver(removePackage, currentAgent,PackageAgent.NAME, currentAgent.conveyorID, currentAgent.szenarioID);
+			send(removePackage);
 			
-			send(addPackage);
 			
-			//Go to destination (Selfmessage)
+			//Receive the Package from Packageagent
+			MessageTemplate mtP = MessageTemplate.MatchPerformative(MessageType.BOT_REMOVED_PACKAGE);
+			ACLMessage msgGetAnswerFromP = myAgent.blockingReceive(mtP);
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " <- BOT_REMOVE_PACKAGE");
 			
+			//Tell the Ramp to Take the Package
+			ACLMessage takePackage = new ACLMessage(MessageType.RAMP_TAKE_PACKAGE);
+			takePackage.setContentObject(msgGetAnswerFromP.getContentObject());
+			AgentHelper.addReceiver(takePackage, currentAgent,RampPlattformAgent.NAME,Integer.parseInt(msg.getUserDefinedParameter("sourceID")), currentAgent.szenarioID);
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " -> RAMP_TAKE_PACKAGE");
 			
+			send(takePackage);
+			
+			//Tell the Bot to set its status unreserved
+			ACLMessage unreserved = new ACLMessage(MessageType.SET_BOT_UNRESERVED);
+			
+			AgentHelper.addReceiver(unreserved, currentAgent,VehicleRoutingAgent.NAME,currentAgent.conveyorID, currentAgent.szenarioID);
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " -> SET_BOT_UNRESERVED");
+			
+			send(unreserved);
 			
 			
 		}

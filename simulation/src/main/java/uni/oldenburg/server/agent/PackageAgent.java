@@ -55,15 +55,17 @@ public class PackageAgent extends Agent {
 
 		}
 
-		addBehaviour(new AddPackageBehaviour(
-				MessageTemplate.MatchPerformative(MessageType.ADD_PACKAGE)));
+        	addBehaviour(new AddPackageBehaviour(
+    				MessageTemplate.MatchPerformative(MessageType.ADD_PACKAGE)));
+    
+		
 		addBehaviour(new GetPackageCountBehaviour(
 				MessageTemplate.MatchPerformative(MessageType.GET_PACKAGE_COUNT)));
 		addBehaviour(new RemovePackageBehaviour(
 				MessageTemplate.MatchPerformative(MessageType.REMOVE_PACKAGE)));
-      addBehaviour(new AssignDestinationToPackageBehaviour(
+        addBehaviour(new AssignDestinationToPackageBehaviour(
             MessageTemplate.MatchPerformative(MessageType.ASSIGN_PACKAGE_DESTINATION)));
-      addBehaviour(new RemovePackageAndAnswerBehaviour(
+        addBehaviour(new RemovePackageAndAnswerBehaviour(
 				MessageTemplate.MatchPerformative(MessageType.REMOVE_PACKAGE_AND_ANSWER)));
 
 		// If it is an Exit, than add the Behaviour, which is used for
@@ -91,6 +93,7 @@ public class PackageAgent extends Agent {
 		
 		if(rampType==-1){//If it is an Vehicle
 			addBehaviour(new BotAddPackageBehaviour(MessageTemplate.MatchPerformative(MessageType.BOT_ADD_PACKAGE)));
+			addBehaviour(new BotRemovePackageBehaviour(MessageTemplate.MatchPerformative(MessageType.BOT_REMOVE_PACKAGE)));			
 		}
 		
 
@@ -111,7 +114,7 @@ public class PackageAgent extends Agent {
 	/**
 	 * add package to this agent
 	 * 
-	 * @author Matthias
+	 * @author Matthias, Raschid
 	 */
 	private class AddPackageBehaviour extends CyclicReceiverBehaviour {
 		protected AddPackageBehaviour(MessageTemplate mt) {
@@ -121,12 +124,22 @@ public class PackageAgent extends Agent {
 		public void onMessage(ACLMessage msg) throws UnreadableException {
 			PackageAgent currentAgent = (PackageAgent) myAgent;
 			PackageData myPackage = (PackageData) msg.getContentObject();
-
-			currentAgent.lstPackage.add(myPackage);
-
-			if (Debugging.showPackageMessages)
-				logger.log(Level.INFO, myAgent.getLocalName() + ": package "
-						+ myPackage.getPackageID() + " added");
+            //If it is an Exit the Package can be removed immediately , The package is thrown down
+			if(rampType==ConveyorRamp.RAMP_EXIT){
+				
+            	for(int i=0;i<currentAgent.lstPackage.size();i++){
+            		PackageData dummy=currentAgent.lstPackage.get(i);
+            		if(dummy.getPackageID()==myPackage.getPackageID()){
+            			currentAgent.lstPackage.remove(i);
+            			break;
+            		}
+            	}
+            }else {
+			   currentAgent.lstPackage.add(myPackage);
+   
+			    if (Debugging.showPackageMessages)
+				    logger.log(Level.INFO, myAgent.getLocalName() + ": package "+ myPackage.getPackageID() + " added");
+            }
 		}
 	}
 
@@ -493,7 +506,7 @@ public class PackageAgent extends Agent {
    }
    
    /**
-	 * Behaviour should remove a Package in order to give it to the Volsbot
+	 * Behaviour should remove a Package in order to give it to the Volksbot
 	 * 
 	 * @author Raschid
 	 */
@@ -552,7 +565,7 @@ public class PackageAgent extends Agent {
 		@Override
 		public void onMessage(ACLMessage msg) throws UnreadableException,
 				IOException {
-			// Receive the Request from Orderagent
+			// Receive the Request from its Plattformagent
 			PackageAgent currentAgent = (PackageAgent) myAgent;
             PackageData packagee=(PackageData) msg.getContentObject();
 			
@@ -562,6 +575,46 @@ public class PackageAgent extends Agent {
 			//Add the Package
 			
 			currentAgent.lstPackage.add(packagee);
+							
+       }
+
+	}
+	
+	/**
+	 * Behaviour should remove a Package from the Bot
+	 * 
+	 * @author Raschid
+	 */
+	private class BotRemovePackageBehaviour extends CyclicReceiverBehaviour {
+
+		protected BotRemovePackageBehaviour(MessageTemplate mt) {
+			super(mt);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public void onMessage(ACLMessage msg) throws UnreadableException,
+				IOException {
+			// Receive the Request from Bot
+			PackageAgent currentAgent = (PackageAgent) myAgent;
+ 
+			
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " <- BOT_REMOVE_PACKAGE");
+
+			//Remove the Package and overgive it
+			PackageData p=currentAgent.lstPackage.get(0);
+			currentAgent.lstPackage.remove(0);
+			
+			ACLMessage packageRemoved = new ACLMessage(MessageType.BOT_REMOVED_PACKAGE);
+			packageRemoved.setContentObject(p);
+			packageRemoved.addReceiver(msg.getSender());
+			
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " -> BOT_REMOVED_PACKAGE");
+			
+			send(packageRemoved);
+			
 				
 			
 			

@@ -47,7 +47,16 @@ public class RampPlattformAgent extends Agent {
 		
 		addBehaviour(new SendRampInfoBehaviour());
 		addBehaviour(new IsPackageSpaceAvailableBehaviour());
-		addBehaviour(new GivePackageBehaviour(MessageTemplate.MatchPerformative(MessageType.GIVE_PACKAGE)));
+		
+		if(rampType== ConveyorRamp.RAMP_ENTRANCE||rampType== ConveyorRamp.RAMP_STOREAGE){
+			addBehaviour(new GivePackageBehaviour(MessageTemplate.MatchPerformative(MessageType.GIVE_PACKAGE)));
+		}
+		
+		if(rampType== ConveyorRamp.RAMP_EXIT||rampType== ConveyorRamp.RAMP_STOREAGE){
+			addBehaviour(new  ReceivePackageBehaviour(MessageTemplate.MatchPerformative(MessageType.BOT_TARGET_ACHIEVED )));
+		}
+		
+		
 		
 		String nickname = AgentHelper.getUniqueNickname(RampRoutingAgent.NAME, conveyorID, szenarioID);
 		AgentHelper.registerAgent(szenarioID, this, nickname);
@@ -243,5 +252,52 @@ public class RampPlattformAgent extends Agent {
 
 		}
 	}
+	
+	/**Behaviour should receive a Request from a Volksbot and Take the Package from him
+	 * @author Raschid
+	 */
+	private class ReceivePackageBehaviour extends CyclicReceiverBehaviour {
+		protected ReceivePackageBehaviour(MessageTemplate mt) {
+			super(mt);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public void onMessage(ACLMessage msg) throws UnreadableException,
+				IOException {
+					
+			// send message to Packageagent
+			RampPlattformAgent currentAgent=(RampPlattformAgent)myAgent;
+			
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " <- BOT_TARGET_ACHIEVED");
+			
+			
+			
+			ACLMessage msgAnswerBot = new ACLMessage(MessageType.CAN_TAKE_PACKAGE);
+			msgAnswerBot.addReceiver(msg.getSender());
+			
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " -> CAN_TAKE_PACKAGE");
+			
+		    send(msgAnswerBot);
+		    
+		    //Receive Message and Tell Packageagent to add the Package
+		    MessageTemplate mtB = MessageTemplate.MatchPerformative(MessageType.RAMP_TAKE_PACKAGE);
+			ACLMessage msgGetAnswerFromBot = myAgent.blockingReceive(mtB);
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " <- RAMP_TAKE_PACKAGE");
+		    
+		    
+			ACLMessage takePackage = new ACLMessage(MessageType.ADD_PACKAGE);
+			takePackage.setContentObject(msgGetAnswerFromBot.getContentObject());
+			AgentHelper.addReceiver(takePackage, currentAgent,PackageAgent.NAME,currentAgent.conveyorID, currentAgent.szenarioID);
+		    
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " -> ADD_PACKAGE");
+			
+		}
+	}
+	
 	
 }

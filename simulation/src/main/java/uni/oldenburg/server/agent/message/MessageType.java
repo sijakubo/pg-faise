@@ -41,4 +41,10 @@ public class MessageType {
    public static final int ANSWER_BOT = 0x26;
    public static final int BOT_ADD_PACKAGE = 0x27;
    public static final int BOT_GO_TO_DESTINATION = 0x28;
+   public static final int BOT_TARGET_ACHIEVED = 0x29;
+   public static final int CAN_TAKE_PACKAGE = 0x30;
+   public static final int BOT_REMOVE_PACKAGE = 0x31;
+   public static final int BOT_REMOVED_PACKAGE = 0x32;
+   public static final int RAMP_TAKE_PACKAGE = 0x33;
+   public static final int SET_BOT_UNRESERVED = 0x34;
 }

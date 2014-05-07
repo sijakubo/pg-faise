@@ -1,9 +1,12 @@
 package uni.oldenburg.server.agent;
 
+import java.io.IOException;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import uni.oldenburg.Debugging;
+import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
@@ -12,6 +15,7 @@ import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.UnreadableException;
 
 @SuppressWarnings("serial")
 public class VehicleRoutingAgent extends Agent {
@@ -40,6 +44,8 @@ public class VehicleRoutingAgent extends Agent {
 		addBehaviour(new AssignVehicleForPackageBehaviour());
 		addBehaviour(new InitializePacketAgentBehaviour());
 		addBehaviour(new IsFreeForTransportBehaviour());
+		addBehaviour(new SetBotUnreservedBehaviour(MessageTemplate.MatchPerformative(MessageType.SET_BOT_UNRESERVED)));
+		
 		
 		String nickname = AgentHelper.getUniqueNickname(VehicleRoutingAgent.NAME, conveyorID, szenarioID);		
 		AgentHelper.registerAgent(szenarioID, this, nickname);
@@ -187,6 +193,35 @@ public class VehicleRoutingAgent extends Agent {
 				block();
 			}
 		}
+	}
+	
+	/**
+	 * Behaviour should set the Bot unreserved
+	 * @author Raschid
+	 */
+	private class SetBotUnreservedBehaviour extends
+			CyclicReceiverBehaviour {
+
+		protected SetBotUnreservedBehaviour (MessageTemplate mt) {
+			super(mt);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public void onMessage(ACLMessage msg) throws UnreadableException,
+				IOException {
+			//Receive the Message from Plattformagent and set the Status of the Bot unreserved
+	
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " <- SET_BOT_UNRESERVED");
+			setReserved(false);
+			
+			
+			
+			
+			
+		}
+
 	}
 
 	private class InitializePacketAgentBehaviour extends Behaviour {
