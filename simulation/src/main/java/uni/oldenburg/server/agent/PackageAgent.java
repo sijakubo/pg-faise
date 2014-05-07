@@ -2,16 +2,17 @@ package uni.oldenburg.server.agent;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
 
+
 import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
-import uni.oldenburg.server.agent.data.PackageDestinationData;
-import uni.oldenburg.server.agent.data.EnquiredPackageData;
 import uni.oldenburg.server.agent.data.PackageData;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
@@ -35,11 +36,13 @@ public class PackageAgent extends Agent {
 	private int rampType = -1;// -1 represents a Vehicle
 
 	private List<PackageData> lstPackage = new ArrayList<PackageData>();
+	//List that holds the reserverd PackageIds for StorageRamps
+   private Set<Integer> lstStorageRampReservedPackageIds = new HashSet<Integer>();
 
 	private Logger logger = Logger.getLogger(PackageAgent.class);
 
-	/**
-	 * @author Matthias
+   /**
+	 * @author Matthias, sijakubo
 	 */
 	// init
 	protected void setup() {
@@ -49,6 +52,7 @@ public class PackageAgent extends Agent {
 
 			Conveyor myConveyor = (Conveyor) args[1];
 			conveyorID = myConveyor.getID();
+
 			if (myConveyor instanceof ConveyorRamp) {
 				rampType = ((ConveyorRamp) myConveyor).getRampType();
 			}
@@ -63,10 +67,19 @@ public class PackageAgent extends Agent {
 				MessageTemplate.MatchPerformative(MessageType.GET_PACKAGE_COUNT)));
 		addBehaviour(new RemovePackageBehaviour(
 				MessageTemplate.MatchPerformative(MessageType.REMOVE_PACKAGE)));
+
         addBehaviour(new AssignDestinationToPackageBehaviour(
             MessageTemplate.MatchPerformative(MessageType.ASSIGN_PACKAGE_DESTINATION)));
         addBehaviour(new RemovePackageAndAnswerBehaviour(
 				MessageTemplate.MatchPerformative(MessageType.REMOVE_PACKAGE_AND_ANSWER)));
+
+
+      if (rampType == ConveyorRamp.RAMP_ENTRANCE) {
+         addBehaviour(new AssignDestinationToPackageBehaviour(
+               MessageTemplate.MatchPerformative(MessageType.ASSIGN_PACKAGE_DESTINATION)));
+
+      }
+
 
 		// If it is an Exit, than add the Behaviour, which is used for
 		// requesting an Package for an existing Job
@@ -81,6 +94,7 @@ public class PackageAgent extends Agent {
 		// Orderagent, who was asked by an exit, and check if a
 		// Package for the requested Package id is contained
 		if (rampType == ConveyorRamp.RAMP_STOREAGE) {
+
 			addBehaviour(new AnswerIfPackageIsContainedBehaviour(MessageTemplate.MatchPerformative(MessageType.CHECK_IF_PACKAGE_IS_STORED)));
 			addBehaviour (new SetPackageDestinationBehaviour(MessageTemplate.MatchPerformative(MessageType.SET_PACKAGE_DESTINATION_STORAGE)));
 			addBehaviour (new InitializeAuctionStartBehaviour(this,3000));
@@ -97,14 +111,23 @@ public class PackageAgent extends Agent {
 		}
 		
 
-		String nickname = AgentHelper.getUniqueNickname(PackageAgent.NAME,
-				conveyorID, szenarioID);
-		AgentHelper.registerAgent(szenarioID, this, nickname);
+			addBehaviour(new AnswerIfPackageIsContainedBehaviour(
+					MessageTemplate.MatchPerformative(MessageType.CHECK_IF_PACKAGE_IS_STORED)));
 
-		if (Debugging.showAgentStartupMessages)
-			logger.log(Level.INFO, nickname + " started");
+         addBehaviour(new PackageReservationForStorageRampBehaviour(MessageType.SET_PACKAGE_RESERVED_FOR_STORAGE_RAMP));
+         
+         String nickname = AgentHelper.getUniqueNickname(PackageAgent.NAME,
+ 				conveyorID, szenarioID);
+ 		AgentHelper.registerAgent(szenarioID, this, nickname);
 
-	}
+ 		if (Debugging.showAgentStartupMessages)
+ 			logger.log(Level.INFO, nickname + " started");
+      }
+
+
+		
+
+
 
 	// destructor
 	protected void takeDown() {
@@ -112,6 +135,12 @@ public class PackageAgent extends Agent {
 	}
 
 	/**
+	 * Got message:
+	 * 		RampPlattformAgent::IsPackageSpaceAvailableBehaviour
+	 * 			[from chosen ramp]
+	 * Send message:
+	 * 		none
+	 * 
 	 * add package to this agent
 	 * 
 	 * @author Matthias, Raschid
@@ -144,6 +173,11 @@ public class PackageAgent extends Agent {
 	}
 
 	/**
+	 * Got message:
+	 * 		RampPlattformAgent::IsPackageSpaceAvailableBehaviour
+	 * Send message:
+	 * 		RampPlattformAgent::IsPackageSpaceAvailableBehaviour
+	 * 
 	 * give into about current package count
 	 * 
 	 * @author Matthias
@@ -464,13 +498,15 @@ public class PackageAgent extends Agent {
 
       @Override
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-         EnquiredPackageData enquiredPackageData = (EnquiredPackageData) msg.getContentObject();
+         PackageData packageData = (PackageData) msg.getContentObject();
 
          for (PackageData requiredPackageData : lstPackage) {
-            if (enquiredPackageData.getPackageData().getPackageID() == requiredPackageData.getPackageID()) {
-               ACLMessage msgAnswer = new ACLMessage(MessageType.PACKAGE_IS_NEEDED);
-               msgAnswer.setContentObject(enquiredPackageData);
-               send(msgAnswer);
+            if (packageData.getPackageID() == requiredPackageData.getPackageID()) {
+               ACLMessage msgReply = new ACLMessage(MessageType.PACKAGE_IS_NEEDED);
+               msgReply.addUserDefinedParameter("enquiring_ramp_conveyor_id",
+                     msg.getUserDefinedParameter("enquiring_ramp_conveyor_id"));
+               msgReply.setContentObject(packageData);
+               send(msgReply);
             }
          }
       }
@@ -489,21 +525,26 @@ public class PackageAgent extends Agent {
 
       @Override
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-         PackageDestinationData packageDestinationData = ((PackageDestinationData) msg.getContentObject());
+         int packageId = Integer.valueOf(msg.getUserDefinedParameter("package_id"));
+         int destinationConveyorId = Integer.valueOf(msg.getUserDefinedParameter("destination_conveyor_id"));
 
          for (PackageData packageData : lstPackage) {
-            if (packageData.getPackageID() == packageDestinationData.getPackageId()
+            if (packageData.getPackageID() == packageId
                   && packageData.getDestinationID() != 0) {
 
-               packageData.setDestinationID(packageDestinationData.getRampDestination());
-               if (Debugging.showInfoMessages)
+               packageData.setReserved();
+               packageData.setDestinationID(destinationConveyorId);
+
+               if (Debugging.showInfoMessages) {
                   logger.log(Level.INFO, myAgent.getLocalName()
                         + ": destination from package " + packageData.getPackageID()
                         + " changed to destination " + packageData.getDestinationID());
+               }
             }
          }
       }
    }
+
    
    /**
 	 * Behaviour should remove a Package in order to give it to the Volksbot
@@ -627,4 +668,23 @@ public class PackageAgent extends Agent {
 	
 	
    
+
+
+   /**
+    * Behaviour to handle package Reservations on Storage Ramps
+    *
+    * @author sijakubo
+    */
+   private class PackageReservationForStorageRampBehaviour extends CyclicReceiverBehaviour {
+      protected PackageReservationForStorageRampBehaviour(int messageType) {
+         super(MessageTemplate.MatchPerformative(messageType));
+      }
+
+      @Override
+      public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+         PackageData packageData = (PackageData) msg.getContentObject();
+         lstStorageRampReservedPackageIds.add(packageData.getPackageID());
+      }
+   }
+
 }

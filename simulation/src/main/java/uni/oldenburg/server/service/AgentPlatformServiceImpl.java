@@ -48,10 +48,15 @@ public class AgentPlatformServiceImpl extends RemoteServiceServlet implements Ag
    Map<Integer, JobAgent> mapJobAgent = new HashMap<Integer, JobAgent>();
 
    /**
-    * puts job from client into simulation
-    * 
-    * @author Matthias
-    */
+	* Got message:
+	* 		none [executed by client]
+	* Send message:
+	* 		JobAgent::DelegateIncomingJob
+	* 
+	* puts job from client into simulation
+	* 
+	* @author Matthias
+	*/
    public void addJob(int szenarioID, Job myJob) {	   
 	   Agent myAgent = mapJobAgent.get(szenarioID);
 	   

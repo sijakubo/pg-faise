@@ -1,69 +1,79 @@
 package uni.oldenburg.server.agent;
 
-import java.io.IOException;
-
 import jade.core.AID;
+import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.WakerBehaviour;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.UnreadableException;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
-import uni.oldenburg.server.agent.behaviour.TimeoutReceiverBehaviour;
-import uni.oldenburg.server.agent.data.EnquiredPackageData;
 import uni.oldenburg.server.agent.data.PackageData;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
-import jade.core.Agent;
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
-import jade.lang.acl.UnreadableException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("serial")
 public class RampOrderAgent extends Agent {
-	public final static String NAME = "RampOrderAgent";
+   public final static String NAME = "RampOrderAgent";
 
-	private int conveyorID = 0;
-	private int szenarioID = 0;
-	private int rampType = -1; //-1 represents a Vehicle
-	private Logger logger = Logger.getLogger(RampOrderAgent.class);
+   private static final String ENQUIRING_RAMP_PARAMETER_KEY = "enquiring_ramp_conveyor_id";
 
-	/**
-	 * @author Matthias, siajkubo
-	 */
-	protected void setup() {
-		Object[] args = getArguments();
-		if (args != null) {
-			szenarioID = (Integer) args[0];
+   private int conveyorID = 0;
+   private int szenarioID = 0;
+   private int rampType = -1; //-1 represents a Vehicle
+   private Logger logger = Logger.getLogger(RampOrderAgent.class);
 
-			Conveyor myConveyor = (Conveyor) args[1];
-			conveyorID = myConveyor.getID();
-			if (myConveyor instanceof ConveyorRamp) {
-				rampType = ((ConveyorRamp) myConveyor).getRampType();
-			}
-		}
+   /**
+    * @author Matthias, siajkubo
+    */
+   protected void setup() {
+      Object[] args = getArguments();
+      if (args != null) {
+         szenarioID = (Integer) args[0];
+
+         Conveyor myConveyor = (Conveyor) args[1];
+         conveyorID = myConveyor.getID();
+         if (myConveyor instanceof ConveyorRamp) {
+            rampType = ((ConveyorRamp) myConveyor).getRampType();
+         }
+      }
 
       if (rampType == ConveyorRamp.RAMP_ENTRANCE) {
-         //Eingang -> Ausgang: Schreibe Ausgangsrampen an und Frage ob das Paket dort ankommen darf
-         addBehaviour(new EnquireOutgoingRampsForPackageSlotBehaviour(MessageType.START_RAMP_SEARCH_FOR_PACKAGE));
-
          //Eingang -> Ausgang: wähle eine Ausgangsrampe aus und melde dieser RESERVE_PACKAGE_SLOT_ON_RAMP
-         addBehaviour(new SelectDestinationRampBehaviour(this,
-               MessageTemplate.or(MessageTemplate.MatchPerformative(MessageType.START_RAMP_EXIT_PACKAGE_ENQUIRE),
-                     MessageTemplate.MatchPerformative(MessageType.PACKAGE_IS_NEEDED_FROM_RAMP_EXIT))));
+         addBehaviour(new EnquireRampsForPackageSlotBehaviour(
+               MessageType.START_EXIT_RAMP_SEARCH_FOR_PACKAGE,
+               MessageType.END_EXIT_RAMP_SEARCH_FOR_PACKAGE,
+               MessageType.ENQUIRE_EXIT_RAMP));
+
+         //Eingang -> Zwischenrampe: wähle eine Zwischenrampe aus und melde dieser RESERVE_PACKAGE_SLOT_ON_RAMP
+         addBehaviour(new EnquireRampsForPackageSlotBehaviour(
+               MessageType.START_STORAGE_RAMP_SEARCH_FOR_PACKAGE,
+               MessageType.END_STORAGE_RAMP_SEARCH_FOR_PACKAGE,
+               MessageType.ENQUIRE_STORAGE_RAMP));
 
          //Eingang -> PackageAgent: setze Destination
          addBehaviour(new AssignPackageDestinationBehaviour(MessageType.ASSIGN_PACKAGE_DESTINATION));
       }
 
 		if (rampType == ConveyorRamp.RAMP_EXIT) {
-
 			addBehaviour(new AskOtherOrderagentsIfPackageExistsBehaviour(MessageTemplate.MatchPerformative(MessageType.SEARCH_FOR_PACKAGE)));
 			addBehaviour(new SetPackageReservedBehaviour(MessageTemplate.MatchPerformative(MessageType.GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT)));
-			
+
+         //Ausgang -> Eingang: Beantworte die Anfrage, wenn das Paket angenommen werden kann
+         addBehaviour(new HandleExitRampPackageSlotEnquireBehaviour(MessageType.ENQUIRE_EXIT_RAMP));
+         //PackageAgent -> Ausgang: Der eigene PackageAgent meldet auf Anfrage eine Nachfrage nach dem Paket
+         addBehaviour(new SendPackageNeedOfferBehaviour(MessageType.PACKAGE_IS_NEEDED));
+         //Ausgang -> Eingang: reserviere einen Slot für das Paket
+         addBehaviour(new HandlePackageSlotReservationBehaviour(MessageType.RESERVE_PACKAGE_SLOT_ON_RAMP, false));
 		}
 
 		if (rampType == ConveyorRamp.RAMP_STOREAGE) {
@@ -76,54 +86,48 @@ public class RampOrderAgent extends Agent {
 			addBehaviour(new CheckIfPackageIsStoredBehaviour(
 					MessageTemplate.MatchPerformative(MessageType.ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS)));
 
-         //Ausgang -> Eingang: Beantworte die Anfrage, wenn das Paket angenommen werden kann
-         addBehaviour(new HandlePackageSlotEnquire(MessageType.ENQUIRE_OUTGOING_RAMP));
-         //PackageAgent -> Ausgang: Der eigene PackageAgent meldet auf Anfrage eine Nachfrage nach dem Paket
-         addBehaviour(new SendPackageNeedOffer(MessageType.PACKAGE_IS_NEEDED));
-         //Ausgang -> Eingang: reserviere einen Slot für das Paket
-         addBehaviour(new HandlePackageSlotReservationBehaviour(MessageType.RESERVE_PACKAGE_SLOT_ON_RAMP));
+         addBehaviour(new HandleStorageRampPackageSlotEnquireBehaviour(MessageType.ENQUIRE_STORAGE_RAMP));
+         addBehaviour(new HandlePackageSlotReservationBehaviour(MessageType.RESERVE_PACKAGE_SLOT_ON_RAMP, true));
+         addBehaviour(new HandleSpaceAvailableBehaviour(MessageType.PACKAGE_SPACE_AVAILABLE));
       }
 
-		
-
       String nickname = AgentHelper.getUniqueNickname(RampOrderAgent.NAME,
-				conveyorID, szenarioID);
-		AgentHelper.registerAgent(szenarioID, this, nickname);
+            conveyorID, szenarioID);
+      AgentHelper.registerAgent(szenarioID, this, nickname);
 
-		if (Debugging.showAgentStartupMessages)
-			logger.log(Level.INFO, nickname + " started");
-	}
+      if (Debugging.showAgentStartupMessages)
+         logger.log(Level.INFO, nickname + " started");
+   }
 
-	// destructor
-	protected void takeDown() {
-		AgentHelper.unregister(this);
-	}
+   // destructor
+   protected void takeDown() {
+      AgentHelper.unregister(this);
+   }
 
-	/**
-	 * Behaviour should receive the request of a Packageagent and should ask the
-	 * Orderagents of a Storage if there is a Package for the given ID
-	 * 
-	 * @author Raschid
-	 */
-	private class AskOtherOrderagentsIfPackageExistsBehaviour extends
-			CyclicReceiverBehaviour {
+   /**
+    * Behaviour should receive the request of a Packageagent and should ask the
+    * Orderagents of a Storage if there is a Package for the given ID
+    *
+    * @author Raschid
+    */
+   private class AskOtherOrderagentsIfPackageExistsBehaviour extends
+         CyclicReceiverBehaviour {
 
-		protected AskOtherOrderagentsIfPackageExistsBehaviour(MessageTemplate mt) {
-			super(mt);
-			// TODO Auto-generated constructor stub
-		}
+      protected AskOtherOrderagentsIfPackageExistsBehaviour(MessageTemplate mt) {
+         super(mt);
+      }
 
-		@Override
-		public void onMessage(ACLMessage msg) throws UnreadableException,
-				IOException {
-			RampOrderAgent currentAgent = (RampOrderAgent) myAgent;
-			PackageData searchedPackage = null;
+      @Override
+      public void onMessage(ACLMessage msg) throws UnreadableException,
+            IOException {
+         RampOrderAgent currentAgent = (RampOrderAgent) myAgent;
+         PackageData searchedPackage = null;
 
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()+ " <- SEARCH_FOR_PACKAGE");
 
-			// Receive the Request from the Packageagent
-			searchedPackage = (PackageData) msg.getContentObject();
+         // Receive the Request from the Packageagent
+         searchedPackage = (PackageData) msg.getContentObject();
 
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()+ " ->ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS");
@@ -135,37 +139,36 @@ public class RampOrderAgent extends Agent {
 			AgentHelper.addReceivers(msgPackage, currentAgent, currentAgent.getSzenarioID());
 			send(msgPackage);
 
-		}
+      }
 
-	}
+   }
 
-	/**
-	 * Behaviour should receive the request from an exit Orderagent and should
-	 * ask the Packageagent if a package is stored, which is needed by the exit
-	 * and then answer the Orderagent of the exit if the Package exists or not
-	 * 
-	 * @author Raschid
-	 */
-	private class CheckIfPackageIsStoredBehaviour extends
-			CyclicReceiverBehaviour {
+   /**
+    * Behaviour should receive the request from an exit Orderagent and should
+    * ask the Packageagent if a package is stored, which is needed by the exit
+    * and then answer the Orderagent of the exit if the Package exists or not
+    *
+    * @author Raschid
+    */
+   private class CheckIfPackageIsStoredBehaviour extends
+         CyclicReceiverBehaviour {
 
-		protected CheckIfPackageIsStoredBehaviour(MessageTemplate mt) {
-			super(mt);
-			// TODO Auto-generated constructor stub
-		}
+      protected CheckIfPackageIsStoredBehaviour(MessageTemplate mt) {
+         super(mt);
+      }
 
-		@Override
-		public void onMessage(ACLMessage msg) throws UnreadableException,
-				IOException {
-			RampOrderAgent currentAgent = (RampOrderAgent) myAgent;
-			PackageData searchedPackage = null;
+      @Override
+      public void onMessage(ACLMessage msg) throws UnreadableException,
+            IOException {
+         RampOrderAgent currentAgent = (RampOrderAgent) myAgent;
+         PackageData searchedPackage = null;
 
-			if (Debugging.showInfoMessages)
-				logger.log(Level.INFO, myAgent.getLocalName()
-						+ " <- ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS");
+         if (Debugging.showInfoMessages)
+            logger.log(Level.INFO, myAgent.getLocalName()
+                  + " <- ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS");
 
-			// Receive the Message from the Exit
-			searchedPackage = (PackageData) msg.getContentObject();
+         // Receive the Message from the Exit
+         searchedPackage = (PackageData) msg.getContentObject();
 
 			// Orderagent should ask his Packageagent if the Package is stored
 			ACLMessage msgCheckPackage = new ACLMessage(
@@ -196,6 +199,7 @@ public class RampOrderAgent extends Agent {
 		            logger.log(Level.INFO, myAgent.getLocalName()+ " -> GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT");
 				send(msgAnswer);
 
+
 				// Inform the PackageAgent of the Storage to set the Package as reserved and to set the Destination ID
                 ACLMessage msgAnswerPackageAgent = new ACLMessage(MessageType.SET_PACKAGE_DESTINATION_STORAGE);
                 msgAnswerPackageAgent.addUserDefinedParameter("conveyorId", msg.getUserDefinedParameter("conveyorId"));
@@ -205,9 +209,12 @@ public class RampOrderAgent extends Agent {
 		            logger.log(Level.INFO, myAgent.getLocalName()+ " -> SET_PACKAGE_DESTINATION_STORAGE");
 				send(msgAnswer);
 
-			}
-			/*
-			 * else { //Inform the Exit ACLMessage msgAnswerExit = new
+            // Inform the Routingagent
+
+
+         }
+         /*
+          * else { //Inform the Exit ACLMessage msgAnswerExit = new
 			 * ACLMessage(MessageType.GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT);
 			 * msgAnswerExit.addUserDefinedParameter("answer_exit", "No");
 			 * msgAnswerExit.addReceiver(msg.getSender());
@@ -218,28 +225,27 @@ public class RampOrderAgent extends Agent {
 			 * }
 			 */
 
-		}
+      }
 
-	}
+   }
 
-	/**
-	 * Behaviour should receive the answer from the Storage and should set the
-	 * Packagedata reserved
-	 * 
-	 * @author Raschid
-	 */
-	private class SetPackageReservedBehaviour extends CyclicReceiverBehaviour {
+   /**
+    * Behaviour should receive the answer from the Storage and should set the
+    * Packagedata reserved
+    *
+    * @author Raschid
+    */
+   private class SetPackageReservedBehaviour extends CyclicReceiverBehaviour {
 
-		protected SetPackageReservedBehaviour(MessageTemplate mt) {
-			super(mt);
-			// TODO Auto-generated constructor stub
-		}
+      protected SetPackageReservedBehaviour(MessageTemplate mt) {
+         super(mt);
+      }
 
-		@Override
-		public void onMessage(ACLMessage msg) throws UnreadableException,
-				IOException {
-			RampOrderAgent currentAgent = (RampOrderAgent) myAgent;
-			PackageData searchedPackage = null;
+      @Override
+      public void onMessage(ACLMessage msg) throws UnreadableException,
+            IOException {
+         RampOrderAgent currentAgent = (RampOrderAgent) myAgent;
+         PackageData searchedPackage = null;
 
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()
@@ -260,22 +266,129 @@ public class RampOrderAgent extends Agent {
                 send(msgSetPackage);
 			}
 
-		}
+         //Tell the Packageagent to set the Package reserved, so that it will not be checked again
+         if (searchedPackage != null) {
+            // Orderagent should ask his Packageagent to set a Package reserved
+            ACLMessage msgSetPackage = new ACLMessage(
+                  MessageType.SET_PACKAGE_RESERVED);
+            msgSetPackage.setContentObject(searchedPackage);
+            AgentHelper.addReceiver(msgSetPackage, currentAgent,
+                  PackageAgent.NAME, conveyorID, szenarioID);
+            if (Debugging.showInfoMessages)
+               logger.log(Level.INFO, myAgent.getLocalName()
+                     + " -> SET_PACKAGE_RESERVED");
 
-	}
+            send(msgSetPackage);
+         }
 
-	public int getSzenarioID() {
-		// TODO Auto-generated method stub
-		return this.szenarioID;
-	}
+      }
+
+   }
+
+   public int getSzenarioID() {
+      return this.szenarioID;
+   }
 
    /**
-    * Enquire all ExitRamps if they have a need for an specific Package.
+    * Behaviour that handles the Search for an Destination Ramp. This Behaviour could either ask Exit- or StorageRamps.
+    * If no free Conveyor was found, this behaviour asks in 5s steps the StorageRamps until a free space is found.
     *
     * @author sijakubo
     */
-   private class EnquireOutgoingRampsForPackageSlotBehaviour extends CyclicReceiverBehaviour {
-      protected EnquireOutgoingRampsForPackageSlotBehaviour(int messageType) {
+   private class EnquireRampsForPackageSlotBehaviour extends CyclicReceiverBehaviour {
+      private static final int ENQUIRE_TIMEOUT = 5000;
+      private Behaviour timeOutBehaviour;
+      private List<AID> possibleDestinationRamps;
+      private int startEnquireMessageType;
+      private int endEnquireMessageType;
+
+      protected EnquireRampsForPackageSlotBehaviour(int startEnquireMessageType,
+                                                    int endEnquireMessageType,
+                                                    int enquireMessageType) {
+         super(MessageTemplate.or(
+               MessageTemplate.or(
+                     MessageTemplate.MatchPerformative(startEnquireMessageType),
+                     MessageTemplate.MatchPerformative(endEnquireMessageType)),
+               MessageTemplate.MatchPerformative(enquireMessageType)
+         ));
+
+         this.startEnquireMessageType = startEnquireMessageType;
+         this.endEnquireMessageType = endEnquireMessageType;
+      }
+
+      @Override
+      public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+         PackageData packageData = (PackageData) msg.getContentObject();
+
+         if (msg.getPerformative() == startEnquireMessageType) {
+            //Start Enquire of Ramps
+            logger.info("Enquire for DestinationRamp started. Package: " + packageData.getPackageID());
+
+            addTimeOutBehaviourToMyAgent();
+            possibleDestinationRamps = new ArrayList<AID>();
+
+            //send enquire to ramps
+            ACLMessage msgEnquireRamps = new ACLMessage(MessageType.ENQUIRE_EXIT_RAMP);
+            msgEnquireRamps.setContentObject(packageData);
+            msgEnquireRamps.addUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY, String.valueOf(conveyorID));
+            AgentHelper.addReceivers(msgEnquireRamps, myAgent, szenarioID);
+            send(msgEnquireRamps);
+
+         } else if (msg.getPerformative() == endEnquireMessageType) {
+            //End Enquire of Ramps
+            logger.debug("Enquire for DestinationRamp ended. Package: " + packageData.getPackageID());
+
+            if (!possibleDestinationRamps.isEmpty()) {
+               AID destinationRampAID = possibleDestinationRamps.get(0);
+               logger.debug("Destination Ramp found for Package: " + packageData.getPackageID()
+                     + ". Destination is AID: " + destinationRampAID);
+
+               ACLMessage message = new ACLMessage(MessageType.RESERVE_PACKAGE_SLOT_ON_RAMP);
+               message.addReceiver(destinationRampAID);
+               send(message);
+            } else {
+               logger.debug("No DestinationRamp found for Package: " + packageData.getPackageID()
+                     + ". Trying to find Storage Ramp.");
+
+               //no ExitRamp has a need for the given package.
+               //Initialize StorageRamp Search until a StorageRamp is found.
+               ACLMessage message = new ACLMessage(MessageType.START_STORAGE_RAMP_SEARCH_FOR_PACKAGE);
+               message.addUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY, String.valueOf(conveyorID));
+               message.setContentObject(packageData);
+               message.addReceiver(myAgent.getAID());
+               send(message);
+            }
+         } else {
+            logger.debug("Enquire recived for Package: " + packageData.getPackageID());
+            possibleDestinationRamps.add(msg.getSender());
+         }
+      }
+
+      private void addTimeOutBehaviourToMyAgent() {
+         if (timeOutBehaviour != null) {
+            myAgent.removeBehaviour(timeOutBehaviour);
+         }
+
+         timeOutBehaviour = new WakerBehaviour(myAgent, ENQUIRE_TIMEOUT) {
+            @Override
+            protected void onWake() {
+               ACLMessage endEnquireMessage = new ACLMessage(MessageType.END_EXIT_RAMP_SEARCH_FOR_PACKAGE);
+               endEnquireMessage.addReceiver(myAgent.getAID());
+               myAgent.send(endEnquireMessage);
+            }
+         };
+         myAgent.addBehaviour(timeOutBehaviour);
+      }
+   }
+
+
+   /**
+    * Behaviour which asks its PackageAgent if there is a need for a specific Package
+    *
+    * @author sijakubo
+    */
+   private class HandleExitRampPackageSlotEnquireBehaviour extends CyclicReceiverBehaviour {
+      protected HandleExitRampPackageSlotEnquireBehaviour(int messageType) {
          super(MessageTemplate.MatchPerformative(messageType));
       }
 
@@ -283,93 +396,27 @@ public class RampOrderAgent extends Agent {
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
          PackageData packageData = (PackageData) msg.getContentObject();
 
-         EnquiredPackageData enquiredPackageData = new EnquiredPackageData(myAgent.getAID(), packageData);
-
-         //send enquire to exitRamps
-         ACLMessage msgEnquireExitRamps = new ACLMessage(MessageType.ENQUIRE_OUTGOING_RAMP);
-         msgEnquireExitRamps.setContentObject(enquiredPackageData);
-         AgentHelper.addReceiver(msgEnquireExitRamps, myAgent, RampOrderAgent.NAME, conveyorID, szenarioID);
-         send(msgEnquireExitRamps);
-
-         //notify this OrderAgent, that the Enquire started
-         ACLMessage msgStartExitRampEnquire = new ACLMessage(MessageType.START_RAMP_EXIT_PACKAGE_ENQUIRE);
-         msgStartExitRampEnquire.addReceiver(myAgent.getAID());
-         send(msgStartExitRampEnquire);
-      }
-   }
-
-
-   /**
-    * Behaviour which asks its PackageAgent if there is a need for a specifig Package
-    *
-    * @author sijakubo
-    */
-   private class HandlePackageSlotEnquire extends CyclicReceiverBehaviour {
-      protected HandlePackageSlotEnquire(int messageType) {
-         super(MessageTemplate.MatchPerformative(messageType));
-      }
-
-      @Override
-      public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-         EnquiredPackageData enquiredPackage = (EnquiredPackageData) msg.getContentObject();
-
          ACLMessage msgCheckIfPackageIsNeeded = new ACLMessage(MessageType.CHECK_IF_PACKAGE_IS_NEEDED);
-         msgCheckIfPackageIsNeeded.setContentObject(enquiredPackage);
+         msgCheckIfPackageIsNeeded.addUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY,
+               msg.getUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY));
+         msgCheckIfPackageIsNeeded.setContentObject(packageData);
          AgentHelper.addReceiver(msgCheckIfPackageIsNeeded, myAgent, PackageAgent.NAME, conveyorID, szenarioID);
          send(msgCheckIfPackageIsNeeded);
       }
    }
 
-   /**
-    * TimeoutReceiverBehaviour which waits for 5s to receive
-    *
-    * @author sijakubo
-    */
-   private class SelectDestinationRampBehaviour extends TimeoutReceiverBehaviour {
-      public static final int TIMEOUT_MS = 5000;
-
-      private List<AID> possibleDestinationRamps;
-
-      public SelectDestinationRampBehaviour(Agent myAgent, MessageTemplate messageTemplate) {
-         super(myAgent, TIMEOUT_MS, messageTemplate);
-         possibleDestinationRamps = new ArrayList<AID>();
-      }
-
-      @Override
-      public void onMessage(ACLMessage msg) {
-         //Offer from ExitRamp received. Cache Recevier information
-         possibleDestinationRamps.add(msg.getSender());
-      }
-
-      @Override
-      public void onTimeout() throws IOException {
-         if (!possibleDestinationRamps.isEmpty()) {
-
-            AID destinationRampAID = possibleDestinationRamps.get(0);
-            ACLMessage message = new ACLMessage(MessageType.RESERVE_PACKAGE_SLOT_ON_RAMP);
-            message.addReceiver(destinationRampAID);
-            send(message);
-
-            possibleDestinationRamps.clear();
-         } else {
-            //no ExitRamp has a need for the given package. Search for a storageRamp instead
-            //TODO: wir hahben aktuel keinen identifikator für Paketentypen. Wonach soll eine passende Zwischenrampe gesucht werden?
-         }
-      }
-
-   }
 
    /**
-    * EntranceRamp -> ExitRamp
-    *
-    * The ExitRamp got choosen to receiver the Package. Reserve the Job on the PackageAgent
+    * The ExitRamp got choosen to receiver the Package. Reserve the Job on the ExitsRamp-PackageAgent
     *
     * @author sijakubo
     */
    private class HandlePackageSlotReservationBehaviour extends CyclicReceiverBehaviour {
+      private boolean isStorageRamp;
 
-      protected HandlePackageSlotReservationBehaviour(int messageType) {
+      protected HandlePackageSlotReservationBehaviour(int messageType, boolean isStorageRamp) {
          super(MessageTemplate.MatchPerformative(messageType));
+         this.isStorageRamp = isStorageRamp;
       }
 
       @Override
@@ -377,19 +424,29 @@ public class RampOrderAgent extends Agent {
          PackageData packageData = (PackageData) msg.getContentObject();
 
          //Notifiy PackageAgent, to reserve the Slot for the Package
-         ACLMessage msgAcceptReservationOffer = new ACLMessage(MessageType.SET_PACKAGE_RESERVED);
+
+         ACLMessage msgAcceptReservationOffer;
+         if (isStorageRamp) {
+            msgAcceptReservationOffer = new ACLMessage(MessageType.SET_PACKAGE_RESERVED);
+         } else {
+            msgAcceptReservationOffer = new ACLMessage(MessageType.SET_PACKAGE_RESERVED_FOR_STORAGE_RAMP);
+         }
          msgAcceptReservationOffer.setContentObject(packageData);
          AgentHelper.addReceiver(msgAcceptReservationOffer, myAgent, PackageAgent.NAME, conveyorID, szenarioID);
          send(msgAcceptReservationOffer);
 
+         //reply to the Entrance Ramp, that the Reservation was accepted
          ACLMessage msgReply = new ACLMessage(MessageType.ASSIGN_PACKAGE_DESTINATION);
          msgReply.setContentObject(packageData);
+         msgReply.addUserDefinedParameter("destination_conveyor_id", String.valueOf(conveyorID));
          msgReply.addReceiver(msg.getSender());
          send(msgReply);
       }
    }
 
    /**
+    * Sends a destination
+    *
     * @author sijakubo
     */
    private class AssignPackageDestinationBehaviour extends CyclicReceiverBehaviour {
@@ -403,28 +460,85 @@ public class RampOrderAgent extends Agent {
          PackageData packageData = (PackageData) msg.getContentObject();
 
          ACLMessage msgAssignDestination = new ACLMessage(MessageType.ASSIGN_PACKAGE_DESTINATION);
+         msgAssignDestination.addUserDefinedParameter(
+               "package_id", String.valueOf(packageData.getDestinationID()));
+         msgAssignDestination.addUserDefinedParameter(
+               "destination_conveyor_id", msg.getUserDefinedParameter("destination_conveyor_id"));
+
          msgAssignDestination.setContentObject(packageData.getPackageID());
          AgentHelper.addReceiver(msgAssignDestination, myAgent, PackageAgent.NAME, conveyorID, szenarioID);
       }
    }
 
    /**
+    * Send an packageNeed response from the ExitRamp to the EntranceRamp
+    *
     * @author sijakubo
     */
-   private class SendPackageNeedOffer extends CyclicReceiverBehaviour {
+   private class SendPackageNeedOfferBehaviour extends CyclicReceiverBehaviour {
 
-      protected SendPackageNeedOffer(int messageType) {
+      protected SendPackageNeedOfferBehaviour(int messageType) {
          super(MessageTemplate.MatchPerformative(messageType));
       }
 
       @Override
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-         EnquiredPackageData enquiredPackageData = (EnquiredPackageData) msg.getContentObject();
+         ACLMessage msgPackageIsNeeded = new ACLMessage(MessageType.PACKAGE_IS_NEEDED_FROM_EXIT_RAMP);
 
-         ACLMessage msgPackageIsNeeded = new ACLMessage(MessageType.PACKAGE_IS_NEEDED_FROM_RAMP_EXIT);
-         msgPackageIsNeeded.addReceiver(enquiredPackageData.getEnquirererAID());
-         msgPackageIsNeeded.setContentObject(enquiredPackageData.getPackageData());
+         String enquiringRampConveyorId = msg.getUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY);
+         AgentHelper.addReceiver(msgPackageIsNeeded, myAgent, RampOrderAgent.NAME,
+               Integer.valueOf(enquiringRampConveyorId), szenarioID);
+
+         //packageData
+         msgPackageIsNeeded.setContentObject(msg.getContentObject());
          send(msgPackageIsNeeded);
+      }
+   }
+
+   /**
+    * Asks its PlattformAgent if there is space available for another package
+    *
+    * @author sijakubo
+    */
+   private class HandleStorageRampPackageSlotEnquireBehaviour extends CyclicReceiverBehaviour {
+      protected HandleStorageRampPackageSlotEnquireBehaviour(int messageType) {
+         super(MessageTemplate.MatchPerformative(messageType));
+      }
+
+      @Override
+      public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+         ACLMessage message = new ACLMessage(MessageType.PACKAGE_SPACE_AVAILABLE);
+         //packageData
+         message.setContentObject(msg.getContentObject());
+         message.addUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY,
+               msg.getUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY));
+         AgentHelper.addReceiver(message, myAgent, RampPlattformAgent.NAME, conveyorID, szenarioID);
+         send(message);
+      }
+   }
+
+   /**
+    * Handles the response from the StorageRamps Plattform Agent
+    *
+    * @author sijakubo
+    */
+   private class HandleSpaceAvailableBehaviour extends CyclicReceiverBehaviour {
+      protected HandleSpaceAvailableBehaviour(int messageType) {
+         super(MessageTemplate.MatchPerformative(messageType));
+      }
+
+      @Override
+      public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+         String space_available = msg.getUserDefinedParameter("space_available");
+         if ("1".equals(space_available)) {
+            //accept offer
+            ACLMessage msgReply = new ACLMessage(MessageType.PACKAGE_IS_STORABLE_FROM_STORAGE_RAMP);
+            String enquiringRampConveyorId = msg.getUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY);
+            AgentHelper.addReceiver(msgReply, myAgent, RampOrderAgent.NAME,
+                  Integer.valueOf(enquiringRampConveyorId), szenarioID);
+         } else {
+            //TODO decline offer, no space available
+         }
       }
    }
 }

@@ -71,6 +71,11 @@ public class RampPlattformAgent extends Agent {
 	}
 	
 	/**
+	 * Got message:
+	 * 		JobAgent::RequestRampInfosBehaviour
+	 * Send message: 
+	 * 		JobAgent::ReceiveRampInfosBehaviour
+	 * 
 	 * send information about the ramp type
 	 * 
      * @author Matthias
@@ -97,14 +102,26 @@ public class RampPlattformAgent extends Agent {
 			send(msgReply);
 		}
 	}
-	
+
 	/**
+	 * Got message:
+	 * 		JobAgent::DistributeJobBehaviour
+	 * 		PackageAgent::GetPackageCountBehaviour
+	 * 		JobAgent::AssignDestinationRampBehaviour
+	 * 			[after ramp was chosen]
+	 * Send message:
+	 * 		PackageAgent::GetPackageCountBehaviour
+	 * 			[ask ramps for item count]
+	 * 		JobAgent::AssignDestinationRampBehaviour
+	 * 		PackageAgent::AddPackageBehaviour
+	 * 			[only if current ramp got the job]
+	 * 
 	 * send message if space is available for a package on this ramp
 	 * and wait for a response if a new space should be "reserved" or not
 	 * 
      * @author Matthias
      */
-	private class IsPackageSpaceAvailableBehaviour extends CyclicBehaviour {		
+	private class IsPackageSpaceAvailableBehaviour extends CyclicBehaviour {
 		int step = 0;
 		int packageCount = 0;
 		
@@ -148,7 +165,9 @@ public class RampPlattformAgent extends Agent {
 						// send ramp space info
 						ACLMessage msgReply = new ACLMessage(MessageType.PACKAGE_SPACE_AVAILABLE);
 						msgReply.addUserDefinedParameter("space_available", isSpaceAvailable);
-						msgReply.setContentObject(pendingPackage);
+						msgReply.addUserDefinedParameter("enquiring_ramp_conveyor_id",
+                        msg.getUserDefinedParameter("enquiring_ramp_conveyor_id"));
+                  msgReply.setContentObject(pendingPackage);
 						msgReply.addReceiver(msg.getSender());
 						
 						if(Debugging.showInfoMessages)
