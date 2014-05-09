@@ -97,11 +97,11 @@ public class PackageAgent extends Agent {
 
 			addBehaviour(new AnswerIfPackageIsContainedBehaviour(MessageTemplate.MatchPerformative(MessageType.CHECK_IF_PACKAGE_IS_STORED)));
 			addBehaviour (new SetPackageDestinationBehaviour(MessageTemplate.MatchPerformative(MessageType.SET_PACKAGE_DESTINATION_STORAGE)));
-			addBehaviour (new InitializeAuctionStartBehaviour(this,3000));
+			
 			
 		}
 		
-		if(rampType==ConveyorRamp.RAMP_ENTRANCE){
+		if(rampType==ConveyorRamp.RAMP_ENTRANCE|| rampType == ConveyorRamp.RAMP_STOREAGE){
 			addBehaviour (new InitializeAuctionStartBehaviour(this,3000));
 		}
 		

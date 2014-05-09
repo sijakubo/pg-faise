@@ -165,8 +165,8 @@ public class RampPlattformAgent extends Agent {
 						// send ramp space info
 						ACLMessage msgReply = new ACLMessage(MessageType.PACKAGE_SPACE_AVAILABLE);
 						msgReply.addUserDefinedParameter("space_available", isSpaceAvailable);
-						msgReply.addUserDefinedParameter("enquiring_ramp_conveyor_id",
-                        msg.getUserDefinedParameter("enquiring_ramp_conveyor_id"));
+						//msgReply.addUserDefinedParameter("enquiring_ramp_conveyor_id",
+                        //msg.getUserDefinedParameter("enquiring_ramp_conveyor_id"));
                   msgReply.setContentObject(pendingPackage);
 						msgReply.addReceiver(msg.getSender());
 						
