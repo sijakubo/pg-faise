@@ -154,6 +154,8 @@ public class PackageAgent extends Agent {
 			PackageAgent currentAgent = (PackageAgent) myAgent;
 			PackageData myPackage = (PackageData) msg.getContentObject();
             //If it is an Exit the Package can be removed immediately , The package is thrown down
+			
+			/*
 			if(rampType==ConveyorRamp.RAMP_EXIT){
 				
             	for(int i=0;i<currentAgent.lstPackage.size();i++){
@@ -164,11 +166,13 @@ public class PackageAgent extends Agent {
             		}
             	}
             }else {
+            
+            */
 			   currentAgent.lstPackage.add(myPackage);
    
 			    if (Debugging.showPackageMessages)
 				    logger.log(Level.INFO, myAgent.getLocalName() + ": package "+ myPackage.getPackageID() + " added");
-            }
+            
 		}
 	}
 
