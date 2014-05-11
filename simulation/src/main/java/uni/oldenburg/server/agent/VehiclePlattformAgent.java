@@ -57,6 +57,13 @@ public class VehiclePlattformAgent extends Agent {
 	}
 	
 	/**
+	 * Got message:
+	 * 		VehicleRoutingAgent: AssignVehicleForPackageBehaviour 
+	 *      RampPlattformAgent: GivePackageBehaviour     
+	 * Send message:
+	 *      RampPlattformAgent: GivePackageBehaviour
+	 * 		PackageAgent: BotAddPackageBehaviour
+	 *      VehiclePlattformAgent: BotGoToDestinationBehaviour 
 	 * Behaviour should receive the request from its RoutingAgent and start the Communication with the Source Ramp, where the Package
 	 * lies
 	 * @author Raschid
@@ -82,7 +89,7 @@ public class VehiclePlattformAgent extends Agent {
 			AgentHelper.addReceiver(msgPackage, myAgent,RampPlattformAgent.NAME, Integer.parseInt(msg.getUserDefinedParameter("sourceID")),currentAgent.szenarioID);
 			
 			if (Debugging.showInfoMessages)
-				logger.log(Level.INFO, myAgent.getLocalName()+ " -> GIVE_ME_PACKAGE");
+				logger.log(Level.INFO, myAgent.getLocalName()+ " -> GIVE_PACKAGE");
 			
 			send(msgPackage);
 			
@@ -122,6 +129,14 @@ public class VehiclePlattformAgent extends Agent {
 	
 	
 	/**
+	 * Got message:
+	 *      VehiclePlattformAgent: GetPackageFromSourceBehaviour
+	 *      RampPlattformAgent: ReceivePackageBehaviour
+	 *      PackageAgent: BotRemovePackageBehaviour     
+	 * Send message:
+	 *      PackageAgent: BotRemovePackageBehaviour 
+	 *      RampPlattformAgent: ReceivePackageBehaviour
+	 *      VehicleRoutingAgent: SetBotUnreservedBehaviour
 	 * Behaviour should ask the Destination Ramp to take the Package
 	 * @author Raschid
 	 */
@@ -167,7 +182,7 @@ public class VehiclePlattformAgent extends Agent {
 			MessageTemplate mtP = MessageTemplate.MatchPerformative(MessageType.BOT_REMOVED_PACKAGE);
 			ACLMessage msgGetAnswerFromP = myAgent.blockingReceive(mtP);
 			if (Debugging.showInfoMessages)
-				logger.log(Level.INFO, myAgent.getLocalName()+ " <- BOT_REMOVE_PACKAGE");
+				logger.log(Level.INFO, myAgent.getLocalName()+ " <- BOT_REMOVED_PACKAGE");
 			
 			//Tell the Ramp to Take the Package
 			ACLMessage takePackage = new ACLMessage(MessageType.RAMP_TAKE_PACKAGE);

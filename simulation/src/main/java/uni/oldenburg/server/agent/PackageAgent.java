@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
 
 
+
 import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.data.PackageData;
@@ -79,14 +80,16 @@ public class PackageAgent extends Agent {
                MessageTemplate.MatchPerformative(MessageType.ASSIGN_PACKAGE_DESTINATION)));
 
       }
+      
+      addBehaviour(new PackageReservationBehaviour(
+				MessageTemplate.MatchPerformative(MessageType.SET_PACKAGE_RESERVED)));
 
 
 		// If it is an Exit, than add the Behaviour, which is used for
 		// requesting an Package for an existing Job
 		if (rampType == ConveyorRamp.RAMP_EXIT) {
 			addBehaviour(new SearchForPackageBehaviour(this, 3000));
-			addBehaviour(new PackageReservationBehaviour(
-					MessageTemplate.MatchPerformative(MessageType.SET_PACKAGE_RESERVED)));
+			
          addBehaviour(new PackageNeedInformationBehaviour(MessageType.CHECK_IF_PACKAGE_IS_NEEDED));
 		}
 
@@ -96,7 +99,7 @@ public class PackageAgent extends Agent {
 		if (rampType == ConveyorRamp.RAMP_STOREAGE) {
 
 			addBehaviour(new AnswerIfPackageIsContainedBehaviour(MessageTemplate.MatchPerformative(MessageType.CHECK_IF_PACKAGE_IS_STORED)));
-			addBehaviour (new SetPackageDestinationBehaviour(MessageTemplate.MatchPerformative(MessageType.SET_PACKAGE_DESTINATION_STORAGE)));
+			//addBehaviour (new SetPackageDestinationBehaviour(MessageTemplate.MatchPerformative(MessageType.SET_PACKAGE_DESTINATION_STORAGE)));
 			
 			
 		}
@@ -153,7 +156,7 @@ public class PackageAgent extends Agent {
 		public void onMessage(ACLMessage msg) throws UnreadableException {
 			PackageAgent currentAgent = (PackageAgent) myAgent;
 			PackageData myPackage = (PackageData) msg.getContentObject();
-            //If it is an Exit the Package can be removed immediately , The package is thrown down
+            
 			
 			/*
 			if(rampType==ConveyorRamp.RAMP_EXIT){
@@ -233,8 +236,12 @@ public class PackageAgent extends Agent {
 	}
 
 	/**
-	 * Behaviour (Exit Behaviour) should cyclically choose a Job from the List
-	 * and ask his Orderagent to ask the Orderagents from the Exits if there is
+	 * Got message:
+	 * 		none
+	 * Send message:
+	 * 		RampOrderAgent: AskOtherOrderagentsIfPackageExistsBehaviour
+	 * Behaviour (Exit Behaviour) should cyclically choose a Job from the List (PackageDataList)
+	 * and ask his Orderagent to ask the Orderagents from the Storage if there is
 	 * a Package, which belongs to the Job
 	 * 
 	 * @author Raschid
@@ -255,16 +262,7 @@ public class PackageAgent extends Agent {
 			if (sizePackageList >= 1) {
 				// Choose a Package randomly. To do that, you have to create a
 				// random Value depending on the size of the package list
-				int index = (int) ((Math.random() * 10) % sizePackageList);
-				/*
-				 * if (sizePackageList == 1) { index = 0; } else if
-				 * (sizePackageList == 2) { Random random = new Random(); index
-				 * = random.nextInt(1 - 0 + 1) + 0; } else if (sizePackageList
-				 * == 3) { Random random = new Random(); index =
-				 * random.nextInt(2 - 1 + 1) + 1; } else if (sizePackageList ==
-				 * 4) { Random random = new Random(); index = random.nextInt(3 -
-				 * 2 + 1) + 2; }
-				 */
+				int index = (int) ((Math.random() * 10) % sizePackageList);				
 				// Get the Package Data
 				PackageData pData = currentAgent.lstPackage.get(index);
 
@@ -293,7 +291,10 @@ public class PackageAgent extends Agent {
 		}
 	}
 	
-	/**
+	/**Got message:
+	 * 		none
+	 * Send message:
+	 * 		RampRoutingAgent: StartAuctionBehaviour
 	 * Behaviour (Entry and Storage Behaviour) should cyclically check if the first package in the list is already reserved
 	 * and then tell the Routingagent to start the Auction
 	 * 
@@ -341,7 +342,10 @@ public class PackageAgent extends Agent {
 		}
 	}
 
-	/**
+	/**Got message:
+	 * 		RampOrderAgent: CheckIfPackageIsStoredBehaviour
+	 * Send message:
+	 * 		RampOrderAgent: CheckIfPackageIsStoredBehaviour
 	 * Behaviour should receive the request from its Storage Orderagent and
 	 * should search the list and look if the requested Package exists and then
 	 * answer the Orderagent
@@ -413,8 +417,11 @@ public class PackageAgent extends Agent {
 
 	}
 
-	/**
-	 * Behaviour should set a Package Reserved for an Exit
+	/**Got message:
+	 * 		RampOrderAgent: SetPackageReservedBehaviour,  CheckIfPackageIsStoredBehaviour
+	 * Send message:
+	 * 		none
+	 * Behaviour should set a Package Reserved and set a Packages DestinationId if there exists one
 	 * 
 	 * @author Raschid
 	 */
@@ -430,6 +437,12 @@ public class PackageAgent extends Agent {
 				IOException {
 			// Receive the Request from Orderagent
 			PackageAgent currentAgent = (PackageAgent) myAgent;
+			int destinationId= -1;
+			
+			if(msg.getUserDefinedParameter("conveyorId")!=null){
+				destinationId=Integer.parseInt(msg.getUserDefinedParameter("conveyorId"));
+			}
+					
 			PackageData receivedPackage = (PackageData) msg.getContentObject();
 
 			if (Debugging.showInfoMessages)
@@ -440,6 +453,10 @@ public class PackageAgent extends Agent {
 				PackageData dummy = currentAgent.lstPackage.get(i);
 				if (dummy.getPackageID() == receivedPackage.getPackageID()) {
 					dummy.setReserved();
+					//Check if there is a destinationId
+					if(destinationId!=-1){
+						dummy.setDestinationID(destinationId);//The destination id is setted
+					}
 					break;
 
 				}
@@ -450,11 +467,13 @@ public class PackageAgent extends Agent {
 
 	}
 	
-	/**
+	/**Got message:
+	 * 		RampOrderAgent: CheckIfPackageIsStoredBehaviour
+	 * Send message:
+	 * 		none
 	 * Behaviour should set a Package Reserved and set its destination
 	 * 
 	 * @author Raschid
-	 */
 	private class SetPackageDestinationBehaviour extends CyclicReceiverBehaviour {
 
 		protected SetPackageDestinationBehaviour(MessageTemplate mt) {
@@ -471,7 +490,7 @@ public class PackageAgent extends Agent {
 			PackageData receivedPackage = (PackageData) msg.getContentObject();
 
 			if (Debugging.showInfoMessages)
-				logger.log(Level.INFO, myAgent.getLocalName()+ " <- SET_PACKAGE_RESERVED");
+				logger.log(Level.INFO, myAgent.getLocalName()+ " <- SET_PACKAGE_DESTINATION_STORAGE");
 
 			// Search the Package in the list and set it reserved
 			for (int i = 0; i < currentAgent.lstPackage.size(); i++) {
@@ -488,6 +507,7 @@ public class PackageAgent extends Agent {
         }
 
 	}
+	 */
 
    /**
     * Checks the internal packageList, if there is an outgoing Job for the given Package, answer the RampOrderAgent
@@ -550,8 +570,11 @@ public class PackageAgent extends Agent {
    }
 
    
-   /**
-	 * Behaviour should remove a Package in order to give it to the Volksbot
+   /***Got message:
+	 * 		RampPlattformAgent: GivePackageBehaviour
+	 * Send message:
+	 * 		RampPlattformAgent: GivePackageBehaviour
+	 * Plattformagent should remove a Package in order to give it to the Volksbot
 	 * 
 	 * @author Raschid
 	 */
@@ -595,7 +618,10 @@ public class PackageAgent extends Agent {
 
 	}
    
-	/**
+	/**Got message:
+	 * 		VehiclePlattformAgent: GetPackageFromSourceBehaviour
+	 * Send message:
+	 * 		none
 	 * Behaviour should charge a Package on the Bot
 	 * 
 	 * @author Raschid
@@ -625,7 +651,10 @@ public class PackageAgent extends Agent {
 
 	}
 	
-	/**
+	/**Got message:
+	 * 		VehiclePlattformAgent: BotGoToDestinationBehaviour
+	 * Send message:
+	 * 		VehiclePlattformAgent: BotGoToDestinationBehaviour
 	 * Behaviour should remove a Package from the Bot
 	 * 
 	 * @author Raschid

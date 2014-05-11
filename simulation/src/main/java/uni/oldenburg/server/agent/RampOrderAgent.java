@@ -105,6 +105,10 @@ public class RampOrderAgent extends Agent {
    }
 
    /**
+    * Got message:
+    *       Packageagent: SearchForPackageBehaviour    
+	* Send message:
+	*       RampOrderagent: CheckIfPackageIsStoredBehaviour
     * Behaviour should receive the request of a Packageagent and should ask the
     * Orderagents of a Storage if there is a Package for the given ID
     *
@@ -144,6 +148,12 @@ public class RampOrderAgent extends Agent {
    }
 
    /**
+    * Got message:
+    *        RampOrderagent: CheckIfPackageIsStoredBehaviour  
+    *        Packageagent: AnswerIfPackageIsContainedBehaviour 
+	* Send message:
+	*        Packageagent: AnswerIfPackageIsContainedBehaviour
+	*        Packageagent: PackageReservationBehaviour
     * Behaviour should receive the request from an exit Orderagent and should
     * ask the Packageagent if a package is stored, which is needed by the exit
     * and then answer the Orderagent of the exit if the Package exists or not
@@ -201,16 +211,13 @@ public class RampOrderAgent extends Agent {
 
 
 				// Inform the PackageAgent of the Storage to set the Package as reserved and to set the Destination ID
-                ACLMessage msgAnswerPackageAgent = new ACLMessage(MessageType.SET_PACKAGE_DESTINATION_STORAGE);
+                ACLMessage msgAnswerPackageAgent = new ACLMessage(MessageType.SET_PACKAGE_RESERVED);
                 msgAnswerPackageAgent.addUserDefinedParameter("conveyorId", msg.getUserDefinedParameter("conveyorId"));
                 msgAnswerPackageAgent.setContentObject(msgAnswer.getContentObject());
                 AgentHelper.addReceiver(msgAnswerPackageAgent, currentAgent,PackageAgent.NAME, conveyorID, szenarioID);
 				if (Debugging.showInfoMessages)
-		            logger.log(Level.INFO, myAgent.getLocalName()+ " -> SET_PACKAGE_DESTINATION_STORAGE");
+		            logger.log(Level.INFO, myAgent.getLocalName()+ " -> SET_PACKAGE_RESERVED");
 				send(msgAnswer);
-
-            // Inform the Routingagent
-
 
          }
          /*
@@ -230,6 +237,10 @@ public class RampOrderAgent extends Agent {
    }
 
    /**
+    * Got message:
+    *        RampOrderagent: CheckIfPackageIsStoredBehaviour  
+	* Send message:
+	*        Packageagent: PackageReservationBehaviour
     * Behaviour should receive the answer from the Storage and should set the
     * Packagedata reserved
     *
@@ -265,21 +276,6 @@ public class RampOrderAgent extends Agent {
 					logger.log(Level.INFO, myAgent.getLocalName()+ " -> SET_PACKAGE_RESERVED");
                 send(msgSetPackage);
 			}
-
-         //Tell the Packageagent to set the Package reserved, so that it will not be checked again
-         if (searchedPackage != null) {
-            // Orderagent should ask his Packageagent to set a Package reserved
-            ACLMessage msgSetPackage = new ACLMessage(
-                  MessageType.SET_PACKAGE_RESERVED);
-            msgSetPackage.setContentObject(searchedPackage);
-            AgentHelper.addReceiver(msgSetPackage, currentAgent,
-                  PackageAgent.NAME, conveyorID, szenarioID);
-            if (Debugging.showInfoMessages)
-               logger.log(Level.INFO, myAgent.getLocalName()
-                     + " -> SET_PACKAGE_RESERVED");
-
-            send(msgSetPackage);
-         }
 
       }
 

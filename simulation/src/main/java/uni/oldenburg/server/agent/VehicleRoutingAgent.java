@@ -195,7 +195,10 @@ public class VehicleRoutingAgent extends Agent {
 		}
 	}
 	
-	/**
+	/**Got message:
+	 *      VehiclePlattformAgent: BotGoToDestinationBehaviour           
+	 * Send message:
+	 *      none
 	 * Behaviour should set the Bot unreserved
 	 * @author Raschid
 	 */
@@ -214,12 +217,7 @@ public class VehicleRoutingAgent extends Agent {
 	
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()+ " <- SET_BOT_UNRESERVED");
-			setReserved(false);
-			
-			
-			
-			
-			
+			setReserved(false);		
 		}
 
 	}

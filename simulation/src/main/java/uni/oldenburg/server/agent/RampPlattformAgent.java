@@ -230,7 +230,14 @@ public class RampPlattformAgent extends Agent {
 	}
 	
 	
-	/**Behaviour should receive a Request from a Volksbot and Get him the Package from the Packageagent
+	/**
+	 * Got message:
+	 * 		VehiclePlattformAgent: GetPackageFromSourceBehaviour
+	 *      PackageAgent: RemovePackageAndAnswerBehaviour
+	 * Send message:
+	 *      VehiclePlattformAgent: GetPackageFromSourceBehaviour
+	 * 		PackageAgent: RemovePackageAndAnswerBehaviour
+	 * Behaviour should receive a Request from a Volksbot and Get him the Package from the Packageagent
 	 * @author Raschid
 	 */
 	private class GivePackageBehaviour extends CyclicReceiverBehaviour {
@@ -272,7 +279,12 @@ public class RampPlattformAgent extends Agent {
 		}
 	}
 	
-	/**Behaviour should receive a Request from a Volksbot and Take the Package from him
+	/**Got message:
+	 * 		VehiclePlattformAgent: BotGoToDestinationBehaviour     
+	 * Send message:
+	 *      VehiclePlattformAgent: BotGoToDestinationBehaviour
+	 * 		PackageAgent: BotAddPackageBehaviour
+	 * Behaviour should receive a Request from a Volksbot and Take the Package from him
 	 * @author Raschid
 	 */
 	private class ReceivePackageBehaviour extends CyclicReceiverBehaviour {
