@@ -104,6 +104,12 @@ public class PackageAgent extends Agent {
 	}
 
 	/**
+	 * Got message:
+	 * 		RampPlattformAgent::IsPackageSpaceAvailableBehaviour
+	 * 			[from chosen ramp]
+	 * Send message:
+	 * 		none
+	 * 
 	 * add package to this agent
 	 * 
 	 * @author Matthias
@@ -126,6 +132,11 @@ public class PackageAgent extends Agent {
 	}
 
 	/**
+	 * Got message:
+	 * 		RampPlattformAgent::IsPackageSpaceAvailableBehaviour
+	 * Send message:
+	 * 		RampPlattformAgent::IsPackageSpaceAvailableBehaviour
+	 * 
 	 * give into about current package count
 	 * 
 	 * @author Matthias

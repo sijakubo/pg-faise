@@ -77,6 +77,11 @@ public class JobAgent extends Agent {
 	}
 	
 	/**
+	 * Got message:
+	 * 		none [first behaviour to start sending messages]
+	 * Send message:
+	 * 		RampPlattformAgent::SendRampInfoBehaviour
+	 * 
 	 * request info about ramp types
 	 * 
      * @author Matthias
@@ -95,6 +100,11 @@ public class JobAgent extends Agent {
 	}
 	
 	/**
+	 * Got message:
+	 * 		RampPlattformAgent::SendRampInfoBehaviour
+	 * Send message:
+	 * 		none [wait for client to send job(s)]
+	 * 
 	 * - receive ramp info (f.e. incoming/outgoing/storage)
 	 * - add a basic job to test job behaviour functionality
 	 * 
@@ -135,6 +145,11 @@ public class JobAgent extends Agent {
 	}
 	
 	/**
+	 * Got message:
+	 * 		AgentPlatformServiceImpl::addJob
+	 * Send message:
+	 * 		JobAgent::DistributeJobBehaviour
+	 * 
 	 * processes incoming job orders
 	 * 
      * @author Matthias
@@ -165,6 +180,12 @@ public class JobAgent extends Agent {
 	}
 	
 	/**
+	 * Got message:
+	 * 		JobAgent::DelegateIncomingJob
+	 * Send message:
+	 * 		RampPlattformAgent::IsPackageSpaceAvailableBehaviour
+	 * 			[only incoming or outgoing ramps]
+	 * 
 	 * - get incoming job data
 	 * - ask incoming or outgoing ramps for available space
 	 * 
@@ -192,10 +213,6 @@ public class JobAgent extends Agent {
 				case Job.OUTGOING:
 					AgentHelper.addReceivers(msgInfo, lstRampOutgoing);
 					
-					/*for (AID myAID : lstRampOutgoing) {
-						logger.log(Level.INFO, myAID.toString());
-					}*/
-					
 					break;
 			}
 			
@@ -207,6 +224,12 @@ public class JobAgent extends Agent {
 	}
 	
 	/**
+	 * Got message:
+	 * 		RampOrderAgent::IsPackageSpaceAvailableBehaviour
+	 * Send message:
+	 * 		RampOrderAgent::IsPackageSpaceAvailableBehaviour
+	 * 			[after collecting responses from all asked ramps]
+	 * 
 	 * - get info about ramps with available space
 	 * - wait till everyone answered
 	 * - reserve space on a random free one

@@ -13,6 +13,7 @@ import com.google.gwt.canvas.dom.client.CssColor;
 @SuppressWarnings("serial")
 public class ConveyorVehicle extends Conveyor {
 	public static final String CONVEYOR_TYPE = "Fahrzeug";
+	private double batteryCharge = Math.random();
 	
 	public ConveyorVehicle() {
 		super(0, 0, Conveyor.getRastersize(), Conveyor.getRastersize());
@@ -54,9 +55,13 @@ public class ConveyorVehicle extends Conveyor {
 				drawEntry(context, CONVEYOR_COLOR_INPUT, 0, 0, ENTRY_BORDER_SIZE, this.getWidth());				
 				drawEntry(context, CONVEYOR_COLOR_OUTPUT , this.getWidth() - ENTRY_BORDER_SIZE, 0, ENTRY_BORDER_SIZE, this.getWidth());
 				break;
-	}		
+		}		
 		
 		return canvas;
+	}
+	
+	public double getBatteryCharge() {
+		return batteryCharge;
 	}
 
 	@Override
