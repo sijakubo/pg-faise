@@ -279,7 +279,10 @@ public class RampOrderAgent extends Agent {
    }
 
    /**
-    * Behaviour that handles the Search for an Destination Ramp. This Behaviour could either ask Exit- or StorageRamps.
+    * Behaviour that handles the Search for an Destination Ramp. This Behaviour should receive a request from the
+    * PlattformAgent when a new package arrives which needs to be distributed.
+    *
+    * This Behaviour could either ask Exit- or StorageRamps.
     * If no free Conveyor was found, this behaviour asks in 5s steps the StorageRamps until a free space is found.
     *
     * @author sijakubo
@@ -358,6 +361,8 @@ public class RampOrderAgent extends Agent {
             myAgent.removeBehaviour(timeOutBehaviour);
          }
 
+         //WakerBehaviour die nach ENQUIRE_TIMEOUT millisekunden eine EndeNachricht an die Behaviour
+         // EnquireRampsForPackageSlotBehaviour schickt
          timeOutBehaviour = new WakerBehaviour(myAgent, ENQUIRE_TIMEOUT) {
             @Override
             protected void onWake() {
@@ -372,7 +377,8 @@ public class RampOrderAgent extends Agent {
 
 
    /**
-    * Behaviour which asks its PackageAgent if there is a need for a specific Package
+    * Behaviour on ExitRamp which receives a request from the EntranceOrderAgent to asks its PackageAgent if
+    * there is a need for a specific Package
     *
     * @author sijakubo
     */
@@ -396,7 +402,7 @@ public class RampOrderAgent extends Agent {
 
 
    /**
-    * The ExitRamp got choosen to receiver the Package. Reserve the Job on the ExitsRamp-PackageAgent
+    * Behaviour which receives a request from an Entrance Ramp to Reserve the Job on the ExitsRamp-PackageAgent
     *
     * @author sijakubo
     */
@@ -434,7 +440,7 @@ public class RampOrderAgent extends Agent {
    }
 
    /**
-    * Sends a destination
+    * Behaviour on an EntranceRamp which sends a request to its PackageAgent to set a destination on a specific package
     *
     * @author sijakubo
     */
@@ -460,7 +466,7 @@ public class RampOrderAgent extends Agent {
    }
 
    /**
-    * Send an packageNeed response from the ExitRamp to the EntranceRamp
+    * Behaviour on an ExitRamp which send a response to an EntranceRamp package Enquire.
     *
     * @author sijakubo
     */
@@ -485,7 +491,8 @@ public class RampOrderAgent extends Agent {
    }
 
    /**
-    * Asks its PlattformAgent if there is space available for another package
+    * Behaviour on a StorageRamp which sends an Request to its PlattformAgent, to ask if there is space
+    * available for another package.
     *
     * @author sijakubo
     */
@@ -507,7 +514,7 @@ public class RampOrderAgent extends Agent {
    }
 
    /**
-    * Handles the response from the StorageRamps Plattform Agent
+    * Behaviour which handles the response from the StorageRamps Plattform Agent
     *
     * @author sijakubo
     */
