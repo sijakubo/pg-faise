@@ -149,7 +149,7 @@ public class RampOrderAgent extends Agent {
 
    /**
     * Got message:
-    *        RampOrderagent: CheckIfPackageIsStoredBehaviour  
+    *        RampOrderagent: AskOtherOrderagentsIfPackageExistsBehaviour  
     *        Packageagent: AnswerIfPackageIsContainedBehaviour 
 	* Send message:
 	*        Packageagent: AnswerIfPackageIsContainedBehaviour
