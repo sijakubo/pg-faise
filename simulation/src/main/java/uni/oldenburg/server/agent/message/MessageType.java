@@ -26,7 +26,6 @@ public class MessageType {
 	public final static int SET_PACKAGE_DESTINATION_STORAGE = 0x12; //  PackageAgent (Exit)
 	public final static int INITIALIZE_START_AUCTION_BEHAVIOUR = 0x13; //  PackageAgent (Entry/Storage) @ Routingagent
 
-
    public static final int START_RAMP_SEARCH_FOR_PACKAGE = 0x14;
    public static final int ENQUIRE_OUTGOING_RAMP = 0x15;
 
@@ -54,9 +53,7 @@ public class MessageType {
    public static final int ENQUIRE_STORAGE_RAMP = 0x34;
 
    public static final int CHECK_IF_PACKAGE_IS_NEEDED = 0x35;
-   public static final int CHECK_IF_PACKAGE_IS_STORABLE = 0x36;
    public static final int PACKAGE_IS_NEEDED = 0x37;
-   public static final int START_TIMER_FOR_RAMP_ENQUIRE = 0x38;
 
    public static final int PACKAGE_IS_NEEDED_FROM_EXIT_RAMP = 0x39;
    public static final int PACKAGE_IS_STORABLE_FROM_STORAGE_RAMP = 0x40;
@@ -69,4 +66,6 @@ public class MessageType {
    public static final int START_STORAGE_RAMP_SEARCH_FOR_PACKAGE = 0x44 ;
    public static final int END_STORAGE_RAMP_SEARCH_FOR_PACKAGE = 0x45;
 
+   public static final int REQUEST_OFFER_FROM_EXIT_RAMP_FOR_PACKAGE = 0x46;
+   public static final int REQUEST_OFFER_FROM_STORAGE_RAMP_FOR_PACKAGE = 0x47;
 }

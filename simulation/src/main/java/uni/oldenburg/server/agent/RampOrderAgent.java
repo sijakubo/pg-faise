@@ -69,7 +69,7 @@ public class RampOrderAgent extends Agent {
 			addBehaviour(new SetPackageReservedBehaviour(MessageTemplate.MatchPerformative(MessageType.GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT)));
 
          //Ausgang -> Eingang: Beantworte die Anfrage, wenn das Paket angenommen werden kann
-         addBehaviour(new HandleExitRampPackageSlotEnquireBehaviour(MessageType.ENQUIRE_EXIT_RAMP));
+         addBehaviour(new HandleExitRampPackageSlotEnquireBehaviour(MessageType.REQUEST_OFFER_FROM_EXIT_RAMP_FOR_PACKAGE));
          //PackageAgent -> Ausgang: Der eigene PackageAgent meldet auf Anfrage eine Nachfrage nach dem Paket
          addBehaviour(new SendPackageNeedOfferBehaviour(MessageType.PACKAGE_IS_NEEDED));
          //Ausgang -> Eingang: reserviere einen Slot für das Paket
@@ -86,7 +86,7 @@ public class RampOrderAgent extends Agent {
 			addBehaviour(new CheckIfPackageIsStoredBehaviour(
 					MessageTemplate.MatchPerformative(MessageType.ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS)));
 
-         addBehaviour(new HandleStorageRampPackageSlotEnquireBehaviour(MessageType.ENQUIRE_STORAGE_RAMP));
+         addBehaviour(new HandleStorageRampPackageSlotEnquireBehaviour(MessageType.REQUEST_OFFER_FROM_STORAGE_RAMP_FOR_PACKAGE));
          addBehaviour(new HandlePackageSlotReservationBehaviour(MessageType.RESERVE_PACKAGE_SLOT_ON_RAMP, true));
          addBehaviour(new HandleSpaceAvailableBehaviour(MessageType.PACKAGE_SPACE_AVAILABLE));
       }
@@ -138,7 +138,7 @@ public class RampOrderAgent extends Agent {
 
 			// Send the Request to all Orderagents from Storage
 			ACLMessage msgPackage = new ACLMessage(MessageType.ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS);
-			msgPackage.addUserDefinedParameter("conveyorId", ""+currentAgent.conveyorID);//Send the Conveyor id, so that the Storage knows for which destination an auction should be started
+			msgPackage.addUserDefinedParameter("conveyorId", "" + currentAgent.conveyorID);//Send the Conveyor id, so that the Storage knows for which destination an auction should be started
 			msgPackage.setContentObject(searchedPackage);
 			AgentHelper.addReceivers(msgPackage, currentAgent, currentAgent.getSzenarioID());
 			send(msgPackage);
@@ -154,6 +154,7 @@ public class RampOrderAgent extends Agent {
 	* Send message:
 	*        Packageagent: AnswerIfPackageIsContainedBehaviour
 	*        Packageagent: PackageReservationBehaviour
+    *
     * Behaviour should receive the request from an exit Orderagent and should
     * ask the Packageagent if a package is stored, which is needed by the exit
     * and then answer the Orderagent of the exit if the Package exists or not
@@ -286,6 +287,17 @@ public class RampOrderAgent extends Agent {
    }
 
    /**
+    * Behaviour on:
+    *       Entrance - RampOrderAgent
+    *
+    * Gets message:
+    *       PackageAgent:  START_EXIT_RAMP_SEARCH_FOR_PACKAGE / START_STORAGE_RAMP_SEARCH_FOR_PACKAGE
+    *       Entrance - RampOrderAgent: END_EXIT_RAMP_SEARCH_FOR_PACKAGE / END_STORAGE_RAMP_SEARCH_FOR_PACKAGE
+    *
+    * Send message:
+    *       Exit or Storage - RampOrderAgent: ENQUIRE_EXIT_RAMP / ENQUIRE_STORAGE_RAMP
+    *       Exit or Storage - RampOrderAgent: RESERVE_PACKAGE_SLOT_ON_RAMP
+    *
     * Behaviour that handles the Search for an Destination Ramp. This Behaviour should receive a request from the
     * PlattformAgent when a new package arrives which needs to be distributed.
     *
@@ -300,6 +312,7 @@ public class RampOrderAgent extends Agent {
       private List<AID> possibleDestinationRamps;
       private int startEnquireMessageType;
       private int endEnquireMessageType;
+      private final int enquireMessageType;
 
       protected EnquireRampsForPackageSlotBehaviour(int startEnquireMessageType,
                                                     int endEnquireMessageType,
@@ -313,6 +326,7 @@ public class RampOrderAgent extends Agent {
 
          this.startEnquireMessageType = startEnquireMessageType;
          this.endEnquireMessageType = endEnquireMessageType;
+         this.enquireMessageType = enquireMessageType;
       }
 
       @Override
@@ -327,7 +341,7 @@ public class RampOrderAgent extends Agent {
             possibleDestinationRamps = new ArrayList<AID>();
 
             //send enquire to ramps
-            ACLMessage msgEnquireRamps = new ACLMessage(MessageType.ENQUIRE_EXIT_RAMP);
+            ACLMessage msgEnquireRamps = new ACLMessage(enquireMessageType);
             msgEnquireRamps.setContentObject(packageData);
             msgEnquireRamps.addUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY, String.valueOf(conveyorID));
             AgentHelper.addReceivers(msgEnquireRamps, myAgent, szenarioID);
@@ -384,6 +398,15 @@ public class RampOrderAgent extends Agent {
 
 
    /**
+    * Behaviour on:
+    *       Exit - RampOrderAgent
+    *
+    * Gets message:
+    *       Entrance - RampOrderAgent: REQUEST_OFFER_FROM_EXIT_RAMP_FOR_PACKAGE
+    *
+    * Send message:
+    *       Exit - PackageAgent - CHECK_IF_PACKAGE_IS_NEEDED
+    *
     * Behaviour on ExitRamp which receives a request from the EntranceOrderAgent to asks its PackageAgent if
     * there is a need for a specific Package
     *
@@ -409,7 +432,17 @@ public class RampOrderAgent extends Agent {
 
 
    /**
-    * Behaviour which receives a request from an Entrance Ramp to Reserve the Job on the ExitsRamp-PackageAgent
+    * Behaviour on:
+    *       Exit or Storage - RampOrderAgent
+    *
+    * Gets message:
+    *       Entrance - RampOrderAgent: RESERVE_PACKAGE_SLOT_ON_RAMP
+    *
+    * Send message:
+    *       PackageAgent - SET_PACKAGE_RESERVED / SET_PACKAGE_RESERVED_FOR_STORAGE_RAMP
+    *
+    * Behaviour which receives a request from an Entrance Ramp to Reserve the Job on the
+    * Exit- or StorageRamps-PackageAgent
     *
     * @author sijakubo
     */
@@ -447,6 +480,15 @@ public class RampOrderAgent extends Agent {
    }
 
    /**
+    * Behaviour on:
+    *       Entrance - RampOrderAgent
+    *
+    * Gets message:
+    *       Entrance - RampOrderAgent: ASSIGN_PACKAGE_DESTINATION
+    *
+    * Send message:
+    *       Entrance - PackageAgent - ASSIGN_PACKAGE_DESTINATION
+    *
     * Behaviour on an EntranceRamp which sends a request to its PackageAgent to set a destination on a specific package
     *
     * @author sijakubo
@@ -473,6 +515,15 @@ public class RampOrderAgent extends Agent {
    }
 
    /**
+    * Behaviour on:
+    *       Exit - RampeOrderAgent
+    *
+    * Gets message:
+    *       PackageAgent: PACKAGE_IS_NEEDED
+    *
+    * Send message:
+    *       Exit - RampOrderAgent: PACKAGE_IS_NEEDED_FROM_EXIT_RAMP
+    *
     * Behaviour on an ExitRamp which send a response to an EntranceRamp package Enquire.
     *
     * @author sijakubo
@@ -498,6 +549,15 @@ public class RampOrderAgent extends Agent {
    }
 
    /**
+    * Behaviour on:
+    *       Storage - RampeOrderAgent
+    *
+    * Gets message:
+    *       Entrance - RampOrderAgent: REQUEST_OFFER_FROM_STORAGE_RAMP_FOR_PACKAGE
+    *
+    * Send message:
+    *       PlattformAgent - PACKAGE_SPACE_AVAILABLE
+    *
     * Behaviour on a StorageRamp which sends an Request to its PlattformAgent, to ask if there is space
     * available for another package.
     *
@@ -521,6 +581,15 @@ public class RampOrderAgent extends Agent {
    }
 
    /**
+    * Behaviour on:
+    *       StorageRamp - RampOrderAgent
+    *
+    * Gets message:
+    *       PlattformAgent - RampOrderAgent: PACKAGE_SPACE_AVAILABLE
+    *
+    * Send message:
+    *       Entrance - RampOrderAgent - PACKAGE_IS_STORABLE_FROM_STORAGE_RAMP
+    *
     * Behaviour which handles the response from the StorageRamps Plattform Agent
     *
     * @author sijakubo
