@@ -12,6 +12,11 @@ import de.novanic.eventservice.client.event.Event;
 public class JobAssignedEvent implements Event {
 	private Job myJob = null;
 	
+	
+	public JobAssignedEvent() {
+		
+	}
+	
 	public JobAssignedEvent(Job newJob) {
 		myJob = newJob;
 	}
