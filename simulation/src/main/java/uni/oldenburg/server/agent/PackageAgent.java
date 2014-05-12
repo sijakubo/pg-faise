@@ -61,10 +61,9 @@ public class PackageAgent extends Agent {
 
 		}
 
-        	addBehaviour(new AddPackageBehaviour(
-    				MessageTemplate.MatchPerformative(MessageType.ADD_PACKAGE)));
+      addBehaviour(new AddPackageBehaviour(
+            MessageTemplate.MatchPerformative(MessageType.ADD_PACKAGE)));
     
-		
 		addBehaviour(new GetPackageCountBehaviour(
 				MessageTemplate.MatchPerformative(MessageType.GET_PACKAGE_COUNT)));
 		addBehaviour(new RemovePackageBehaviour(
@@ -304,8 +303,9 @@ public class PackageAgent extends Agent {
 	 * @author Raschid
 	 */
 	private class StartRampSearchForPackageBehaviour extends TickerBehaviour {
+      private Integer lastSearchedPackageId;
 
-		public StartRampSearchForPackageBehaviour (Agent a, long period) {
+      public StartRampSearchForPackageBehaviour (Agent a, long period) {
 			super(a, period);
 
 		}
@@ -323,23 +323,35 @@ public class PackageAgent extends Agent {
 
 				// Send the Message, if the Package is not reserved
 				if (!pData.isReserved()) {
-					ACLMessage msgPackageSearch = new ACLMessage(
-							MessageType.START_EXIT_RAMP_SEARCH_FOR_PACKAGE);
-					AgentHelper.addReceiver(msgPackageSearch, myAgent,
-							RampOrderAgent.NAME, currentAgent.conveyorID,
+					ACLMessage msgPackageSearch = new ACLMessage(MessageType.START_EXIT_RAMP_SEARCH_FOR_PACKAGE);
+					AgentHelper.addReceiver(msgPackageSearch, myAgent, RampOrderAgent.NAME, currentAgent.conveyorID,
 							currentAgent.szenarioID);
 
-				   logger.log(Level.INFO, myAgent.getLocalName()
-								+ " -> START_EXIT_RAMP_SEARCH_FOR_PACKAGE");
+               try {
+                  //Start Search for Package only once. Uf the lastSearchedPackageId == pData.getPackageId do not start
+                  //a package Search.
+                  boolean startSearchForPackageDestination;
+                  if (lastSearchedPackageId == null) {
+                     lastSearchedPackageId = pData.getPackageID();
+                     startSearchForPackageDestination = true;
+                  } else {
+                     if (lastSearchedPackageId == pData.getPackageID()) {
+                        startSearchForPackageDestination = false;
+                     } else {
+                        startSearchForPackageDestination = true;
+                     }
+                  }
 
-					try {
-						msgPackageSearch.setContentObject(pData);
-						send(msgPackageSearch);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
+                  if (startSearchForPackageDestination) {
+                     logger.log(Level.INFO, myAgent.getLocalName() + " -> START_EXIT_RAMP_SEARCH_FOR_PACKAGE");
+
+                     msgPackageSearch.setContentObject(pData);
+                     send(msgPackageSearch);
+                  }
+               } catch (IOException e) {
+                  e.printStackTrace();
+               }
+            }
 
 			}
 		}
