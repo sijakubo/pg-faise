@@ -69,7 +69,7 @@ public class RampOrderAgent extends Agent {
 			addBehaviour(new SetPackageReservedBehaviour(MessageTemplate.MatchPerformative(MessageType.GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT)));
 
          //Ausgang -> Eingang: Beantworte die Anfrage, wenn das Paket angenommen werden kann
-         addBehaviour(new HandleExitRampPackageSlotEnquireBehaviour(MessageType.REQUEST_OFFER_FROM_EXIT_RAMP_FOR_PACKAGE));
+         addBehaviour(new HandleExitRampPackageSlotEnquireBehaviour(MessageType.ENQUIRE_EXIT_RAMP));
          //PackageAgent -> Ausgang: Der eigene PackageAgent meldet auf Anfrage eine Nachfrage nach dem Paket
          addBehaviour(new SendPackageNeedOfferBehaviour(MessageType.PACKAGE_IS_NEEDED));
          //Ausgang -> Eingang: reserviere einen Slot für das Paket
@@ -86,7 +86,7 @@ public class RampOrderAgent extends Agent {
 			addBehaviour(new CheckIfPackageIsStoredBehaviour(
 					MessageTemplate.MatchPerformative(MessageType.ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS)));
 
-         addBehaviour(new HandleStorageRampPackageSlotEnquireBehaviour(MessageType.REQUEST_OFFER_FROM_STORAGE_RAMP_FOR_PACKAGE));
+         addBehaviour(new HandleStorageRampPackageSlotEnquireBehaviour(MessageType.ENQUIRE_STORAGE_RAMP));
          addBehaviour(new HandlePackageSlotReservationBehaviour(MessageType.RESERVE_PACKAGE_SLOT_ON_RAMP, true));
          addBehaviour(new HandleSpaceAvailableBehaviour(MessageType.PACKAGE_SPACE_AVAILABLE));
       }
@@ -318,11 +318,8 @@ public class RampOrderAgent extends Agent {
                                                     int endEnquireMessageType,
                                                     int enquireMessageType) {
          super(MessageTemplate.or(
-               MessageTemplate.or(
                      MessageTemplate.MatchPerformative(startEnquireMessageType),
-                     MessageTemplate.MatchPerformative(endEnquireMessageType)),
-               MessageTemplate.MatchPerformative(enquireMessageType)
-         ));
+                     MessageTemplate.MatchPerformative(endEnquireMessageType)));
 
          this.startEnquireMessageType = startEnquireMessageType;
          this.endEnquireMessageType = endEnquireMessageType;
@@ -335,13 +332,14 @@ public class RampOrderAgent extends Agent {
 
          if (msg.getPerformative() == startEnquireMessageType) {
             //Start Enquire of Ramps
-            logger.info("Enquire for DestinationRamp started. Package: " + packageData.getPackageID());
+            logger.info("Entrance - RampOrderAgent <- START_RAMP_SEARCH_FOR_PACKAGE");
 
             addTimeOutBehaviourToMyAgent();
             possibleDestinationRamps = new ArrayList<AID>();
 
             //send enquire to ramps
             ACLMessage msgEnquireRamps = new ACLMessage(enquireMessageType);
+            logger.info("Entrance - RampOrderAgent -> ENQUIRE_RAMP, from " + String.valueOf(conveyorID));
             msgEnquireRamps.setContentObject(packageData);
             msgEnquireRamps.addUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY, String.valueOf(conveyorID));
             AgentHelper.addReceivers(msgEnquireRamps, myAgent, szenarioID);
@@ -349,7 +347,7 @@ public class RampOrderAgent extends Agent {
 
          } else if (msg.getPerformative() == endEnquireMessageType) {
             //End Enquire of Ramps
-            logger.debug("Enquire for DestinationRamp ended. Package: " + packageData.getPackageID());
+            logger.info("Entrance - RampOrderAgent <- END_RAMP_SEARCH_FOR_PACKAGE");
 
             if (!possibleDestinationRamps.isEmpty()) {
                AID destinationRampAID = possibleDestinationRamps.get(0);
@@ -372,7 +370,8 @@ public class RampOrderAgent extends Agent {
                send(message);
             }
          } else {
-            logger.debug("Enquire recived for Package: " + packageData.getPackageID());
+            logger.info("Entrance - RampOrderAgent <- ENQUIRE_EXIT_RAMP / ENQUIRE_STORAGE_RAMP, "
+                  + msg.getPerformative());
             possibleDestinationRamps.add(msg.getSender());
          }
       }
@@ -387,11 +386,13 @@ public class RampOrderAgent extends Agent {
          timeOutBehaviour = new WakerBehaviour(myAgent, ENQUIRE_TIMEOUT) {
             @Override
             protected void onWake() {
+               logger.info("WakeUp -> Entrance (END_EXIT_RAMP_SEARCH_FOR_PACKAGE)");
                ACLMessage endEnquireMessage = new ACLMessage(MessageType.END_EXIT_RAMP_SEARCH_FOR_PACKAGE);
                endEnquireMessage.addReceiver(myAgent.getAID());
                myAgent.send(endEnquireMessage);
             }
          };
+         logger.info("WakeUp-Behaviour added");
          myAgent.addBehaviour(timeOutBehaviour);
       }
    }
@@ -539,6 +540,8 @@ public class RampOrderAgent extends Agent {
          ACLMessage msgPackageIsNeeded = new ACLMessage(MessageType.PACKAGE_IS_NEEDED_FROM_EXIT_RAMP);
 
          String enquiringRampConveyorId = msg.getUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY);
+         logger.info("Exit - RampOrderAgent -> PACKAGE_IS_NEEDED_FROM_EXIT_RAMP, to " +
+               enquiringRampConveyorId);
          AgentHelper.addReceiver(msgPackageIsNeeded, myAgent, RampOrderAgent.NAME,
                Integer.valueOf(enquiringRampConveyorId), szenarioID);
 
@@ -606,6 +609,8 @@ public class RampOrderAgent extends Agent {
             //accept offer
             ACLMessage msgReply = new ACLMessage(MessageType.PACKAGE_IS_STORABLE_FROM_STORAGE_RAMP);
             String enquiringRampConveyorId = msg.getUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY);
+            logger.info("StorageRamp - RampOrderAgent -> PACKAGE_IS_STORABLE_FROM_STORAGE_RAMP, to "
+                  + enquiringRampConveyorId);
             AgentHelper.addReceiver(msgReply, myAgent, RampOrderAgent.NAME,
                   Integer.valueOf(enquiringRampConveyorId), szenarioID);
          } else {

@@ -329,8 +329,7 @@ public class PackageAgent extends Agent {
 							RampOrderAgent.NAME, currentAgent.conveyorID,
 							currentAgent.szenarioID);
 
-					if (Debugging.showInfoMessages)
-						logger.log(Level.INFO, myAgent.getLocalName()
+				   logger.log(Level.INFO, myAgent.getLocalName()
 								+ " -> START_EXIT_RAMP_SEARCH_FOR_PACKAGE");
 
 					try {
