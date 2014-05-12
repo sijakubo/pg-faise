@@ -12,6 +12,7 @@ import org.apache.log4j.Priority;
 
 
 
+
 import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.data.PackageData;
@@ -78,6 +79,7 @@ public class PackageAgent extends Agent {
       if (rampType == ConveyorRamp.RAMP_ENTRANCE) {
          addBehaviour(new AssignDestinationToPackageBehaviour(
                MessageTemplate.MatchPerformative(MessageType.ASSIGN_PACKAGE_DESTINATION)));
+         addBehaviour(new  StartRampSearchForPackageBehaviour(this,3000));
 
       }
       
@@ -114,8 +116,8 @@ public class PackageAgent extends Agent {
 		}
 		
 
-			addBehaviour(new AnswerIfPackageIsContainedBehaviour(
-					MessageTemplate.MatchPerformative(MessageType.CHECK_IF_PACKAGE_IS_STORED)));
+			//addBehaviour(new AnswerIfPackageIsContainedBehaviour(
+					//MessageTemplate.MatchPerformative(MessageType.CHECK_IF_PACKAGE_IS_STORED)));
 
          addBehaviour(new PackageReservationForStorageRampBehaviour(MessageType.SET_PACKAGE_RESERVED_FOR_STORAGE_RAMP));
          
@@ -241,8 +243,7 @@ public class PackageAgent extends Agent {
 	 * Send message:
 	 * 		RampOrderAgent: AskOtherOrderagentsIfPackageExistsBehaviour
 	 * Behaviour (Exit Behaviour) should cyclically choose a Job from the List (PackageDataList)
-	 * and ask his Orderagent to ask the Orderagents from the Storage if there is
-	 * a Package, which belongs to the Job
+	 * and ask his Orderagent to search for a Package
 	 * 
 	 * @author Raschid
 	 */
@@ -290,6 +291,61 @@ public class PackageAgent extends Agent {
 			}
 		}
 	}
+	
+	
+	/**
+	 * Got message:
+	 * 		none (Ticker Behaviour, after 5 seconds, if a Package is available)
+	 * Send message:
+	 * 		RampOrderAgent: EnquireRampsForPackageSlotBehaviour
+	 * 
+	 * Behaviour should search a Ramp for the Package (Entrance Behaviour)
+	 * 
+	 * @author Raschid
+	 */
+	private class StartRampSearchForPackageBehaviour extends TickerBehaviour {
+
+		public StartRampSearchForPackageBehaviour (Agent a, long period) {
+			super(a, period);
+
+		}
+
+		@Override
+		protected void onTick() {
+			PackageAgent currentAgent = (PackageAgent) myAgent;
+
+			// Only if Jobs exists, there should be made a request
+			int sizePackageList = currentAgent.lstPackage.size();
+			if (sizePackageList >= 1) {
+								
+				// Get the Package Data
+				PackageData pData = currentAgent.lstPackage.get(0);
+
+				// Send the Message, if the Package is not reserved
+				if (!pData.isReserved()) {
+					ACLMessage msgPackageSearch = new ACLMessage(
+							MessageType.START_EXIT_RAMP_SEARCH_FOR_PACKAGE);
+					AgentHelper.addReceiver(msgPackageSearch, myAgent,
+							RampOrderAgent.NAME, currentAgent.conveyorID,
+							currentAgent.szenarioID);
+
+					if (Debugging.showInfoMessages)
+						logger.log(Level.INFO, myAgent.getLocalName()
+								+ " -> START_EXIT_RAMP_SEARCH_FOR_PACKAGE");
+
+					try {
+						msgPackageSearch.setContentObject(pData);
+						send(msgPackageSearch);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+
+			}
+		}
+	}
+	
 	
 	/**Got message:
 	 * 		none
