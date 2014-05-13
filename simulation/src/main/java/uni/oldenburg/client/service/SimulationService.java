@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import uni.oldenburg.shared.model.JobList;
 import uni.oldenburg.shared.model.Szenario;
+import uni.oldenburg.shared.model.SzenarioInfo;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -11,7 +12,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("simulationsService")
 public interface SimulationService extends RemoteService {
 	Szenario loadSzenario(String name);
-	ArrayList<String> getScenarioTitles();
+	ArrayList<SzenarioInfo> getScenarioInfos();
 	void saveSzenario(Szenario szenario);
 	boolean checkIfTitleExists(String title);
 	JobList loadJoblist(String name);

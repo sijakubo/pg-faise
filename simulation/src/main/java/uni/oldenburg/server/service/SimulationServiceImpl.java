@@ -12,6 +12,7 @@ import uni.oldenburg.server.dao.SzenarioDao;
 import uni.oldenburg.shared.model.JobList;
 import uni.oldenburg.shared.model.SimulationUser;
 import uni.oldenburg.shared.model.Szenario;
+import uni.oldenburg.shared.model.SzenarioInfo;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -39,19 +40,19 @@ public class SimulationServiceImpl extends RemoteServiceServlet implements Simul
 	 * Method gets the Name of the ScenarioTitles in order to present it within
 	 * the Popup
 	 * 
-	 * @author Raschid
+	 * @author Raschid Matthias
 	 */
-	public ArrayList<String> getScenarioTitles() {
+	public ArrayList<SzenarioInfo> getScenarioInfos() {
 		SzenarioDao szenarioDao = new SzenarioDao();
-		ArrayList<String> scenarioTitles = null;
+		ArrayList<SzenarioInfo> scenarioInfos = null;
 
 		try {
-			scenarioTitles = szenarioDao.getSzenarioTitles();
+			scenarioInfos = szenarioDao.getSzenarioInfos();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		return scenarioTitles;
+		return scenarioInfos;
 	}
 
 	/**

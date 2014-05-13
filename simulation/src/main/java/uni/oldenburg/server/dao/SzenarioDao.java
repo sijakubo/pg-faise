@@ -38,11 +38,10 @@ public class SzenarioDao {
 	 * Returns the names of all Szenarios so that they can be showed in the
 	 * Popup for Scenario selection
 	 * 
-	 * @author Raschid
+	 * @author Raschid Matthias
 	 */
-	public ArrayList<String> getSzenarioTitles() throws SQLException {
-
-		ArrayList<String> scenarioTitles = new ArrayList<String>();
+	public ArrayList<SzenarioInfo> getSzenarioInfos() throws SQLException {
+		ArrayList<SzenarioInfo> scenarioInfos = new ArrayList<SzenarioInfo>();
 
 		String strSQL = "SELECT title FROM " + Szenario.TABLE_NAME + " ORDER BY title";
 
@@ -52,15 +51,30 @@ public class SzenarioDao {
 		ResultSet resultSet = preparedStatement.executeQuery();
 
 		while (resultSet.next()) {
+			SzenarioInfo myInfo = new SzenarioInfo();
+			myInfo.Title = resultSet.getString("title");
+			
+			Szenario mySzenario = loadSzenario(myInfo.Title);
+			
+			for (Conveyor myConveyor : mySzenario.getConveyorList()) {
+				if (myConveyor instanceof ConveyorRamp) {
+					ConveyorRamp myRamp = (ConveyorRamp)myConveyor;
+					if (myRamp.getRampType() == ConveyorRamp.RAMP_ENTRANCE)
+						myInfo.EntryRampCount += 1;
+					else if (myRamp.getRampType() == ConveyorRamp.RAMP_EXIT)
+						myInfo.ExitRampCount += 1;
+					else if (myRamp.getRampType() == ConveyorRamp.RAMP_STOREAGE)
+						myInfo.StorageRampCount += 1;
+				}
+				else if (myConveyor instanceof ConveyorVehicle) {
+					myInfo.VehicleCount += 1;
+				}
+			}
 
-			String title = resultSet.getString("title");
-
-			scenarioTitles.add(title);
-
+			scenarioInfos.add(myInfo);
 		}
 
-		return scenarioTitles;
-
+		return scenarioInfos;
 	}
 
 	/**

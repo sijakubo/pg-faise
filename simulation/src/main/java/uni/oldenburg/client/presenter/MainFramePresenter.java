@@ -26,6 +26,7 @@ import uni.oldenburg.shared.model.ConveyorWall;
 import uni.oldenburg.shared.model.Job;
 import uni.oldenburg.shared.model.JobList;
 import uni.oldenburg.shared.model.Szenario;
+import uni.oldenburg.shared.model.SzenarioInfo;
 import uni.oldenburg.shared.model.event.JobAssignedEvent;
 import uni.oldenburg.shared.model.event.JobUnassignableEvent;
 import uni.oldenburg.shared.model.event.SimStartedEvent;
@@ -601,16 +602,15 @@ public class MainFramePresenter extends Presenter {
 	 * 
 	 * @author Raschid
 	 */
-	public void getScenarioTitlesFromServerAndShow() {
+	public void getScenarioInfosFromServerAndShow() {
 		((SimulationServiceAsync) rpcService)
-				.getScenarioTitles(new AsyncCallback<ArrayList<String>>() {
+				.getScenarioInfos(new AsyncCallback<ArrayList<SzenarioInfo>>() {
 					public void onFailure(Throwable arg0) {
 						Window.alert(arg0.getLocalizedMessage());
 					}
 
-					public void onSuccess(ArrayList<String> result) {
-						DialogBoxScenarioSelection dialog = new DialogBoxScenarioSelection(
-								result, MainFramePresenter.this);
+					public void onSuccess(ArrayList<SzenarioInfo> result) {
+						DialogBoxScenarioSelection dialog = new DialogBoxScenarioSelection(result, MainFramePresenter.this);
 						dialog.show();
 					}
 				});
@@ -843,7 +843,7 @@ public class MainFramePresenter extends Presenter {
 		String menuName = "Laden";
 		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar().addItem(menuName, new Command() {
 			public void execute() {
-				getScenarioTitlesFromServerAndShow();
+				getScenarioInfosFromServerAndShow();
 			}
 		}));
 
