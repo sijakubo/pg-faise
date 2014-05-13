@@ -12,10 +12,7 @@ import de.novanic.eventservice.client.event.Event;
 public class JobUnassignableEvent implements Event {
 	private Job myJob = null;
 	
-	public JobUnassignableEvent() {
-		
-	}
-	
+	public JobUnassignableEvent() {}
 	
 	public JobUnassignableEvent(Job newJob) {
 		myJob = newJob;

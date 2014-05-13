@@ -13,7 +13,6 @@ import uni.oldenburg.client.service.AgentPlatformServiceAsync;
 import uni.oldenburg.client.service.ServiceAsync;
 import uni.oldenburg.client.service.SimulationServiceAsync;
 import uni.oldenburg.client.util.EmptyAsyncCallback;
-import uni.oldenburg.client.util.LoggingUtil;
 import uni.oldenburg.client.view.DialogBoxJoblistSelection;
 import uni.oldenburg.client.view.DialogBoxOverwrite;
 import uni.oldenburg.client.view.DialogBoxOverwriteJoblist;
@@ -943,11 +942,6 @@ public class MainFramePresenter extends Presenter {
 		
 		myRES.addListener(DomainFactory.getDomain(DOMAIN_NAME), new RemoteEventListener() {
 			public void apply(Event anEvent) {
-				if (Debugging.showDebugMessages) {
-					// check to see if any message would come at all
-					MainFramePresenter.this.display.log("event fired!");
-				}
-				
 				if (anEvent instanceof SimStartedEvent) {
 					bSimulationRunning = true;
 					display.log("Simulation started!");
@@ -966,30 +960,21 @@ public class MainFramePresenter extends Presenter {
 					return;
 				}
 				
-				if (anEvent instanceof JobAssignedEvent) {
-					if (Debugging.showDebugMessages) {
-						MainFramePresenter.this.display.log("Job assigned");
-						LoggingUtil.logMessageToServer("Job assigned");	
-					}
-					
+				if (anEvent instanceof JobAssignedEvent) {					
 					JobAssignedEvent myEvent = (JobAssignedEvent)anEvent;
+						
+					lstJobs.removeJob(myEvent.getJob().getPackageId(), myEvent.getJob().getType());
 					
-					lstJobs.removeJob(myEvent.getJob());
 					setupJobTable();
 					
 					return;
 				}
 				
-				if (anEvent instanceof JobUnassignableEvent) {
-					if (Debugging.showDebugMessages) {
-						MainFramePresenter.this.display.log("Unassignable Job found");
-						LoggingUtil.logMessageToServer("Unassignable Job found");	
-					}
-					
+				if (anEvent instanceof JobUnassignableEvent) {					
 					JobUnassignableEvent myEvent = (JobUnassignableEvent)anEvent;
 					
 					Job clonedJob = myEvent.getJob().clone(elapsedTimeSec + 10);
-					lstJobs.removeJob(myEvent.getJob());
+					lstJobs.removeJob(myEvent.getJob().getPackageId(), myEvent.getJob().getType());
 					lstJobs.addJob(clonedJob);
 					
 					setupJobTable();

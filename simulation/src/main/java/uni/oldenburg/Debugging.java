@@ -11,7 +11,7 @@ public class Debugging {
 	public final static boolean showInfoMessages			= false;
 	public final static boolean showPackageMessages			= false;
 	
-	public final static boolean showDebugMessages			= true;
+	public final static boolean showDebugMessages			= false;
 	
 	// Debugging Mode
 	public static final boolean isDebugging					= true;

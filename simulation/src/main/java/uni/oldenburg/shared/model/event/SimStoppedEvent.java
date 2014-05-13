@@ -4,10 +4,5 @@ import de.novanic.eventservice.client.event.Event;
 
 @SuppressWarnings("serial")
 public class SimStoppedEvent implements Event {
-	
-	public SimStoppedEvent(){
-		
-	}
-	
-	
+	public SimStoppedEvent() {}
 }
