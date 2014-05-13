@@ -9,7 +9,9 @@ public class Debugging {
 	public final static boolean showAgentStartupMessages	= false;
 	public final static boolean showAuctionMessages			= false;
 	public final static boolean showInfoMessages			= true;
-	public final static boolean showPackageMessages			= true;
+	public final static boolean showPackageMessages			= false;
+	
+	public final static boolean showDebugMessages			= false;
 	
 	// Debugging Mode
 	public static final boolean isDebugging					= true;

@@ -57,40 +57,31 @@ public class PackageAgent extends Agent {
 
 		}
 
-		addBehaviour(new AddPackageBehaviour(
-				MessageTemplate.MatchPerformative(MessageType.ADD_PACKAGE)));
-		addBehaviour(new GetPackageCountBehaviour(
-				MessageTemplate.MatchPerformative(MessageType.GET_PACKAGE_COUNT)));
-		addBehaviour(new RemovePackageBehaviour(
-				MessageTemplate.MatchPerformative(MessageType.REMOVE_PACKAGE)));
+		addBehaviour(new AddPackageBehaviour(MessageTemplate.MatchPerformative(MessageType.ADD_PACKAGE)));
+		addBehaviour(new GetPackageCountBehaviour(MessageTemplate.MatchPerformative(MessageType.GET_PACKAGE_COUNT)));
+		addBehaviour(new RemovePackageBehaviour(MessageTemplate.MatchPerformative(MessageType.REMOVE_PACKAGE)));
 
-      if (rampType == ConveyorRamp.RAMP_ENTRANCE) {
-         addBehaviour(new AssignDestinationToPackageBehaviour(
-               MessageTemplate.MatchPerformative(MessageType.ASSIGN_PACKAGE_DESTINATION)));
-
-      }
+		if (rampType == ConveyorRamp.RAMP_ENTRANCE) {
+			addBehaviour(new AssignDestinationToPackageBehaviour(MessageTemplate.MatchPerformative(MessageType.ASSIGN_PACKAGE_DESTINATION)));
+      	}
 
 		// If it is an Exit, than add the Behaviour, which is used for
 		// requesting an Package for an existing Job
 		if (rampType == ConveyorRamp.RAMP_EXIT) {
 			addBehaviour(new SearchForPackageBehaviour(this, 3000));
-			addBehaviour(new PackageReservationBehaviour(
-					MessageTemplate.MatchPerformative(MessageType.SET_PACKAGE_RESERVED)));
-         addBehaviour(new PackageNeedInformationBehaviour(MessageType.CHECK_IF_PACKAGE_IS_NEEDED));
+			addBehaviour(new PackageReservationBehaviour(MessageTemplate.MatchPerformative(MessageType.SET_PACKAGE_RESERVED)));
+			addBehaviour(new PackageNeedInformationBehaviour(MessageType.CHECK_IF_PACKAGE_IS_NEEDED));
 		}
 
 		// If it is an Storage it should answer the request from its own
 		// Orderagent, who was asked by an exit, and check if a
 		// Package for the requested Package id is contained
 		if (rampType == ConveyorRamp.RAMP_STOREAGE) {
-			addBehaviour(new AnswerIfPackageIsContainedBehaviour(
-					MessageTemplate.MatchPerformative(MessageType.CHECK_IF_PACKAGE_IS_STORED)));
+			addBehaviour(new AnswerIfPackageIsContainedBehaviour(MessageTemplate.MatchPerformative(MessageType.CHECK_IF_PACKAGE_IS_STORED)));
+			addBehaviour(new PackageReservationForStorageRampBehaviour(MessageType.SET_PACKAGE_RESERVED_FOR_STORAGE_RAMP));
+		}
 
-         addBehaviour(new PackageReservationForStorageRampBehaviour(MessageType.SET_PACKAGE_RESERVED_FOR_STORAGE_RAMP));
-      }
-
-		String nickname = AgentHelper.getUniqueNickname(PackageAgent.NAME,
-				conveyorID, szenarioID);
+		String nickname = AgentHelper.getUniqueNickname(PackageAgent.NAME, conveyorID, szenarioID);
 		AgentHelper.registerAgent(szenarioID, this, nickname);
 
 		if (Debugging.showAgentStartupMessages)
@@ -256,12 +247,9 @@ public class PackageAgent extends Agent {
 	 * 
 	 * @author Raschid
 	 */
-	private class AnswerIfPackageIsContainedBehaviour extends
-			CyclicReceiverBehaviour {
-
+	private class AnswerIfPackageIsContainedBehaviour extends CyclicReceiverBehaviour {
 		protected AnswerIfPackageIsContainedBehaviour(MessageTemplate mt) {
 			super(mt);
-			// TODO Auto-generated constructor stub
 		}
 
 		@Override
@@ -281,8 +269,7 @@ public class PackageAgent extends Agent {
 			// Check if it is contained at the first position
 			int size = currentAgent.lstPackage.size();
 			if (size >= 1) {
-				PackageData firstPositionPackage = currentAgent.lstPackage
-						.get(0);
+				PackageData firstPositionPackage = currentAgent.lstPackage.get(0);
 				if (id == firstPositionPackage.getPackageID()) {
 					// Answer the Orderagent with Yes
 					ACLMessage msgAnswer = new ACLMessage(MessageType.ANSWER_IF_PACKAGE_IS_CONTAINED);
@@ -330,7 +317,6 @@ public class PackageAgent extends Agent {
 
 		protected PackageReservationBehaviour(MessageTemplate mt) {
 			super(mt);
-			// TODO Auto-generated constructor stub
 		}
 
 		@Override

@@ -7,17 +7,16 @@ import java.util.List;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import de.novanic.eventservice.client.event.domain.DomainFactory;
 import uni.oldenburg.Debugging;
-import uni.oldenburg.client.presenter.MainFramePresenter;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.behaviour.TimeoutReceiverBehaviour;
-import uni.oldenburg.server.agent.data.PackageData;
 import uni.oldenburg.server.agent.helper.AgentHelper;
+import uni.oldenburg.server.agent.helper.EventHelper;
 import uni.oldenburg.server.agent.message.MessageType;
-import uni.oldenburg.server.service.RemoteEventService;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.Job;
+import uni.oldenburg.shared.model.event.JobAssignedEvent;
+import uni.oldenburg.shared.model.event.JobUnassignableEvent;
 import uni.oldenburg.shared.model.event.SimStartedEvent;
 import jade.core.AID;
 import jade.core.Agent;
@@ -61,9 +60,9 @@ public class JobAgent extends Agent {
 		
 		addBehaviour(new RequestRampInfosBehaviour());
 		addBehaviour(new ReceiveRampInfosBehaviour(this, 1000, MessageTemplate.MatchPerformative(MessageType.SEND_RAMP_INFO)));
+		addBehaviour(new DelegateIncomingJob(MessageTemplate.MatchPerformative(MessageType.ASSIGN_JOB)));		
 		addBehaviour(new DistributeJobBehaviour(MessageTemplate.MatchPerformative(MessageType.SEND_JOB)));
 		addBehaviour(new AssignDestinationRampBehaviour(MessageTemplate.MatchPerformative(MessageType.PACKAGE_SPACE_AVAILABLE)));
-		addBehaviour(new DelegateIncomingJob(MessageTemplate.MatchPerformative(MessageType.ASSIGN_JOB)));
 		
 		AgentHelper.registerAgent(szenarioID, this, JobAgent.NAME);
 		
@@ -140,7 +139,7 @@ public class JobAgent extends Agent {
 			}
 			
 			// fire SimStartedEvent
-			new RemoteEventService().addEvent(DomainFactory.getDomain(MainFramePresenter.DOMAIN_NAME), new SimStartedEvent());
+			EventHelper.addEvent(new SimStartedEvent());
 		}
 	}
 	
@@ -163,14 +162,12 @@ public class JobAgent extends Agent {
 			if(Debugging.showInfoMessages)
 				logger.log(Level.INFO, "Incoming Job!");
 			
-			Job myJob = (Job)msg.getContentObject();
-			
-			PackageData currentPackage = new PackageData(myJob.getPackageId(), myJob.getDestinationId());
+			Job currentJob = (Job)msg.getContentObject();
 			
 			ACLMessage msgReply = new ACLMessage(MessageType.SEND_JOB);
 			msgReply.addReceiver(myAgent.getAID());
 
-			msgReply.setContentObject(currentPackage);
+			msgReply.setContentObject(currentJob);
 			
 			if(Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName() + " -> SEND_JOB");		
@@ -200,13 +197,13 @@ public class JobAgent extends Agent {
 			if(Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName() + " <- SEND_JOB");
 			
-			PackageData currentPackage = (PackageData)msg.getContentObject();
+			Job currentJob = (Job)msg.getContentObject();
 			
 			// send ramp space request
 			ACLMessage msgInfo = new ACLMessage(MessageType.PACKAGE_SPACE_AVAILABLE);
-			msgInfo.setContentObject(currentPackage);
+			msgInfo.setContentObject(currentJob);
 			
-			switch(currentPackage.getType()) {
+			switch(currentJob.getType()) {
 				case Job.INCOMING:
 					AgentHelper.addReceivers(msgInfo, lstRampIncoming);
 					break;
@@ -225,9 +222,9 @@ public class JobAgent extends Agent {
 	
 	/**
 	 * Got message:
-	 * 		RampOrderAgent::IsPackageSpaceAvailableBehaviour
+	 * 		RampPlattformAgent::IsPackageSpaceAvailableBehaviour
 	 * Send message:
-	 * 		RampOrderAgent::IsPackageSpaceAvailableBehaviour
+	 * 		RampPlattformAgent::IsPackageSpaceAvailableBehaviour
 	 * 			[after collecting responses from all asked ramps]
 	 * 
 	 * - get info about ramps with available space
@@ -242,7 +239,7 @@ public class JobAgent extends Agent {
 		List<AID> selectedList = null;
 		List<AID> lstRampsWithSpace = new ArrayList<AID>();
 		
-		PackageData pendingPackage = null;
+		Job pendingJob = null;
 		
 		protected AssignDestinationRampBehaviour(MessageTemplate mt) {
 			super(mt);
@@ -257,40 +254,56 @@ public class JobAgent extends Agent {
 				rampCount = lstRampOutgoing.size();
 				selectedList = lstRampOutgoing;
 			}
-			
+
 			++rampsResponded;
-			
-			pendingPackage = (PackageData)msg.getContentObject();
-			
+
+			pendingJob = (Job)msg.getContentObject();
+
 			// remember those who have space
 			if (msg.getUserDefinedParameter("space_available") == "1") {
 				lstRampsWithSpace.add(msg.getSender());
 			}
-			
+
 			if(Debugging.showInfoMessages)
 				logger.log(Level.INFO, "Ramps responsed: " + rampsResponded + "/" + rampCount);
-			
+
 			// pick one of the available ramps with free space
 			if (rampsResponded == rampCount) {
 				if(Debugging.showInfoMessages)
 					logger.log(Level.INFO, "Available Ramp Count: " + lstRampsWithSpace.size());
-				
-				int randomRamp = ((int)(Math.random() * 1000)) % lstRampsWithSpace.size();
-				
+
 				ACLMessage msgReply = new ACLMessage(MessageType.RESERVE_SPACE);
-				
-				String target = lstRampsWithSpace.get(randomRamp).toString();
+				String target = "unknown";
+
+				if (lstRampsWithSpace.size() > 0) {
+					int randomRamp = ((int)(Math.random() * 1000)) % lstRampsWithSpace.size();
+					target = lstRampsWithSpace.get(randomRamp).toString();
+
+					// fire JobAssignedEvent
+					if (Debugging.showDebugMessages)
+						logger.log(Level.INFO, "fire JobAssignedEvent");
+						
+					EventHelper.addEvent(new JobAssignedEvent(pendingJob));
+				}
+				else {
+					// fire JobUnassignableEvent
+					if (Debugging.showDebugMessages)
+						logger.log(Level.INFO, "fire JobUnassignableEvent");
+	
+					EventHelper.addEvent(new JobUnassignableEvent(pendingJob));
+				}
+	
 				msgReply.addUserDefinedParameter("RampAID", target);
-				msgReply.setContentObject(pendingPackage);
+				msgReply.setContentObject(pendingJob);
 				
 				rampsResponded = 0;				
 				lstRampsWithSpace.clear();
-				
+
 				AgentHelper.addReceivers(msgReply, selectedList);
-				
+
 				if(Debugging.showInfoMessages)
 					logger.log(Level.INFO, myAgent.getLocalName() + " -> RESERVE_SPACE: " + target);
-				
+	
 				send(msgReply);
 			}
 		}

@@ -26,6 +26,8 @@ import uni.oldenburg.shared.model.ConveyorWall;
 import uni.oldenburg.shared.model.Job;
 import uni.oldenburg.shared.model.JobList;
 import uni.oldenburg.shared.model.Szenario;
+import uni.oldenburg.shared.model.event.JobAssignedEvent;
+import uni.oldenburg.shared.model.event.JobUnassignableEvent;
 import uni.oldenburg.shared.model.event.SimStartedEvent;
 import uni.oldenburg.shared.model.event.SimStoppedEvent;
 
@@ -128,6 +130,7 @@ public class MainFramePresenter extends Presenter {
 		
 		if (Debugging.isDebugging) {			
 			this.loadSzenario("TestSzenario");
+			this.lstJobs.addRandomJobs(100);
 		}
 	}
 
@@ -952,12 +955,6 @@ public class MainFramePresenter extends Presenter {
 			public void apply(Event anEvent) {
 				if (anEvent instanceof SimStartedEvent) {
 					bSimulationRunning = true;
-					
-					/*if (Debugging.isDebugging) {
-						Job myJob = new Job(0, 0, null);
-						agentPlatformService.addJob(currentSzenario.getId(), myJob, new EmptyAsyncCallback());
-					}*/
-					
 					display.log("Simulation started!");
 					
 					startJobTimer();
@@ -967,11 +964,31 @@ public class MainFramePresenter extends Presenter {
 				
 				if (anEvent instanceof SimStoppedEvent) {
 					bSimulationRunning = false;
-					
 					display.log("Simulation stopped!");
 					
 					stopJobTimer();
 					
+					return;
+				}
+				
+				if (anEvent instanceof JobAssignedEvent) {					
+					JobAssignedEvent myEvent = (JobAssignedEvent)anEvent;
+						
+					lstJobs.removeJob(myEvent.getJob().getPackageId(), myEvent.getJob().getType());
+					
+					setupJobTable();
+					
+					return;
+				}
+				
+				if (anEvent instanceof JobUnassignableEvent) {					
+					JobUnassignableEvent myEvent = (JobUnassignableEvent)anEvent;
+					
+					Job clonedJob = myEvent.getJob().clone(elapsedTimeSec + 10);
+					lstJobs.removeJob(myEvent.getJob().getPackageId(), myEvent.getJob().getType());
+					lstJobs.addJob(clonedJob);
+					
+					setupJobTable();
 					return;
 				}
 			}
@@ -982,6 +999,8 @@ public class MainFramePresenter extends Presenter {
 	public void startJobTimer() {
 		if (tmrJobStarter != null)
 			return;
+		
+		elapsedTimeSec = 0;
 			
 		tmrJobStarter = new Timer() {
 			public void run() {
@@ -993,7 +1012,6 @@ public class MainFramePresenter extends Presenter {
 				Job pendingJob = lstJobs.getJob(0);
 				
 				if (elapsedTimeSec >= pendingJob.getTimestamp()) {
-					lstJobs.removeJob(pendingJob);
 					agentPlatformService.addJob(currentSzenario.getId(), pendingJob, new EmptyAsyncCallback());
 				}
 			}

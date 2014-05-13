@@ -16,7 +16,7 @@ public class JobList implements Serializable {
 	private static int lastTimestamp = 0;
 
 	private String name = "undefined";
-	private List<Job> jobList = new ArrayList<Job>();
+	private List<Job> lstJobs = new ArrayList<Job>();
 	private List<Integer> lstOutgoingPackageIDs = new ArrayList<Integer>();
 
 	public JobList() {}
@@ -26,8 +26,8 @@ public class JobList implements Serializable {
 	}
 
 	public void addJob(Job job) {
-		jobList.add(job);
-		Collections.sort(jobList);
+		lstJobs.add(job);
+		Collections.sort(lstJobs);
 	}
 	
 	public void addRandomJobs(int numberOfJobs) {
@@ -63,27 +63,33 @@ public class JobList implements Serializable {
 	}
 
 	public Job getJob(int index) {
-		return jobList.get(index);
-
+		return lstJobs.get(index);
 	}
 
 	public int size() {
-		return jobList.size();
+		return lstJobs.size();
 	}
 
 	public List<Job> subList(int start, int end) {
-		return jobList.subList(start, end);
+		return lstJobs.subList(start, end);
 	}
 
+	public void removeJob(int packageID, int type) {
+		for (Job myJob : lstJobs) {
+			if (myJob.getPackageId() == packageID && myJob.getType() == type)
+				lstJobs.remove(myJob);
+		}
+	}
+	
 	public void removeJob(Job job) {
 		if (job.getType() == Job.INCOMING)
 			this.registerOutgoingPacketID(job.getPackageId());
 		
-		jobList.remove(job);
+		lstJobs.remove(job);
 	}
 
 	public List<Job> getJoblist() {
-		return this.jobList;
+		return this.lstJobs;
 
 	}
 }
