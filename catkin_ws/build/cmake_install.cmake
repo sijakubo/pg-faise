@@ -86,7 +86,10 @@ IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   INCLUDE("/home/pg/catkin_ws/build/gtest/cmake_install.cmake")
   INCLUDE("/home/pg/catkin_ws/build/epos2_control/cmake_install.cmake")
+  INCLUDE("/home/pg/catkin_ws/build/slam_gmapping-hydro-devel/gmapping/cmake_install.cmake")
+  INCLUDE("/home/pg/catkin_ws/build/robot_setup_tf/cmake_install.cmake")
   INCLUDE("/home/pg/catkin_ws/build/sick_tim3xx-hydro_catkin/cmake_install.cmake")
+  INCLUDE("/home/pg/catkin_ws/build/slam_gmapping-hydro-devel/slam_gmapping/cmake_install.cmake")
 
 ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
 

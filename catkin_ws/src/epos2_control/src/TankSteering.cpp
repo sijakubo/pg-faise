@@ -3,6 +3,7 @@
  *
  *  Created on: 25.04.2013
  *      Author: eos
+ *      modified by Jannik Flessner
  */
 
 #include "TankSteering.h"
@@ -22,7 +23,7 @@ TankSteering::TankSteering(ros::NodeHandle roshandle, Epos2MotorController* epos
 	ROS_ERROR("TAnkSteering: maxMPS: %.4lf, factorMPSToRPM: %.4lf, maxRPM: %.4lf", tankSettings.maxMPS, tankSettings.factorMPSToRPM, tankSettings.maxRPM);
 
 	tankSettings.roshandle = roshandle;
-	for (int i=left; i<=right;i++) {
+	for (int i=left; i<=flow;i++) {
 		tankSettings.epos[i] = epos[i];
 	}
 
@@ -49,6 +50,8 @@ void TankSteering::driveCallback(const geometry_msgs::Twist velocityVector)
 {
 	double dxTarget = tankSettings.axisLength * velocityVector.angular.z / 2;
 	double xTarget = velocityVector.linear.x;
+	double y_hub = velocityVector.linear.y;
+	double z_flow = velocityVector.linear.z;
 
 	//ROS_ERROR("linear.x: %.6f ; angular.z: %.6f", velocityVector.linear.x, velocityVector.angular.z);	//debugging
 
@@ -66,23 +69,27 @@ void TankSteering::driveCallback(const geometry_msgs::Twist velocityVector)
 		//output velocities
 		tankSettings.targetVelocityMPS[left]  = x - dx;
 		tankSettings.targetVelocityMPS[right] = x + dx;
+		tankSettings.targetVelocityMPS[hub] = tankSettings.maxMPS * y_hub;
+		tankSettings.targetVelocityMPS[flow] = tankSettings.maxMPS * z_flow;
 	} else {
 		ROS_ERROR("No movement possible because the maximum safety Velocity is to low.");
 		tankSettings.targetVelocityMPS[left]  = 0;
 		tankSettings.targetVelocityMPS[right]  = 0;
+		tankSettings.targetVelocityMPS[hub] = 0;
+		tankSettings.targetVelocityMPS[flow] = 0;
 	}
 }
 
 void TankSteering::setVelocityCallback(const ros::TimerEvent& event)
 {
-	double targetVelocityRPM[2];
+	double targetVelocityRPM[4];
 
-	for (int i=left; i<=right; i++) {targetVelocityRPM[i] = tankSettings.factorMPSToRPM * tankSettings.targetVelocityMPS[i];}
+	for (int i=left; i <=flow; i++) {targetVelocityRPM[i] = tankSettings.factorMPSToRPM * tankSettings.targetVelocityMPS[i];}
 
 	ROS_DEBUG("Try to set Velocity left to %.3f rpm and right to %.3f rpm", targetVelocityRPM[left], targetVelocityRPM[right]);
 	ROS_INFO("Try to set Velocity left to %.4f m/s and right to %.4f m/s", tankSettings.targetVelocityMPS[left], tankSettings.targetVelocityMPS[right]);
 
-	for (int i=left; i<=right; i++) {tankSettings.epos[i]->changeRotationPerMinute(targetVelocityRPM[i]);}
+	for (int i=left; i <=flow; i++) {tankSettings.epos[i]->changeRotationPerMinute(targetVelocityRPM[i]);}
 }
 
 void TankSteering::odomCallback(const ros::TimerEvent& event)
@@ -208,30 +215,30 @@ void TankSteering::getDeviceErrorCallback(const ros::TimerEvent& event)
 int TankSteering::init()
 {
 	int j = 0;
-	int active[2] = {0,0};
+	int active[4] = {0,0,0,0};
 	Epos2MotorController::EposState state = Epos2MotorController::disabled;
 
-	for (int i = left; i <= right; i++) { tankSettings.epos[i]->testForErrorsAndPrint(); }
+	for (int i = left; i <= flow; i++) { tankSettings.epos[i]->testForErrorsAndPrint(); }
 	resetEPOS2Fault();
-	for (int i=left; i<=right;i++) {tankSettings.epos[i]->init(tankSettings.maxRPM, tankSettings.wheelPerimeter);}
+	for (int i=left; i<=flow;i++) {tankSettings.epos[i]->init(tankSettings.maxRPM, tankSettings.wheelPerimeter);}
 	ROS_INFO("initialize both EPOS2 successfully");
 
 	j = 0;
 	do {
-		if (tankSettings.epos[left]->getEpos2State() == Epos2MotorController::enabled && tankSettings.epos[right]->getEpos2State() == Epos2MotorController::enabled) {
+		if (tankSettings.epos[left]->getEpos2State() == Epos2MotorController::enabled && tankSettings.epos[right]->getEpos2State() == Epos2MotorController::enabled && tankSettings.epos[hub]->getEpos2State() == Epos2MotorController::enabled && tankSettings.epos[flow]->getEpos2State() == Epos2MotorController::enabled) {
 			state = Epos2MotorController::enabled;
-			if (j == 0) { for (int i=left; i<=right;i++) {tankSettings.epos[i]->enableEpos2();} }
+			if (j == 0) { for (int i=left; i<=flow;i++) {tankSettings.epos[i]->enableEpos2();} }
 		}
 		j++;
 	} while ( state != Epos2MotorController::enabled && j < 6);
 
 	if (state == Epos2MotorController::enabled) {
 
-		for (int i=left; i<=right; i++) {
+		for (int i=left; i<=flow; i++) {
 			active[i] = tankSettings.epos[i]->activateProfileVelocity();
 		}
 
-		if ( active[left] == 1 && active[right] == 1 ) {
+		if ( active[left] == 1 && active[right] == 1  && active[hub] == 1  && active[flow] == 1 ) {
 			// Abhoeren von SteuerNachrichten
 			tankSettings.epos2MPS = tankSettings.roshandle.subscribe("epos2_MPS_left_right", 1000, &TankSteering::driveCallbackMPS, this);
 			tankSettings.epos2Twist = tankSettings.roshandle.subscribe("cmd_vel", 1000, &TankSteering::driveCallback, this);
@@ -274,7 +281,7 @@ void TankSteering::initLaserscanner(int range, double low, double high)
 
 	tankSettings.sickLMS = tankSettings.roshandle.subscribe("scan", 100, &TankSteering::LaserScanCallback, this);
 
-	ROS_ERROR("Laser-Scanner successfully initialized (Parameter-> a: %.4lf, b: %.4lf, c: %.4lf)", LaserDistance.a, LaserDistance.b, LaserDistance.c);
+	//ROS_ERROR("Laser-Scanner successfully initialized (Parameter-> a: %.4lf, b: %.4lf, c: %.4lf)", LaserDistance.a, LaserDistance.b, LaserDistance.c);
 }
 
 void TankSteering::resetEPOS2Fault()

@@ -3,6 +3,7 @@
  *
  *  Created on: 25.04.2013
  *      Author: eos
+ *      modified by Jannik Flessner
  */
 
 /**
@@ -49,7 +50,7 @@ class TankSteering {
 			tf::TransformListener tfListener;	/**< object to get coordinate transformations from tf-framework */
 			tf::TransformBroadcaster tfBroad;	/**< object to send coordinates with respective to a given system to the tf-frameork */
 
-			double targetVelocityMPS[2];	/**< [m/s] the target velocity for both sides */
+			double targetVelocityMPS[4];	/**< [m/s] the target velocity for both sides */
 			double odomDuration;	/**< [s] the time between to calls of the odomCallback() */
 			double velocityDuration;	/**< [s] the time between to calls of the setVelocityCallback() */
 		}tankSettings;	/**< Main Settings for tank-steering a robot with two EPOS2 */

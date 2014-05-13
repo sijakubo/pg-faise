@@ -36,14 +36,6 @@ math.h
 std_msgs/String.h
 /home/pg/catkin_ws/src/epos2_control/src/std_msgs/String.h
 
-/home/pg/catkin_ws/src/epos2_control/src/HubFlow.h
-Epos2MotorController.h
-/home/pg/catkin_ws/src/epos2_control/src/Epos2MotorController.h
-epos2_control/velocity.h
-/home/pg/catkin_ws/src/epos2_control/src/epos2_control/velocity.h
-geometry_msgs/Twist.h
-/home/pg/catkin_ws/src/epos2_control/src/geometry_msgs/Twist.h
-
 /home/pg/catkin_ws/src/epos2_control/src/TankSteering.h
 Epos2MotorController.h
 /home/pg/catkin_ws/src/epos2_control/src/Epos2MotorController.h
@@ -63,8 +55,6 @@ sensor_msgs/LaserScan.h
 /home/pg/catkin_ws/src/epos2_control/src/epos2_driver.cpp
 TankSteering.h
 /home/pg/catkin_ws/src/epos2_control/src/TankSteering.h
-HubFlow.h
-/home/pg/catkin_ws/src/epos2_control/src/HubFlow.h
 bondcpp/bond.h
 -
 signal.h

@@ -3,6 +3,7 @@
  *
  *  Created on: Apr 11, 2012
  *      Author: Martin Seidel
+ *      modified by Jannik Flessner
  */
 
 #include "SampleMoving.h"
@@ -93,8 +94,8 @@ void SampleMoving::publishSpeed(const ros::TimerEvent& event)
 			break;
 		case cmdVel:	//publish current velocity in a cmd_vel message
 			speedVector.linear.x = ( speedMPS[right] + speedMPS[left] ) * 0.5;
-			speedVector.linear.y=0;
-			speedVector.linear.z=0;
+			speedVector.linear.y= sampleMovingSet.targetVelocity[hub];
+			speedVector.linear.z= sampleMovingSet.targetVelocity[flow];
 			speedVector.angular.x=0;
 			speedVector.angular.y=0;
 			speedVector.angular.z=(speedMPS[right] - speedMPS[left]) / sampleMovingSet.axisLength;
@@ -347,22 +348,55 @@ void SampleMoving::keyboardCallback(const ros::TimerEvent& event)
 			switch(latestChar[0]) {
 			case KEYCODE_W:	targetSpeed[left] = 1;
 							targetSpeed[right]= 1;
+							sampleMovingSet.targetVelocity[hub] = 0;
+							sampleMovingSet.targetVelocity[flow] = 0;
 							break;
 			case KEYCODE_S:	targetSpeed[left] = -1;
 							targetSpeed[right]= -1;
+							sampleMovingSet.targetVelocity[hub] = 0;
+							sampleMovingSet.targetVelocity[flow] = 0;
 							break;
 			case KEYCODE_A:	targetSpeed[left] = -1;
 							targetSpeed[right]= 1;
+							sampleMovingSet.targetVelocity[hub] = 0;
+							sampleMovingSet.targetVelocity[flow] = 0;
 							break;
 			case KEYCODE_D:	targetSpeed[left] = 1;
 							targetSpeed[right]= -1;
+							sampleMovingSet.targetVelocity[hub] = 0;
+							sampleMovingSet.targetVelocity[flow] = 0;
 							break;
 			case KEYCODE_Q:	targetSpeed[left] = 0.5;
 							targetSpeed[right]= 1;
+							sampleMovingSet.targetVelocity[hub] = 0;
+							sampleMovingSet.targetVelocity[flow] = 0;
 							break;
 			case KEYCODE_E:	targetSpeed[left] = 1;
 							targetSpeed[right]= 0.5;
+							sampleMovingSet.targetVelocity[hub] = 0;
+							sampleMovingSet.targetVelocity[flow] = 0;
 							break;
+			case KEYCODE_H:	targetSpeed[left] = 0;
+							targetSpeed[right]= 0;
+							sampleMovingSet.targetVelocity[hub] = 0.5;
+							sampleMovingSet.targetVelocity[flow] = 0;
+							break;
+			case KEYCODE_B:	targetSpeed[left] = 0;
+							targetSpeed[right]= 0;
+							sampleMovingSet.targetVelocity[hub] = -0.5;
+							sampleMovingSet.targetVelocity[flow] = 0;
+							break;
+			case KEYCODE_F:	targetSpeed[left] = 0;
+							targetSpeed[right]= 0;
+							sampleMovingSet.targetVelocity[hub] = 0;
+							sampleMovingSet.targetVelocity[flow] = 0.5;
+							break;
+			case KEYCODE_C:	targetSpeed[left] = 0;
+							targetSpeed[right]= 0;
+							sampleMovingSet.targetVelocity[hub] = 0;
+							sampleMovingSet.targetVelocity[flow] = -0.5;
+							break;
+
 			}
 		}
 	}

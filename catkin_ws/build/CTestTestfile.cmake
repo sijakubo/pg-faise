@@ -6,4 +6,7 @@
 # testing this directory and lists subdirectories to be tested as well.
 SUBDIRS(gtest)
 SUBDIRS(epos2_control)
+SUBDIRS(slam_gmapping-hydro-devel/gmapping)
+SUBDIRS(robot_setup_tf)
 SUBDIRS(sick_tim3xx-hydro_catkin)
+SUBDIRS(slam_gmapping-hydro-devel/slam_gmapping)

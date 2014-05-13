@@ -1,13 +1,13 @@
 //============================================================================
 // Name        : epos2_driver.cpp
 // Author      : Martin Seidel
+// modified    : Jannik Flessner
 // Version     :
 // Copyright   :
 // Description :
 //============================================================================
 
 #include "TankSteering.h"
-#include "HubFlow.h"
 #include <bondcpp/bond.h>		//for sending alive-messages
 #include <signal.h>
 
@@ -53,6 +53,19 @@ int readParameterServer() {
 		parameter.node[TankSteering::right]=2;
 		ROS_ERROR("couldn't read right NodeNr - will use NodeNr 2");
 	}
+
+	if (ros::param::get("/epos2_control/hubNodeNr", getParam)) {
+			parameter.node[TankSteering::hub]=std::min(abs(getParam), 255);
+		} else {
+			parameter.node[TankSteering::hub]=3;
+			ROS_ERROR("couldn't read hub NodeNr - will use NodeNr 3");
+		}
+	if (ros::param::get("/epos2_control/flowNodeNr", getParam)) {
+			parameter.node[TankSteering::flow]=std::min(abs(getParam), 255);
+		} else {
+			parameter.node[TankSteering::flow]=4;
+			ROS_ERROR("couldn't read flow NodeNr - will use NodeNr 2");
+		}
 
 	if (ros::param::get("/epos2_control/reverseLeft", getParam)) {
 		parameter.reverse[TankSteering::left]=std::min(abs(getParam), 1);
@@ -130,7 +143,7 @@ int main(int argc, char **argv) {
 
 	if (readParameterServer()) {
 
-		ROS_ERROR("maxMPS: %.4lf, wheelBase: %.4lf, axisLength: %.4lf, wheelPerimeter: %.4lf", parameter.maxMeterPerSecond, parameter.wheelBase, parameter.axisLength, parameter.wheelPerimeter);
+		//ROS_ERROR("maxMPS: %.4lf, wheelBase: %.4lf, axisLength: %.4lf, wheelPerimeter: %.4lf", parameter.maxMeterPerSecond, parameter.wheelBase, parameter.axisLength, parameter.wheelPerimeter);
 
 		//ROS_ERROR("port: %s", parameter.port);
 		Epos2MotorController leftEpos(parameter.node[TankSteering::left], parameter.reverse[TankSteering::left], parameter.port, parameter.timeout, parameter.baudrate);
@@ -142,13 +155,13 @@ int main(int argc, char **argv) {
 			epos[TankSteering::left] = &leftEpos;
 			epos[TankSteering::right] = &rightEpos;
 
-			Epos2MotorController hubEpos(3, 1, leftEpos.devhandle );
+			Epos2MotorController hubEpos(parameter.node[TankSteering::hub], 1, leftEpos.devhandle );
 			hubEpos.nodeStr = (char*) "hub EPOS2";
-			epos[HubFlow::hub]= &hubEpos;
+			epos[TankSteering::hub]= &hubEpos;
 
-			Epos2MotorController flowEpos(4, 1, leftEpos.devhandle);
+			Epos2MotorController flowEpos(parameter.node[TankSteering::flow], 1, leftEpos.devhandle);
 			flowEpos.nodeStr = (char*) "flow Epos2";
-			epos[HubFlow::flow]= &flowEpos;
+			epos[TankSteering::flow]= &flowEpos;
 
 			bond::Bond driverBond("epos2_bond", "motorController");	//new local bond
 			driverBond.setConnectTimeout(90);

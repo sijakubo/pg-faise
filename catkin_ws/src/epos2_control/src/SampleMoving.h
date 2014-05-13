@@ -3,6 +3,7 @@
  *
  *  Created on: Apr 11, 2012
  *      Author: Martin Seidel
+ *      modified by Jannik Flessner
  */
 
 #ifndef SAMPLEMOVING_H_
@@ -30,6 +31,10 @@
 #define KEYCODE_W 0x77
 #define KEYCODE_Q 0x71
 #define KEYCODE_E 0x65
+#define KEYCODE_F 0x66
+#define KEYCODE_B 0x62
+#define KEYCODE_H 0x68
+#define KEYCODE_C 0x63
 #define pi 3.14159265
 
 //typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> ActionClient;
@@ -45,7 +50,7 @@ class SampleMoving {
 		/**
 		 * enumeration for naming the EPOS2s
 		 */
-		enum {left, right};
+		enum {left, right, hub, flow};
 		/**
 		 * internal state which kind of humanInterface was detected (gamepads / wheels)
 		 */
@@ -142,7 +147,7 @@ class SampleMoving {
 			double wheelPerimeter;	/**< [m] perimeter of one wheel. will be read from the parameter-server. */
 			double maxMPS;	/**< [m/s] highest allowed speed, which could be send. will be read from the parameter-server. */
 
-			double targetVelocity[2];	/**< [1] the velocity-value (with respect to the maximum allowed velocity) which should be reached. will be sent by velocity-messages. */
+			double targetVelocity[4];	/**< [1] the velocity-value (with respect to the maximum allowed velocity) which should be reached. will be sent by velocity-messages. */
 
 			struct timeval timeForKeys;	/**< time-value the terminal is waiting for a key-press. afterwards the velocity will be set. */
 			struct termios oldKeyboardIO;	/**< the saved settings for the terminal. will be reset in the destructor */
