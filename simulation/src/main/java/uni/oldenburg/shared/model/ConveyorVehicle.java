@@ -34,7 +34,7 @@ public class ConveyorVehicle extends Conveyor {
 	protected Canvas createCanvas(Canvas canvas) {
 		Context2d context = canvas.getContext2d();
 		
-		context.setFillStyle(CssColor.make("blue"));
+		context.setFillStyle(CssColor.make(127, 127, 127));
 		context.fillRect(0, 0, getWidth(), getHeight());
 		context.fill();
 		

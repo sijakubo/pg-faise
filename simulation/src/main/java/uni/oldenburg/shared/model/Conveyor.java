@@ -23,7 +23,7 @@ public abstract class Conveyor implements Serializable {
 	public static final int DIRECTION_DOWN 	= 2;
 	public static final int DIRECTION_LEFT 	= 3;	
 	
-	protected static final int ENTRY_BORDER_SIZE = rasterSize / 4;	
+	protected static final int ENTRY_BORDER_SIZE = rasterSize / 8;	
 	protected static final String CONVEYOR_COLOR_INPUT = "red";
 	protected static final String CONVEYOR_COLOR_OUTPUT  = "green";	
 
