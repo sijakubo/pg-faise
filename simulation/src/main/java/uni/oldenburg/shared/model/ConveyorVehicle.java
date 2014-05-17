@@ -28,7 +28,7 @@ public class ConveyorVehicle extends Conveyor {
 	/**
 	 * helper function to draw entry points of conveyors 
 	 * 
-	 * @author Matthias
+	 * @author Matthias, Christopher
 	 */
 	@Override
 	protected Canvas createCanvas(Canvas canvas) {
@@ -42,18 +42,34 @@ public class ConveyorVehicle extends Conveyor {
 			case DIRECTION_UP:
 				drawEntry(context, CONVEYOR_COLOR_INPUT, 0, 0, this.getWidth(), ENTRY_BORDER_SIZE);
 				drawEntry(context, CONVEYOR_COLOR_OUTPUT , 0, this.getHeight() - ENTRY_BORDER_SIZE, this.getWidth(), ENTRY_BORDER_SIZE);
+				if(this.getPackageCount() > 0) {
+					context.setFillStyle(CssColor.make(0, 63, 127));
+					context.fillRect(0.2 * getWidth(), 0.1 * getHeight(), 0.6 * getWidth(), 0.8 * getHeight());
+				}
 				break;
 			case DIRECTION_LEFT:
 				drawEntry(context, CONVEYOR_COLOR_INPUT, this.getWidth() - ENTRY_BORDER_SIZE, 0, ENTRY_BORDER_SIZE, this.getWidth());
 				drawEntry(context, CONVEYOR_COLOR_OUTPUT , 0, 0, ENTRY_BORDER_SIZE, this.getWidth());
+				if(this.getPackageCount() > 0) {
+					context.setFillStyle(CssColor.make(0, 63, 127));
+					context.fillRect(0.1 * getWidth(), 0.2 * getHeight(), 0.8 * getWidth(), 0.6 * getHeight());
+				}
 				break;
 			case DIRECTION_DOWN:
 				drawEntry(context, CONVEYOR_COLOR_INPUT, 0, this.getHeight() - ENTRY_BORDER_SIZE, this.getWidth(), ENTRY_BORDER_SIZE);				
 				drawEntry(context, CONVEYOR_COLOR_OUTPUT , 0, 0, this.getWidth(), ENTRY_BORDER_SIZE);
+				if(this.getPackageCount() > 0) {
+					context.setFillStyle(CssColor.make(0, 63, 127));
+					context.fillRect(0.2 * getWidth(), 0.1 * getHeight(), 0.6 * getWidth(), 0.8 * getHeight());
+				}
 				break;
 			case DIRECTION_RIGHT:
 				drawEntry(context, CONVEYOR_COLOR_INPUT, 0, 0, ENTRY_BORDER_SIZE, this.getWidth());				
 				drawEntry(context, CONVEYOR_COLOR_OUTPUT , this.getWidth() - ENTRY_BORDER_SIZE, 0, ENTRY_BORDER_SIZE, this.getWidth());
+				if(this.getPackageCount() > 0) {
+					context.setFillStyle(CssColor.make(0, 63, 127));
+					context.fillRect(0.1 * getWidth(), 0.2 * getHeight(), 0.8 * getWidth(), 0.6 * getHeight());
+				}
 				break;
 		}		
 		
