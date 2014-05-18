@@ -101,7 +101,7 @@ public class VehicleRoutingAgent extends Agent {
             msgOut.addUserDefinedParameter("estimation", "" + estimation);
             msgOut.addUserDefinedParameter("destinationID", "" + destinationID);
 
-            AgentHelper.addReceivers(msgOut, myAgent, ((VehicleRoutingAgent) myAgent).getSzenarioID());
+            AgentHelper.addReceivers(msgOut, myAgent, szenarioID);
 
             logger.log(Level.INFO, myAgent.getLocalName() + " sent SEND_ESTIMATION message with vehicleID "
                   + conveyorID + " auctionID " + auctionID + " and estimation: " + estimation);

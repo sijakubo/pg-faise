@@ -48,7 +48,7 @@ public class RampRoutingAgent extends Agent {
 		}
 		
 		addBehaviour(new StartAuctionBehaviour(MessageTemplate.MatchPerformative(MessageType.INITIALIZE_START_AUCTION_BEHAVIOUR)));
-		addBehaviour(new ReceiveEstimationBehaviour());
+		addBehaviour(new ReceiveEstimationBehaviour(MessageTemplate.MatchPerformative(MessageType.SEND_ESTIMATION)));
 		addBehaviour(new AssignVehicleForPackageBehaviour());
 
 		String nickname = AgentHelper.getUniqueNickname(RampRoutingAgent.NAME,
@@ -109,57 +109,31 @@ public class RampRoutingAgent extends Agent {
 		}
 	}
 
-	/**
-	 * @author Christopher
-	 */
-	private class ReceiveEstimationBehaviour extends CyclicBehaviour {
+   /**
+    * @author Christopher, sijakubo
+    */
+   private class ReceiveEstimationBehaviour extends CyclicReceiverBehaviour {
 
-		public void action() {
+      protected ReceiveEstimationBehaviour(MessageTemplate mt) {
+         super(mt);
+      }
 
-			int auctionID;
-			int vehicleID;
-			int estimation;
+      @Override
+      public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+         int auctionID = Integer.valueOf(msg.getUserDefinedParameter("auctionID"));
+         int vehicleID = Integer.valueOf(msg.getUserDefinedParameter("vehicleID"));
+         int estimation = Integer.valueOf(msg.getUserDefinedParameter("estimation"));
 
-			// wait for message
-			MessageTemplate mt = MessageTemplate
-					.MatchPerformative(MessageType.SEND_ESTIMATION);
-			ACLMessage msg = myAgent.receive(mt);
+         logger.log(Level.INFO, myAgent.getLocalName()
+               + " received ESTIMATION message with vehicleID "
+               + vehicleID + " auctionID " + auctionID
+               + " and estimation: " + estimation);
 
-			if (msg != null) {
-				try {
-					auctionID = Integer.valueOf(msg
-							.getUserDefinedParameter("auctionID"));
-				} catch (NumberFormatException e) {
-					auctionID = -1;
-				}
-				try {
-					vehicleID = Integer.valueOf(msg
-							.getUserDefinedParameter("vehicleID"));
-				} catch (NumberFormatException e) {
-					vehicleID = -1;
-				}
-				try {
-					estimation = Integer.valueOf(msg
-							.getUserDefinedParameter("estimation"));
-				} catch (NumberFormatException e) {
-					estimation = -1;
-				}
-
-				if (Debugging.showAuctionMessages) {
-					logger.log(Level.INFO, myAgent.getLocalName()
-							+ " received ESTIMATION message with vehicleID "
-							+ vehicleID + " auctionID " + auctionID
-							+ " and estimation: " + estimation);
-				}
-
-				if (auctionID == currentAuction) {
-					estimations.add(new Dimension(vehicleID, estimation));
-				}
-			} else {
-				block();
-			}
-		}
-	}
+         if (auctionID == currentAuction) {
+            estimations.add(new Dimension(vehicleID, estimation));
+         }
+      }
+   }
 
 	/**
 	 * @author Christopher
