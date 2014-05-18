@@ -107,7 +107,7 @@ public class PackageAgent extends Agent {
 		}
 		
 		if(rampType==ConveyorRamp.RAMP_ENTRANCE|| rampType == ConveyorRamp.RAMP_STOREAGE){
-			addBehaviour (new InitializeAuctionStartBehaviour(this, 3000));
+			addBehaviour (new InitializeAuctionStartBehaviour(this, 20000));
 		}
 		
 		if(rampType==-1){//If it is an Vehicle
@@ -391,6 +391,7 @@ public class PackageAgent extends Agent {
 				if (pData.isReserved()) {
                ACLMessage msgPackageAuctionStart = new ACLMessage(MessageType.INITIALIZE_START_AUCTION_BEHAVIOUR);
                msgPackageAuctionStart.addUserDefinedParameter("conveyorId", "" + pData.getDestinationID());
+               msgPackageAuctionStart.addUserDefinedParameter("packageId", "" + pData.getPackageID());
                AgentHelper.addReceiver(msgPackageAuctionStart, myAgent, RampRoutingAgent.NAME, currentAgent.conveyorID, currentAgent.szenarioID);
 
                try {

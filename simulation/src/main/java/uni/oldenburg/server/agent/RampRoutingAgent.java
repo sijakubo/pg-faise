@@ -25,13 +25,13 @@ public class RampRoutingAgent extends Agent {
 
 	private int conveyorID = 0;
 	private int szenarioID = 0;
-
+	private int actualPackageId = -1;
 	private static int auctionIdCounter = 0;
 	private int currentAuction = -1;
 	private Vector<Dimension> estimations = new Vector<Dimension>();
 	private long endOfAuction = -1;
 	private int currentDestinationID = -1;
-
+	private boolean auctionStarted = false;
 	private Logger logger = Logger.getLogger(RampRoutingAgent.class);
 
 	/**
@@ -46,9 +46,12 @@ public class RampRoutingAgent extends Agent {
 			Conveyor myConveyor = (Conveyor) args[1];
 			conveyorID = myConveyor.getID();
 		}
-		
-		addBehaviour(new StartAuctionBehaviour(MessageTemplate.MatchPerformative(MessageType.INITIALIZE_START_AUCTION_BEHAVIOUR)));
-		addBehaviour(new ReceiveEstimationBehaviour(MessageTemplate.MatchPerformative(MessageType.SEND_ESTIMATION)));
+
+		addBehaviour(new StartAuctionBehaviour(
+				MessageTemplate
+						.MatchPerformative(MessageType.INITIALIZE_START_AUCTION_BEHAVIOUR)));
+		addBehaviour(new ReceiveEstimationBehaviour(
+				MessageTemplate.MatchPerformative(MessageType.SEND_ESTIMATION)));
 		addBehaviour(new AssignVehicleForPackageBehaviour());
 
 		String nickname = AgentHelper.getUniqueNickname(RampRoutingAgent.NAME,
@@ -72,6 +75,22 @@ public class RampRoutingAgent extends Agent {
 		return this.szenarioID;
 	}
 
+	public int getActualPackageId() {
+		return actualPackageId;
+	}
+
+	public void setActualPackageId(int actualPackageId) {
+		this.actualPackageId = actualPackageId;
+	}
+
+	public boolean isAuctionStarted() {
+		return auctionStarted;
+	}
+
+	public void setAuctionStarted(boolean auctionStarted) {
+		this.auctionStarted = auctionStarted;
+	}
+
 	/**
 	 * @author Christopher
 	 */
@@ -83,65 +102,80 @@ public class RampRoutingAgent extends Agent {
 		@Override
 		public void onMessage(ACLMessage msg) throws UnreadableException,
 				IOException {
-			// send message
-			ACLMessage msgStart = new ACLMessage(MessageType.START_AUCTION);
+			// Check if an Auction was already started
+			if (auctionStarted == false) {
+				setAuctionStarted(true);
+				// Set the actual Package id
+				setActualPackageId(Integer.parseInt(msg
+						.getUserDefinedParameter("packageId")));
+				// send message
+				ACLMessage msgStart = new ACLMessage(MessageType.START_AUCTION);
 
-			currentAuction = auctionIdCounter++;
-			currentDestinationID = Integer.parseInt(msg.getUserDefinedParameter("conveyorId"));
+				currentAuction = auctionIdCounter++;
+				currentDestinationID = Integer.parseInt(msg
+						.getUserDefinedParameter("conveyorId"));
 
-			String auctionID = "" + currentAuction;
-			String sourceID = "" + ((RampRoutingAgent) myAgent).getConveyorID();
-			String destinationID = "" + currentDestinationID;
+				String auctionID = "" + currentAuction;
+				String sourceID = ""
+						+ ((RampRoutingAgent) myAgent).getConveyorID();
+				String destinationID = "" + currentDestinationID;
 
-         msgStart.addUserDefinedParameter("auctionID", auctionID);
-         msgStart.addUserDefinedParameter("sourceID", sourceID);
-         msgStart.addUserDefinedParameter("destinationID", destinationID);
+				msgStart.addUserDefinedParameter("auctionID", auctionID);
+				msgStart.addUserDefinedParameter("sourceID", sourceID);
+				msgStart.addUserDefinedParameter("destinationID", destinationID);
 
-         AgentHelper.addReceivers(msgStart, myAgent, szenarioID);
+				AgentHelper.addReceivers(msgStart, myAgent, szenarioID);
 
-         logger.log(Level.INFO, myAgent.getLocalName() + " sent START_AUCTION message #" + auctionID
-               + " from " + sourceID + " to " + destinationID);
+				logger.log(Level.INFO, myAgent.getLocalName()
+						+ " sent START_AUCTION message #" + auctionID
+						+ " from " + sourceID + " to " + destinationID);
 
-         estimations.removeAllElements();
-         endOfAuction = System.currentTimeMillis() + Debugging.auctionTimeout;
-         send(msgStart);
-
+				estimations.removeAllElements();
+				endOfAuction = System.currentTimeMillis()
+						+ Debugging.auctionTimeout;
+				send(msgStart);
+			}
 		}
 	}
 
-   /**
-    * @author Christopher, sijakubo
-    */
-   private class ReceiveEstimationBehaviour extends CyclicReceiverBehaviour {
+	/**
+	 * @author Christopher, sijakubo
+	 */
+	private class ReceiveEstimationBehaviour extends CyclicReceiverBehaviour {
 
-      protected ReceiveEstimationBehaviour(MessageTemplate mt) {
-         super(mt);
-      }
+		protected ReceiveEstimationBehaviour(MessageTemplate mt) {
+			super(mt);
+		}
 
-      @Override
-      public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-         int auctionID = Integer.valueOf(msg.getUserDefinedParameter("auctionID"));
-         int vehicleID = Integer.valueOf(msg.getUserDefinedParameter("vehicleID"));
-         int estimation = Integer.valueOf(msg.getUserDefinedParameter("estimation"));
+		@Override
+		public void onMessage(ACLMessage msg) throws UnreadableException,
+				IOException {
+			int auctionID = Integer.valueOf(msg
+					.getUserDefinedParameter("auctionID"));
+			int vehicleID = Integer.valueOf(msg
+					.getUserDefinedParameter("vehicleID"));
+			int estimation = Integer.valueOf(msg
+					.getUserDefinedParameter("estimation"));
 
-         if (auctionID == currentAuction) {
-            logger.log(Level.INFO, myAgent.getLocalName()
-                  + " received ESTIMATION message with vehicleID "
-                  + vehicleID + " auctionID " + auctionID
-                  + " and estimation: " + estimation);
+			if (auctionID == currentAuction) {
+				logger.log(Level.INFO, myAgent.getLocalName()
+						+ " received ESTIMATION message with vehicleID "
+						+ vehicleID + " auctionID " + auctionID
+						+ " and estimation: " + estimation);
 
-            estimations.add(new Dimension(vehicleID, estimation));
-         }
-      }
-   }
+				estimations.add(new Dimension(vehicleID, estimation));
+			}
+		}
+	}
 
 	/**
 	 * @author Christopher
 	 */
 	private class AssignVehicleForPackageBehaviour extends CyclicBehaviour {
 		public void action() {
-
+			RampRoutingAgent currentAgent = (RampRoutingAgent) myAgent;
 			if (endOfAuction != -1 && endOfAuction < System.currentTimeMillis()) {
+				logger.log(Level.INFO, "Auction will be finished");
 
 				if (estimations.size() > 0) {
 					Dimension bestEstimation = estimations.elementAt(0);
@@ -165,16 +199,18 @@ public class RampRoutingAgent extends Agent {
 							+ ((RampRoutingAgent) myAgent).getConveyorID();
 					String destinationID = "" + currentDestinationID;
 					String botID = "" + (int) bestEstimation.getWidth();
-					String packageID = "tbd";
+					String packageID = "" + actualPackageId;
 
 					msg.addUserDefinedParameter("sourceID", sourceID);
 					msg.addUserDefinedParameter("destinationID", destinationID);
 					msg.addUserDefinedParameter("botID", botID);
 					msg.addUserDefinedParameter("packageID", packageID);
 
-					AgentHelper.addReceivers(msg, myAgent,
-							((RampRoutingAgent) myAgent).getSzenarioID());
-
+					// AgentHelper.addReceivers(msg, myAgent,
+					// ((RampRoutingAgent) myAgent).getSzenarioID());
+					AgentHelper.addReceiver(msg, currentAgent,
+							VehicleRoutingAgent.NAME, Integer.parseInt(botID),
+							szenarioID);
 					if (Debugging.showAuctionMessages) {
 						logger.log(
 								Level.INFO,
@@ -189,6 +225,8 @@ public class RampRoutingAgent extends Agent {
 				}
 
 				endOfAuction = -1;
+				setAuctionStarted(false);
+				logger.log(Level.INFO, "Auction is finished");
 			} else {
 				if (endOfAuction == -1) {
 					block();

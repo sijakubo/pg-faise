@@ -27,7 +27,6 @@ public class RampPlattformAgent extends Agent {
 	private int szenarioID = 0;
 	private int rampType = 0;
 	private int packageCountMax = 0;
-	
 	private Logger logger = Logger.getLogger(RampPlattformAgent.class);
 	
 	/**
@@ -264,7 +263,7 @@ public class RampPlattformAgent extends Agent {
 			RampPlattformAgent currentAgent=(RampPlattformAgent)myAgent;
 			
 			ACLMessage msgGetPackage = new ACLMessage(MessageType.REMOVE_PACKAGE_AND_ANSWER);
-			msgGetPackage.addUserDefinedParameter("packageID", msgGetPackage.getUserDefinedParameter("packageID"));
+			msgGetPackage.addUserDefinedParameter("packageID", msg.getUserDefinedParameter("packageID"));
 			AgentHelper.addReceiver(msgGetPackage, currentAgent,PackageAgent.NAME, currentAgent.conveyorID, currentAgent.szenarioID);
 			
 			if (Debugging.showInfoMessages)
@@ -278,7 +277,11 @@ public class RampPlattformAgent extends Agent {
 		    
 		    ACLMessage sendGetAnswerToBot = new ACLMessage(MessageType.ANSWER_BOT);
 		    sendGetAnswerToBot.setContentObject(msgGetAnswer.getContentObject());
-		    AgentHelper.addReceiver(sendGetAnswerToBot,currentAgent,PackageAgent.NAME,  currentAgent.conveyorID,  currentAgent.szenarioID);
+		    
+		    if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " -> ANSWER_BOT");
+		    
+		    sendGetAnswerToBot.addReceiver(msg.getSender());
 		    send(sendGetAnswerToBot);
 		   
 		    
@@ -304,7 +307,7 @@ public class RampPlattformAgent extends Agent {
 		public void onMessage(ACLMessage msg) throws UnreadableException,
 				IOException {
 					
-			// send message to Packageagent
+			// 
 			RampPlattformAgent currentAgent=(RampPlattformAgent)myAgent;
 			
 			if (Debugging.showInfoMessages)
@@ -333,7 +336,7 @@ public class RampPlattformAgent extends Agent {
 		    
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()+ " -> ADD_PACKAGE");
-			
+			send(takePackage);
 		}
 	}
 	

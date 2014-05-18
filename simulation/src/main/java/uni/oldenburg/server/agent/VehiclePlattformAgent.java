@@ -96,11 +96,11 @@ public class VehiclePlattformAgent extends Agent {
 			
 						
             //Receive Message from Plattformagent and Get the Package and initialize the Packageagent with the Package
+			
+			MessageTemplate mt = MessageTemplate.MatchPerformative(MessageType.ANSWER_BOT);
+			ACLMessage msgGetAnswer = myAgent.blockingReceive(mt);
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()+ " <- ANSWER_BOT");
-			MessageTemplate mt = MessageTemplate.MatchPerformative(MessageType.PACKAGE_REMOVED);
-			ACLMessage msgGetAnswer = myAgent.blockingReceive(mt);
-			
 			
 			ACLMessage addPackage = new ACLMessage(MessageType.BOT_ADD_PACKAGE);
 			addPackage.setContentObject(msgGetAnswer.getContentObject());
@@ -115,8 +115,8 @@ public class VehiclePlattformAgent extends Agent {
 			
 			//Go to destination (Selfmessage)
 			ACLMessage goDestination = new ACLMessage(MessageType.BOT_GO_TO_DESTINATION);
-			goDestination.addUserDefinedParameter("sourceID", msg.getUserDefinedParameter("sourceID"));
-			AgentHelper.addReceiver(addPackage, currentAgent,VehiclePlattformAgent.NAME, currentAgent.conveyorID, currentAgent.szenarioID);
+			goDestination.addUserDefinedParameter("destinationID", msg.getUserDefinedParameter("destinationID"));
+			AgentHelper.addReceiver(goDestination, currentAgent,VehiclePlattformAgent.NAME, currentAgent.conveyorID, currentAgent.szenarioID);
 			
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()+ " -> BOT_GO_TO_DESTINATION");
@@ -157,7 +157,7 @@ public class VehiclePlattformAgent extends Agent {
 				logger.log(Level.INFO, myAgent.getLocalName()+ " <- BOT_GO_TO_DESTINATION");
 			
 			ACLMessage targetAchieved = new ACLMessage(MessageType.BOT_TARGET_ACHIEVED );
-			AgentHelper.addReceiver(targetAchieved, currentAgent,RampPlattformAgent.NAME, Integer.parseInt(msg.getUserDefinedParameter("sourceID")), currentAgent.szenarioID);
+			AgentHelper.addReceiver(targetAchieved, currentAgent,RampPlattformAgent.NAME, Integer.parseInt(msg.getUserDefinedParameter("destinationID")), currentAgent.szenarioID);
 			send(targetAchieved);
 			
 			if (Debugging.showInfoMessages)
@@ -165,16 +165,16 @@ public class VehiclePlattformAgent extends Agent {
 			
 			
 			//Receive Answer from Plattformagent
-			if (Debugging.showInfoMessages)
-				logger.log(Level.INFO, myAgent.getLocalName()+ " <- CAN_TAKE_PACKAGE");
 			MessageTemplate mt = MessageTemplate.MatchPerformative(MessageType.CAN_TAKE_PACKAGE);
 			ACLMessage msgGetAnswer = myAgent.blockingReceive(mt);
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " <- CAN_TAKE_PACKAGE");
 			
 			//Send Message to Packageagent, that he removes and overgives the package
-			if (Debugging.showInfoMessages)
-				logger.log(Level.INFO, myAgent.getLocalName()+ " -> BOT_REMOVE_PACKAGE");
 			ACLMessage removePackage = new ACLMessage(MessageType.BOT_REMOVE_PACKAGE);
 			AgentHelper.addReceiver(removePackage, currentAgent,PackageAgent.NAME, currentAgent.conveyorID, currentAgent.szenarioID);
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " -> BOT_REMOVE_PACKAGE");
 			send(removePackage);
 			
 			
@@ -187,7 +187,7 @@ public class VehiclePlattformAgent extends Agent {
 			//Tell the Ramp to Take the Package
 			ACLMessage takePackage = new ACLMessage(MessageType.RAMP_TAKE_PACKAGE);
 			takePackage.setContentObject(msgGetAnswerFromP.getContentObject());
-			AgentHelper.addReceiver(takePackage, currentAgent,RampPlattformAgent.NAME,Integer.parseInt(msg.getUserDefinedParameter("sourceID")), currentAgent.szenarioID);
+			AgentHelper.addReceiver(takePackage, currentAgent,RampPlattformAgent.NAME,Integer.parseInt(msg.getUserDefinedParameter("destinationID")), currentAgent.szenarioID);
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()+ " -> RAMP_TAKE_PACKAGE");
 			
