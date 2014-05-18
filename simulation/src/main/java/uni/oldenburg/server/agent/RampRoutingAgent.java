@@ -124,12 +124,12 @@ public class RampRoutingAgent extends Agent {
          int vehicleID = Integer.valueOf(msg.getUserDefinedParameter("vehicleID"));
          int estimation = Integer.valueOf(msg.getUserDefinedParameter("estimation"));
 
-         logger.log(Level.INFO, myAgent.getLocalName()
-               + " received ESTIMATION message with vehicleID "
-               + vehicleID + " auctionID " + auctionID
-               + " and estimation: " + estimation);
-
          if (auctionID == currentAuction) {
+            logger.log(Level.INFO, myAgent.getLocalName()
+                  + " received ESTIMATION message with vehicleID "
+                  + vehicleID + " auctionID " + auctionID
+                  + " and estimation: " + estimation);
+
             estimations.add(new Dimension(vehicleID, estimation));
          }
       }

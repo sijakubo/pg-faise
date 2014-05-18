@@ -107,7 +107,7 @@ public class PackageAgent extends Agent {
 		}
 		
 		if(rampType==ConveyorRamp.RAMP_ENTRANCE|| rampType == ConveyorRamp.RAMP_STOREAGE){
-			addBehaviour (new InitializeAuctionStartBehaviour(this,3000));
+			addBehaviour (new InitializeAuctionStartBehaviour(this, 3000));
 		}
 		
 		if(rampType==-1){//If it is an Vehicle
@@ -389,20 +389,19 @@ public class PackageAgent extends Agent {
 
 				// Send the Message, if the Package is  reserved
 				if (pData.isReserved()) {
-					ACLMessage msgPackageAuctionStart = new ACLMessage(MessageType.INITIALIZE_START_AUCTION_BEHAVIOUR);
-					msgPackageAuctionStart.addUserDefinedParameter("conveyorId",""+pData.getDestinationID());
+               ACLMessage msgPackageAuctionStart = new ACLMessage(MessageType.INITIALIZE_START_AUCTION_BEHAVIOUR);
+               msgPackageAuctionStart.addUserDefinedParameter("conveyorId", "" + pData.getDestinationID());
                AgentHelper.addReceiver(msgPackageAuctionStart, myAgent, RampRoutingAgent.NAME, currentAgent.conveyorID, currentAgent.szenarioID);
 
-
-					try {
-						msgPackageAuctionStart.setContentObject(pData);
-						send(msgPackageAuctionStart);
+               try {
+                  msgPackageAuctionStart.setContentObject(pData);
+                  send(msgPackageAuctionStart);
                   logger.log(Level.INFO, myAgent.getLocalName() + " -> INITIALIZE_START_AUCTION_BEHAVIOUR");
 
                } catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
+                  e.printStackTrace();
+               }
+            }
 
 			}
 		}
