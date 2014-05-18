@@ -40,7 +40,7 @@ public class VehicleRoutingAgent extends Agent {
 			conveyorID = myConveyor.getID();
 		}
 		
-		addBehaviour(new SendEstimationBehaviour());
+		addBehaviour(new SendEstimationBehaviour(MessageTemplate.MatchPerformative(MessageType.START_AUCTION)));
 		addBehaviour(new AssignVehicleForPackageBehaviour());
 		addBehaviour(new InitializePacketAgentBehaviour());
 		addBehaviour(new IsFreeForTransportBehaviour());
@@ -70,59 +70,46 @@ public class VehicleRoutingAgent extends Agent {
 	/**
 	 * @author Christopher
 	 */
-	private class SendEstimationBehaviour extends CyclicBehaviour {
+	private class SendEstimationBehaviour extends CyclicReceiverBehaviour {
 
-		public void action() {
-         
-			int auctionID;
-			int sourceID;
-			int destinationID;
-			
-			// wait for message
-			MessageTemplate mt = MessageTemplate.MatchPerformative(MessageType.START_AUCTION);
-			ACLMessage msgIn = myAgent.receive(mt);
-			
-			if(msgIn != null) {
-			  if(!reserved){
-				try {
-					auctionID = Integer.valueOf(msgIn.getUserDefinedParameter("auctionID"));
-				} catch(NumberFormatException e) {
-					auctionID = -1;
-				}
-				try {
-					sourceID = Integer.valueOf(msgIn.getUserDefinedParameter("sourceID"));
-				} catch(NumberFormatException e) {
-					sourceID = -1;
-				}
-				try {
-					destinationID = Integer.valueOf(msgIn.getUserDefinedParameter("destinationID"));
-				} catch(NumberFormatException e) {
-					destinationID = -1;
-				}
-				
-				if(Debugging.showAuctionMessages) {
-					logger.log(Level.INFO, myAgent.getLocalName() + " received START_AUCTION message #" + auctionID + " from " + sourceID + " to " + destinationID);
-				}
-				
-				//send estimation
-				int estimation = calculateEstimation(sourceID, destinationID);
-				ACLMessage msgOut = new ACLMessage(MessageType.SEND_ESTIMATION);
-				
-				msgOut.addUserDefinedParameter("auctionID", "" + auctionID);
-				msgOut.addUserDefinedParameter("vehicleID", "" + conveyorID);
-				msgOut.addUserDefinedParameter("estimation", "" + estimation);
-				msgOut.addUserDefinedParameter("destinationID", "" + destinationID);
-				
-				AgentHelper.addReceivers(msgOut, myAgent, ((VehicleRoutingAgent)myAgent).getSzenarioID());
-				
-				if(Debugging.showAuctionMessages)
-					logger.log(Level.INFO, myAgent.getLocalName() + " sent SEND_ESTIMATION message with vehicleID " + conveyorID + " auctionID " + auctionID + " and estimation: " + estimation);
-				send(msgOut);
-			  }
-			} else {
-				block();
-			}
-		}
+      int auctionID;
+      int sourceID;
+      int destinationID;
+
+      protected SendEstimationBehaviour(MessageTemplate mt) {
+         super(mt);
+      }
+
+      @Override
+      public void onMessage(ACLMessage msgIn) throws UnreadableException, IOException {
+         if (!reserved) {
+            logger.log(Level.INFO, "VehicleRoutingAgent -> calculating estimation");
+
+            auctionID = Integer.valueOf(msgIn.getUserDefinedParameter("auctionID"));
+            sourceID = Integer.valueOf(msgIn.getUserDefinedParameter("sourceID"));
+            destinationID = Integer.valueOf(msgIn.getUserDefinedParameter("destinationID"));
+
+            logger.log(Level.INFO, myAgent.getLocalName() + " received START_AUCTION message #"
+                  + auctionID + " from " + sourceID + " to " + destinationID);
+
+            //send estimation
+            int estimation = calculateEstimation(sourceID, destinationID);
+            ACLMessage msgOut = new ACLMessage(MessageType.SEND_ESTIMATION);
+
+            msgOut.addUserDefinedParameter("auctionID", "" + auctionID);
+            msgOut.addUserDefinedParameter("vehicleID", "" + conveyorID);
+            msgOut.addUserDefinedParameter("estimation", "" + estimation);
+            msgOut.addUserDefinedParameter("destinationID", "" + destinationID);
+
+            AgentHelper.addReceivers(msgOut, myAgent, ((VehicleRoutingAgent) myAgent).getSzenarioID());
+
+            logger.log(Level.INFO, myAgent.getLocalName() + " sent SEND_ESTIMATION message with vehicleID "
+                  + conveyorID + " auctionID " + auctionID + " and estimation: " + estimation);
+            send(msgOut);
+         } else {
+            logger.log(Level.INFO, "VehicleRoutingAgent -> no estimation, Vehicle is already reserved");
+         }
+      }
 	}
 	
 	private int calculateEstimation(int sourceID, int destinationID) {
