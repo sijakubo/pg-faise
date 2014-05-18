@@ -13,6 +13,7 @@ import org.apache.log4j.Priority;
 
 
 
+
 import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.data.PackageData;
@@ -89,7 +90,7 @@ public class PackageAgent extends Agent {
 		// If it is an Exit, than add the Behaviour, which is used for
 		// requesting an Package for an existing Job
 		if (rampType == ConveyorRamp.RAMP_EXIT) {
-			addBehaviour(new SearchForPackageBehaviour(this, 3000));
+			//addBehaviour(new SearchForPackageBehaviour(this, 3000));
 			
          addBehaviour(new PackageNeedInformationBehaviour(MessageType.CHECK_IF_PACKAGE_IS_NEEDED));
 		}
@@ -328,28 +329,29 @@ public class PackageAgent extends Agent {
 							currentAgent.szenarioID);
 
                try {
-                  //Start Search for Package only once. Uf the lastSearchedPackageId == pData.getPackageId do not start
-                  //a package Search.
-                  boolean startSearchForPackageDestination;
-                  if (lastSearchedPackageId == null) {
-                     lastSearchedPackageId = pData.getPackageID();
-                     startSearchForPackageDestination = true;
-                  } else {
-                     if (lastSearchedPackageId == pData.getPackageID()) {
-                        startSearchForPackageDestination = false;
-                     } else {
+                 //Start Search for Package only once. Uf the lastSearchedPackageId == pData.getPackageId do not start
+                 //a package Search.
+                 boolean startSearchForPackageDestination;
+                 if (lastSearchedPackageId == null) {
+                    lastSearchedPackageId = pData.getPackageID();
+                    startSearchForPackageDestination = true;
+                 } else {
+                    if (lastSearchedPackageId == pData.getPackageID()) {
+                       startSearchForPackageDestination = false;
+                    } else {
                         startSearchForPackageDestination = true;
-                     }
-                  }
+                        lastSearchedPackageId = pData.getPackageID() ;                      
+                   }
+                 }
+              if (startSearchForPackageDestination) {
+                    logger.log(Level.INFO, myAgent.getLocalName() + " -> START_EXIT_RAMP_SEARCH_FOR_PACKAGE");
 
-                  if (startSearchForPackageDestination) {
-                     logger.log(Level.INFO, myAgent.getLocalName() + " -> START_EXIT_RAMP_SEARCH_FOR_PACKAGE");
-
-                     msgPackageSearch.setContentObject(pData);
-                     send(msgPackageSearch);
-                  }
-               } catch (IOException e) {
-                  e.printStackTrace();
+                   
+					msgPackageSearch.setContentObject(pData);
+                    send(msgPackageSearch);
+                }
+              } catch (IOException e) {
+                 e.printStackTrace();
                }
             }
 
@@ -590,13 +592,15 @@ public class PackageAgent extends Agent {
       @Override
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
          PackageData packageData = (PackageData) msg.getContentObject();
-
+         PackageAgent currentAgent = (PackageAgent) myAgent;
          for (PackageData requiredPackageData : lstPackage) {
             if (packageData.getPackageID() == requiredPackageData.getPackageID()) {
                ACLMessage msgReply = new ACLMessage(MessageType.PACKAGE_IS_NEEDED);
+               logger.info(myAgent.getLocalName()+ "-> PACKAGE_IS_NEEDED");
                msgReply.addUserDefinedParameter("enquiring_ramp_conveyor_id",
                      msg.getUserDefinedParameter("enquiring_ramp_conveyor_id"));
                msgReply.setContentObject(packageData);
+               AgentHelper.addReceiver(msgReply, currentAgent, RampOrderAgent.NAME, conveyorID, szenarioID);
                send(msgReply);
             }
          }

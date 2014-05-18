@@ -439,7 +439,7 @@ public class RampOrderAgent extends Agent {
       @Override
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
          PackageData packageData = (PackageData) msg.getContentObject();
-
+         logger.info(myAgent.getLocalName()+ "-> CHECK_IF_PACKAGE_IS_NEEDED");
          ACLMessage msgCheckIfPackageIsNeeded = new ACLMessage(MessageType.CHECK_IF_PACKAGE_IS_NEEDED);
          msgCheckIfPackageIsNeeded.addUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY,
                msg.getUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY));
@@ -488,7 +488,7 @@ public class RampOrderAgent extends Agent {
          msgAcceptReservationOffer.setContentObject(packageData);
          AgentHelper.addReceiver(msgAcceptReservationOffer, myAgent, PackageAgent.NAME, conveyorID, szenarioID);
          send(msgAcceptReservationOffer);
-
+         logger.info(myAgent.getLocalName()+ "-> ASSIGN_PACKAGE_DESTINATION");
          //reply to the Entrance Ramp, that the Reservation was accepted
          ACLMessage msgReply = new ACLMessage(MessageType.ASSIGN_PACKAGE_DESTINATION);
          msgReply.setContentObject(packageData);
@@ -531,6 +531,7 @@ public class RampOrderAgent extends Agent {
 
          msgAssignDestination.setContentObject(packageData.getPackageID());
          AgentHelper.addReceiver(msgAssignDestination, myAgent, PackageAgent.NAME, conveyorID, szenarioID);
+         send(msgAssignDestination);
       }
    }
 
