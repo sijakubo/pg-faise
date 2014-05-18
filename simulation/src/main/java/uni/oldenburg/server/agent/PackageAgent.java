@@ -389,20 +389,17 @@ public class PackageAgent extends Agent {
 
 				// Send the Message, if the Package is  reserved
 				if (pData.isReserved()) {
-					ACLMessage msgPackageAuctionStart = new ACLMessage(
-							MessageType.INITIALIZE_START_AUCTION_BEHAVIOUR);
+					ACLMessage msgPackageAuctionStart = new ACLMessage(MessageType.INITIALIZE_START_AUCTION_BEHAVIOUR);
 					msgPackageAuctionStart.addUserDefinedParameter("conveyorId",""+pData.getDestinationID());
-					AgentHelper.addReceiver(msgPackageAuctionStart, myAgent,RampRoutingAgent.NAME, currentAgent.conveyorID,currentAgent.szenarioID);
+               AgentHelper.addReceiver(msgPackageAuctionStart, myAgent, RampRoutingAgent.NAME, currentAgent.conveyorID, currentAgent.szenarioID);
 
-					if (Debugging.showInfoMessages)
-						logger.log(Level.INFO, myAgent.getLocalName()
-								+ " -> INITIALIZE_START_AUCTION_BEHAVIOUR");
 
 					try {
 						msgPackageAuctionStart.setContentObject(pData);
 						send(msgPackageAuctionStart);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
+                  logger.log(Level.INFO, myAgent.getLocalName() + " -> INITIALIZE_START_AUCTION_BEHAVIOUR");
+
+               } catch (IOException e) {
 						e.printStackTrace();
 					}
 				}

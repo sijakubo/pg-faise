@@ -78,7 +78,6 @@ public class RampRoutingAgent extends Agent {
 	private class StartAuctionBehaviour extends CyclicReceiverBehaviour {
 		protected StartAuctionBehaviour(MessageTemplate mt) {
 			super(mt);
-			// TODO Auto-generated constructor stub
 		}
 
 		@Override
@@ -94,21 +93,18 @@ public class RampRoutingAgent extends Agent {
 			String sourceID = "" + ((RampRoutingAgent) myAgent).getConveyorID();
 			String destinationID = "" + currentDestinationID;
 
-			msg.addUserDefinedParameter("auctionID", auctionID);
-			msg.addUserDefinedParameter("sourceID", sourceID);
-			msg.addUserDefinedParameter("destinationID", destinationID);
+         msgStart.addUserDefinedParameter("auctionID", auctionID);
+         msgStart.addUserDefinedParameter("sourceID", sourceID);
+         msgStart.addUserDefinedParameter("destinationID", destinationID);
 
-			AgentHelper.addReceivers(msgStart, myAgent, ((RampRoutingAgent) myAgent).getSzenarioID());
+         AgentHelper.addReceivers(msgStart, myAgent, ((RampRoutingAgent) myAgent).getSzenarioID());
 
-			if (Debugging.showAuctionMessages) {
-				logger.log(Level.INFO, myAgent.getLocalName()
-						+ " sent START_AUCTION message #" + auctionID
-						+ " from " + sourceID + " to " + destinationID);
-			}
-			estimations.removeAllElements();
-			endOfAuction = System.currentTimeMillis()
-					+ Debugging.auctionTimeout;
-			send(msg);
+         logger.log(Level.INFO, myAgent.getLocalName() + " sent START_AUCTION message #" + auctionID
+               + " from " + sourceID + " to " + destinationID);
+
+         estimations.removeAllElements();
+         endOfAuction = System.currentTimeMillis() + Debugging.auctionTimeout;
+         send(msgStart);
 
 		}
 	}
