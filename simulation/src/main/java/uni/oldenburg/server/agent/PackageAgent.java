@@ -531,7 +531,7 @@ public class PackageAgent extends Agent {
 				}
 			}
 			if (Debugging.showInfoMessages)
-				logger.log(Level.INFO, myAgent.getLocalName()+ "PACKAGE_RESERVED");
+				logger.log(Level.INFO, myAgent.getLocalName()+ " PACKAGE_RESERVED");
         }
 
 	}
@@ -623,18 +623,15 @@ public class PackageAgent extends Agent {
          int packageId = Integer.valueOf(msg.getUserDefinedParameter("package_id"));
          int destinationConveyorId = Integer.valueOf(msg.getUserDefinedParameter("destination_conveyor_id"));
 
+         logger.info("PackageAgent <- ASSIGN_PACKAGE_DESTINATION");
+
          for (PackageData packageData : lstPackage) {
-            if (packageData.getPackageID() == packageId
-                  && packageData.getDestinationID() != 0) {
+            if (packageData.getPackageID() == packageId) {
 
                packageData.setReserved();
                packageData.setDestinationID(destinationConveyorId);
 
-               if (Debugging.showInfoMessages) {
-                  logger.log(Level.INFO, myAgent.getLocalName()
-                        + ": destination from package " + packageData.getPackageID()
-                        + " changed to destination " + packageData.getDestinationID());
-               }
+               logger.info("PackageAgent <- ASSIGN_PACKAGE_DESTINATION destination set!");
             }
          }
       }

@@ -368,6 +368,8 @@ public class RampOrderAgent extends Agent {
                message.setContentObject(packageData);
                message.addReceiver(destinationRampAID);
                send(message);
+
+               //Start bot auction
             } else {
                logger.debug("No DestinationRamp found for Package: " + packageData.getPackageID()
                      + ". Trying to find Storage Ramp.");
