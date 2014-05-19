@@ -178,9 +178,11 @@ public class RampPlattformAgent extends Agent {
 						
 						if(Debugging.showInfoMessages)
 							logger.log(Level.INFO, myAgent.getLocalName() + " -> PACKAGE_SPACE_AVAILABLE");
-						
-						++step;					
-						
+
+                  if (msg.getUserDefinedParameter("information_message_no_step") == null) {
+                     ++step;
+                  }
+
 						send(msgReply);
 					}
 					catch (UnreadableException e) {

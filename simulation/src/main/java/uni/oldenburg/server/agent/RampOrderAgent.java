@@ -349,7 +349,7 @@ public class RampOrderAgent extends Agent {
 
             //send enquire to ramps
             ACLMessage msgEnquireRamps = new ACLMessage(enquireMessageType);
-            logger.info("Entrance - RampOrderAgent -> ENQUIRE_RAMP");
+            logger.info("Entrance - RampOrderAgent -> ENQUIRE_RAMP (" + enquireMessageType+ ")");
             msgEnquireRamps.setContentObject(packageData);
             msgEnquireRamps.addUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY, String.valueOf(conveyorID));
             AgentHelper.addReceivers(msgEnquireRamps, myAgent, szenarioID);
@@ -594,11 +594,13 @@ public class RampOrderAgent extends Agent {
 
       @Override
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+         logger.info("StorageRamp - RampOrderAgent <- ENQUIRE_STORAGE_RAMP");
          ACLMessage message = new ACLMessage(MessageType.PACKAGE_SPACE_AVAILABLE);
          //packageData
          message.setContentObject(msg.getContentObject());
          message.addUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY,
                msg.getUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY));
+         message.addUserDefinedParameter("information_message_no_step", "noStep");
          AgentHelper.addReceiver(message, myAgent, RampPlattformAgent.NAME, conveyorID, szenarioID);
          send(message);
       }
