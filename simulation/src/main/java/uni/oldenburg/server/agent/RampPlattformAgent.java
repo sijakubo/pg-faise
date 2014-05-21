@@ -140,10 +140,10 @@ public class RampPlattformAgent extends Agent {
 						// get package count from packageagent
 						// request
 						ACLMessage msgPackageReq = new ACLMessage(MessageType.GET_PACKAGE_COUNT);
-						AgentHelper.addReceiver(msgPackageReq, myAgent, PackageAgent.NAME, currentAgent.conveyorID, currentAgent.szenario.getId());
+						AgentHelper.addReceiver(msgPackageReq, myAgent, PackageAgent.NAME, currentAgent.conveyorID,
+                        currentAgent.szenario.getId());
 						
-						if(Debugging.showPackageMessages)
-							logger.log(Level.INFO, myAgent.getLocalName() + " -> GET_PACKAGE_COUNT");
+					   logger.log(Level.INFO, myAgent.getLocalName() + " -> GET_PACKAGE_COUNT");
 						
 						send(msgPackageReq);
 						
@@ -151,8 +151,7 @@ public class RampPlattformAgent extends Agent {
 						mt = MessageTemplate.MatchPerformative(MessageType.GET_PACKAGE_COUNT);
 						ACLMessage msgPackageRes = myAgent.blockingReceive(mt);
 						
-						if(Debugging.showPackageMessages)
-							logger.log(Level.INFO, myAgent.getLocalName() + " <- GET_PACKAGE_COUNT");
+						logger.log(Level.INFO, myAgent.getLocalName() + " <- GET_PACKAGE_COUNT");
 						
 						packageCount = Integer.parseInt(msgPackageRes.getUserDefinedParameter("package_count"));
 						int packageCountMax = currentAgent.packageCountMax;
@@ -184,11 +183,9 @@ public class RampPlattformAgent extends Agent {
                   }
 
 						send(msgReply);
-					}
-					catch (UnreadableException e) {
+					} catch (UnreadableException e) {
 						e.printStackTrace();
-					}
-					catch (IOException e) {
+					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				}

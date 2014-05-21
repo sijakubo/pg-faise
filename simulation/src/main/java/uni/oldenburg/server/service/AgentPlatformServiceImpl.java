@@ -79,8 +79,8 @@ public class AgentPlatformServiceImpl extends RemoteServiceServlet implements Ag
    public int startSimulation(Szenario szenario) {
 	   // async function call and static variable, so remember,
 	   // in case someone else starts before function is finished
-	   int mySzenarioID = ++szenarioID;
-	   
+	   szenario.setId(++szenarioID);
+
 	   Object[] argsJobAgent = new Object[1];
 	   argsJobAgent[0] = szenario;
 	   
@@ -91,7 +91,7 @@ public class AgentPlatformServiceImpl extends RemoteServiceServlet implements Ag
 	   
 	   startAgentPlatform(szenario);
 	   
-	   addAgentToSimulation(0, mySzenarioID, argsJobAgent, JobAgent.NAME, new JobAgent());
+	   addAgentToSimulation(0, szenario.getId(), argsJobAgent, JobAgent.NAME, new JobAgent());
 	   
 	   for (Conveyor myConveyor : lstConveyor) {
 		   Object[] argsAgent = new Object[2];
@@ -101,20 +101,20 @@ public class AgentPlatformServiceImpl extends RemoteServiceServlet implements Ag
 		   int id = myConveyor.getID();		   
 		   
 		   if (myConveyor instanceof ConveyorRamp) {
-			   addAgentToSimulation(id, mySzenarioID, argsAgent, PackageAgent.NAME			, new PackageAgent());
-			   addAgentToSimulation(id, mySzenarioID, argsAgent, RampOrderAgent.NAME		, new RampOrderAgent());
-			   addAgentToSimulation(id, mySzenarioID, argsAgent, RampPlattformAgent.NAME 	, new RampPlattformAgent());
-			   addAgentToSimulation(id, mySzenarioID, argsAgent, RampRoutingAgent.NAME		, new RampRoutingAgent());
+			   addAgentToSimulation(id, szenario.getId(), argsAgent, PackageAgent.NAME			, new PackageAgent());
+			   addAgentToSimulation(id, szenario.getId(), argsAgent, RampOrderAgent.NAME		, new RampOrderAgent());
+			   addAgentToSimulation(id, szenario.getId(), argsAgent, RampPlattformAgent.NAME 	, new RampPlattformAgent());
+			   addAgentToSimulation(id, szenario.getId(), argsAgent, RampRoutingAgent.NAME		, new RampRoutingAgent());
 		   } else if (myConveyor instanceof ConveyorVehicle) {
-			   addAgentToSimulation(id, mySzenarioID, argsAgent, PackageAgent.NAME			, new PackageAgent());
-			   addAgentToSimulation(id, mySzenarioID, argsAgent, VehiclePlattformAgent.NAME	, new VehiclePlattformAgent());
-			   addAgentToSimulation(id, mySzenarioID, argsAgent, VehicleRoutingAgent.NAME	, new VehicleRoutingAgent());
+			   addAgentToSimulation(id, szenario.getId(), argsAgent, PackageAgent.NAME			, new PackageAgent());
+			   addAgentToSimulation(id, szenario.getId(), argsAgent, VehiclePlattformAgent.NAME	, new VehiclePlattformAgent());
+			   addAgentToSimulation(id, szenario.getId(), argsAgent, VehicleRoutingAgent.NAME	, new VehicleRoutingAgent());
 		   }
 	   }
 	   
 	   startAgents();
 	   
-	   return mySzenarioID;
+	   return szenario.getId();
    }
    
    /**
