@@ -8,6 +8,11 @@ import java.util.Set;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
+
+
+
+
 
 import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
@@ -57,37 +62,91 @@ public class PackageAgent extends Agent {
 
 		}
 
-		addBehaviour(new AddPackageBehaviour(MessageTemplate.MatchPerformative(MessageType.ADD_PACKAGE)));
-		addBehaviour(new GetPackageCountBehaviour(MessageTemplate.MatchPerformative(MessageType.GET_PACKAGE_COUNT)));
-		addBehaviour(new RemovePackageBehaviour(MessageTemplate.MatchPerformative(MessageType.REMOVE_PACKAGE)));
 
-		if (rampType == ConveyorRamp.RAMP_ENTRANCE) {
-			addBehaviour(new AssignDestinationToPackageBehaviour(MessageTemplate.MatchPerformative(MessageType.ASSIGN_PACKAGE_DESTINATION)));
-      	}
+
+      addBehaviour(new AddPackageBehaviour(
+            MessageTemplate.MatchPerformative(MessageType.ADD_PACKAGE)));
+    
+		addBehaviour(new GetPackageCountBehaviour(
+				MessageTemplate.MatchPerformative(MessageType.GET_PACKAGE_COUNT)));
+		addBehaviour(new RemovePackageBehaviour(
+				MessageTemplate.MatchPerformative(MessageType.REMOVE_PACKAGE)));
+
+
+        addBehaviour(new RemovePackageAndAnswerBehaviour(
+				MessageTemplate.MatchPerformative(MessageType.REMOVE_PACKAGE_AND_ANSWER)));
+
+
+      if (rampType == ConveyorRamp.RAMP_ENTRANCE) {
+         addBehaviour(new AssignDestinationToPackageBehaviour(
+               MessageTemplate.MatchPerformative(MessageType.ASSIGN_PACKAGE_DESTINATION)));
+         addBehaviour(new  StartRampSearchForPackageBehaviour(this,3000));
+
+      }
+      
+     
+
+
 
 		// If it is an Exit, than add the Behaviour, which is used for
 		// requesting an Package for an existing Job
 		if (rampType == ConveyorRamp.RAMP_EXIT) {
-			addBehaviour(new SearchForPackageBehaviour(this, 3000));
+
+			
 			addBehaviour(new PackageReservationBehaviour(MessageTemplate.MatchPerformative(MessageType.SET_PACKAGE_RESERVED)));
 			addBehaviour(new PackageNeedInformationBehaviour(MessageType.CHECK_IF_PACKAGE_IS_NEEDED));
+
+			//addBehaviour(new SearchForPackageBehaviour(this, 3000));
+			
+
 		}
 
 		// If it is an Storage it should answer the request from its own
 		// Orderagent, who was asked by an exit, and check if a
 		// Package for the requested Package id is contained
 		if (rampType == ConveyorRamp.RAMP_STOREAGE) {
+
 			addBehaviour(new AnswerIfPackageIsContainedBehaviour(MessageTemplate.MatchPerformative(MessageType.CHECK_IF_PACKAGE_IS_STORED)));
 			addBehaviour(new PackageReservationForStorageRampBehaviour(MessageType.SET_PACKAGE_RESERVED_FOR_STORAGE_RAMP));
 		}
 
-		String nickname = AgentHelper.getUniqueNickname(PackageAgent.NAME, conveyorID, szenarioID);
-		AgentHelper.registerAgent(szenarioID, this, nickname);
+		
 
-		if (Debugging.showAgentStartupMessages)
-			logger.log(Level.INFO, nickname + " started");
 
-	}
+			
+			//addBehaviour (new SetPackageDestinationBehaviour(MessageTemplate.MatchPerformative(MessageType.SET_PACKAGE_DESTINATION_STORAGE)));
+			
+			
+		
+		
+		if(rampType==ConveyorRamp.RAMP_ENTRANCE|| rampType == ConveyorRamp.RAMP_STOREAGE){
+			addBehaviour (new InitializeAuctionStartBehaviour(this, 20000));
+		}
+		
+		if(rampType==-1){//If it is an Vehicle
+			addBehaviour(new BotAddPackageBehaviour(MessageTemplate.MatchPerformative(MessageType.BOT_ADD_PACKAGE)));
+			addBehaviour(new BotRemovePackageBehaviour(MessageTemplate.MatchPerformative(MessageType.BOT_REMOVE_PACKAGE)));			
+		}
+		
+
+			//addBehaviour(new AnswerIfPackageIsContainedBehaviour(
+					//MessageTemplate.MatchPerformative(MessageType.CHECK_IF_PACKAGE_IS_STORED)));
+
+        
+         
+         String nickname = AgentHelper.getUniqueNickname(PackageAgent.NAME,
+ 				conveyorID, szenarioID);
+ 		AgentHelper.registerAgent(szenarioID, this, nickname);
+
+ 		if (Debugging.showAgentStartupMessages)
+ 			logger.log(Level.INFO, nickname + " started");
+      }
+
+
+
+		
+
+
 
 	// destructor
 	protected void takeDown() {
@@ -103,7 +162,7 @@ public class PackageAgent extends Agent {
 	 * 
 	 * add package to this agent
 	 * 
-	 * @author Matthias
+	 * @author Matthias, Raschid
 	 */
 	private class AddPackageBehaviour extends CyclicReceiverBehaviour {
 		protected AddPackageBehaviour(MessageTemplate mt) {
@@ -113,12 +172,26 @@ public class PackageAgent extends Agent {
 		public void onMessage(ACLMessage msg) throws UnreadableException {
 			PackageAgent currentAgent = (PackageAgent) myAgent;
 			PackageData myPackage = (PackageData) msg.getContentObject();
-
-			currentAgent.lstPackage.add(myPackage);
-
-			if (Debugging.showPackageMessages)
-				logger.log(Level.INFO, myAgent.getLocalName() + ": package "
-						+ myPackage.getPackageID() + " added");
+            
+			
+			/*
+			if(rampType==ConveyorRamp.RAMP_EXIT){
+				
+            	for(int i=0;i<currentAgent.lstPackage.size();i++){
+            		PackageData dummy=currentAgent.lstPackage.get(i);
+            		if(dummy.getPackageID()==myPackage.getPackageID()){
+            			currentAgent.lstPackage.remove(i);
+            			break;
+            		}
+            	}
+            }else {
+            
+            */
+			   currentAgent.lstPackage.add(myPackage);
+   
+			    if (Debugging.showPackageMessages)
+				    logger.log(Level.INFO, myAgent.getLocalName() + ": package "+ myPackage.getPackageID() + " added");
+            
 		}
 	}
 
@@ -145,8 +218,7 @@ public class PackageAgent extends Agent {
 						+ " <- GET_PACKAGE_COUNT");
 
 			ACLMessage msgReply = new ACLMessage(MessageType.GET_PACKAGE_COUNT);
-			msgReply.addUserDefinedParameter("package_count", ""
-					+ currentAgent.lstPackage.size());
+			msgReply.addUserDefinedParameter("package_count", ""+ currentAgent.lstPackage.size());
 			msgReply.addReceiver(msg.getSender());
 
 			if (Debugging.showPackageMessages)
@@ -180,9 +252,12 @@ public class PackageAgent extends Agent {
 	}
 
 	/**
-	 * Behaviour (Exit Behaviour) should cyclically choose a Job from the List
-	 * and ask his Orderagent to ask the Orderagents from the Exits if there is
-	 * a Package, which belongs to the Job
+	 * Got message:
+	 * 		none
+	 * Send message:
+	 * 		RampOrderAgent: AskOtherOrderagentsIfPackageExistsBehaviour
+	 * Behaviour (Exit Behaviour) should cyclically choose a Job from the List (PackageDataList)
+	 * and ask his Orderagent to search for a Package
 	 * 
 	 * @author Raschid
 	 */
@@ -202,16 +277,7 @@ public class PackageAgent extends Agent {
 			if (sizePackageList >= 1) {
 				// Choose a Package randomly. To do that, you have to create a
 				// random Value depending on the size of the package list
-				int index = (int) ((Math.random() * 10) % sizePackageList);
-				/*
-				 * if (sizePackageList == 1) { index = 0; } else if
-				 * (sizePackageList == 2) { Random random = new Random(); index
-				 * = random.nextInt(1 - 0 + 1) + 0; } else if (sizePackageList
-				 * == 3) { Random random = new Random(); index =
-				 * random.nextInt(2 - 1 + 1) + 1; } else if (sizePackageList ==
-				 * 4) { Random random = new Random(); index = random.nextInt(3 -
-				 * 2 + 1) + 2; }
-				 */
+				int index = (int) ((Math.random() * 10) % sizePackageList);				
 				// Get the Package Data
 				PackageData pData = currentAgent.lstPackage.get(index);
 
@@ -239,8 +305,127 @@ public class PackageAgent extends Agent {
 			}
 		}
 	}
-
+	
+	
 	/**
+	 * Got message:
+	 * 		none (Ticker Behaviour, after 5 seconds, if a Package is available)
+	 * Send message:
+	 * 		RampOrderAgent: EnquireRampsForPackageSlotBehaviour
+	 * 
+	 * Behaviour should search a Ramp for the Package (Entrance Behaviour)
+	 * 
+	 * @author Raschid
+	 */
+	private class StartRampSearchForPackageBehaviour extends TickerBehaviour {
+      private Integer lastSearchedPackageId;
+
+      public StartRampSearchForPackageBehaviour (Agent a, long period) {
+			super(a, period);
+
+		}
+
+		@Override
+		protected void onTick() {
+			PackageAgent currentAgent = (PackageAgent) myAgent;
+
+			// Only if Jobs exists, there should be made a request
+			int sizePackageList = currentAgent.lstPackage.size();
+			if (sizePackageList >= 1) {
+								
+				// Get the Package Data
+				PackageData pData = currentAgent.lstPackage.get(0);
+
+				// Send the Message, if the Package is not reserved
+				if (!pData.isReserved()) {
+					ACLMessage msgPackageSearch = new ACLMessage(MessageType.START_EXIT_RAMP_SEARCH_FOR_PACKAGE);
+					AgentHelper.addReceiver(msgPackageSearch, myAgent, RampOrderAgent.NAME, currentAgent.conveyorID,
+							currentAgent.szenarioID);
+
+               try {
+                 //Start Search for Package only once. Uf the lastSearchedPackageId == pData.getPackageId do not start
+                 //a package Search.
+                 boolean startSearchForPackageDestination;
+                 if (lastSearchedPackageId == null) {
+                    lastSearchedPackageId = pData.getPackageID();
+                    startSearchForPackageDestination = true;
+                 } else {
+                    if (lastSearchedPackageId == pData.getPackageID()) {
+                       startSearchForPackageDestination = false;
+                    } else {
+                        startSearchForPackageDestination = true;
+                        lastSearchedPackageId = pData.getPackageID() ;                      
+                   }
+                 }
+              if (startSearchForPackageDestination) {
+                    logger.log(Level.INFO, myAgent.getLocalName() + " -> START_EXIT_RAMP_SEARCH_FOR_PACKAGE");
+
+                   
+					msgPackageSearch.setContentObject(pData);
+                    send(msgPackageSearch);
+                }
+              } catch (IOException e) {
+                 e.printStackTrace();
+               }
+            }
+
+			}
+		}
+	}
+	
+	
+	/**Got message:
+	 * 		none
+	 * Send message:
+	 * 		RampRoutingAgent: StartAuctionBehaviour
+	 * Behaviour (Entry and Storage Behaviour) should cyclically check if the first package in the list is already reserved
+	 * and then tell the Routingagent to start the Auction
+	 * 
+	 * @author Raschid
+	 */
+	private class InitializeAuctionStartBehaviour extends TickerBehaviour {
+
+		public InitializeAuctionStartBehaviour(Agent a, long period) {
+			super(a, period);
+
+		}
+
+		@Override
+		protected void onTick() {
+			PackageAgent currentAgent = (PackageAgent) myAgent;
+
+			// Only if Jobs exists, there should be made a request
+			int sizePackageList = currentAgent.lstPackage.size();
+			if (sizePackageList >= 1) {
+				
+				// Get the Package Data
+				PackageData pData = currentAgent.lstPackage.get(0);
+
+				// Send the Message, if the Package is  reserved
+				if (pData.isReserved()) {
+               ACLMessage msgPackageAuctionStart = new ACLMessage(MessageType.INITIALIZE_START_AUCTION_BEHAVIOUR);
+               msgPackageAuctionStart.addUserDefinedParameter("conveyorId", "" + pData.getDestinationID());
+               msgPackageAuctionStart.addUserDefinedParameter("packageId", "" + pData.getPackageID());
+               AgentHelper.addReceiver(msgPackageAuctionStart, myAgent, RampRoutingAgent.NAME, currentAgent.conveyorID, currentAgent.szenarioID);
+
+               try {
+                  msgPackageAuctionStart.setContentObject(pData);
+                  send(msgPackageAuctionStart);
+                  logger.log(Level.INFO, myAgent.getLocalName() + " -> INITIALIZE_START_AUCTION_BEHAVIOUR");
+
+               } catch (IOException e) {
+                  e.printStackTrace();
+               }
+            }
+
+			}
+		}
+	}
+
+	/**Got message:
+	 * 		RampOrderAgent: CheckIfPackageIsStoredBehaviour
+	 * Send message:
+	 * 		RampOrderAgent: CheckIfPackageIsStoredBehaviour
 	 * Behaviour should receive the request from its Storage Orderagent and
 	 * should search the list and look if the requested Package exists and then
 	 * answer the Orderagent
@@ -308,8 +493,11 @@ public class PackageAgent extends Agent {
 
 	}
 
-	/**
-	 * Behaviour should set a Package Reserved
+	/**Got message:
+	 * 		RampOrderAgent: SetPackageReservedBehaviour,  CheckIfPackageIsStoredBehaviour
+	 * Send message:
+	 * 		none
+	 * Behaviour should set a Package Reserved and set a Packages DestinationId if there exists one
 	 * 
 	 * @author Raschid
 	 */
@@ -324,6 +512,12 @@ public class PackageAgent extends Agent {
 				IOException {
 			// Receive the Request from Orderagent
 			PackageAgent currentAgent = (PackageAgent) myAgent;
+			int destinationId= -1;
+			
+			if(msg.getUserDefinedParameter("conveyorId")!=null){
+				destinationId=Integer.parseInt(msg.getUserDefinedParameter("conveyorId"));
+			}
+					
 			PackageData receivedPackage = (PackageData) msg.getContentObject();
 
 			if (Debugging.showInfoMessages)
@@ -334,6 +528,51 @@ public class PackageAgent extends Agent {
 				PackageData dummy = currentAgent.lstPackage.get(i);
 				if (dummy.getPackageID() == receivedPackage.getPackageID()) {
 					dummy.setReserved();
+					//Check if there is a destinationId
+					if(destinationId!=-1){
+						dummy.setDestinationID(destinationId);//The destination id is setted
+					}
+					break;
+
+				}
+			}
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " PACKAGE_RESERVED");
+        }
+
+	}
+	
+	/**Got message:
+	 * 		RampOrderAgent: CheckIfPackageIsStoredBehaviour
+	 * Send message:
+	 * 		none
+	 * Behaviour should set a Package Reserved and set its destination
+	 * 
+	 * @author Raschid
+	private class SetPackageDestinationBehaviour extends CyclicReceiverBehaviour {
+
+		protected SetPackageDestinationBehaviour(MessageTemplate mt) {
+			super(mt);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public void onMessage(ACLMessage msg) throws UnreadableException,
+				IOException {
+			// Receive the Request from Orderagent
+			PackageAgent currentAgent = (PackageAgent) myAgent;
+			int destinationId= Integer.parseInt(msg.getUserDefinedParameter("conveyorId"));
+			PackageData receivedPackage = (PackageData) msg.getContentObject();
+
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " <- SET_PACKAGE_DESTINATION_STORAGE");
+
+			// Search the Package in the list and set it reserved
+			for (int i = 0; i < currentAgent.lstPackage.size(); i++) {
+				PackageData dummy = currentAgent.lstPackage.get(i);
+				if (dummy.getPackageID() == receivedPackage.getPackageID()) {
+					dummy.setReserved();
+					dummy.setDestinationID(destinationId);//The destination id is setted
 					break;
 
 				}
@@ -343,6 +582,7 @@ public class PackageAgent extends Agent {
         }
 
 	}
+	 */
 
    /**
     * Checks the internal packageList, if there is an outgoing Job for the given Package, answer the RampOrderAgent
@@ -358,13 +598,15 @@ public class PackageAgent extends Agent {
       @Override
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
          PackageData packageData = (PackageData) msg.getContentObject();
-
+         PackageAgent currentAgent = (PackageAgent) myAgent;
          for (PackageData requiredPackageData : lstPackage) {
             if (packageData.getPackageID() == requiredPackageData.getPackageID()) {
                ACLMessage msgReply = new ACLMessage(MessageType.PACKAGE_IS_NEEDED);
+               logger.info(myAgent.getLocalName()+ "-> PACKAGE_IS_NEEDED");
                msgReply.addUserDefinedParameter("enquiring_ramp_conveyor_id",
                      msg.getUserDefinedParameter("enquiring_ramp_conveyor_id"));
                msgReply.setContentObject(packageData);
+               AgentHelper.addReceiver(msgReply, currentAgent, RampOrderAgent.NAME, conveyorID, szenarioID);
                send(msgReply);
             }
          }
@@ -387,22 +629,153 @@ public class PackageAgent extends Agent {
          int packageId = Integer.valueOf(msg.getUserDefinedParameter("package_id"));
          int destinationConveyorId = Integer.valueOf(msg.getUserDefinedParameter("destination_conveyor_id"));
 
+         logger.info("PackageAgent <- ASSIGN_PACKAGE_DESTINATION");
+
          for (PackageData packageData : lstPackage) {
-            if (packageData.getPackageID() == packageId
-                  && packageData.getDestinationID() != 0) {
+            if (packageData.getPackageID() == packageId) {
 
                packageData.setReserved();
                packageData.setDestinationID(destinationConveyorId);
 
-               if (Debugging.showInfoMessages) {
-                  logger.log(Level.INFO, myAgent.getLocalName()
-                        + ": destination from package " + packageData.getPackageID()
-                        + " changed to destination " + packageData.getDestinationID());
-               }
+               logger.info("PackageAgent <- ASSIGN_PACKAGE_DESTINATION destination set!");
             }
          }
       }
    }
+
+   
+   /***Got message:
+	 * 		RampPlattformAgent: GivePackageBehaviour
+	 * Send message:
+	 * 		RampPlattformAgent: GivePackageBehaviour
+	 * Plattformagent should remove a Package in order to give it to the Volksbot
+	 * 
+	 * @author Raschid
+	 */
+	private class RemovePackageAndAnswerBehaviour extends CyclicReceiverBehaviour {
+
+		protected RemovePackageAndAnswerBehaviour(MessageTemplate mt) {
+			super(mt);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public void onMessage(ACLMessage msg) throws UnreadableException,
+				IOException {
+			// Receive the Request from Orderagent
+			PackageAgent currentAgent = (PackageAgent) myAgent;
+			int packageId =Integer.parseInt(msg.getUserDefinedParameter("packageID"));
+            PackageData packagee=null;
+			
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " <- REMOVE_PACKAGE_AND_ANSWER");
+
+			// Search the Package in the list and and remove it
+			for (int i = 0; i < currentAgent.lstPackage.size(); i++) {
+				packagee = currentAgent.lstPackage.get(i);
+				if (packagee.getPackageID() == packageId) {
+					packagee.setUnReserved();
+					currentAgent.lstPackage.remove(i);
+					break;
+				}
+			}
+			
+			//Answer the Plattformagent
+			ACLMessage msgPackageRemoved = new ACLMessage(MessageType.PACKAGE_REMOVED);
+			msgPackageRemoved.setContentObject(packagee);
+			AgentHelper.addReceiver(msgPackageRemoved, currentAgent,RampPlattformAgent.NAME, currentAgent.conveyorID, currentAgent.szenarioID);
+			
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ "->PACKAGE_REMOVED");
+			send(msgPackageRemoved);
+       }
+
+	}
+   
+	/**Got message:
+	 * 		VehiclePlattformAgent: GetPackageFromSourceBehaviour
+	 * Send message:
+	 * 		none
+	 * Behaviour should charge a Package on the Bot
+	 * 
+	 * @author Raschid
+	 */
+	private class BotAddPackageBehaviour extends CyclicReceiverBehaviour {
+
+		protected BotAddPackageBehaviour(MessageTemplate mt) {
+			super(mt);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public void onMessage(ACLMessage msg) throws UnreadableException,
+				IOException {
+			// Receive the Request from its Plattformagent
+			PackageAgent currentAgent = (PackageAgent) myAgent;
+            PackageData packagee=(PackageData) msg.getContentObject();
+			
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " <- BOT_ADD_PACKAGE");
+
+			//Add the Package
+			
+			currentAgent.lstPackage.add(packagee);
+							
+       }
+
+	}
+	
+	/**Got message:
+	 * 		VehiclePlattformAgent: BotGoToDestinationBehaviour
+	 * Send message:
+	 * 		VehiclePlattformAgent: BotGoToDestinationBehaviour
+	 * Behaviour should remove a Package from the Bot
+	 * 
+	 * @author Raschid
+	 */
+	private class BotRemovePackageBehaviour extends CyclicReceiverBehaviour {
+
+		protected BotRemovePackageBehaviour(MessageTemplate mt) {
+			super(mt);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public void onMessage(ACLMessage msg) throws UnreadableException,
+				IOException {
+			// Receive the Request from Bot
+			PackageAgent currentAgent = (PackageAgent) myAgent;
+ 
+			
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " <- BOT_REMOVE_PACKAGE");
+
+			//Remove the Package and overgive it
+			PackageData p=currentAgent.lstPackage.get(0);
+			currentAgent.lstPackage.remove(0);
+			
+			ACLMessage packageRemoved = new ACLMessage(MessageType.BOT_REMOVED_PACKAGE);
+			packageRemoved.setContentObject(p);
+			packageRemoved.addReceiver(msg.getSender());
+			
+			if (Debugging.showInfoMessages)
+				logger.log(Level.INFO, myAgent.getLocalName()+ " -> BOT_REMOVED_PACKAGE");
+			
+			send(packageRemoved);
+			
+				
+			
+			
+       }
+
+	}
+	
+	
+	
+	
+	
+   
+
 
    /**
     * Behaviour to handle package Reservations on Storage Ramps
@@ -420,4 +793,5 @@ public class PackageAgent extends Agent {
          lstStorageRampReservedPackageIds.add(packageData.getPackageID());
       }
    }
+
 }
