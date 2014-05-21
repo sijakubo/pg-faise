@@ -16,6 +16,7 @@ import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
+import uni.oldenburg.shared.model.Szenario;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class RampOrderAgent extends Agent {
    private static final String ENQUIRING_RAMP_PARAMETER_KEY = "enquiring_ramp_conveyor_id";
 
    private int conveyorID = 0;
-   private int szenarioID = 0;
+   private Szenario szenario;
    private int rampType = -1; //-1 represents a Vehicle
    private Logger logger = Logger.getLogger(RampOrderAgent.class);
 
@@ -38,7 +39,7 @@ public class RampOrderAgent extends Agent {
    protected void setup() {
       Object[] args = getArguments();
       if (args != null) {
-         szenarioID = (Integer) args[0];
+         szenario = (Szenario) args[0];
 
          Conveyor myConveyor = (Conveyor) args[1];
          conveyorID = myConveyor.getID();
@@ -93,9 +94,8 @@ public class RampOrderAgent extends Agent {
          addBehaviour(new HandleSpaceAvailableBehaviour(MessageType.PACKAGE_SPACE_AVAILABLE));
       }
 
-      String nickname = AgentHelper.getUniqueNickname(RampOrderAgent.NAME,
-            conveyorID, szenarioID);
-      AgentHelper.registerAgent(szenarioID, this, nickname);
+      String nickname = AgentHelper.getUniqueNickname(RampOrderAgent.NAME, conveyorID, szenario.getId());
+      AgentHelper.registerAgent(szenario.getId(), this, nickname);
 
       if (Debugging.showAgentStartupMessages)
          logger.log(Level.INFO, nickname + " started");
@@ -142,7 +142,7 @@ public class RampOrderAgent extends Agent {
          ACLMessage msgPackage = new ACLMessage(MessageType.ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS);
          msgPackage.addUserDefinedParameter("conveyorId", "" + currentAgent.conveyorID);//Send the Conveyor id, so that the Storage knows for which destination an auction should be started
          msgPackage.setContentObject(searchedPackage);
-         AgentHelper.addReceivers(msgPackage, currentAgent, currentAgent.getSzenarioID());
+         AgentHelper.addReceivers(msgPackage, currentAgent, szenario.getId());
          send(msgPackage);
 
       }
@@ -187,7 +187,7 @@ public class RampOrderAgent extends Agent {
          ACLMessage msgCheckPackage = new ACLMessage(
                MessageType.CHECK_IF_PACKAGE_IS_STORED);
          msgCheckPackage.setContentObject(searchedPackage);
-         AgentHelper.addReceiver(msgCheckPackage, currentAgent, PackageAgent.NAME, conveyorID, szenarioID);
+         AgentHelper.addReceiver(msgCheckPackage, currentAgent, PackageAgent.NAME, conveyorID, szenario.getId());
          if (Debugging.showInfoMessages)
             logger.log(Level.INFO, myAgent.getLocalName() + " -> CHECK_IF_PACKAGE_IS_STORED");
 
@@ -218,7 +218,7 @@ public class RampOrderAgent extends Agent {
             ACLMessage msgAnswerPackageAgent = new ACLMessage(MessageType.SET_PACKAGE_RESERVED);
             msgAnswerPackageAgent.addUserDefinedParameter("conveyorId", msg.getUserDefinedParameter("conveyorId"));
             msgAnswerPackageAgent.setContentObject(msgAnswer.getContentObject());
-            AgentHelper.addReceiver(msgAnswerPackageAgent, currentAgent, PackageAgent.NAME, conveyorID, szenarioID);
+            AgentHelper.addReceiver(msgAnswerPackageAgent, currentAgent, PackageAgent.NAME, conveyorID, szenario.getId());
             if (Debugging.showInfoMessages)
                logger.log(Level.INFO, myAgent.getLocalName() + " -> SET_PACKAGE_RESERVED");
             send(msgAnswer);
@@ -271,11 +271,9 @@ public class RampOrderAgent extends Agent {
          //Tell the Packageagent to set the Package reserved, so that it will not be checked again
          if (searchedPackage != null) {
             // Orderagent should ask his Packageagent to set a Package reserved
-            ACLMessage msgSetPackage = new ACLMessage(
-                  MessageType.SET_PACKAGE_RESERVED);
+            ACLMessage msgSetPackage = new ACLMessage(MessageType.SET_PACKAGE_RESERVED);
             msgSetPackage.setContentObject(searchedPackage);
-            AgentHelper.addReceiver(msgSetPackage, currentAgent,
-                  PackageAgent.NAME, conveyorID, szenarioID);
+            AgentHelper.addReceiver(msgSetPackage, currentAgent, PackageAgent.NAME, conveyorID, szenario.getId());
             if (Debugging.showInfoMessages)
                logger.log(Level.INFO, myAgent.getLocalName() + " -> SET_PACKAGE_RESERVED");
             send(msgSetPackage);
@@ -283,10 +281,6 @@ public class RampOrderAgent extends Agent {
 
       }
 
-   }
-
-   public int getSzenarioID() {
-      return this.szenarioID;
    }
 
    /**
@@ -352,7 +346,7 @@ public class RampOrderAgent extends Agent {
             logger.info("Entrance - RampOrderAgent -> ENQUIRE_RAMP (" + enquireMessageType+ ")");
             msgEnquireRamps.setContentObject(packageData);
             msgEnquireRamps.addUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY, String.valueOf(conveyorID));
-            AgentHelper.addReceivers(msgEnquireRamps, myAgent, szenarioID);
+            AgentHelper.addReceivers(msgEnquireRamps, myAgent, szenario.getId());
             send(msgEnquireRamps);
 
          } else if (msg.getPerformative() == endEnquireMessageType) {
@@ -446,7 +440,7 @@ public class RampOrderAgent extends Agent {
          msgCheckIfPackageIsNeeded.addUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY,
                msg.getUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY));
          msgCheckIfPackageIsNeeded.setContentObject(packageData);
-         AgentHelper.addReceiver(msgCheckIfPackageIsNeeded, myAgent, PackageAgent.NAME, conveyorID, szenarioID);
+         AgentHelper.addReceiver(msgCheckIfPackageIsNeeded, myAgent, PackageAgent.NAME, conveyorID, szenario.getId());
          send(msgCheckIfPackageIsNeeded);
       }
    }
@@ -488,7 +482,7 @@ public class RampOrderAgent extends Agent {
             msgAcceptReservationOffer = new ACLMessage(MessageType.SET_PACKAGE_RESERVED);
          }
          msgAcceptReservationOffer.setContentObject(packageData);
-         AgentHelper.addReceiver(msgAcceptReservationOffer, myAgent, PackageAgent.NAME, conveyorID, szenarioID);
+         AgentHelper.addReceiver(msgAcceptReservationOffer, myAgent, PackageAgent.NAME, conveyorID, szenario.getId());
          send(msgAcceptReservationOffer);
          logger.info(myAgent.getLocalName()+ "-> ASSIGN_PACKAGE_DESTINATION");
          //reply to the Entrance Ramp, that the Reservation was accepted
@@ -532,7 +526,7 @@ public class RampOrderAgent extends Agent {
                "destination_conveyor_id", msg.getUserDefinedParameter("destination_conveyor_id"));
 
          msgAssignDestination.setContentObject(packageData.getPackageID());
-         AgentHelper.addReceiver(msgAssignDestination, myAgent, PackageAgent.NAME, conveyorID, szenarioID);
+         AgentHelper.addReceiver(msgAssignDestination, myAgent, PackageAgent.NAME, conveyorID, szenario.getId());
          send(msgAssignDestination);
       }
    }
@@ -564,7 +558,7 @@ public class RampOrderAgent extends Agent {
          String enquiringRampConveyorId = msg.getUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY);
          logger.info("Exit - RampOrderAgent -> PACKAGE_IS_NEEDED_FROM_EXIT_RAMP");
          AgentHelper.addReceiver(msgPackageIsNeeded, myAgent, RampOrderAgent.NAME,
-               Integer.valueOf(enquiringRampConveyorId), szenarioID);
+               Integer.valueOf(enquiringRampConveyorId), szenario.getId());
 
          //packageData
          msgPackageIsNeeded.setContentObject(msg.getContentObject());
@@ -601,7 +595,7 @@ public class RampOrderAgent extends Agent {
          message.addUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY,
                msg.getUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY));
          message.addUserDefinedParameter("information_message_no_step", "noStep");
-         AgentHelper.addReceiver(message, myAgent, RampPlattformAgent.NAME, conveyorID, szenarioID);
+         AgentHelper.addReceiver(message, myAgent, RampPlattformAgent.NAME, conveyorID, szenario.getId());
          send(message);
       }
    }
@@ -634,7 +628,7 @@ public class RampOrderAgent extends Agent {
             String enquiringRampConveyorId = msg.getUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY);
             Integer enquiringRampId = Integer.valueOf(enquiringRampConveyorId);
             logger.info("StorageRamp - RampOrderAgent -> PACKAGE_IS_STORABLE_FROM_STORAGE_RAMP, to " + enquiringRampId);
-            AgentHelper.addReceiver(msgReply, myAgent, RampOrderAgent.NAME, enquiringRampId, szenarioID);
+            AgentHelper.addReceiver(msgReply, myAgent, RampOrderAgent.NAME, enquiringRampId, szenario.getId());
             send(msgReply);
          } else {
             //TODO decline offer, no space available

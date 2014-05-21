@@ -15,6 +15,7 @@ import uni.oldenburg.server.agent.helper.EventHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.Job;
+import uni.oldenburg.shared.model.Szenario;
 import uni.oldenburg.shared.model.event.JobAssignedEvent;
 import uni.oldenburg.shared.model.event.JobUnassignableEvent;
 import uni.oldenburg.shared.model.event.SimStartedEvent;
@@ -29,16 +30,12 @@ import jade.lang.acl.UnreadableException;
 public class JobAgent extends Agent {
 	public final static String NAME = "JobAgent";
 	
-	private int szenarioID = 0;
+	private Szenario szenario;
 	
 	private Logger logger = Logger.getLogger(JobAgent.class);
 	
 	private List<AID> lstRampIncoming = new ArrayList<AID>();
 	private List<AID> lstRampOutgoing = new ArrayList<AID>();
-	
-	public int getSzenarioID() {
-		return this.szenarioID;
-	}
 	
 	public List<AID> getRampListIncoming() {
 		return lstRampIncoming;
@@ -55,7 +52,7 @@ public class JobAgent extends Agent {
 	protected void setup() {
 		Object[] args = getArguments();
 		if (args != null) {
-			szenarioID = (Integer) args[0];
+			szenario = (Szenario) args[0];
 		}
 		
 		addBehaviour(new RequestRampInfosBehaviour());
@@ -64,7 +61,7 @@ public class JobAgent extends Agent {
 		addBehaviour(new DistributeJobBehaviour(MessageTemplate.MatchPerformative(MessageType.SEND_JOB)));
 		addBehaviour(new AssignDestinationRampBehaviour(MessageTemplate.MatchPerformative(MessageType.PACKAGE_SPACE_AVAILABLE)));
 		
-		AgentHelper.registerAgent(szenarioID, this, JobAgent.NAME);
+		AgentHelper.registerAgent(szenario.getId(), this, JobAgent.NAME);
 		
 		if(Debugging.showAgentStartupMessages)
 			logger.log(Level.INFO, JobAgent.NAME + " started");
@@ -89,7 +86,7 @@ public class JobAgent extends Agent {
 		public void action() {
 			// send ramp info request
 			ACLMessage msg = new ACLMessage(MessageType.REQUEST_RAMP_INFO);
-			AgentHelper.addReceivers(msg, myAgent, ((JobAgent)myAgent).getSzenarioID());
+			AgentHelper.addReceivers(msg, myAgent, szenario.getId());
 			
 			if(Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName() + " -> REQUEST_RAMP_INFO");

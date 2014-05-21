@@ -2,7 +2,6 @@ package uni.oldenburg.server.agent;
 
 import java.io.IOException;
 
-import jade.core.behaviours.Behaviour;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -20,13 +19,14 @@ import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
+import uni.oldenburg.shared.model.Szenario;
 
 @SuppressWarnings("serial")
 public class RampPlattformAgent extends Agent {
 	public final static String NAME = "RampPlattformAgent";
 	
 	private int conveyorID = 0;
-	private int szenarioID = 0;
+	private Szenario szenario;
 	private int rampType = 0;
 	private int packageCountMax = 0;
 	private Logger logger = Logger.getLogger(RampPlattformAgent.class);
@@ -38,7 +38,7 @@ public class RampPlattformAgent extends Agent {
 	protected void setup() {
 		Object[] args = getArguments();
 		if (args != null) {
-			szenarioID = (Integer) args[0];
+			szenario = (Szenario) args[0];
 			
 			Conveyor myConveyor = (Conveyor) args[1];
 			conveyorID = myConveyor.getID();
@@ -57,8 +57,8 @@ public class RampPlattformAgent extends Agent {
 			addBehaviour(new  ReceivePackageBehaviour(MessageTemplate.MatchPerformative(MessageType.BOT_TARGET_ACHIEVED )));
 		}
 		
-		String nickname = AgentHelper.getUniqueNickname(RampRoutingAgent.NAME, conveyorID, szenarioID);
-		AgentHelper.registerAgent(szenarioID, this, nickname);
+		String nickname = AgentHelper.getUniqueNickname(RampRoutingAgent.NAME, conveyorID, szenario.getId());
+		AgentHelper.registerAgent(szenario.getId(), this, nickname);
 		
 		if(Debugging.showAgentStartupMessages)
 			logger.log(Level.INFO, nickname + " started");
@@ -140,7 +140,7 @@ public class RampPlattformAgent extends Agent {
 						// get package count from packageagent
 						// request
 						ACLMessage msgPackageReq = new ACLMessage(MessageType.GET_PACKAGE_COUNT);
-						AgentHelper.addReceiver(msgPackageReq, myAgent, PackageAgent.NAME, currentAgent.conveyorID, currentAgent.szenarioID);
+						AgentHelper.addReceiver(msgPackageReq, myAgent, PackageAgent.NAME, currentAgent.conveyorID, currentAgent.szenario.getId());
 						
 						if(Debugging.showPackageMessages)
 							logger.log(Level.INFO, myAgent.getLocalName() + " -> GET_PACKAGE_COUNT");
@@ -209,7 +209,7 @@ public class RampPlattformAgent extends Agent {
 					// reserve/add space in ramp if target matches 
 					if (target.compareTo(myAgent.getAID().toString()) == 0) {
 						ACLMessage msgAddPackage = new ACLMessage(MessageType.ADD_PACKAGE);
-						AgentHelper.addReceiver(msgAddPackage, currentAgent, PackageAgent.NAME, conveyorID, szenarioID);
+						AgentHelper.addReceiver(msgAddPackage, currentAgent, PackageAgent.NAME, conveyorID, szenario.getId());
 						
 						++packageCount;
 							
@@ -271,7 +271,7 @@ public class RampPlattformAgent extends Agent {
 			
 			ACLMessage msgGetPackage = new ACLMessage(MessageType.REMOVE_PACKAGE_AND_ANSWER);
 			msgGetPackage.addUserDefinedParameter("packageID", msg.getUserDefinedParameter("packageID"));
-			AgentHelper.addReceiver(msgGetPackage, currentAgent,PackageAgent.NAME, currentAgent.conveyorID, currentAgent.szenarioID);
+			AgentHelper.addReceiver(msgGetPackage, currentAgent,PackageAgent.NAME, currentAgent.conveyorID, currentAgent.szenario.getId());
 			
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()+ " -> REMOVE_PACKAGE_AND_ANSWER");
@@ -339,7 +339,7 @@ public class RampPlattformAgent extends Agent {
 		    
 			ACLMessage takePackage = new ACLMessage(MessageType.ADD_PACKAGE);
 			takePackage.setContentObject(msgGetAnswerFromBot.getContentObject());
-			AgentHelper.addReceiver(takePackage, currentAgent,PackageAgent.NAME,currentAgent.conveyorID, currentAgent.szenarioID);
+			AgentHelper.addReceiver(takePackage, currentAgent,PackageAgent.NAME,currentAgent.conveyorID, currentAgent.szenario.getId());
 		    
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()+ " -> ADD_PACKAGE");

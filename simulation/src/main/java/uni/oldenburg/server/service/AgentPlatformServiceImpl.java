@@ -82,7 +82,7 @@ public class AgentPlatformServiceImpl extends RemoteServiceServlet implements Ag
 	   int mySzenarioID = ++szenarioID;
 	   
 	   Object[] argsJobAgent = new Object[1];
-	   argsJobAgent[0] = mySzenarioID;
+	   argsJobAgent[0] = szenario;
 	   
 	   List<Conveyor> lstConveyor = szenario.getConveyorList();
 	   
@@ -95,7 +95,7 @@ public class AgentPlatformServiceImpl extends RemoteServiceServlet implements Ag
 	   
 	   for (Conveyor myConveyor : lstConveyor) {
 		   Object[] argsAgent = new Object[2];
-		   argsAgent[0] = mySzenarioID;
+		   argsAgent[0] = szenario;
 		   argsAgent[1] = myConveyor;
 		   
 		   int id = myConveyor.getID();		   

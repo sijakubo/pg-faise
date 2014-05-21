@@ -14,17 +14,17 @@ import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
+import uni.oldenburg.shared.model.Szenario;
 
 @SuppressWarnings("serial")
 public class RampRoutingAgent extends Agent {
 	public final static String NAME = "RampRoutingAgent";
 
 	private int conveyorID = 0;
-	private int szenarioID = 0;
+	private Szenario szenario;
 	private int actualPackageId = -1;
 	private static int auctionIdCounter = 0;
 	private int currentAuction = -1;
@@ -41,7 +41,7 @@ public class RampRoutingAgent extends Agent {
 	protected void setup() {
 		Object[] args = getArguments();
 		if (args != null) {
-			szenarioID = (Integer) args[0];
+			szenario = (Szenario) args[0];
 
 			Conveyor myConveyor = (Conveyor) args[1];
 			conveyorID = myConveyor.getID();
@@ -54,9 +54,8 @@ public class RampRoutingAgent extends Agent {
 				MessageTemplate.MatchPerformative(MessageType.SEND_ESTIMATION)));
 		addBehaviour(new AssignVehicleForPackageBehaviour());
 
-		String nickname = AgentHelper.getUniqueNickname(RampRoutingAgent.NAME,
-				conveyorID, szenarioID);
-		AgentHelper.registerAgent(szenarioID, this, nickname);
+		String nickname = AgentHelper.getUniqueNickname(RampRoutingAgent.NAME, conveyorID, szenario.getId());
+		AgentHelper.registerAgent(szenario.getId(), this, nickname);
 
 		if (Debugging.showAgentStartupMessages)
 			logger.log(Level.INFO, nickname + " started");
@@ -69,10 +68,6 @@ public class RampRoutingAgent extends Agent {
 
 	public int getConveyorID() {
 		return this.conveyorID;
-	}
-
-	public int getSzenarioID() {
-		return this.szenarioID;
 	}
 
 	public int getActualPackageId() {
@@ -124,7 +119,7 @@ public class RampRoutingAgent extends Agent {
 				msgStart.addUserDefinedParameter("sourceID", sourceID);
 				msgStart.addUserDefinedParameter("destinationID", destinationID);
 
-				AgentHelper.addReceivers(msgStart, myAgent, szenarioID);
+				AgentHelper.addReceivers(msgStart, myAgent, szenario.getId());
 
 				logger.log(Level.INFO, myAgent.getLocalName()
 						+ " sent START_AUCTION message #" + auctionID
@@ -207,10 +202,10 @@ public class RampRoutingAgent extends Agent {
 					msg.addUserDefinedParameter("packageID", packageID);
 
 					// AgentHelper.addReceivers(msg, myAgent,
-					// ((RampRoutingAgent) myAgent).getSzenarioID());
+					// ((RampRoutingAgent) myAgent).getszenario.getId()());
 					AgentHelper.addReceiver(msg, currentAgent,
 							VehicleRoutingAgent.NAME, Integer.parseInt(botID),
-							szenarioID);
+							szenario.getId());
 					if (Debugging.showAuctionMessages) {
 						logger.log(
 								Level.INFO,

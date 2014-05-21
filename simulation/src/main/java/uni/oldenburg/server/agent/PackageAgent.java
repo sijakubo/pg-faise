@@ -26,6 +26,7 @@ import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
+import uni.oldenburg.shared.model.Szenario;
 
 /**
  * @author Matthias
@@ -35,7 +36,7 @@ public class PackageAgent extends Agent {
 	public final static String NAME = "PackageAgent";
 
 	private int conveyorID = 0;
-	private int szenarioID = 0;
+	private Szenario szenario;
 	private int rampType = -1;// -1 represents a Vehicle
 
 	private List<PackageData> lstPackage = new ArrayList<PackageData>();
@@ -51,7 +52,7 @@ public class PackageAgent extends Agent {
 	protected void setup() {
 		Object[] args = getArguments();
 		if (args != null) {
-			szenarioID = (Integer) args[0];
+			szenario = (Szenario) args[0];
 
 			Conveyor myConveyor = (Conveyor) args[1];
 			conveyorID = myConveyor.getID();
@@ -134,9 +135,8 @@ public class PackageAgent extends Agent {
 
         
          
-         String nickname = AgentHelper.getUniqueNickname(PackageAgent.NAME,
- 				conveyorID, szenarioID);
- 		AgentHelper.registerAgent(szenarioID, this, nickname);
+      String nickname = AgentHelper.getUniqueNickname(PackageAgent.NAME, conveyorID, szenario.getId());
+ 		AgentHelper.registerAgent(szenario.getId(), this, nickname);
 
  		if (Debugging.showAgentStartupMessages)
  			logger.log(Level.INFO, nickname + " started");
@@ -284,8 +284,7 @@ public class PackageAgent extends Agent {
 					ACLMessage msgPackageSearch = new ACLMessage(
 							MessageType.SEARCH_FOR_PACKAGE);
 					AgentHelper.addReceiver(msgPackageSearch, myAgent,
-							RampOrderAgent.NAME, currentAgent.conveyorID,
-							currentAgent.szenarioID);
+							RampOrderAgent.NAME, currentAgent.conveyorID, szenario.getId());
 
 					if (Debugging.showInfoMessages)
 						logger.log(Level.INFO, myAgent.getLocalName()
@@ -338,7 +337,7 @@ public class PackageAgent extends Agent {
 				if (!pData.isReserved()) {
 					ACLMessage msgPackageSearch = new ACLMessage(MessageType.START_EXIT_RAMP_SEARCH_FOR_PACKAGE);
 					AgentHelper.addReceiver(msgPackageSearch, myAgent, RampOrderAgent.NAME, currentAgent.conveyorID,
-							currentAgent.szenarioID);
+							currentAgent.szenario.getId());
 
                try {
                  //Start Search for Package only once. Uf the lastSearchedPackageId == pData.getPackageId do not start
@@ -404,7 +403,8 @@ public class PackageAgent extends Agent {
                ACLMessage msgPackageAuctionStart = new ACLMessage(MessageType.INITIALIZE_START_AUCTION_BEHAVIOUR);
                msgPackageAuctionStart.addUserDefinedParameter("conveyorId", "" + pData.getDestinationID());
                msgPackageAuctionStart.addUserDefinedParameter("packageId", "" + pData.getPackageID());
-               AgentHelper.addReceiver(msgPackageAuctionStart, myAgent, RampRoutingAgent.NAME, currentAgent.conveyorID, currentAgent.szenarioID);
+               AgentHelper.addReceiver(msgPackageAuctionStart, myAgent, RampRoutingAgent.NAME, currentAgent.conveyorID,
+                     currentAgent.szenario.getId());
 
                try {
                   msgPackageAuctionStart.setContentObject(pData);
@@ -604,7 +604,7 @@ public class PackageAgent extends Agent {
                msgReply.addUserDefinedParameter("enquiring_ramp_conveyor_id",
                      msg.getUserDefinedParameter("enquiring_ramp_conveyor_id"));
                msgReply.setContentObject(packageData);
-               AgentHelper.addReceiver(msgReply, currentAgent, RampOrderAgent.NAME, conveyorID, szenarioID);
+               AgentHelper.addReceiver(msgReply, currentAgent, RampOrderAgent.NAME, conveyorID, szenario.getId());
                send(msgReply);
             }
          }
@@ -681,7 +681,8 @@ public class PackageAgent extends Agent {
 			//Answer the Plattformagent
 			ACLMessage msgPackageRemoved = new ACLMessage(MessageType.PACKAGE_REMOVED);
 			msgPackageRemoved.setContentObject(packagee);
-			AgentHelper.addReceiver(msgPackageRemoved, currentAgent,RampPlattformAgent.NAME, currentAgent.conveyorID, currentAgent.szenarioID);
+			AgentHelper.addReceiver(msgPackageRemoved, currentAgent,RampPlattformAgent.NAME, currentAgent.conveyorID,
+               szenario.getId());
 			
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()+ "->PACKAGE_REMOVED");

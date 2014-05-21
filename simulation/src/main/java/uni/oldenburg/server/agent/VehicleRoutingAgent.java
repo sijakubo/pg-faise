@@ -12,49 +12,49 @@ import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
+import uni.oldenburg.shared.model.Szenario;
 
 @SuppressWarnings("serial")
 public class VehicleRoutingAgent extends Agent {
 	public final static String NAME = "VehicleRoutingAgent";
-	
+
 	private int conveyorID = 0;
-	private int szenarioID = 0;
+	private Szenario szenario;
 	private boolean reserved=false;
-	
+
 	private Logger logger = Logger.getLogger(VehicleRoutingAgent.class);
-	
+
 	/**
      * @author Matthias
-     */	
+     */
 	// init
 	protected void setup() {
 		Object[] args = getArguments();
 		if (args != null) {
-			szenarioID = (Integer) args[0];
-			
+			szenario = (Szenario) args[0];
+
 			Conveyor myConveyor = (Conveyor) args[1];
 			conveyorID = myConveyor.getID();
 		}
-		
+
 		addBehaviour(new SendEstimationBehaviour(MessageTemplate.MatchPerformative(MessageType.START_AUCTION)));
 		addBehaviour(new AssignVehicleForPackageBehaviour(MessageTemplate.MatchPerformative(MessageType.ASSIGN_VEHICLE_FOR_PACKAGE)));
 		addBehaviour(new InitializePacketAgentBehaviour());
 		addBehaviour(new IsFreeForTransportBehaviour());
 		addBehaviour(new SetBotUnreservedBehaviour(MessageTemplate.MatchPerformative(MessageType.SET_BOT_UNRESERVED)));
-		
-		
-		String nickname = AgentHelper.getUniqueNickname(VehicleRoutingAgent.NAME, conveyorID, szenarioID);		
-		AgentHelper.registerAgent(szenarioID, this, nickname);
-		
+
+
+		String nickname = AgentHelper.getUniqueNickname(VehicleRoutingAgent.NAME, conveyorID, szenario.getId());
+		AgentHelper.registerAgent(szenario.getId(), this, nickname);
+
 		if(Debugging.showAgentStartupMessages)
 			logger.log(Level.INFO, nickname + " started");
 	}
-	
-	// destructor 
+
+	// destructor
 	protected void takeDown() {
 		AgentHelper.unregister(this);
 	}
@@ -63,10 +63,6 @@ public class VehicleRoutingAgent extends Agent {
 		return this.conveyorID;
 	}
 
-	public int getSzenarioID() {
-		return this.szenarioID;
-	}
-	
 	/**
 	 * @author Christopher, sijakubo
 	 */
@@ -111,7 +107,7 @@ public class VehicleRoutingAgent extends Agent {
          }
       }
 	}
-	
+
 	private int calculateEstimation(int sourceID, int destinationID) {
 		//pseudorandom values
 		//TODO: pathfinding etc.
@@ -161,14 +157,14 @@ public class VehicleRoutingAgent extends Agent {
          msgStartGetting.addUserDefinedParameter("destinationID", "" + destinationID);
          msgStartGetting.addUserDefinedParameter("sourceID", "" + sourceID);
          msgStartGetting.addUserDefinedParameter("packageID", "" + packageID);
-         AgentHelper.addReceiver(msgStartGetting, myAgent, VehiclePlattformAgent.NAME, currentAgent.conveyorID, currentAgent.szenarioID);
+         AgentHelper.addReceiver(msgStartGetting, myAgent, VehiclePlattformAgent.NAME, currentAgent.conveyorID, currentAgent.szenario.getId());
          send(msgStartGetting);
 
       }
    }
-	
+
 	/**Got message:
-	 *      VehiclePlattformAgent: BotGoToDestinationBehaviour           
+	 *      VehiclePlattformAgent: BotGoToDestinationBehaviour
 	 * Send message:
 	 *      none
 	 * Behaviour should set the Bot unreserved
@@ -186,10 +182,10 @@ public class VehicleRoutingAgent extends Agent {
 		public void onMessage(ACLMessage msg) throws UnreadableException,
 				IOException {
 			//Receive the Message from Plattformagent and set the Status of the Bot unreserved
-	
+
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()+ " <- SET_BOT_UNRESERVED");
-			setReserved(false);		
+			setReserved(false);
 		}
 
 	}
@@ -197,18 +193,18 @@ public class VehicleRoutingAgent extends Agent {
 	private class InitializePacketAgentBehaviour extends Behaviour {
 
 		public void action() {
-			
+
 		}
 
 		public boolean done() {
 			return false;
 		}
 	}
-	
+
 	private class IsFreeForTransportBehaviour extends Behaviour {
 
 		public void action() {
-			
+
 		}
 
 		public boolean done() {

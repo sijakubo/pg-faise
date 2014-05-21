@@ -15,13 +15,14 @@ import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
+import uni.oldenburg.shared.model.Szenario;
 
 @SuppressWarnings("serial")
 public class VehiclePlattformAgent extends Agent {
 	public final static String NAME = "VehiclePlattformAgent";
 	
 	private int conveyorID = 0;
-	private int szenarioID = 0;
+	private Szenario szenario;
 	
 	private Logger logger = Logger.getLogger(VehiclePlattformAgent.class);
 	
@@ -32,7 +33,7 @@ public class VehiclePlattformAgent extends Agent {
 	protected void setup() {
 		Object[] args = getArguments();
 		if (args != null) {
-			szenarioID = (Integer) args[0];
+			szenario = (Szenario) args[0];
 			
 			Conveyor myConveyor = (Conveyor) args[1];
 			conveyorID = myConveyor.getID();
@@ -40,8 +41,8 @@ public class VehiclePlattformAgent extends Agent {
 		
 		//addBehaviour(new IsFreeForTransportBehaviour());
 		
-		String nickname = AgentHelper.getUniqueNickname(VehiclePlattformAgent.NAME, conveyorID, szenarioID);		
-		AgentHelper.registerAgent(szenarioID, this, nickname);
+		String nickname = AgentHelper.getUniqueNickname(VehiclePlattformAgent.NAME, conveyorID, szenario.getId());		
+		AgentHelper.registerAgent(szenario.getId(), this, nickname);
 		
 		if(Debugging.showAgentStartupMessages)
 			logger.log(Level.INFO, nickname + " started");
@@ -86,7 +87,7 @@ public class VehiclePlattformAgent extends Agent {
 			//Tell the Rampplattformagent that he wants to have the Package and which Package he wants to have
 			ACLMessage msgPackage = new ACLMessage(MessageType.GIVE_PACKAGE);
 			msgPackage.addUserDefinedParameter("packageID", msg.getUserDefinedParameter("packageID"));
-			AgentHelper.addReceiver(msgPackage, myAgent,RampPlattformAgent.NAME, Integer.parseInt(msg.getUserDefinedParameter("sourceID")),currentAgent.szenarioID);
+			AgentHelper.addReceiver(msgPackage, myAgent,RampPlattformAgent.NAME, Integer.parseInt(msg.getUserDefinedParameter("sourceID")),currentAgent.szenario.getId());
 			
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()+ " -> GIVE_PACKAGE");
@@ -104,7 +105,7 @@ public class VehiclePlattformAgent extends Agent {
 			
 			ACLMessage addPackage = new ACLMessage(MessageType.BOT_ADD_PACKAGE);
 			addPackage.setContentObject(msgGetAnswer.getContentObject());
-			AgentHelper.addReceiver(addPackage, currentAgent,PackageAgent.NAME, currentAgent.conveyorID, currentAgent.szenarioID);
+			AgentHelper.addReceiver(addPackage, currentAgent,PackageAgent.NAME, currentAgent.conveyorID, currentAgent.szenario.getId());
 			
 			
 			
@@ -116,7 +117,7 @@ public class VehiclePlattformAgent extends Agent {
 			//Go to destination (Selfmessage)
 			ACLMessage goDestination = new ACLMessage(MessageType.BOT_GO_TO_DESTINATION);
 			goDestination.addUserDefinedParameter("destinationID", msg.getUserDefinedParameter("destinationID"));
-			AgentHelper.addReceiver(goDestination, currentAgent,VehiclePlattformAgent.NAME, currentAgent.conveyorID, currentAgent.szenarioID);
+			AgentHelper.addReceiver(goDestination, currentAgent,VehiclePlattformAgent.NAME, currentAgent.conveyorID, currentAgent.szenario.getId());
 			
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()+ " -> BOT_GO_TO_DESTINATION");
@@ -157,7 +158,7 @@ public class VehiclePlattformAgent extends Agent {
 				logger.log(Level.INFO, myAgent.getLocalName()+ " <- BOT_GO_TO_DESTINATION");
 			
 			ACLMessage targetAchieved = new ACLMessage(MessageType.BOT_TARGET_ACHIEVED );
-			AgentHelper.addReceiver(targetAchieved, currentAgent,RampPlattformAgent.NAME, Integer.parseInt(msg.getUserDefinedParameter("destinationID")), currentAgent.szenarioID);
+			AgentHelper.addReceiver(targetAchieved, currentAgent,RampPlattformAgent.NAME, Integer.parseInt(msg.getUserDefinedParameter("destinationID")), currentAgent.szenario.getId());
 			send(targetAchieved);
 			
 			if (Debugging.showInfoMessages)
@@ -172,7 +173,7 @@ public class VehiclePlattformAgent extends Agent {
 			
 			//Send Message to Packageagent, that he removes and overgives the package
 			ACLMessage removePackage = new ACLMessage(MessageType.BOT_REMOVE_PACKAGE);
-			AgentHelper.addReceiver(removePackage, currentAgent,PackageAgent.NAME, currentAgent.conveyorID, currentAgent.szenarioID);
+			AgentHelper.addReceiver(removePackage, currentAgent,PackageAgent.NAME, currentAgent.conveyorID, currentAgent.szenario.getId());
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()+ " -> BOT_REMOVE_PACKAGE");
 			send(removePackage);
@@ -187,7 +188,7 @@ public class VehiclePlattformAgent extends Agent {
 			//Tell the Ramp to Take the Package
 			ACLMessage takePackage = new ACLMessage(MessageType.RAMP_TAKE_PACKAGE);
 			takePackage.setContentObject(msgGetAnswerFromP.getContentObject());
-			AgentHelper.addReceiver(takePackage, currentAgent,RampPlattformAgent.NAME,Integer.parseInt(msg.getUserDefinedParameter("destinationID")), currentAgent.szenarioID);
+			AgentHelper.addReceiver(takePackage, currentAgent,RampPlattformAgent.NAME,Integer.parseInt(msg.getUserDefinedParameter("destinationID")), currentAgent.szenario.getId());
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()+ " -> RAMP_TAKE_PACKAGE");
 			
@@ -196,7 +197,7 @@ public class VehiclePlattformAgent extends Agent {
 			//Tell the Bot to set its status unreserved
 			ACLMessage unreserved = new ACLMessage(MessageType.SET_BOT_UNRESERVED);
 			
-			AgentHelper.addReceiver(unreserved, currentAgent,VehicleRoutingAgent.NAME,currentAgent.conveyorID, currentAgent.szenarioID);
+			AgentHelper.addReceiver(unreserved, currentAgent,VehicleRoutingAgent.NAME,currentAgent.conveyorID, currentAgent.szenario.getId());
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()+ " -> SET_BOT_UNRESERVED");
 			
