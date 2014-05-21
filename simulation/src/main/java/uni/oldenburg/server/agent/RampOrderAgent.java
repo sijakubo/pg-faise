@@ -483,9 +483,9 @@ public class RampOrderAgent extends Agent {
 
          ACLMessage msgAcceptReservationOffer;
          if (isStorageRamp) {
-            msgAcceptReservationOffer = new ACLMessage(MessageType.SET_PACKAGE_RESERVED);
-         } else {
             msgAcceptReservationOffer = new ACLMessage(MessageType.SET_PACKAGE_RESERVED_FOR_STORAGE_RAMP);
+         } else {
+            msgAcceptReservationOffer = new ACLMessage(MessageType.SET_PACKAGE_RESERVED);
          }
          msgAcceptReservationOffer.setContentObject(packageData);
          AgentHelper.addReceiver(msgAcceptReservationOffer, myAgent, PackageAgent.NAME, conveyorID, szenarioID);
@@ -597,7 +597,6 @@ public class RampOrderAgent extends Agent {
          logger.info("StorageRamp - RampOrderAgent <- ENQUIRE_STORAGE_RAMP");
          ACLMessage message = new ACLMessage(MessageType.PACKAGE_SPACE_AVAILABLE);
          //packageData
-         //todo Nachricht an Packageagent anstatt an den Plattformagent
          message.setContentObject(msg.getContentObject());
          message.addUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY,
                msg.getUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY));

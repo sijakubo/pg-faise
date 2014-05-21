@@ -2,6 +2,7 @@ package uni.oldenburg.server.agent;
 
 import java.io.IOException;
 
+import jade.core.behaviours.Behaviour;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -47,7 +48,7 @@ public class RampPlattformAgent extends Agent {
 		
 		addBehaviour(new SendRampInfoBehaviour());
 		addBehaviour(new IsPackageSpaceAvailableBehaviour());
-		
+
 		if(rampType== ConveyorRamp.RAMP_ENTRANCE||rampType== ConveyorRamp.RAMP_STOREAGE){
 			addBehaviour(new GivePackageBehaviour(MessageTemplate.MatchPerformative(MessageType.GIVE_PACKAGE)));
 		}
@@ -55,8 +56,6 @@ public class RampPlattformAgent extends Agent {
 		if(rampType== ConveyorRamp.RAMP_EXIT||rampType== ConveyorRamp.RAMP_STOREAGE){
 			addBehaviour(new  ReceivePackageBehaviour(MessageTemplate.MatchPerformative(MessageType.BOT_TARGET_ACHIEVED )));
 		}
-		
-		
 		
 		String nickname = AgentHelper.getUniqueNickname(RampRoutingAgent.NAME, conveyorID, szenarioID);
 		AgentHelper.registerAgent(szenarioID, this, nickname);
@@ -127,8 +126,7 @@ public class RampPlattformAgent extends Agent {
 		
 		public void action() {
 			RampPlattformAgent currentAgent = (RampPlattformAgent)myAgent;
-			Job pendingJob = null;
-			
+
 			if (step == 0) {
 				// get ramp space request
 				MessageTemplate mt = MessageTemplate.MatchPerformative(MessageType.PACKAGE_SPACE_AVAILABLE);
@@ -139,8 +137,6 @@ public class RampPlattformAgent extends Agent {
 						logger.log(Level.INFO, myAgent.getLocalName() + " <- PACKAGE_SPACE_AVAILABLE");
 					
 					try {
-						pendingJob = (Job)msg.getContentObject();
-						
 						// get package count from packageagent
 						// request
 						ACLMessage msgPackageReq = new ACLMessage(MessageType.GET_PACKAGE_COUNT);
@@ -176,8 +172,8 @@ public class RampPlattformAgent extends Agent {
 							msgReply.addUserDefinedParameter("enquiring_ramp_conveyor_id", enquiringRampConveyorId);
 						}
 
-						msgReply.setContentObject(pendingJob);
-
+                  //Job or PackageData
+						msgReply.setContentObject(msg.getContentObject());
 						msgReply.addReceiver(msg.getSender());
 						
 						if(Debugging.showInfoMessages)
@@ -350,6 +346,4 @@ public class RampPlattformAgent extends Agent {
 			send(takePackage);
 		}
 	}
-	
-	
 }

@@ -84,7 +84,6 @@ public class SimulationServiceImpl extends RemoteServiceServlet implements Simul
 		try {
 			result = szenarioDao.checkIfTitleExists(title);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return result;
@@ -172,7 +171,6 @@ public class SimulationServiceImpl extends RemoteServiceServlet implements Simul
 			result = joblistDao.checkIfJoblistExists(title);
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return result;

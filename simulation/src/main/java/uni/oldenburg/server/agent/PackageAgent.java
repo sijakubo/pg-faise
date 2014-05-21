@@ -214,18 +214,16 @@ public class PackageAgent extends Agent {
 			PackageAgent currentAgent = (PackageAgent) myAgent;
 
 			if (Debugging.showPackageMessages)
-				logger.log(Level.INFO, myAgent.getLocalName()
-						+ " <- GET_PACKAGE_COUNT");
+				logger.log(Level.INFO, myAgent.getLocalName() + " <- GET_PACKAGE_COUNT");
 
 			ACLMessage msgReply = new ACLMessage(MessageType.GET_PACKAGE_COUNT);
 			msgReply.addUserDefinedParameter("package_count", ""+ currentAgent.lstPackage.size());
 			msgReply.addReceiver(msg.getSender());
 
 			if (Debugging.showPackageMessages)
-				logger.log(Level.INFO, myAgent.getLocalName()
-						+ " -> GET_PACKAGE_COUNT");
+				logger.log(Level.INFO, myAgent.getLocalName() + " -> GET_PACKAGE_COUNT");
 
-			send(msgReply);
+         send(msgReply);
 		}
 	}
 
