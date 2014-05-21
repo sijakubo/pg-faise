@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.cmake.em
 
-message(STATUS "epos2_control: 2 messages, 0 services")
+message(STATUS "epos2_control: 1 messages, 0 services")
 
 set(MSG_I_FLAGS "-Iepos2_control:/home/pg/catkin_ws/src/epos2_control/msg")
 
@@ -17,12 +17,6 @@ add_custom_target(epos2_control_generate_messages ALL)
 
 ### Section generating for lang: gencpp
 ### Generating Messages
-_generate_msg_cpp(epos2_control
-  "/home/pg/catkin_ws/src/epos2_control/msg/HubFlow.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/epos2_control
-)
 _generate_msg_cpp(epos2_control
   "/home/pg/catkin_ws/src/epos2_control/msg/velocity.msg"
   "${MSG_I_FLAGS}"
@@ -53,12 +47,6 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS epos2_control_generate_messages_cpp
 ### Section generating for lang: genlisp
 ### Generating Messages
 _generate_msg_lisp(epos2_control
-  "/home/pg/catkin_ws/src/epos2_control/msg/HubFlow.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/epos2_control
-)
-_generate_msg_lisp(epos2_control
   "/home/pg/catkin_ws/src/epos2_control/msg/velocity.msg"
   "${MSG_I_FLAGS}"
   ""
@@ -87,12 +75,6 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS epos2_control_generate_messages_lis
 
 ### Section generating for lang: genpy
 ### Generating Messages
-_generate_msg_py(epos2_control
-  "/home/pg/catkin_ws/src/epos2_control/msg/HubFlow.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/epos2_control
-)
 _generate_msg_py(epos2_control
   "/home/pg/catkin_ws/src/epos2_control/msg/velocity.msg"
   "${MSG_I_FLAGS}"

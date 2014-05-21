@@ -27,7 +27,6 @@ set(LD_LIBRARY_PATH /opt/lib:${PROJECT_SOURCE_DIR}:$LD_LIBRARY_PATH)
  add_message_files(
    FILES
    velocity.msg
-   HubFlow.msg	
 #   Message1.msg
 #   Message2.msg
  )
@@ -90,6 +89,7 @@ include_directories(include
 add_executable(epos2_talker src/epos2_talker.cpp)
 add_executable(epos2_driver src/epos2_driver.cpp)
 add_executable(epos2_stateOutput src/epos2_stateOutput.cpp)
+#add_executable(einfachefahrt src/einfachefahrt.cpp)
 
 #include the MotorController-class for the driver
 add_library(Epos2MotorController src/Epos2MotorController.cpp)
@@ -106,6 +106,7 @@ add_library(SampleMoving src/SampleMoving.cpp)
 add_dependencies(SampleMoving ${PROJECT_NAME}_gencpp)
 target_link_libraries(epos2_talker SampleMoving)
 target_link_libraries(epos2_talker ${catkin_LIBRARIES})
+
 
 #include the stateOutput
 #add_dependencies(epos2_stateOutput ${PROJECT_NAME}_gencpp)

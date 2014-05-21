@@ -33,10 +33,7 @@ IF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/epos2_control/msg" TYPE FILE FILES
-    "/home/pg/catkin_ws/src/epos2_control/msg/velocity.msg"
-    "/home/pg/catkin_ws/src/epos2_control/msg/HubFlow.msg"
-    )
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/epos2_control/msg" TYPE FILE FILES "/home/pg/catkin_ws/src/epos2_control/msg/velocity.msg")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")

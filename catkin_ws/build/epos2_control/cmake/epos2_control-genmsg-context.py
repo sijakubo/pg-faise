@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.context.in
 
-messages_str = "/home/pg/catkin_ws/src/epos2_control/msg/velocity.msg;/home/pg/catkin_ws/src/epos2_control/msg/HubFlow.msg"
+messages_str = "/home/pg/catkin_ws/src/epos2_control/msg/velocity.msg"
 services_str = ""
 pkg_name = "epos2_control"
 dependencies_str = ""

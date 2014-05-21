@@ -71,6 +71,8 @@ void TankSteering::driveCallback(const geometry_msgs::Twist velocityVector)
 		tankSettings.targetVelocityMPS[right] = x + dx;
 		tankSettings.targetVelocityMPS[hub] = tankSettings.maxMPS * y_hub;
 		tankSettings.targetVelocityMPS[flow] = tankSettings.maxMPS * z_flow;
+		//tankSettings.targetVelocityMPS[flow] = tankSettings.targetVelocityMPS[hub];
+		//ROS_ERROR("TankSteering:maxMPS: %.4lf",tankSettings.targetVelocityMPS[left]);
 	} else {
 		ROS_ERROR("No movement possible because the maximum safety Velocity is to low.");
 		tankSettings.targetVelocityMPS[left]  = 0;
@@ -84,12 +86,12 @@ void TankSteering::setVelocityCallback(const ros::TimerEvent& event)
 {
 	double targetVelocityRPM[4];
 
-	for (int i=left; i <=flow; i++) {targetVelocityRPM[i] = tankSettings.factorMPSToRPM * tankSettings.targetVelocityMPS[i];}
+	for (int i=left; i <=hub; i++) {targetVelocityRPM[i] = tankSettings.factorMPSToRPM * tankSettings.targetVelocityMPS[i];}
 
 	ROS_DEBUG("Try to set Velocity left to %.3f rpm and right to %.3f rpm", targetVelocityRPM[left], targetVelocityRPM[right]);
 	ROS_INFO("Try to set Velocity left to %.4f m/s and right to %.4f m/s", tankSettings.targetVelocityMPS[left], tankSettings.targetVelocityMPS[right]);
 
-	for (int i=left; i <=flow; i++) {tankSettings.epos[i]->changeRotationPerMinute(targetVelocityRPM[i]);}
+	for (int i=left; i <=hub; i++) {tankSettings.epos[i]->changeRotationPerMinute(targetVelocityRPM[i]);}
 }
 
 void TankSteering::odomCallback(const ros::TimerEvent& event)
@@ -186,7 +188,7 @@ void TankSteering::LaserScanCallback(const sensor_msgs::LaserScan sensorData)
 		if (minValue > LaserDistance.low) {
 			tankSettings.maxSafetyMPS = LaserDistance.a * pow(minValue,2) + LaserDistance.b * minValue + LaserDistance.c;
 		} else {
-			tankSettings.maxSafetyMPS = 0;
+			tankSettings.maxSafetyMPS = 0.5;
 		}
 	}else{
 		tankSettings.maxSafetyMPS = tankSettings.maxMPS;

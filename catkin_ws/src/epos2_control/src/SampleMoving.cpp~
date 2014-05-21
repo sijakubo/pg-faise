@@ -3,6 +3,7 @@
  *
  *  Created on: Apr 11, 2012
  *      Author: Martin Seidel
+ *      modified by Jannik Flessner
  */
 
 #include "SampleMoving.h"
@@ -92,9 +93,10 @@ void SampleMoving::publishSpeed(const ros::TimerEvent& event)
 			sampleMovingSet.epos2MPS.publish(speed);
 			break;
 		case cmdVel:	//publish current velocity in a cmd_vel message
+			speedVectro.linear.x = 0.5;
 			speedVector.linear.x = ( speedMPS[right] + speedMPS[left] ) * 0.5;
-			speedVector.linear.y=0;
-			speedVector.linear.z=0;
+			speedVector.linear.y= sampleMovingSet.targetVelocity[hub];
+			speedVector.linear.z= sampleMovingSet.targetVelocity[flow];
 			speedVector.angular.x=0;
 			speedVector.angular.y=0;
 			speedVector.angular.z=(speedMPS[right] - speedMPS[left]) / sampleMovingSet.axisLength;
@@ -190,26 +192,26 @@ void SampleMoving::gamepadCallback (const sensor_msgs::Joy joymsg)
 				axesRemap.lefty = joymsg.axes[1];
 				axesRemap.rightx = joymsg.axes[2];
 				axesRemap.righty = joymsg.axes[3];
-				axesRemap.switchButton = joymsg.buttons[5];
+				axesRemap.switchButton = joymsg.buttons[3];
 				sampleMovingSet.ableToMove = true;
 				break;
 		case 6:	sampleMovingSet.joyControll = gamePad;
-				gamePadType = "Logitech F710 DirectInput";
+				gamePadType = "Xbox DirectInput";
 				axesRemap.leftx = joymsg.axes[0];
 				axesRemap.lefty = joymsg.axes[1];
 				axesRemap.rightx = joymsg.axes[2];
 				axesRemap.righty = joymsg.axes[3];
-				axesRemap.switchButton = joymsg.buttons[5];
+				axesRemap.switchButton = joymsg.buttons[3];
 				axesRemap.quickStopButton = joymsg.buttons[2];
 				sampleMovingSet.ableToMove = true;
 				break;
 		case 8:	sampleMovingSet.joyControll = gamePad;
-				gamePadType = "Logitech F710 XInput";
+				gamePadType = "Xbox XInput";
 				axesRemap.leftx = joymsg.axes[0];
 				axesRemap.lefty = joymsg.axes[1];
 				axesRemap.rightx = joymsg.axes[3];
 				axesRemap.righty = joymsg.axes[4];
-				axesRemap.switchButton = joymsg.buttons[5];
+				axesRemap.switchButton = joymsg.buttons[3];
 				axesRemap.quickStopButton = joymsg.buttons[1];
 				sampleMovingSet.ableToMove = true;
 				break;
@@ -347,22 +349,55 @@ void SampleMoving::keyboardCallback(const ros::TimerEvent& event)
 			switch(latestChar[0]) {
 			case KEYCODE_W:	targetSpeed[left] = 1;
 							targetSpeed[right]= 1;
+							sampleMovingSet.targetVelocity[hub] = 0;
+							sampleMovingSet.targetVelocity[flow] = 0;
 							break;
 			case KEYCODE_S:	targetSpeed[left] = -1;
 							targetSpeed[right]= -1;
+							sampleMovingSet.targetVelocity[hub] = 0;
+							sampleMovingSet.targetVelocity[flow] = 0;
 							break;
 			case KEYCODE_A:	targetSpeed[left] = -1;
 							targetSpeed[right]= 1;
+							sampleMovingSet.targetVelocity[hub] = 0;
+							sampleMovingSet.targetVelocity[flow] = 0;
 							break;
 			case KEYCODE_D:	targetSpeed[left] = 1;
 							targetSpeed[right]= -1;
+							sampleMovingSet.targetVelocity[hub] = 0;
+							sampleMovingSet.targetVelocity[flow] = 0;
 							break;
 			case KEYCODE_Q:	targetSpeed[left] = 0.5;
 							targetSpeed[right]= 1;
+							sampleMovingSet.targetVelocity[hub] = 0;
+							sampleMovingSet.targetVelocity[flow] = 0;
 							break;
 			case KEYCODE_E:	targetSpeed[left] = 1;
 							targetSpeed[right]= 0.5;
+							sampleMovingSet.targetVelocity[hub] = 0;
+							sampleMovingSet.targetVelocity[flow] = 0;
 							break;
+			case KEYCODE_H:	targetSpeed[left] = 0;
+							targetSpeed[right]= 0;
+							sampleMovingSet.targetVelocity[hub] = 0.5;
+							sampleMovingSet.targetVelocity[flow] = 0;
+							break;
+			case KEYCODE_B:	targetSpeed[left] = 0;
+							targetSpeed[right]= 0;
+							sampleMovingSet.targetVelocity[hub] = -0.5;
+							sampleMovingSet.targetVelocity[flow] = 0;
+							break;
+			case KEYCODE_F:	targetSpeed[left] = 0;
+							targetSpeed[right]= 0;
+							sampleMovingSet.targetVelocity[hub] = 0;
+							sampleMovingSet.targetVelocity[flow] = 0.02;
+							break;
+			case KEYCODE_C:	targetSpeed[left] = 0;
+							targetSpeed[right]= 0;
+							sampleMovingSet.targetVelocity[hub] = 0;
+							sampleMovingSet.targetVelocity[flow] = -0.02;
+							break;
+
 			}
 		}
 	}

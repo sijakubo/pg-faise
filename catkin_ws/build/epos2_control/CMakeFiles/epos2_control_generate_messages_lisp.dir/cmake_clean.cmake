@@ -1,6 +1,5 @@
 FILE(REMOVE_RECURSE
   "CMakeFiles/epos2_control_generate_messages_lisp"
-  "/home/pg/catkin_ws/devel/share/common-lisp/ros/epos2_control/msg/HubFlow.lisp"
   "/home/pg/catkin_ws/devel/share/common-lisp/ros/epos2_control/msg/velocity.lisp"
 )
 

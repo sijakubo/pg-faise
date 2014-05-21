@@ -93,7 +93,8 @@ void SampleMoving::publishSpeed(const ros::TimerEvent& event)
 			sampleMovingSet.epos2MPS.publish(speed);
 			break;
 		case cmdVel:	//publish current velocity in a cmd_vel message
-			speedVector.linear.x = ( speedMPS[right] + speedMPS[left] ) * 0.5;
+			speedVector.linear.x = 0.5;
+			//speedVector.linear.x = ( speedMPS[right] + speedMPS[left] ) * 0.5;
 			speedVector.linear.y= sampleMovingSet.targetVelocity[hub];
 			speedVector.linear.z= sampleMovingSet.targetVelocity[flow];
 			speedVector.angular.x=0;
@@ -389,12 +390,12 @@ void SampleMoving::keyboardCallback(const ros::TimerEvent& event)
 			case KEYCODE_F:	targetSpeed[left] = 0;
 							targetSpeed[right]= 0;
 							sampleMovingSet.targetVelocity[hub] = 0;
-							sampleMovingSet.targetVelocity[flow] = 0.5;
+							sampleMovingSet.targetVelocity[flow] = 0.02;
 							break;
 			case KEYCODE_C:	targetSpeed[left] = 0;
 							targetSpeed[right]= 0;
 							sampleMovingSet.targetVelocity[hub] = 0;
-							sampleMovingSet.targetVelocity[flow] = -0.5;
+							sampleMovingSet.targetVelocity[flow] = -0.02;
 							break;
 
 			}
