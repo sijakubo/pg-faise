@@ -49,6 +49,16 @@ public class Szenario implements Serializable {
 		lstConveyor.remove(conveyor);
 	}
 	
+	public Conveyor getConveyorById(int id){
+		for(int i=0;i<lstConveyor.size();i++){
+			Conveyor c=lstConveyor.get(i);
+			if(c.getID()==id){
+				return c;
+			}
+		}
+			return null;//no match found
+	}
+	
 	public String getTitle() {
 		return title;
 	}

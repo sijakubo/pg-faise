@@ -14,10 +14,15 @@ import org.apache.log4j.Priority;
 
 
 
+
+
+
+
 import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.data.PackageData;
 import uni.oldenburg.server.agent.helper.AgentHelper;
+import uni.oldenburg.server.agent.helper.EventHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
@@ -27,6 +32,9 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import uni.oldenburg.shared.model.Szenario;
+import uni.oldenburg.shared.model.event.BotAddPackageEvent;
+import uni.oldenburg.shared.model.event.PackageAddedEvent;
+import uni.oldenburg.shared.model.event.PackageRemovedEvent;
 
 /**
  * @author Matthias
@@ -153,6 +161,11 @@ public class PackageAgent extends Agent {
 		AgentHelper.unregister(this);
 	}
 
+	public Szenario getSzenario(){
+		return this.szenario;
+	}
+	
+	
 	/**
 	 * Got message:
 	 * 		RampPlattformAgent::IsPackageSpaceAvailableBehaviour
@@ -172,21 +185,21 @@ public class PackageAgent extends Agent {
 		public void onMessage(ACLMessage msg) throws UnreadableException {
 			PackageAgent currentAgent = (PackageAgent) myAgent;
 			PackageData myPackage = (PackageData) msg.getContentObject();
-            
-			
-			/*
+            //If it is an Exit, you should check if a real physical Package was added 
 			if(rampType==ConveyorRamp.RAMP_EXIT){
-				
-            	for(int i=0;i<currentAgent.lstPackage.size();i++){
-            		PackageData dummy=currentAgent.lstPackage.get(i);
-            		if(dummy.getPackageID()==myPackage.getPackageID()){
-            			currentAgent.lstPackage.remove(i);
-            			break;
-            		}
-            	}
-            }else {
-            
-            */
+				if(msg.getUserDefinedParameter("realPackageAdded")!=null){
+					Conveyor ramp=getSzenario().getConveyorById(conveyorID);
+					ramp.setPackageCount(ramp.getPackageCount()+1);
+					PackageAddedEvent event=new PackageAddedEvent(conveyorID);
+					EventHelper.addEvent(event);
+				}
+			}else {
+				Conveyor ramp=getSzenario().getConveyorById(conveyorID);
+				ramp.setPackageCount(ramp.getPackageCount()+1);
+				PackageAddedEvent event=new PackageAddedEvent(conveyorID);
+				EventHelper.addEvent(event);
+			}
+			
 			   currentAgent.lstPackage.add(myPackage);
    
 			    if (Debugging.showPackageMessages)
@@ -246,6 +259,11 @@ public class PackageAgent extends Agent {
 			if (Debugging.showPackageMessages)
 				logger.log(Level.INFO, myAgent.getLocalName() + ": package "
 						+ myPackage.getPackageID() + " removed");
+			
+			
+			//Fire an Event to the Client
+			
+			
 		}
 	}
 
@@ -678,6 +696,12 @@ public class PackageAgent extends Agent {
 				}
 			}
 			
+			//Fire an Event to the Client
+			Conveyor ramp=getSzenario().getConveyorById(conveyorID);
+			ramp.setPackageCount(ramp.getPackageCount()-1);
+			PackageRemovedEvent event=new PackageRemovedEvent(conveyorID);
+			EventHelper.addEvent(event);
+			
 			//Answer the Plattformagent
 			ACLMessage msgPackageRemoved = new ACLMessage(MessageType.PACKAGE_REMOVED);
 			msgPackageRemoved.setContentObject(packagee);
@@ -717,6 +741,10 @@ public class PackageAgent extends Agent {
 				logger.log(Level.INFO, myAgent.getLocalName()+ " <- BOT_ADD_PACKAGE");
 
 			//Add the Package
+			Conveyor ramp=getSzenario().getConveyorById(conveyorID);
+			ramp.setPackageCount(ramp.getPackageCount()+1);
+			BotAddPackageEvent event=new BotAddPackageEvent(conveyorID);
+			EventHelper.addEvent(event);
 			
 			currentAgent.lstPackage.add(packagee);
 							

@@ -27,8 +27,13 @@ import uni.oldenburg.shared.model.Job;
 import uni.oldenburg.shared.model.JobList;
 import uni.oldenburg.shared.model.Szenario;
 import uni.oldenburg.shared.model.SzenarioInfo;
+import uni.oldenburg.shared.model.event.BotAddPackageEvent;
+import uni.oldenburg.shared.model.event.BotChangedPositionEvent;
+import uni.oldenburg.shared.model.event.BotRemovePackageEvent;
 import uni.oldenburg.shared.model.event.JobAssignedEvent;
 import uni.oldenburg.shared.model.event.JobUnassignableEvent;
+import uni.oldenburg.shared.model.event.PackageAddedEvent;
+import uni.oldenburg.shared.model.event.PackageRemovedEvent;
 import uni.oldenburg.shared.model.event.SimStartedEvent;
 import uni.oldenburg.shared.model.event.SimStoppedEvent;
 
@@ -991,6 +996,62 @@ public class MainFramePresenter extends Presenter {
 					setupJobTable();
 					return;
 				}
+				
+				if (anEvent instanceof BotChangedPositionEvent) {					
+					BotChangedPositionEvent myEvent = (BotChangedPositionEvent)anEvent;
+					
+					Conveyor ramp=currentSzenario.getConveyorById(myEvent.getId());
+					ramp.setPosition(myEvent.getX(), myEvent.getY());
+					
+					loadSzenario(currentSzenario);
+					
+					return;
+				}
+				
+				if (anEvent instanceof PackageAddedEvent) {					
+					PackageAddedEvent myEvent = (PackageAddedEvent)anEvent;
+					
+					Conveyor ramp=currentSzenario.getConveyorById(myEvent.getId());
+					ramp.setPackageCount(ramp.getPackageCount()+1);
+					
+					loadSzenario(currentSzenario);
+					
+					return;
+				}
+				
+				if (anEvent instanceof PackageRemovedEvent) {					
+					PackageRemovedEvent myEvent = (PackageRemovedEvent)anEvent;
+					
+					Conveyor ramp=currentSzenario.getConveyorById(myEvent.getId());
+					ramp.setPackageCount(ramp.getPackageCount()-1);
+					
+					loadSzenario(currentSzenario);
+					
+					return;
+				}
+				
+				if (anEvent instanceof BotAddPackageEvent) {					
+					BotAddPackageEvent myEvent = (BotAddPackageEvent)anEvent;
+					
+					Conveyor ramp=currentSzenario.getConveyorById(myEvent.getId());
+					ramp.setPackageCount(ramp.getPackageCount()+1);
+					
+					loadSzenario(currentSzenario);
+					
+					return;
+				}
+				
+				if (anEvent instanceof BotRemovePackageEvent) {					
+					BotRemovePackageEvent myEvent = (BotRemovePackageEvent)anEvent;
+					
+					Conveyor ramp=currentSzenario.getConveyorById(myEvent.getId());
+					ramp.setPackageCount(ramp.getPackageCount()-1);
+					
+					loadSzenario(currentSzenario);
+					
+					return;
+				}
+				
 			}
 		});
 	}

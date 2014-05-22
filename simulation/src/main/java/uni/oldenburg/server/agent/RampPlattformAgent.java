@@ -336,6 +336,8 @@ public class RampPlattformAgent extends Agent {
 		    
 			ACLMessage takePackage = new ACLMessage(MessageType.ADD_PACKAGE);
 			takePackage.setContentObject(msgGetAnswerFromBot.getContentObject());
+			//This line is used, so that the 
+			takePackage.addUserDefinedParameter("realPackageAdded", "real");
 			AgentHelper.addReceiver(takePackage, currentAgent,PackageAgent.NAME,currentAgent.conveyorID, currentAgent.szenario.getId());
 		    
 			if (Debugging.showInfoMessages)
