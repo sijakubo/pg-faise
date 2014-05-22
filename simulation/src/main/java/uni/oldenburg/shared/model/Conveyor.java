@@ -199,6 +199,8 @@ public abstract class Conveyor implements Serializable {
 			packageCount = getPackageCountMax();
 		
 		this.packageCount = packageCount;
+		
+		this.canvas = null;
 	}
 	
 	public int getPackageCountMax() {
