@@ -82,10 +82,9 @@ public class RampOrderAgent extends Agent {
       if (rampType == ConveyorRamp.RAMP_STOREAGE) {
          addBehaviour(new CheckIfPackageIsStoredBehaviour(MessageTemplate.MatchPerformative(MessageType.ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS)));
 
-         addBehaviour(new AskOtherOrderagentsIfPackageExistsBehaviour(
-               MessageTemplate.MatchPerformative(MessageType.SEARCH_FOR_PACKAGE)));
-         addBehaviour(new SetPackageReservedBehaviour(
-               MessageTemplate.MatchPerformative(MessageType.GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT)));
+         
+         //addBehaviour(new SetPackageReservedBehaviour(
+              // MessageTemplate.MatchPerformative(MessageType.GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT)));
          addBehaviour(new CheckIfPackageIsStoredBehaviour(
                MessageTemplate.MatchPerformative(MessageType.ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS)));
 

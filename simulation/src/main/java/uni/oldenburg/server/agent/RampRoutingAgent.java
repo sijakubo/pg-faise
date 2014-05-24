@@ -12,6 +12,7 @@ import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
+import uni.oldenburg.shared.model.ConveyorRamp;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -32,6 +33,7 @@ public class RampRoutingAgent extends Agent {
 	private long endOfAuction = -1;
 	private int currentDestinationID = -1;
 	private boolean auctionStarted = false;
+	private int rampType = -1; //-1 represents a Vehicle
 	private Logger logger = Logger.getLogger(RampRoutingAgent.class);
 
 	/**
@@ -45,14 +47,21 @@ public class RampRoutingAgent extends Agent {
 
 			Conveyor myConveyor = (Conveyor) args[1];
 			conveyorID = myConveyor.getID();
+			if (myConveyor instanceof ConveyorRamp) {
+	            rampType = ((ConveyorRamp) myConveyor).getRampType();
+	         }
 		}
 
-		addBehaviour(new StartAuctionBehaviour(
-				MessageTemplate
-						.MatchPerformative(MessageType.INITIALIZE_START_AUCTION_BEHAVIOUR)));
-		addBehaviour(new ReceiveEstimationBehaviour(
-				MessageTemplate.MatchPerformative(MessageType.SEND_ESTIMATION)));
-		addBehaviour(new AssignVehicleForPackageBehaviour());
+		if(rampType==ConveyorRamp.RAMP_ENTRANCE|| rampType == ConveyorRamp.RAMP_STOREAGE){
+			addBehaviour(new StartAuctionBehaviour(
+					MessageTemplate
+							.MatchPerformative(MessageType.INITIALIZE_START_AUCTION_BEHAVIOUR)));
+			addBehaviour(new ReceiveEstimationBehaviour(
+					MessageTemplate.MatchPerformative(MessageType.SEND_ESTIMATION)));
+			addBehaviour(new AssignVehicleForPackageBehaviour());
+			
+		}
+		
 
 		String nickname = AgentHelper.getUniqueNickname(RampRoutingAgent.NAME, conveyorID, szenario.getId());
 		AgentHelper.registerAgent(szenario.getId(), this, nickname);

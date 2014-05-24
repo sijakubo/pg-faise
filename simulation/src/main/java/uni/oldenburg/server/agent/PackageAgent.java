@@ -102,7 +102,7 @@ public class PackageAgent extends Agent {
 		if (rampType == ConveyorRamp.RAMP_EXIT) {
 
 			
-			addBehaviour(new PackageReservationBehaviour(MessageTemplate.MatchPerformative(MessageType.SET_PACKAGE_RESERVED)));
+			addBehaviour(new JobReservationBehaviour(MessageTemplate.MatchPerformative(MessageType.SET_PACKAGE_RESERVED)));
 			addBehaviour(new PackageNeedInformationBehaviour(MessageType.CHECK_IF_PACKAGE_IS_NEEDED));
 
 			//addBehaviour(new SearchForPackageBehaviour(this, 3000));
@@ -517,9 +517,9 @@ public class PackageAgent extends Agent {
 	 * 
 	 * @author Raschid
 	 */
-	private class PackageReservationBehaviour extends CyclicReceiverBehaviour {
+	private class JobReservationBehaviour extends CyclicReceiverBehaviour {
 
-		protected PackageReservationBehaviour(MessageTemplate mt) {
+		protected JobReservationBehaviour(MessageTemplate mt) {
 			super(mt);
 		}
 
