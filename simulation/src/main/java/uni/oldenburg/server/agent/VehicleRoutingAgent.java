@@ -109,9 +109,9 @@ public class VehicleRoutingAgent extends Agent {
 	}
 
 	private int calculateEstimation(int sourceID, int destinationID) {
-		//pseudorandom values
+		//random dummy values
 		//TODO: pathfinding etc.
-		return conveyorID + sourceID - destinationID;
+		return (int)(Math.random() * 100);
 	}
 
 	public boolean isReserved() {
