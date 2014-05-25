@@ -2,6 +2,7 @@ package uni.oldenburg.server.agent;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,10 +19,14 @@ import org.apache.log4j.Priority;
 
 
 
+
+
+
 import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.data.PackageData;
 import uni.oldenburg.server.agent.helper.AgentHelper;
+import uni.oldenburg.server.agent.helper.DelayTimes;
 import uni.oldenburg.server.agent.helper.EventHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
@@ -188,12 +193,20 @@ public class PackageAgent extends Agent {
             //If it is an Exit, you should check if a real physical Package was added 
 			if(rampType==ConveyorRamp.RAMP_EXIT){
 				if(msg.getUserDefinedParameter("realPackageAdded")!=null){
+					
+					//Delay
+					long start = new Date().getTime();
+					while(new Date().getTime() - start < DelayTimes.ADD_PACKAGE_TIME){}
+					
 					Conveyor ramp=getSzenario().getConveyorById(conveyorID);
 					ramp.setPackageCount(ramp.getPackageCount()+1);
 					PackageAddedEvent event=new PackageAddedEvent(conveyorID);
 					EventHelper.addEvent(event);
 				}
 			}else {
+				//Delay
+				long start = new Date().getTime();
+				while(new Date().getTime() - start < DelayTimes.ADD_PACKAGE_TIME){}
 				Conveyor ramp=getSzenario().getConveyorById(conveyorID);
 				ramp.setPackageCount(ramp.getPackageCount()+1);
 				PackageAddedEvent event=new PackageAddedEvent(conveyorID);
@@ -695,7 +708,9 @@ public class PackageAgent extends Agent {
 					break;
 				}
 			}
-			
+			//Delay
+			long start = new Date().getTime();
+			while(new Date().getTime() - start < DelayTimes.REMOVE_PACKAGE_TIME){}
 			//Fire an Event to the Client
 			Conveyor ramp=getSzenario().getConveyorById(conveyorID);
 			ramp.setPackageCount(ramp.getPackageCount()-1);

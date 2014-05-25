@@ -1,6 +1,7 @@
 package uni.oldenburg.server.agent;
 
 import java.io.IOException;
+import java.util.Date;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -9,6 +10,7 @@ import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.data.PackageData;
 import uni.oldenburg.server.agent.helper.AgentHelper;
+import uni.oldenburg.server.agent.helper.DelayTimes;
 import uni.oldenburg.server.agent.helper.EventHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
@@ -149,7 +151,9 @@ public class VehiclePlattformAgent extends Agent {
 				logger.log(Level.INFO, myAgent.getLocalName()+ " -> BOT_ADD_PACKAGE");
 			
 			send(addPackage);
-			
+			//Delay
+			long start = new Date().getTime();
+			while(new Date().getTime() - start < DelayTimes.BOT_GO_TO_TIME){}
 			//Go to destination (Selfmessage)
 			ACLMessage goDestination = new ACLMessage(MessageType.BOT_GO_TO_DESTINATION);
 			goDestination.addUserDefinedParameter("destinationID", msg.getUserDefinedParameter("destinationID"));
@@ -247,11 +251,13 @@ public class VehiclePlattformAgent extends Agent {
 			//Receive the Package from Packageagent
 			MessageTemplate mtP = MessageTemplate.MatchPerformative(MessageType.BOT_REMOVED_PACKAGE);
 			ACLMessage msgGetAnswerFromP = myAgent.blockingReceive(mtP);
-			
+			//Delay
+			long start = new Date().getTime();
+			while(new Date().getTime() - start < DelayTimes.BOT_REMOVE_PACKAGE_TIME){}
 			//Fire Event to the Client
-			//Add the Package
-			Conveyor rampTwo=getSzenario().getConveyorById(conveyorID);
-			rampTwo.setPackageCount(rampTwo.getPackageCount()-1);
+			//Remove the Package
+			Conveyor botTwo=getSzenario().getConveyorById(conveyorID);
+			botTwo.setPackageCount(botTwo.getPackageCount()-1);
 			BotRemovePackageEvent eventTwo=new BotRemovePackageEvent(conveyorID);
 			EventHelper.addEvent(eventTwo);
 			
