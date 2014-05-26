@@ -66,6 +66,5 @@ public class MessageType {
    public static final int START_STORAGE_RAMP_SEARCH_FOR_PACKAGE = 49 ;
    public static final int END_STORAGE_RAMP_SEARCH_FOR_PACKAGE = 50;
 
-   public static final int REQUEST_OFFER_FROM_EXIT_RAMP_FOR_PACKAGE = 51;
-   public static final int REQUEST_OFFER_FROM_STORAGE_RAMP_FOR_PACKAGE = 52;
+   public static final int RAMP_FREE_FOR_PACKAGE_ENQUIRE = 51;
 }

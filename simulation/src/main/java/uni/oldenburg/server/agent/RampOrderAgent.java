@@ -33,6 +33,9 @@ public class RampOrderAgent extends Agent {
    private int rampType = -1; //-1 represents a Vehicle
    private Logger logger = Logger.getLogger(RampOrderAgent.class);
 
+   //Exit and Storage Ramps need to be blocked when they are waiting for package
+   private boolean conveyorBlockedByPackageReservation;
+
    /**
     * @author Matthias, siajkubo
     */
@@ -82,7 +85,6 @@ public class RampOrderAgent extends Agent {
       if (rampType == ConveyorRamp.RAMP_STOREAGE) {
          addBehaviour(new CheckIfPackageIsStoredBehaviour(MessageTemplate.MatchPerformative(MessageType.ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS)));
 
-         
          //addBehaviour(new SetPackageReservedBehaviour(
               // MessageTemplate.MatchPerformative(MessageType.GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT)));
          addBehaviour(new CheckIfPackageIsStoredBehaviour(
@@ -91,6 +93,10 @@ public class RampOrderAgent extends Agent {
          addBehaviour(new HandleStorageRampPackageSlotEnquireBehaviour(MessageType.ENQUIRE_STORAGE_RAMP));
          addBehaviour(new HandlePackageSlotReservationBehaviour(MessageType.RESERVE_PACKAGE_SLOT_ON_RAMP, true));
          addBehaviour(new HandleSpaceAvailableBehaviour(MessageType.PACKAGE_SPACE_AVAILABLE));
+      }
+
+      if (rampType == ConveyorRamp.RAMP_EXIT || rampType == ConveyorRamp.RAMP_STOREAGE) {
+         addBehaviour(new SetRampFreeForPackageEnquireBehaviour(MessageType.RAMP_FREE_FOR_PACKAGE_ENQUIRE));
       }
 
       String nickname = AgentHelper.getUniqueNickname(RampOrderAgent.NAME, conveyorID, szenario.getId());
@@ -442,14 +448,19 @@ public class RampOrderAgent extends Agent {
 
       @Override
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-         PackageData packageData = (PackageData) msg.getContentObject();
-         logger.info(myAgent.getLocalName()+ "-> CHECK_IF_PACKAGE_IS_NEEDED");
-         ACLMessage msgCheckIfPackageIsNeeded = new ACLMessage(MessageType.CHECK_IF_PACKAGE_IS_NEEDED);
-         msgCheckIfPackageIsNeeded.addUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY,
-               msg.getUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY));
-         msgCheckIfPackageIsNeeded.setContentObject(packageData);
-         AgentHelper.addReceiver(msgCheckIfPackageIsNeeded, myAgent, PackageAgent.NAME, conveyorID, szenario.getId());
-         send(msgCheckIfPackageIsNeeded);
+         if (!conveyorBlockedByPackageReservation) {
+            PackageData packageData = (PackageData) msg.getContentObject();
+            logger.info(myAgent.getLocalName() + "-> CHECK_IF_PACKAGE_IS_NEEDED");
+
+            ACLMessage msgCheckIfPackageIsNeeded = new ACLMessage(MessageType.CHECK_IF_PACKAGE_IS_NEEDED);
+            msgCheckIfPackageIsNeeded.addUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY,
+                  msg.getUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY));
+            msgCheckIfPackageIsNeeded.setContentObject(packageData);
+            AgentHelper.addReceiver(msgCheckIfPackageIsNeeded, myAgent, PackageAgent.NAME, conveyorID, szenario.getId());
+            send(msgCheckIfPackageIsNeeded);
+         } else {
+            logger.info("Exit - RampOrderAgent - No Enquire send, cause OrderAgent is blocked by Package Reservation");
+         }
       }
    }
 
@@ -479,10 +490,11 @@ public class RampOrderAgent extends Agent {
 
       @Override
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+         conveyorBlockedByPackageReservation = true;
+
          PackageData packageData = (PackageData) msg.getContentObject();
 
          //Notifiy PackageAgent, to reserve the Slot for the Package
-
          ACLMessage msgAcceptReservationOffer;
          if (isStorageRamp) {
             msgAcceptReservationOffer = new ACLMessage(MessageType.SET_PACKAGE_RESERVED_FOR_STORAGE_RAMP);
@@ -641,6 +653,30 @@ public class RampOrderAgent extends Agent {
          } else {
             //TODO decline offer, no space available
          }
+      }
+   }
+
+   /**
+    * Behaviour on:
+    * Exit - RampeOrderAgent
+    * StorageRamp - RampOrderAgent
+    * <p/>
+    * Gets message:
+    * PlattformAgent - RampOrderAgent: RAMP_FREE_FOR_PACKAGE_ENQUIRE
+    * <p/>
+    * Behaviour which unlocks the Ramp for new Enquire Msgs.
+    *
+    * @author sijakubo
+    */
+   private class SetRampFreeForPackageEnquireBehaviour extends CyclicReceiverBehaviour {
+      public SetRampFreeForPackageEnquireBehaviour(int messageType) {
+         super(MessageTemplate.MatchPerformative(messageType));
+      }
+
+      @Override
+      public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+         logger.log(Level.INFO, "Storage or Exit RampOrderAgent <- RAMP_FREE_FOR_PACKAGE_ENQUIRE");
+         conveyorBlockedByPackageReservation = false;
       }
    }
 }

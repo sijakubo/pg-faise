@@ -301,48 +301,49 @@ public class RampPlattformAgent extends Agent {
 	 * Behaviour should receive a Request from a Volksbot and Take the Package from him
 	 * @author Raschid
 	 */
-	private class ReceivePackageBehaviour extends CyclicReceiverBehaviour {
-		protected ReceivePackageBehaviour(MessageTemplate mt) {
-			super(mt);
-			// TODO Auto-generated constructor stub
-		}
+   private class ReceivePackageBehaviour extends CyclicReceiverBehaviour {
+      protected ReceivePackageBehaviour(MessageTemplate mt) {
+         super(mt);
+      }
 
 		@Override
-		public void onMessage(ACLMessage msg) throws UnreadableException,
-				IOException {
-					
-			// 
+		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
 			RampPlattformAgent currentAgent=(RampPlattformAgent)myAgent;
-			
+
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()+ " <- BOT_TARGET_ACHIEVED");
-			
-			
-			
+
 			ACLMessage msgAnswerBot = new ACLMessage(MessageType.CAN_TAKE_PACKAGE);
 			msgAnswerBot.addReceiver(msg.getSender());
-			
+
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()+ " -> CAN_TAKE_PACKAGE");
-			
+
 		    send(msgAnswerBot);
-		    
+
 		    //Receive Message and Tell Packageagent to add the Package
 		    MessageTemplate mtB = MessageTemplate.MatchPerformative(MessageType.RAMP_TAKE_PACKAGE);
 			ACLMessage msgGetAnswerFromBot = myAgent.blockingReceive(mtB);
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()+ " <- RAMP_TAKE_PACKAGE");
-		    
-		    
+
+
 			ACLMessage takePackage = new ACLMessage(MessageType.ADD_PACKAGE);
 			takePackage.setContentObject(msgGetAnswerFromBot.getContentObject());
-			//This line is used, so that the 
+			//This line is used, so that the
 			takePackage.addUserDefinedParameter("realPackageAdded", "real");
 			AgentHelper.addReceiver(takePackage, currentAgent,PackageAgent.NAME,currentAgent.conveyorID, currentAgent.szenario.getId());
-		    
+
 			if (Debugging.showInfoMessages)
 				logger.log(Level.INFO, myAgent.getLocalName()+ " -> ADD_PACKAGE");
 			send(takePackage);
+
+         //Notify OrderAgent, that the Ramp is no longer blocked for package
+         ACLMessage rampFreeForPackage = new ACLMessage(MessageType.RAMP_FREE_FOR_PACKAGE_ENQUIRE);
+         AgentHelper.addReceiver(rampFreeForPackage, currentAgent, RampOrderAgent.NAME, currentAgent.conveyorID, currentAgent.szenario.getId());
+         send(rampFreeForPackage);
+
+         logger.log(Level.INFO, myAgent.getLocalName()+ " -> RAMP_FREE_FOR_PACKAGE_ENQUIRE");
 		}
 	}
 }
