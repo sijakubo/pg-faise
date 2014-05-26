@@ -34,7 +34,7 @@ public class RampOrderAgent extends Agent {
    private Logger logger = Logger.getLogger(RampOrderAgent.class);
 
    //Exit and Storage Ramps need to be blocked when they are waiting for package
-   private boolean conveyorBlockedByPackageReservation;
+   private boolean ingoingRampBlockedByPackageReservation;
 
    /**
     * @author Matthias, siajkubo
@@ -83,12 +83,9 @@ public class RampOrderAgent extends Agent {
       }
 
       if (rampType == ConveyorRamp.RAMP_STOREAGE) {
-         addBehaviour(new CheckIfPackageIsStoredBehaviour(MessageTemplate.MatchPerformative(MessageType.ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS)));
-
          //addBehaviour(new SetPackageReservedBehaviour(
               // MessageTemplate.MatchPerformative(MessageType.GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT)));
-         addBehaviour(new CheckIfPackageIsStoredBehaviour(
-               MessageTemplate.MatchPerformative(MessageType.ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS)));
+         addBehaviour(new CheckIfPackageIsStoredBehaviour(MessageTemplate.MatchPerformative(MessageType.ASK_OTHER_ORDERAGENTS_IF_PACKAGE_EXISTS)));
 
          addBehaviour(new HandleStorageRampPackageSlotEnquireBehaviour(MessageType.ENQUIRE_STORAGE_RAMP));
          addBehaviour(new HandlePackageSlotReservationBehaviour(MessageType.RESERVE_PACKAGE_SLOT_ON_RAMP, true));
@@ -168,18 +165,16 @@ public class RampOrderAgent extends Agent {
     *
     * @author Raschid
     */
-   private class CheckIfPackageIsStoredBehaviour extends
-         CyclicReceiverBehaviour {
+   private class CheckIfPackageIsStoredBehaviour extends CyclicReceiverBehaviour {
 
       protected CheckIfPackageIsStoredBehaviour(MessageTemplate mt) {
          super(mt);
       }
 
       @Override
-      public void onMessage(ACLMessage msg) throws UnreadableException,
-            IOException {
+      public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
          RampOrderAgent currentAgent = (RampOrderAgent) myAgent;
-         PackageData searchedPackage = null;
+         PackageData searchedPackage;
 
          if (Debugging.showInfoMessages)
             logger.log(Level.INFO, myAgent.getLocalName()
@@ -207,8 +202,9 @@ public class RampOrderAgent extends Agent {
          ACLMessage msgAnswer = currentAgent.blockingReceive(mt);
          // If it is answered with Yes, then he should inform the Exit and
          // his Routingagent to start an Auction
-         if (msgAnswer.getUserDefinedParameter("answer_if_contained") != null && msgAnswer.getUserDefinedParameter("answer_if_contained")
-               .equals("Yes")) {
+         if (msgAnswer.getUserDefinedParameter("answer_if_contained") != null
+               && msgAnswer.getUserDefinedParameter("answer_if_contained").equals("Yes")) {
+
             // Inform the Exit
             ACLMessage msgAnswerExit = new ACLMessage(MessageType.GET_ANSWER_IF_PACKAGE_IS_STORED_OR_NOT);
 
@@ -448,7 +444,7 @@ public class RampOrderAgent extends Agent {
 
       @Override
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-         if (!conveyorBlockedByPackageReservation) {
+         if (!ingoingRampBlockedByPackageReservation) {
             PackageData packageData = (PackageData) msg.getContentObject();
             logger.info(myAgent.getLocalName() + "-> CHECK_IF_PACKAGE_IS_NEEDED");
 
@@ -490,7 +486,7 @@ public class RampOrderAgent extends Agent {
 
       @Override
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-         conveyorBlockedByPackageReservation = true;
+         ingoingRampBlockedByPackageReservation = true;
 
          PackageData packageData = (PackageData) msg.getContentObject();
 
@@ -676,7 +672,7 @@ public class RampOrderAgent extends Agent {
       @Override
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
          logger.log(Level.INFO, "Storage or Exit RampOrderAgent <- RAMP_FREE_FOR_PACKAGE_ENQUIRE");
-         conveyorBlockedByPackageReservation = false;
+         ingoingRampBlockedByPackageReservation = false;
       }
    }
 }
