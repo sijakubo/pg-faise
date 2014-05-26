@@ -305,11 +305,13 @@ public class RampOrderAgent extends Agent {
    private class EnquireRampsForPackageSlotBehaviour extends CyclicReceiverBehaviour {
       private static final int ENQUIRE_TIMEOUT = 5000;
       private Behaviour timeOutBehaviour;
-      private List<AID> possibleDestinationRamps;
+      private List<AID> possibleDestinationRampAIDs;
       private int startEnquireMessageType;
       private int endEnquireMessageType;
       private final int enquireMessageType;
       private int receiveSlotOfferMessageType;
+
+      private boolean enquireActive;
 
       protected EnquireRampsForPackageSlotBehaviour(int startEnquireMessageType,
                                                     int endEnquireMessageType,
@@ -330,15 +332,17 @@ public class RampOrderAgent extends Agent {
       }
 
       @Override
-      public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-         PackageData packageData = (PackageData) msg.getContentObject();
+      public void onMessage(ACLMessage msgIn) throws UnreadableException, IOException {
+         PackageData packageData = (PackageData) msgIn.getContentObject();
 
-         if (msg.getPerformative() == startEnquireMessageType) {
+         if (!enquireActive && msgIn.getPerformative() == startEnquireMessageType) {
+            enquireActive = true;
+
             //Start Enquire of Ramps
             logger.info("Entrance - RampOrderAgent <- START_RAMP_SEARCH_FOR_PACKAGE, from " + conveyorID);
 
             addTimeOutBehaviourForPackageDataToMyAgent(packageData);
-            possibleDestinationRamps = new ArrayList<AID>();
+            possibleDestinationRampAIDs = new ArrayList<AID>();
 
             //send enquire to ramps
             ACLMessage msgEnquireRamps = new ACLMessage(enquireMessageType);
@@ -348,38 +352,43 @@ public class RampOrderAgent extends Agent {
             AgentHelper.addReceivers(msgEnquireRamps, myAgent, szenario.getId());
             send(msgEnquireRamps);
 
-         } else if (msg.getPerformative() == endEnquireMessageType) {
+         } else if (msgIn.getPerformative() == endEnquireMessageType) {
             //End Enquire of Ramps
             logger.info("Entrance - RampOrderAgent <- END_RAMP_SEARCH_FOR_PACKAGE");
 
-            if (!possibleDestinationRamps.isEmpty()) {
-               AID destinationRampAID = possibleDestinationRamps.get(0);
+            if (!possibleDestinationRampAIDs.isEmpty()) {
+               AID destinationRampAID = possibleDestinationRampAIDs.get(0);
                logger.debug("Destination Ramp found for Package: " + packageData.getPackageID()
                      + ". Destination is AID: " + destinationRampAID);
 
-               ACLMessage message = new ACLMessage(MessageType.RESERVE_PACKAGE_SLOT_ON_RAMP);
-               message.setContentObject(packageData);
-               message.addReceiver(destinationRampAID);
-               send(message);
+               ACLMessage msgOut = new ACLMessage(MessageType.RESERVE_PACKAGE_SLOT_ON_RAMP);
+               msgOut.setContentObject(packageData);
+               msgOut.addReceiver(destinationRampAID);
+               send(msgOut);
 
-               //Start bot auction
             } else {
                logger.debug("No DestinationRamp found for Package: " + packageData.getPackageID()
                      + ". Trying to find Storage Ramp.");
 
-               //no ExitRamp has a need for the given package.
-               //Initialize StorageRamp Search until a StorageRamp is found.
-               ACLMessage message = new ACLMessage(MessageType.START_STORAGE_RAMP_SEARCH_FOR_PACKAGE);
-               message.addUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY, String.valueOf(conveyorID));
-               message.setContentObject(packageData);
-               message.addReceiver(myAgent.getAID());
+               //Start StorageRampSearch only once
+               if (startEnquireMessageType != MessageType.START_STORAGE_RAMP_SEARCH_FOR_PACKAGE) {
+                  //no ExitRamp has a need for the given package.
+                  //Initialize StorageRamp Search until a StorageRamp is found.
+                  ACLMessage msgOut = new ACLMessage(MessageType.START_STORAGE_RAMP_SEARCH_FOR_PACKAGE);
+                  msgOut.addUserDefinedParameter(ENQUIRING_RAMP_PARAMETER_KEY, String.valueOf(conveyorID));
+                  msgOut.setContentObject(packageData);
+                  msgOut.addReceiver(myAgent.getAID());
 
-               logger.info("Entrance - RampOrderAgent -> START_STORAGE_RAMP_SEARCH_FOR_PACKAGE");
-               send(message);
+                  logger.info("Entrance - RampOrderAgent -> START_STORAGE_RAMP_SEARCH_FOR_PACKAGE");
+                  send(msgOut);
+               }
             }
-         } else if (msg.getPerformative() == receiveSlotOfferMessageType) {
+
+            enquireActive = false;
+
+         } else if (msgIn.getPerformative() == receiveSlotOfferMessageType) {
             logger.info("Entrance - RampOrderAgent <- SLOT_OFFER from Exit or StorageRamp");
-            possibleDestinationRamps.add(msg.getSender());
+            possibleDestinationRampAIDs.add(msgIn.getSender());
          }
       }
 
