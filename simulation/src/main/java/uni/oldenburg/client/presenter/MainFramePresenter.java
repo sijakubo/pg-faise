@@ -470,16 +470,18 @@ public class MainFramePresenter extends Presenter {
 	private void drawConveyor(Conveyor myConveyor) {
 		Context2d context = display.getCanvas().getContext2d();
 		context.drawImage(myConveyor.getCanvasElement(), myConveyor.getX(), myConveyor.getY());
-		if(myConveyor instanceof ConveyorVehicle) {
-			double charge = ((ConveyorVehicle) myConveyor).getBatteryCharge();
-			int width = myConveyor.getCanvasElement().getWidth();
-			//battery charge
-			context.setFillStyle(CssColor.make(128, 128, 128));
-			context.fillRect(myConveyor.getX() - (width / 2), myConveyor.getY() - 8, 2 * width, 4);
-			int red = (int)(255 * (charge < 0.5 ? 1 : 2 * (1 - charge)));
-			int green = (int)(255 * (charge > 0.5 ? 1 : 2 * charge));
-			context.setFillStyle(CssColor.make(red, green, 0));
-			context.fillRect(myConveyor.getX() - (width / 2) + 1, myConveyor.getY() - 7, charge * 2 * (width - 1), 2);
+		if(Debugging.showCharge) { 
+			if(myConveyor instanceof ConveyorVehicle) {
+				double charge = ((ConveyorVehicle) myConveyor).getBatteryCharge();
+				int width = myConveyor.getCanvasElement().getWidth();
+				//battery charge
+				context.setFillStyle(CssColor.make(128, 128, 128));
+				context.fillRect(myConveyor.getX() - (width / 2), myConveyor.getY() - 8, 2 * width, 4);
+				int red = (int)(255 * (charge < 0.5 ? 1 : 2 * (1 - charge)));
+				int green = (int)(255 * (charge > 0.5 ? 1 : 2 * charge));
+				context.setFillStyle(CssColor.make(red, green, 0));
+				context.fillRect(myConveyor.getX() - (width / 2) + 1, myConveyor.getY() - 7, charge * 2 * (width - 1), 2);
+			}
 		}
 	}
 

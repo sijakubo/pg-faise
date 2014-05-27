@@ -18,4 +18,7 @@ public class Debugging {
 	
 	// Delays
 	public static final int     auctionTimeout              = 10000; //(milliseconds)
+	
+	//View
+	public static final boolean showCharge					= false;
 }
