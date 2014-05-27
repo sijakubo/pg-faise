@@ -24,7 +24,8 @@ public class VehicleRoutingAgent extends Agent {
 	private int conveyorID = 0;
 	private Szenario szenario;
 	private boolean reserved=false;
-
+	private int currentAuction = -1; //to prevent the bot from taking part in two auctions at the same time.
+	
 	private Logger logger = Logger.getLogger(VehicleRoutingAgent.class);
 
 	/**
@@ -78,7 +79,7 @@ public class VehicleRoutingAgent extends Agent {
 
       @Override
       public void onMessage(ACLMessage msgIn) throws UnreadableException, IOException {
-         if (!reserved) {
+         if (!reserved && currentAuction == -1) {
             logger.log(Level.INFO, "VehicleRoutingAgent -> calculating estimation");
 
             auctionID = Integer.valueOf(msgIn.getUserDefinedParameter("auctionID"));
@@ -88,6 +89,8 @@ public class VehicleRoutingAgent extends Agent {
             logger.log(Level.INFO, myAgent.getLocalName() + " received START_AUCTION message #"
                   + auctionID + " from " + sourceID + " to " + destinationID);
 
+            currentAuction = auctionID;
+            
             //send estimation
             int estimation = calculateEstimation(sourceID, destinationID);
             ACLMessage msgOut = new ACLMessage(MessageType.SEND_ESTIMATION);
@@ -137,11 +140,13 @@ public class VehicleRoutingAgent extends Agent {
 
          setReserved(true);
          VehicleRoutingAgent currentAgent = (VehicleRoutingAgent) myAgent;
+         int auctionID;
          int sourceID;
          int destinationID;
          int botID;
          int packageID;
 
+         auctionID = Integer.valueOf(msgIn.getUserDefinedParameter("auctionID"));
          sourceID = Integer.valueOf(msgIn.getUserDefinedParameter("sourceID"));
          destinationID = Integer.valueOf(msgIn.getUserDefinedParameter("destinationID"));
          botID = Integer.valueOf(msgIn.getUserDefinedParameter("botID"));
@@ -159,6 +164,11 @@ public class VehicleRoutingAgent extends Agent {
          msgStartGetting.addUserDefinedParameter("packageID", "" + packageID);
          AgentHelper.addReceiver(msgStartGetting, myAgent, VehiclePlattformAgent.NAME, currentAgent.conveyorID, currentAgent.szenario.getId());
          send(msgStartGetting);
+         
+         //allow taking part in auctions again
+         if(auctionID == currentAuction) {
+        	 currentAuction = -1;
+         }
       }
    }
 

@@ -204,7 +204,8 @@ public class RampRoutingAgent extends Agent {
 					String destinationID = "" + currentDestinationID;
 					String botID = "" + (int) bestEstimation.getWidth();
 					String packageID = "" + actualPackageId;
-
+					
+					msg.addUserDefinedParameter("auctionID", "" + currentAuction);
 					msg.addUserDefinedParameter("sourceID", sourceID);
 					msg.addUserDefinedParameter("destinationID", destinationID);
 					msg.addUserDefinedParameter("botID", botID);
