@@ -110,7 +110,7 @@ public class PackageAgent extends Agent {
 			addBehaviour(new JobReservationBehaviour(MessageTemplate.MatchPerformative(MessageType.SET_PACKAGE_RESERVED)));
 			addBehaviour(new PackageNeedInformationBehaviour(MessageType.CHECK_IF_PACKAGE_IS_NEEDED));
 
-			//addBehaviour(new SearchForPackageBehaviour(this, 3000));
+			addBehaviour(new SearchForPackageBehaviour(this, 3000));
 			
 
 		}
@@ -197,11 +197,22 @@ public class PackageAgent extends Agent {
 					//Delay
 					long start = new Date().getTime();
 					while(new Date().getTime() - start < DelayTimes.ADD_PACKAGE_TIME){}
-					
+					//Add Package 
 					Conveyor ramp=getSzenario().getConveyorById(conveyorID);
 					ramp.setPackageCount(ramp.getPackageCount()+1);
 					PackageAddedEvent event=new PackageAddedEvent(conveyorID);
 					EventHelper.addEvent(event);
+					//Remove it immediately	
+					//Delay
+					start = new Date().getTime();
+					while(new Date().getTime() - start < DelayTimes.ADD_PACKAGE_TIME){}
+					//Send Event and remove Package from the list
+					currentAgent.lstPackage.remove(myPackage);
+					ramp.setPackageCount(ramp.getPackageCount()-1);
+					PackageRemovedEvent eventTwo=new PackageRemovedEvent(conveyorID);
+					EventHelper.addEvent(eventTwo);
+					
+					
 				}
 			}else {
 				//Delay
