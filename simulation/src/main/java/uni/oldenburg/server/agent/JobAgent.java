@@ -121,15 +121,10 @@ public class JobAgent extends Agent {
 			AID senderAID = msg.getSender();
 			int rampType = Integer.parseInt(msg.getUserDefinedParameter("rampType"));
 
-			if (rampType == ConveyorRamp.RAMP_ENTRANCE) {
+			if (rampType == ConveyorRamp.RAMP_ENTRANCE)
 				currentAgent.getRampListIncoming().add(senderAID);
-            logger.log(Level.INFO, myAgent.getLocalName() + " Entrance Ramp registered");
-			} else if (rampType == ConveyorRamp.RAMP_EXIT) {
+			else if (rampType == ConveyorRamp.RAMP_EXIT)
 				currentAgent.getRampListOutgoing().add(senderAID);
-            logger.log(Level.INFO, myAgent.getLocalName() + " Exit Ramp registered");
-			} else if (rampType == ConveyorRamp.RAMP_STOREAGE) {
-            logger.log(Level.INFO, myAgent.getLocalName() + " Storage Ramp detected");
-			}
 		}
 
 		public void onTimeout() throws IOException {
@@ -205,8 +200,6 @@ public class JobAgent extends Agent {
 			msgInfo.setContentObject(currentJob);
 			
 			switch(currentJob.getType()) {
-
-
 				case Job.INCOMING:
 					AgentHelper.addReceivers(msgInfo, lstRampIncoming);
 					break;

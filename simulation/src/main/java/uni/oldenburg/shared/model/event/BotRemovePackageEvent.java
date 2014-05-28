@@ -2,6 +2,7 @@ package uni.oldenburg.shared.model.event;
 
 import de.novanic.eventservice.client.event.Event;
 
+@SuppressWarnings("serial")
 public class BotRemovePackageEvent implements Event {
 	private int id;
 
