@@ -17,7 +17,7 @@ public class MessageType {
 	public final static int ASSIGN_JOB				   				= 10; // JobAgent
 	public final static int ENQUIRE_RAMPS_WITHOUT_ENTRANCE			= 11; // Entrance/Exit PackageAgent -> Own OrderAgent
 	public final static int ENQUIRE_RAMPS_RELAY						= 12; // Own OrderAgent -> Storage/Exit OrderAgent
-	public final static int ENQUIRE_RAMPS_RESPONSE					= 13;
+	public final static int ENQUIRE_RAMP_RESPONSE					= 13;
 	public final static int DEMAND_PACKAGE							= 14;
 	public final static int ENQUIRE_RAMPS_STORAGE					= 15;
 	public final static int FIND_PACKAGE_IN_STORAGE					= 16;

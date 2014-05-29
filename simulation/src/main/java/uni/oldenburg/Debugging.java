@@ -10,7 +10,7 @@ public class Debugging {
 	public final static boolean showAuctionMessages			= false;
 	public final static boolean showJobInitMessages			= false;
 	public final static boolean showPackageMessages			= false;
-	public final static boolean showEnquirePackageMessages	= true;
+	public final static boolean showEnquirePackageMessages	= false;
 	
 	public final static boolean showDebugMessages			= true;
 	

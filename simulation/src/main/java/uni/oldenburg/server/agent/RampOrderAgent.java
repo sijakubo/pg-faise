@@ -1,8 +1,11 @@
 package uni.oldenburg.server.agent;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import jade.core.Agent;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
@@ -17,6 +20,7 @@ import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.Szenario;
+import uni.oldenburg.shared.model.SzenarioInfo;
 
 @SuppressWarnings("serial")
 public class RampOrderAgent extends Agent {
@@ -24,6 +28,8 @@ public class RampOrderAgent extends Agent {
 
 	private Conveyor myConveyor;
 	private Szenario mySzenario;
+	
+	SzenarioInfo myInfo = null;
 	
 	private Logger logger = Logger.getLogger(RampOrderAgent.class);
 
@@ -37,6 +43,8 @@ public class RampOrderAgent extends Agent {
 			myConveyor = (Conveyor) args[1];
 		}
 		
+		myInfo = AgentHelper.calculateRampCounts(mySzenario);
+		
 		// am i am ramp?
 		if (myConveyor instanceof ConveyorRamp) {
 			ConveyorRamp myRampConveyor = (ConveyorRamp)myConveyor;
@@ -44,10 +52,10 @@ public class RampOrderAgent extends Agent {
 			// what ramp type am i?
 			switch(myRampConveyor.getRampType()) {
 				case ConveyorRamp.RAMP_ENTRANCE:
-					addBehaviour(new SendEquirePackageRequestRelay(MessageTemplate.MatchPerformative(MessageType.ENQUIRE_RAMPS_RELAY)));
+					addBehaviour(new SendEquirePackageRequestRelay());
 					break;
 				case ConveyorRamp.RAMP_EXIT:
-					addBehaviour(new SendEquirePackageRequestRelay(MessageTemplate.MatchPerformative(MessageType.ENQUIRE_RAMPS_RELAY)));
+					addBehaviour(new SendEquirePackageRequestRelay());
 					addBehaviour(new GetEnquirePackageRequest(MessageTemplate.MatchPerformative(MessageType.ENQUIRE_RAMPS_WITHOUT_ENTRANCE)));
 					break;
 				case ConveyorRamp.RAMP_STOREAGE:
@@ -73,6 +81,7 @@ public class RampOrderAgent extends Agent {
 	/**
 	 * Got message:
 	 * 		PackageAgent::SendEquirePackageRequest
+	 * 		RampOrderAgent::GetEnquirePackageRequest
 	 * Send message:
 	 * 		RampOrderAgent::GetEnquirePackageRequest		
 	 * 
@@ -80,33 +89,89 @@ public class RampOrderAgent extends Agent {
 	 * 
      * @author Matthias
      */
-	private class SendEquirePackageRequestRelay extends CyclicReceiverBehaviour {
-		protected SendEquirePackageRequestRelay(MessageTemplate mt) {
-			super(mt);
-		}
-
-		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-			ACLMessage enquireRampsMsg = null;
-			int requestingRampType = Integer.parseInt(msg.getUserDefinedParameter("requestingRampType"));
-			int packageID = Integer.parseInt(msg.getUserDefinedParameter("packageID"));
-			
-			switch(requestingRampType) {
-				case ConveyorRamp.RAMP_ENTRANCE:
-					enquireRampsMsg = new ACLMessage(MessageType.ENQUIRE_RAMPS_WITHOUT_ENTRANCE);
-					break;
-				case ConveyorRamp.RAMP_EXIT:
-					enquireRampsMsg =  new ACLMessage(MessageType.ENQUIRE_RAMPS_STORAGE);
-					break;
-				default:
-					return;
+	private class SendEquirePackageRequestRelay extends CyclicBehaviour {
+		int step = 0;
+		int rampsResponded = 0;
+		int curRequestingRampType = 0;
+		
+		List<Integer> lstConveyorRamps = new ArrayList<Integer>();
+		
+		public void action() {
+			if (step == 0) {
+				ACLMessage msgEnquire = myAgent.receive(MessageTemplate.MatchPerformative(MessageType.ENQUIRE_RAMPS_RELAY));
+				
+				if (msgEnquire != null) {
+					ACLMessage enquireRampsMsg = null;
+					int requestingRampType = Integer.parseInt(msgEnquire.getUserDefinedParameter("requestingRampType"));
+					int packageID = Integer.parseInt(msgEnquire.getUserDefinedParameter("packageID"));
+					
+					switch(requestingRampType) {
+						case ConveyorRamp.RAMP_ENTRANCE:
+							enquireRampsMsg = new ACLMessage(MessageType.ENQUIRE_RAMPS_WITHOUT_ENTRANCE);
+							break;
+						case ConveyorRamp.RAMP_EXIT:
+							enquireRampsMsg =  new ACLMessage(MessageType.ENQUIRE_RAMPS_STORAGE);
+							break;
+						default:
+							return;
+					}
+					
+					enquireRampsMsg.addUserDefinedParameter("packageID", "" + packageID);
+					enquireRampsMsg.addUserDefinedParameter("requestingRampType", "" + requestingRampType);
+					
+					AgentHelper.addReceivers(enquireRampsMsg, myAgent, mySzenario.getId());
+					
+					curRequestingRampType = requestingRampType;
+					
+					send(enquireRampsMsg);
+					
+					step = 1;	
+				}
+				else {
+					block();
+				}
 			}
-			
-			enquireRampsMsg.addUserDefinedParameter("packageID", "" + packageID);
-			enquireRampsMsg.addUserDefinedParameter("requestingRampType", "" + requestingRampType);
-			
-			AgentHelper.addReceivers(enquireRampsMsg, myAgent, mySzenario.getId());
-			
-			send(enquireRampsMsg);
+			else if (step == 1) {
+				int maxRampToRespond = 0;
+				
+				switch(curRequestingRampType) {
+					case ConveyorRamp.RAMP_ENTRANCE:
+						maxRampToRespond = myInfo.ExitRampCount + myInfo.StorageRampCount;
+						break;
+					case ConveyorRamp.RAMP_EXIT:
+						maxRampToRespond = myInfo.StorageRampCount;
+						break;
+					default:
+						step = 0;
+						return;
+				}
+				
+				if (rampsResponded < maxRampToRespond) {
+					ACLMessage msgEnquireResponse =  myAgent.receive(MessageTemplate.MatchPerformative(MessageType.ENQUIRE_RAMP_RESPONSE));
+					if (msgEnquireResponse != null) {
+						++rampsResponded;
+						
+						if (msgEnquireResponse.getUserDefinedParameter("demand_package").equals("1")) {
+							rampsResponded = maxRampToRespond;
+							lstConveyorRamps.clear();
+						}
+						lstConveyorRamps.add(Integer.parseInt(msgEnquireResponse.getUserDefinedParameter("conveyorID")));
+						
+						logger.log(Level.INFO, myAgent.getLocalName() + " collect enquires: " + rampsResponded + "/" + maxRampToRespond);
+					}
+					else {
+						block();
+					}
+				}
+				else {
+					logger.log(Level.INFO, myAgent.getLocalName() + " collect enquires: " + rampsResponded + "/" + maxRampToRespond + " - done!");
+					
+					lstConveyorRamps.clear();
+					
+					step = 0;
+					rampsResponded = 0;
+				}
+			}	
 		}
 	}
 	
@@ -184,19 +249,22 @@ public class RampOrderAgent extends Agent {
 				return;
 			}
 			
-			if (Debugging.showDebugMessages) {
-				logger.log(Level.INFO, myAgent.getLocalName() + " - send Enquire [I am: " + 
+			if (Debugging.showEnquirePackageMessages) {
+				logger.log(Level.INFO, myAgent.getLocalName() + " - send enquire [I am: " + 
 								((myRampConveyor.getRampType() == ConveyorRamp.RAMP_EXIT) ? "Exit" : "Storage") + " - " +
 								"Requester: " + ((requestingRampType == ConveyorRamp.RAMP_ENTRANCE) ? "Entrance" : "Exit") +
 								"]: space: " + isSpaceAvailable + " (for entrance only) - demand package: " + doDemandPackage + " - packageID: " + packageID);	
 			}
 			
-			ACLMessage msgEnquireResponse = new ACLMessage(MessageType.ENQUIRE_RAMPS_RESPONSE);
+			ACLMessage msgEnquireResponse = new ACLMessage(MessageType.ENQUIRE_RAMP_RESPONSE);
 			// only has to be processed by entrance ramps when 
 			msgEnquireResponse.addUserDefinedParameter("space_available", isSpaceAvailable == true ? "1" : "0");
 			// needed for entrance and exit ramps in case a package with a specific id was found
 			msgEnquireResponse.addUserDefinedParameter("demand_package", doDemandPackage == true ? "1" : "0");
+			msgEnquireResponse.addUserDefinedParameter("conveyorID", "" + myConveyor.getID());
 			
+			msgEnquireResponse.addReceiver(msg.getSender());
+			send(msgEnquireResponse);
 		}
 	}
 }
