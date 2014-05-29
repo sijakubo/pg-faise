@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -92,9 +93,10 @@ public class RampOrderAgent extends Agent {
 	private class SendEquirePackageRequestRelay extends CyclicBehaviour {
 		int step = 0;
 		int rampsResponded = 0;
-		int curRequestingRampType = 0;
+		int requestingRampType = 0;
+		int packageID;
 		
-		List<Integer> lstConveyorRamps = new ArrayList<Integer>();
+		List<AID> lstConveyorRampsAID = new ArrayList<AID>();
 		
 		public void action() {
 			if (step == 0) {
@@ -102,8 +104,8 @@ public class RampOrderAgent extends Agent {
 				
 				if (msgEnquire != null) {
 					ACLMessage enquireRampsMsg = null;
-					int requestingRampType = Integer.parseInt(msgEnquire.getUserDefinedParameter("requestingRampType"));
-					int packageID = Integer.parseInt(msgEnquire.getUserDefinedParameter("packageID"));
+					requestingRampType = Integer.parseInt(msgEnquire.getUserDefinedParameter("requestingRampType"));
+					packageID = Integer.parseInt(msgEnquire.getUserDefinedParameter("packageID"));
 					
 					switch(requestingRampType) {
 						case ConveyorRamp.RAMP_ENTRANCE:
@@ -121,8 +123,6 @@ public class RampOrderAgent extends Agent {
 					
 					AgentHelper.addReceivers(enquireRampsMsg, myAgent, mySzenario.getId());
 					
-					curRequestingRampType = requestingRampType;
-					
 					send(enquireRampsMsg);
 					
 					step = 1;	
@@ -134,7 +134,7 @@ public class RampOrderAgent extends Agent {
 			else if (step == 1) {
 				int maxRampToRespond = 0;
 				
-				switch(curRequestingRampType) {
+				switch(requestingRampType) {
 					case ConveyorRamp.RAMP_ENTRANCE:
 						maxRampToRespond = myInfo.ExitRampCount + myInfo.StorageRampCount;
 						break;
@@ -153,23 +153,33 @@ public class RampOrderAgent extends Agent {
 						
 						if (msgEnquireResponse.getUserDefinedParameter("demand_package").equals("1")) {
 							rampsResponded = maxRampToRespond;
-							lstConveyorRamps.clear();
+							lstConveyorRampsAID.clear();
 						}
-						lstConveyorRamps.add(Integer.parseInt(msgEnquireResponse.getUserDefinedParameter("conveyorID")));
 						
-						logger.log(Level.INFO, myAgent.getLocalName() + " collect enquires: " + rampsResponded + "/" + maxRampToRespond);
+						if (msgEnquireResponse.getUserDefinedParameter("space_available").equals("1")) {
+							lstConveyorRampsAID.add(msgEnquireResponse.getSender());	
+						}
 					}
 					else {
 						block();
 					}
 				}
 				else {
-					logger.log(Level.INFO, myAgent.getLocalName() + " collect enquires: " + rampsResponded + "/" + maxRampToRespond + " - done!");
+					//if (Debugging.showDebugMessages)
+						//logger.log(Level.INFO, myAgent.getLocalName() + " numFreeRamps: " + lstConveyorRampsAID.size() + " pID: " + packageID);
 					
-					lstConveyorRamps.clear();
+					if (lstConveyorRampsAID.size() > 0) {
+						int randomIndex = (int)(Math.random() * 100) % lstConveyorRampsAID.size();
+						
+						AID conveyorAID = lstConveyorRampsAID.get(randomIndex);
+						
+						if (Debugging.showDebugMessages)
+							logger.log(Level.INFO, myAgent.getLocalName() + " chosen conveyor: " + conveyorAID.toString());	
+					}
 					
 					step = 0;
 					rampsResponded = 0;
+					lstConveyorRampsAID.clear();					
 				}
 			}	
 		}
