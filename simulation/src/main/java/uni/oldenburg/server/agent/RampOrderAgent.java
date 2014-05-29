@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -44,27 +43,25 @@ public class RampOrderAgent extends Agent {
 			myConveyor = (Conveyor) args[1];
 		}
 		
+		ConveyorRamp myRampConveyor = (ConveyorRamp)myConveyor;		
 		myInfo = AgentHelper.calculateRampCounts(mySzenario);
 		
-		// am i am ramp?
-		if (myConveyor instanceof ConveyorRamp) {
-			ConveyorRamp myRampConveyor = (ConveyorRamp)myConveyor;
-			
-			// what ramp type am i?
-			switch(myRampConveyor.getRampType()) {
-				case ConveyorRamp.RAMP_ENTRANCE:
-					addBehaviour(new SendEquirePackageRequestRelay());
-					break;
-				case ConveyorRamp.RAMP_EXIT:
-					addBehaviour(new SendEquirePackageRequestRelay());
-					addBehaviour(new GetEnquirePackageRequest(MessageTemplate.MatchPerformative(MessageType.ENQUIRE_RAMPS_WITHOUT_ENTRANCE)));
-					break;
-				case ConveyorRamp.RAMP_STOREAGE:
-					addBehaviour(new GetEnquirePackageRequest(
-							MessageTemplate.or(	MessageTemplate.MatchPerformative(MessageType.ENQUIRE_RAMPS_WITHOUT_ENTRANCE), 
-												MessageTemplate.MatchPerformative(MessageType.ENQUIRE_RAMPS_STORAGE))));
-					break;
-			}
+		addBehaviour(new SetDestinationRelay(MessageType.SET_DESTINATION));
+		
+		// what ramp type am i?
+		switch(myRampConveyor.getRampType()) {
+			case ConveyorRamp.RAMP_ENTRANCE:
+				addBehaviour(new SendEquirePackageRequestRelay());
+				break;
+			case ConveyorRamp.RAMP_EXIT:
+				addBehaviour(new SendEquirePackageRequestRelay());
+				addBehaviour(new GetEnquirePackageRequest(MessageTemplate.MatchPerformative(MessageType.ENQUIRE_RAMPS_WITHOUT_ENTRANCE)));
+				break;
+			case ConveyorRamp.RAMP_STOREAGE:
+				addBehaviour(new GetEnquirePackageRequest(
+						MessageTemplate.or(	MessageTemplate.MatchPerformative(MessageType.ENQUIRE_RAMPS_WITHOUT_ENTRANCE), 
+											MessageTemplate.MatchPerformative(MessageType.ENQUIRE_RAMPS_STORAGE))));
+				break;
 		}
 		
 		String nickname = AgentHelper.getUniqueNickname(RampOrderAgent.NAME, myConveyor.getID(), mySzenario.getId());
@@ -94,9 +91,10 @@ public class RampOrderAgent extends Agent {
 		int step = 0;
 		int rampsResponded = 0;
 		int requestingRampType = 0;
-		int packageID;
+		int packageID = 0;
+		int requestingConveyorID = 0;
 		
-		List<AID> lstConveyorRampsAID = new ArrayList<AID>();
+		List<Integer> lstConveyorRamps = new ArrayList<Integer>();
 		
 		public void action() {
 			if (step == 0) {
@@ -119,6 +117,7 @@ public class RampOrderAgent extends Agent {
 					}
 					
 					enquireRampsMsg.addUserDefinedParameter("packageID", "" + packageID);
+					enquireRampsMsg.addUserDefinedParameter("requestingConveyorID", "" + myConveyor.getID());
 					enquireRampsMsg.addUserDefinedParameter("requestingRampType", "" + requestingRampType);
 					
 					AgentHelper.addReceivers(enquireRampsMsg, myAgent, mySzenario.getId());
@@ -153,12 +152,14 @@ public class RampOrderAgent extends Agent {
 						
 						if (msgEnquireResponse.getUserDefinedParameter("demand_package").equals("1")) {
 							rampsResponded = maxRampToRespond;
-							lstConveyorRampsAID.clear();
+							lstConveyorRamps.clear();
 						}
 						
 						if (msgEnquireResponse.getUserDefinedParameter("space_available").equals("1")) {
-							lstConveyorRampsAID.add(msgEnquireResponse.getSender());	
+							lstConveyorRamps.add(Integer.parseInt(msgEnquireResponse.getUserDefinedParameter("destinationID")));	
 						}
+						
+						requestingConveyorID = Integer.parseInt(msgEnquireResponse.getUserDefinedParameter("requestingConveyorID"));
 					}
 					else {
 						block();
@@ -168,22 +169,45 @@ public class RampOrderAgent extends Agent {
 					//if (Debugging.showDebugMessages)
 						//logger.log(Level.INFO, myAgent.getLocalName() + " numFreeRamps: " + lstConveyorRampsAID.size() + " pID: " + packageID);
 					
-					if (lstConveyorRampsAID.size() > 0) {
-						int randomIndex = (int)(Math.random() * 100) % lstConveyorRampsAID.size();
+					if (lstConveyorRamps.size() > 0) {
+						int randomIndex = (int)(Math.random() * 100) % lstConveyorRamps.size();
 						
-						AID conveyorAID = lstConveyorRampsAID.get(randomIndex);
+						int randomConveyorID = lstConveyorRamps.get(randomIndex);
+						
 						
 						if (Debugging.showDebugMessages)
-							logger.log(Level.INFO, myAgent.getLocalName() + " chosen conveyor: " + conveyorAID.toString());	
+							logger.log(Level.INFO, myAgent.getLocalName() + " chosen conveyor: " + randomConveyorID);
+						
+						ACLMessage msgSetDestination = new ACLMessage(MessageType.SET_DESTINATION);
+						msgSetDestination.addUserDefinedParameter("packageID", "" + packageID);
+						msgSetDestination.addUserDefinedParameter("destinationID", "" + randomConveyorID);
+						AgentHelper.addReceiver(msgSetDestination, myAgent, RampOrderAgent.NAME, requestingConveyorID, mySzenario.getId());
+						send(msgSetDestination);
 					}
 					
 					step = 0;
 					rampsResponded = 0;
-					lstConveyorRampsAID.clear();					
+					lstConveyorRamps.clear();					
 				}
 			}	
 		}
 	}
+	
+	private class SetDestinationRelay extends CyclicReceiverBehaviour {
+		protected SetDestinationRelay(int msgType) {
+			super(MessageTemplate.MatchPerformative(msgType));
+		}
+
+		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+			ACLMessage msgRelay = new ACLMessage(MessageType.SET_DESTINATION);
+			msgRelay.addUserDefinedParameter("packageID", msg.getUserDefinedParameter("packageID"));
+			msgRelay.addUserDefinedParameter("destinationID", msg.getUserDefinedParameter("destinationID"));
+			AgentHelper.addReceiver(msgRelay, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
+			
+			send(msgRelay);
+		}
+	}
+	
 	
 	/**
 	 * Got message:
@@ -207,6 +231,7 @@ public class RampOrderAgent extends Agent {
 		@Override
 		public void onMessage(ACLMessage msg) throws UnreadableException,IOException {
 			int packageID = Integer.parseInt(msg.getUserDefinedParameter("packageID"));
+			int requestingConveyorID = Integer.parseInt(msg.getUserDefinedParameter("requestingConveyorID"));
 			int requestingRampType = Integer.parseInt(msg.getUserDefinedParameter("requestingRampType"));
 			boolean isSpaceAvailable = false;
 			boolean doDemandPackage = false;
@@ -271,7 +296,8 @@ public class RampOrderAgent extends Agent {
 			msgEnquireResponse.addUserDefinedParameter("space_available", isSpaceAvailable == true ? "1" : "0");
 			// needed for entrance and exit ramps in case a package with a specific id was found
 			msgEnquireResponse.addUserDefinedParameter("demand_package", doDemandPackage == true ? "1" : "0");
-			msgEnquireResponse.addUserDefinedParameter("conveyorID", "" + myConveyor.getID());
+			msgEnquireResponse.addUserDefinedParameter("requestingConveyorID", "" + requestingConveyorID);
+			msgEnquireResponse.addUserDefinedParameter("destinationID", "" + myConveyor.getID());
 			
 			msgEnquireResponse.addReceiver(msg.getSender());
 			send(msgEnquireResponse);

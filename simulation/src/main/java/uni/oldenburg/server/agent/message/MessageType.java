@@ -21,4 +21,5 @@ public class MessageType {
 	public final static int DEMAND_PACKAGE							= 14;
 	public final static int ENQUIRE_RAMPS_STORAGE					= 15;
 	public final static int FIND_PACKAGE_IN_STORAGE					= 16;
+	public final static int SET_DESTINATION							= 17;
 }

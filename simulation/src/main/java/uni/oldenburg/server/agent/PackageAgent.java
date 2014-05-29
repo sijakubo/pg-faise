@@ -33,7 +33,8 @@ public class PackageAgent extends Agent {
 	private Conveyor myConveyor;
 	private Szenario mySzenario;
 	
-	private boolean hasPendingJob = false; 
+	private boolean hasPendingIncomingJob = false;
+	private boolean hasPendingOutgoingJob = false;
 
 	private List<PackageData> lstPackage = new ArrayList<PackageData>();
 
@@ -50,10 +51,10 @@ public class PackageAgent extends Agent {
 			myConveyor = (Conveyor) args[1];
 		}
 		
-		addBehaviour(new AddPackageBehaviour(MessageTemplate.MatchPerformative(MessageType.ADD_PACKAGE)));
-		addBehaviour(new GetPackageCountBehaviour(MessageTemplate.MatchPerformative(MessageType.GET_PACKAGE_COUNT)));
-		addBehaviour(new RemovePackageBehaviour(MessageTemplate.MatchPerformative(MessageType.REMOVE_PACKAGE)));
-		addBehaviour(new JobAvailable(MessageTemplate.MatchPerformative(MessageType.DEMAND_PACKAGE))); // only for exit ramps?
+		addBehaviour(new AddPackageBehaviour(MessageType.ADD_PACKAGE));
+		addBehaviour(new GetPackageCountBehaviour(MessageType.GET_PACKAGE_COUNT));
+		addBehaviour(new RemovePackageBehaviour(MessageType.REMOVE_PACKAGE));
+		addBehaviour(new SetDestination(MessageType.SET_DESTINATION));
 		
 		// am i am ramp?
 		if (myConveyor instanceof ConveyorRamp) {
@@ -66,9 +67,10 @@ public class PackageAgent extends Agent {
 					break;
 				case ConveyorRamp.RAMP_EXIT:
 					addBehaviour(new SendEquirePackageRequest(this, 1000));
+					addBehaviour(new JobAvailable(MessageType.DEMAND_PACKAGE)); // only for exit ramps?					
 					break;
 				case ConveyorRamp.RAMP_STOREAGE:
-					addBehaviour(new PackageFoundInStorage(MessageTemplate.MatchPerformative(MessageType.FIND_PACKAGE_IN_STORAGE)));
+					addBehaviour(new PackageFoundInStorage(MessageType.FIND_PACKAGE_IN_STORAGE));
 					break;
 			}
 		}
@@ -97,8 +99,8 @@ public class PackageAgent extends Agent {
 	 * @author Matthias, Raschid
 	 */
 	private class AddPackageBehaviour extends CyclicReceiverBehaviour {
-		protected AddPackageBehaviour(MessageTemplate mt) {
-			super(mt);
+		protected AddPackageBehaviour(int msgType) {
+			super(MessageTemplate.MatchPerformative(msgType));
 		}
 
 		public void onMessage(ACLMessage msg) throws UnreadableException {
@@ -112,6 +114,7 @@ public class PackageAgent extends Agent {
 			if (Debugging.showPackageMessages)
 				logger.log(Level.INFO, myAgent.getLocalName() + ": package "+ myPackage.getPackageID() + " added");
             
+			hasPendingIncomingJob = false;
 		}
 	}
 
@@ -126,8 +129,8 @@ public class PackageAgent extends Agent {
 	 * @author Matthias
 	 */
 	private class GetPackageCountBehaviour extends CyclicReceiverBehaviour {
-		protected GetPackageCountBehaviour(MessageTemplate mt) {
-			super(mt);
+		protected GetPackageCountBehaviour(int msgType) {
+			super(MessageTemplate.MatchPerformative(msgType));
 		}
 
 		public void onMessage(ACLMessage msg) {
@@ -153,8 +156,8 @@ public class PackageAgent extends Agent {
 	 * @author Matthias
 	 */
 	private class RemovePackageBehaviour extends CyclicReceiverBehaviour {
-		public RemovePackageBehaviour(MessageTemplate mt) {
-			super(mt);
+		public RemovePackageBehaviour(int msgType) {
+			super(MessageTemplate.MatchPerformative(msgType));
 		}
 
 		public void onMessage(ACLMessage msg) throws UnreadableException {
@@ -166,6 +169,7 @@ public class PackageAgent extends Agent {
 			if (Debugging.showPackageMessages)
 				logger.log(Level.INFO, myAgent.getLocalName() + ": package " + myPackage.getPackageID() + " removed");
 			
+			hasPendingOutgoingJob = false;
 		}
 	}
 	
@@ -189,19 +193,21 @@ public class PackageAgent extends Agent {
 			ACLMessage enquireRampsMsg = new ACLMessage(MessageType.ENQUIRE_RAMPS_RELAY);
 			ConveyorRamp myRampConveyor = (ConveyorRamp)myConveyor;
 			
-			// job already in progress? -> don't ask
-			if (hasPendingJob)
-				return;
-			
 			// no package? -> no need to ask
 			if (lstPackage.size() < 1)
 				return;
 			
 			switch(myRampConveyor.getRampType())  {
 				case ConveyorRamp.RAMP_ENTRANCE:
+					// outgoing job already in progress? -> don't ask for now
+					if (hasPendingOutgoingJob) return;
+					
 					enquireRampsMsg.addUserDefinedParameter("packageID", "" + lstPackage.get(0).getPackageID());
 					break;
 				case ConveyorRamp.RAMP_EXIT:
+					// incoming job already in progress? -> don't ask for now
+					if (hasPendingIncomingJob) return;
+					
 					int randomIndex = (int)(Math.random() * 100) % lstPackage.size();
 					enquireRampsMsg.addUserDefinedParameter("packageID", "" + lstPackage.get(randomIndex).getPackageID());
 					break;
@@ -231,8 +237,8 @@ public class PackageAgent extends Agent {
      * @author Matthias
      */
 	private class JobAvailable extends CyclicReceiverBehaviour {
-		protected JobAvailable(MessageTemplate mt) {
-			super(mt);
+		protected JobAvailable(int msgType) {
+			super(MessageTemplate.MatchPerformative(msgType));
 		}
 
 		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
@@ -266,8 +272,8 @@ public class PackageAgent extends Agent {
      * @author Matthias
      */
 	private class PackageFoundInStorage extends CyclicReceiverBehaviour {
-		protected PackageFoundInStorage(MessageTemplate mt) {
-			super(mt);
+		protected PackageFoundInStorage(int msgType) {
+			super(MessageTemplate.MatchPerformative(msgType));
 		}
 
 		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
@@ -286,5 +292,26 @@ public class PackageAgent extends Agent {
 			msgDemandPackageResponse.addReceiver(msg.getSender());
 			send(msgDemandPackageResponse);
 		}
+	}
+	
+	private class SetDestination extends CyclicReceiverBehaviour {
+		protected SetDestination(int msgType) {
+			super(MessageTemplate.MatchPerformative(msgType));
+		}
+
+		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+			int packageID = Integer.parseInt(msg.getUserDefinedParameter("packageID"));
+			int destinationID = Integer.parseInt(msg.getUserDefinedParameter("destinationID"));
+			
+			logger.log(Level.INFO, "setDST");
+			
+			for(PackageData myData : lstPackage) {
+				if (myData.getPackageID() == packageID) {
+					myData.setDestinationID(destinationID);
+					hasPendingOutgoingJob = true;
+					break;
+				}
+			}
+		}		
 	}
 }
