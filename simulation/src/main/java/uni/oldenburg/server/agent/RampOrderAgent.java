@@ -166,9 +166,6 @@ public class RampOrderAgent extends Agent {
 					}
 				}
 				else {
-					//if (Debugging.showDebugMessages)
-						//logger.log(Level.INFO, myAgent.getLocalName() + " numFreeRamps: " + lstConveyorRampsAID.size() + " pID: " + packageID);
-					
 					if (lstConveyorRamps.size() > 0) {
 						int randomIndex = (int)(Math.random() * 100) % lstConveyorRamps.size();
 						
@@ -193,6 +190,16 @@ public class RampOrderAgent extends Agent {
 		}
 	}
 	
+	/**
+	 * Got message:
+	 * 		RampOrderAgent::SendEquirePackageRequestRelay
+	 * Send message:
+	 * 		RampAgent::SetDestinationRelay		
+	 * 
+	 * send data to PackageAgent to handle destionationID assignment to a package
+	 * 
+     * @author Matthias
+     */
 	private class SetDestinationRelay extends CyclicReceiverBehaviour {
 		protected SetDestinationRelay(int msgType) {
 			super(MessageTemplate.MatchPerformative(msgType));

@@ -294,6 +294,16 @@ public class PackageAgent extends Agent {
 		}
 	}
 	
+	/**
+	 * Got message:
+	 * 		RampOrderAgent::SetDestinationRelay
+	 * Send message:
+	 * 		none
+	 * 
+	 * set destionationID for a specific package and block new job assignments
+	 * 
+     * @author Matthias
+     */
 	private class SetDestination extends CyclicReceiverBehaviour {
 		protected SetDestination(int msgType) {
 			super(MessageTemplate.MatchPerformative(msgType));

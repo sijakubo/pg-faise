@@ -41,7 +41,6 @@ public class AgentHelper {
 	 * unregister agent as global identifier
 	 * 
 	 * @author Matthias
-	 *
 	 */
 	public static void unregister(Agent myAgent) {
 		try {
@@ -100,7 +99,6 @@ public class AgentHelper {
 	 * set list of AIDs as receivers
 	 * 
 	 * @author Matthias
-	 *
 	 */
 	public static void addReceivers(ACLMessage msg, List<AID> lstAID) {
 		for (AID myAID : lstAID) {	
@@ -112,7 +110,6 @@ public class AgentHelper {
 	 * set all agents in current szenario as receivers
 	 * 
 	 * @author Matthias
-	 *
 	 */
 	public static void addReceivers(ACLMessage msg, Agent myAgent, int szenarioID) {
 		List<AID> lstAID = getAgentList(szenarioID, myAgent);
@@ -135,6 +132,11 @@ public class AgentHelper {
 		return nickname;
 	}
 	
+	/**
+	 * retrieve infos (ramp type counts) about the current szenario
+	 * 
+	 * @author Matthias
+	 */
 	public static SzenarioInfo calculateRampCounts(Szenario mySzenario) {
 		SzenarioInfo myInfo = new SzenarioInfo();
 		
