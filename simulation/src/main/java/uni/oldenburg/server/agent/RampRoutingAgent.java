@@ -177,7 +177,6 @@ public class RampRoutingAgent extends Agent {
 	 */
 	private class AssignVehicleForPackageBehaviour extends CyclicBehaviour {
 		public void action() {
-			RampRoutingAgent currentAgent = (RampRoutingAgent) myAgent;
 			if (endOfAuction != -1 && endOfAuction < System.currentTimeMillis()) {
 				logger.log(Level.INFO, "Auction will be finished");
 
@@ -185,12 +184,7 @@ public class RampRoutingAgent extends Agent {
 					Dimension bestEstimation = estimations.elementAt(0);
 
 					for (Dimension estimation : estimations) {
-						if (estimation.getHeight() < bestEstimation.getHeight()) { // height
-																					// =
-																					// estimation,
-																					// width
-																					// =
-																					// botID
+						if (estimation.getHeight() < bestEstimation.getHeight()) { // height = estimation, width = botID
 							bestEstimation = estimation;
 						}
 					}
@@ -202,30 +196,26 @@ public class RampRoutingAgent extends Agent {
 					String sourceID = ""
 							+ ((RampRoutingAgent) myAgent).getConveyorID();
 					String destinationID = "" + currentDestinationID;
-					String botID = "" + (int) bestEstimation.getWidth();
+					String vehicleID = "" + (int) bestEstimation.getWidth();
 					String packageID = "" + actualPackageId;
 					
 					msg.addUserDefinedParameter("auctionID", "" + currentAuction);
 					msg.addUserDefinedParameter("sourceID", sourceID);
 					msg.addUserDefinedParameter("destinationID", destinationID);
-					msg.addUserDefinedParameter("botID", botID);
+					msg.addUserDefinedParameter("vehicleID", vehicleID);
 					msg.addUserDefinedParameter("packageID", packageID);
 
-					// AgentHelper.addReceivers(msg, myAgent,
-					// ((RampRoutingAgent) myAgent).getszenario.getId()());
-					AgentHelper.addReceiver(msg, currentAgent,
-							VehicleRoutingAgent.NAME, Integer.parseInt(botID),
-							szenario.getId());
+					AgentHelper.addReceivers(msg, myAgent, szenario.getId());
+
 					if (Debugging.showAuctionMessages) {
 						logger.log(
 								Level.INFO,
 								myAgent.getLocalName()
 										+ " sent ASSIGN_VEHICLE_FOR_TRANSPORT message for bot "
-										+ botID + " to carry " + packageID
+										+ vehicleID + " to carry " + packageID
 										+ " from " + sourceID + " to "
 										+ destinationID);
 					}
-
 					send(msg);
 				}
 

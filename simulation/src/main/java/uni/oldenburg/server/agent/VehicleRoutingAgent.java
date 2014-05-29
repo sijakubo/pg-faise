@@ -143,27 +143,29 @@ public class VehicleRoutingAgent extends Agent {
          int auctionID;
          int sourceID;
          int destinationID;
-         int botID;
+         int vehicleID;
          int packageID;
 
          auctionID = Integer.valueOf(msgIn.getUserDefinedParameter("auctionID"));
          sourceID = Integer.valueOf(msgIn.getUserDefinedParameter("sourceID"));
          destinationID = Integer.valueOf(msgIn.getUserDefinedParameter("destinationID"));
-         botID = Integer.valueOf(msgIn.getUserDefinedParameter("botID"));
+         vehicleID = Integer.valueOf(msgIn.getUserDefinedParameter("vehicleID"));
          packageID = Integer.valueOf(msgIn.getUserDefinedParameter("packageID"));
 
          if (Debugging.showAuctionMessages) {
             logger.log(Level.INFO, myAgent.getLocalName() + " received ASSIGN_VEHICLE_FOR_TRANSPORT message for bot "
-                  + botID + " to carry " + packageID + " from " + sourceID + " to " + destinationID);
+                  + vehicleID + " to carry " + packageID + " from " + sourceID + " to " + destinationID);
          }
 
-         //Tell the plattform Agent to get the Package from its Source
-         ACLMessage msgStartGetting = new ACLMessage(MessageType.GET_PACKAGE_FROM_SOURCE);
-         msgStartGetting.addUserDefinedParameter("destinationID", "" + destinationID);
-         msgStartGetting.addUserDefinedParameter("sourceID", "" + sourceID);
-         msgStartGetting.addUserDefinedParameter("packageID", "" + packageID);
-         AgentHelper.addReceiver(msgStartGetting, myAgent, VehiclePlattformAgent.NAME, currentAgent.conveyorID, currentAgent.szenario.getId());
-         send(msgStartGetting);
+         if(vehicleID == getConveyorID()) {
+             //Tell the plattform Agent to get the Package from its Source
+             ACLMessage msgStartGetting = new ACLMessage(MessageType.GET_PACKAGE_FROM_SOURCE);
+             msgStartGetting.addUserDefinedParameter("destinationID", "" + destinationID);
+             msgStartGetting.addUserDefinedParameter("sourceID", "" + sourceID);
+             msgStartGetting.addUserDefinedParameter("packageID", "" + packageID);
+             AgentHelper.addReceiver(msgStartGetting, myAgent, VehiclePlattformAgent.NAME, currentAgent.conveyorID, currentAgent.szenario.getId());
+             send(msgStartGetting);
+         }
          
          //allow taking part in auctions again
          if(auctionID == currentAuction) {
