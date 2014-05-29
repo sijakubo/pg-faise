@@ -138,7 +138,7 @@ public class VehicleRoutingAgent extends Agent {
       public void onMessage(ACLMessage msgIn) throws UnreadableException, IOException {
          logger.log(Level.INFO, "VehicleRoutingAgent <- ASSIGN_VEHICLE_FOR_PACKAGE");
 
-         setReserved(true);
+
          VehicleRoutingAgent currentAgent = (VehicleRoutingAgent) myAgent;
          int auctionID;
          int sourceID;
@@ -159,6 +159,7 @@ public class VehicleRoutingAgent extends Agent {
 
          if(vehicleID == getConveyorID()) {
              //Tell the plattform Agent to get the Package from its Source
+             setReserved(true);
              ACLMessage msgStartGetting = new ACLMessage(MessageType.GET_PACKAGE_FROM_SOURCE);
              msgStartGetting.addUserDefinedParameter("destinationID", "" + destinationID);
              msgStartGetting.addUserDefinedParameter("sourceID", "" + sourceID);
