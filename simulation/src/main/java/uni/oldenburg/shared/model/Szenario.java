@@ -99,7 +99,7 @@ public class Szenario implements Serializable {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setID(int id) {
 		this.id = id;
-	}	
+	}
 }

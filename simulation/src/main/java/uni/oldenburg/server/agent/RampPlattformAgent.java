@@ -41,8 +41,8 @@ public class RampPlattformAgent extends Agent {
 			
 			Conveyor myConveyor = (Conveyor) args[1];
 			conveyorID = myConveyor.getID();
-			//rampType = ((ConveyorRamp)myConveyor).getRampType();
-			//packageCountMax = myConveyor.getPackageCountMax();
+			rampType = ((ConveyorRamp)myConveyor).getRampType();
+			packageCountMax = myConveyor.getPackageCountMax();
 		}
 		
 		addBehaviour(new SendRampInfoBehaviour());
@@ -78,7 +78,7 @@ public class RampPlattformAgent extends Agent {
 			MessageTemplate mt = MessageTemplate.MatchPerformative(MessageType.REQUEST_RAMP_INFO);			
 			ACLMessage msg = myAgent.blockingReceive(mt);
 			
-			if(Debugging.showInfoMessages)
+			if(Debugging.showJobInitMessages)
 				logger.log(Level.INFO, myAgent.getLocalName() + " <- REQUEST_RAMP_INFO");
 			
 			// send ramp info data
@@ -86,7 +86,7 @@ public class RampPlattformAgent extends Agent {
 			msgReply.addUserDefinedParameter("rampType", "" + currentAgent.rampType);
 			msgReply.addReceiver(msg.getSender());
 			
-			if(Debugging.showInfoMessages)
+			if(Debugging.showJobInitMessages)
 				logger.log(Level.INFO, myAgent.getLocalName() + " -> SEND_RAMP_INFO");
 			
 			send(msgReply);
@@ -124,7 +124,7 @@ public class RampPlattformAgent extends Agent {
 				ACLMessage msg = myAgent.receive(mt);
 				
 				if (msg != null) {
-					if(Debugging.showInfoMessages)
+					if(Debugging.showJobInitMessages)
 						logger.log(Level.INFO, myAgent.getLocalName() + " <- PACKAGE_SPACE_AVAILABLE");
 					
 					try {
@@ -134,7 +134,8 @@ public class RampPlattformAgent extends Agent {
 						AgentHelper.addReceiver(msgPackageReq, myAgent, PackageAgent.NAME, currentAgent.conveyorID,
                         currentAgent.szenario.getId());
 						
-					   logger.log(Level.INFO, myAgent.getLocalName() + " -> GET_PACKAGE_COUNT");
+						if (Debugging.showJobInitMessages)
+							logger.log(Level.INFO, myAgent.getLocalName() + " -> GET_PACKAGE_COUNT");
 						
 						send(msgPackageReq);
 						
@@ -142,7 +143,8 @@ public class RampPlattformAgent extends Agent {
 						mt = MessageTemplate.MatchPerformative(MessageType.GET_PACKAGE_COUNT);
 						ACLMessage msgPackageRes = myAgent.blockingReceive(mt);
 						
-						logger.log(Level.INFO, myAgent.getLocalName() + " <- GET_PACKAGE_COUNT");
+						if (Debugging.showJobInitMessages)
+							logger.log(Level.INFO, myAgent.getLocalName() + " <- GET_PACKAGE_COUNT");
 						
 						packageCount = Integer.parseInt(msgPackageRes.getUserDefinedParameter("package_count"));
 						int packageCountMax = currentAgent.packageCountMax;
@@ -166,7 +168,7 @@ public class RampPlattformAgent extends Agent {
 						msgReply.setContentObject(msg.getContentObject());
 						msgReply.addReceiver(msg.getSender());
 						
-						if(Debugging.showInfoMessages)
+						if(Debugging.showJobInitMessages)
 							logger.log(Level.INFO, myAgent.getLocalName() + " -> PACKAGE_SPACE_AVAILABLE");
 
 						if (msg.getUserDefinedParameter("information_message_no_step") == null) {
@@ -189,7 +191,7 @@ public class RampPlattformAgent extends Agent {
 				ACLMessage msg = myAgent.receive(mt);
 				
 				if (msg != null) {
-					if(Debugging.showInfoMessages)
+					if(Debugging.showJobInitMessages)
 						logger.log(Level.INFO, myAgent.getLocalName() + " <- RESERVE_SPACE");
 					
 					String target = msg.getUserDefinedParameter("RampAID");
@@ -217,7 +219,7 @@ public class RampPlattformAgent extends Agent {
 							e.printStackTrace();
 						}
 						
-						if(Debugging.showInfoMessages)
+						if(Debugging.showJobInitMessages)
 							logger.log(Level.INFO, myAgent.getLocalName() + " - space reserved: " + packageCount + "/" + currentAgent.packageCountMax);
 					}
 					

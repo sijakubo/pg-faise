@@ -898,7 +898,7 @@ public class MainFramePresenter extends Presenter {
 						}
 
 						public void onSuccess(Integer id) {
-							MainFramePresenter.this.currentSzenario.setId(id);
+							MainFramePresenter.this.currentSzenario.setID(id);
 							MainFramePresenter.this.setSimulationState(true);
 						}
 		            });

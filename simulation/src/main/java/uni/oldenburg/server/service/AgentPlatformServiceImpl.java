@@ -79,7 +79,7 @@ public class AgentPlatformServiceImpl extends RemoteServiceServlet implements Ag
    public int startSimulation(Szenario szenario) {
 	   // async function call and static variable, so remember,
 	   // in case someone else starts before function is finished
-	   szenario.setId(++szenarioID);
+	   szenario.setID(++szenarioID);
 
 	   Object[] argsJobAgent = new Object[1];
 	   argsJobAgent[0] = szenario;
