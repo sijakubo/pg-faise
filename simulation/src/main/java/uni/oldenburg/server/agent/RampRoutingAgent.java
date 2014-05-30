@@ -13,7 +13,7 @@ import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
-import uni.oldenburg.shared.model.Conveyor;
+import uni.oldenburg.shared.model.ConveyorRamp;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -21,15 +21,11 @@ import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import uni.oldenburg.shared.model.Szenario;
 
-/// starte auktion (hole estimations) -> vehiclerouting
-// bekomme estimation <- vehiclerouting
-// wähle fahrzeug für paket aus -> vehiclerouting
-
 @SuppressWarnings("serial")
 public class RampRoutingAgent extends Agent {
 	public final static String NAME = "RampRoutingAgent";
 
-	private Conveyor myConveyor;
+	private ConveyorRamp myConveyor;
 	private Szenario mySzenario;
 	private Logger logger = Logger.getLogger(RampRoutingAgent.class);
 	
@@ -43,7 +39,7 @@ public class RampRoutingAgent extends Agent {
 		Object[] args = getArguments();
 		if (args != null) {
 			mySzenario = (Szenario) args[0];
-			myConveyor = (Conveyor) args[1];
+			myConveyor = (ConveyorRamp) args[1];
 		}		
 		
 		addBehaviour(new Auction());

@@ -6,10 +6,10 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import uni.oldenburg.Debugging;
+import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.data.PackageData;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
-import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.Job;
 import jade.core.Agent;
@@ -24,10 +24,9 @@ import uni.oldenburg.shared.model.Szenario;
 public class RampPlattformAgent extends Agent {
 	public final static String NAME = "RampPlattformAgent";
 	
-	private int conveyorID = 0;
-	private Szenario szenario;
-	private int rampType = 0;
-	private int packageCountMax = 0;
+	private ConveyorRamp myConveyor;
+	private Szenario mySzenario;
+
 	private Logger logger = Logger.getLogger(RampPlattformAgent.class);
 	
 	/**
@@ -37,19 +36,16 @@ public class RampPlattformAgent extends Agent {
 	protected void setup() {
 		Object[] args = getArguments();
 		if (args != null) {
-			szenario = (Szenario) args[0];
-			
-			Conveyor myConveyor = (Conveyor) args[1];
-			conveyorID = myConveyor.getID();
-			rampType = ((ConveyorRamp)myConveyor).getRampType();
-			packageCountMax = myConveyor.getPackageCountMax();
+			mySzenario = (Szenario) args[0];
+			myConveyor = (ConveyorRamp) args[1];
 		}
 		
 		addBehaviour(new SendRampInfoBehaviour());
 		addBehaviour(new IsPackageSpaceAvailableBehaviour());
+		addBehaviour(new TransferPackageRelay(MessageType.TRANSFER_PACKAGE));
 		
-		String nickname = AgentHelper.getUniqueNickname(RampRoutingAgent.NAME, conveyorID, szenario.getId());
-		AgentHelper.registerAgent(szenario.getId(), this, nickname);
+		String nickname = AgentHelper.getUniqueNickname(RampRoutingAgent.NAME, myConveyor.getID(), mySzenario.getId());
+		AgentHelper.registerAgent(mySzenario.getId(), this, nickname);
 		
 		if(Debugging.showAgentStartupMessages)
 			logger.log(Level.INFO, nickname + " started");
@@ -72,8 +68,6 @@ public class RampPlattformAgent extends Agent {
      */
 	private class SendRampInfoBehaviour extends OneShotBehaviour {	
 		public void action() {
-			RampPlattformAgent currentAgent = (RampPlattformAgent)myAgent;
-			
 			// get ramp info request
 			MessageTemplate mt = MessageTemplate.MatchPerformative(MessageType.REQUEST_RAMP_INFO);			
 			ACLMessage msg = myAgent.blockingReceive(mt);
@@ -83,7 +77,7 @@ public class RampPlattformAgent extends Agent {
 			
 			// send ramp info data
 			ACLMessage msgReply = new ACLMessage(MessageType.SEND_RAMP_INFO);
-			msgReply.addUserDefinedParameter("rampType", "" + currentAgent.rampType);
+			msgReply.addUserDefinedParameter("rampType", "" + myConveyor.getRampType());
 			msgReply.addReceiver(msg.getSender());
 			
 			if(Debugging.showJobInitMessages)
@@ -129,17 +123,16 @@ public class RampPlattformAgent extends Agent {
 					
 					try {
 						// get package count from packageagent
-						// request
+						// - request
 						ACLMessage msgPackageReq = new ACLMessage(MessageType.GET_PACKAGE_COUNT);
-						AgentHelper.addReceiver(msgPackageReq, myAgent, PackageAgent.NAME, currentAgent.conveyorID,
-                        currentAgent.szenario.getId());
+						AgentHelper.addReceiver(msgPackageReq, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
 						
 						if (Debugging.showJobInitMessages)
 							logger.log(Level.INFO, myAgent.getLocalName() + " -> GET_PACKAGE_COUNT");
 						
 						send(msgPackageReq);
 						
-						// response
+						// - response
 						mt = MessageTemplate.MatchPerformative(MessageType.GET_PACKAGE_COUNT);
 						ACLMessage msgPackageRes = myAgent.blockingReceive(mt);
 						
@@ -147,11 +140,11 @@ public class RampPlattformAgent extends Agent {
 							logger.log(Level.INFO, myAgent.getLocalName() + " <- GET_PACKAGE_COUNT");
 						
 						packageCount = Integer.parseInt(msgPackageRes.getUserDefinedParameter("package_count"));
-						int packageCountMax = currentAgent.packageCountMax;
+						int packageCountMax = myConveyor.getPackageCountMax();
 						String isSpaceAvailable = packageCount < packageCountMax ? "1" : "0";
 						
 						// always space available for outgoing ramps
-						if (currentAgent.rampType == ConveyorRamp.RAMP_EXIT)
+						if (myConveyor.getRampType() == ConveyorRamp.RAMP_EXIT)
 							isSpaceAvailable = "1";
 						
 						// send ramp space info
@@ -199,7 +192,7 @@ public class RampPlattformAgent extends Agent {
 					// reserve/add space in ramp if target matches 
 					if (target.compareTo(myAgent.getAID().toString()) == 0) {
 						ACLMessage msgAddPackage = new ACLMessage(MessageType.ADD_PACKAGE);
-						AgentHelper.addReceiver(msgAddPackage, currentAgent, PackageAgent.NAME, conveyorID, szenario.getId());
+						AgentHelper.addReceiver(msgAddPackage, currentAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
 						
 						++packageCount;
 							
@@ -220,7 +213,7 @@ public class RampPlattformAgent extends Agent {
 						}
 						
 						if(Debugging.showJobInitMessages)
-							logger.log(Level.INFO, myAgent.getLocalName() + " - space reserved: " + packageCount + "/" + currentAgent.packageCountMax);
+							logger.log(Level.INFO, myAgent.getLocalName() + " - space reserved: " + packageCount + "/" + myConveyor.getPackageCountMax());
 					}
 					
 					step = 0;
@@ -229,6 +222,30 @@ public class RampPlattformAgent extends Agent {
 					block();
 				}
 			}
+		}
+	}
+	
+	/**
+	 * Got message:
+	 * 		VehiclePlattformAgent::DrivePath
+	 * Send message:
+	 * 		PackageAgent::TransferPackage
+	 * 
+	 * relay to PackageAgent to transfer a package from a source to a destination conveyor
+	 * 
+     * @author Matthias
+     */
+	private class TransferPackageRelay extends CyclicReceiverBehaviour {
+		protected TransferPackageRelay(int msgType) {
+			super(MessageTemplate.MatchPerformative(msgType));
+		}
+
+		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+			// send transfer request to own package-agent
+			ACLMessage msgTransportPackage = new ACLMessage(MessageType.TRANSFER_PACKAGE);
+			msgTransportPackage.addUserDefinedParameter("dstConveyorID", msg.getUserDefinedParameter("dstConveyorID"));
+			AgentHelper.addReceiver(msgTransportPackage, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
+			send(msgTransportPackage);
 		}
 	}
 }

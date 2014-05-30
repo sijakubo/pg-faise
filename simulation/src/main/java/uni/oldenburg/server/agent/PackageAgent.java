@@ -22,6 +22,7 @@ import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import uni.oldenburg.shared.model.Szenario;
 import uni.oldenburg.shared.model.event.PackageAddedEvent;
+import uni.oldenburg.shared.model.event.PackageRemovedEvent;
 
 /**
  * @author Matthias
@@ -51,11 +52,11 @@ public class PackageAgent extends Agent {
 			myConveyor = (Conveyor) args[1];
 		}
 		
-		addBehaviour(new AddPackageBehaviour(MessageType.ADD_PACKAGE));
-		addBehaviour(new GetPackageCountBehaviour(MessageType.GET_PACKAGE_COUNT));
-		addBehaviour(new RemovePackageBehaviour(MessageType.REMOVE_PACKAGE));
+		addBehaviour(new AddPackage(MessageType.ADD_PACKAGE));
+		addBehaviour(new GetPackageCount(MessageType.GET_PACKAGE_COUNT));
 		addBehaviour(new SetDestination(MessageType.SET_DESTINATION));
 		addBehaviour(new SetPendingIncomingStatus(MessageType.SET_PENDING_INCOMING_STATUS));
+		addBehaviour(new TransferPackage(MessageType.TRANSFER_PACKAGE));
 		
 		// am i am ramp?
 		if (myConveyor instanceof ConveyorRamp) {
@@ -99,8 +100,8 @@ public class PackageAgent extends Agent {
 	 * 
 	 * @author Matthias, Raschid
 	 */
-	private class AddPackageBehaviour extends CyclicReceiverBehaviour {
-		protected AddPackageBehaviour(int msgType) {
+	private class AddPackage extends CyclicReceiverBehaviour {
+		protected AddPackage(int msgType) {
 			super(MessageTemplate.MatchPerformative(msgType));
 		}
 
@@ -129,8 +130,8 @@ public class PackageAgent extends Agent {
 	 * 
 	 * @author Matthias
 	 */
-	private class GetPackageCountBehaviour extends CyclicReceiverBehaviour {
-		protected GetPackageCountBehaviour(int msgType) {
+	private class GetPackageCount extends CyclicReceiverBehaviour {
+		protected GetPackageCount(int msgType) {
 			super(MessageTemplate.MatchPerformative(msgType));
 		}
 
@@ -150,30 +151,48 @@ public class PackageAgent extends Agent {
 			send(msgReply);
 		}
 	}
-
+	
 	/**
-	 * remove package from agent
+	 * Got message:
+	 * 		VehiclePlattformAgent::DrivePath
+	 * 		RampPlattformAgent::TransferPackageRelay
+	 * Send message:
+	 * 		PackageAgent::AddPackage
 	 * 
-	 * @author Matthias
-	 */
-	private class RemovePackageBehaviour extends CyclicReceiverBehaviour {
-		public RemovePackageBehaviour(int msgType) {
+	 * transfer package from current conveyor to another conveyor
+	 * 
+     * @author Matthias
+     */
+	private class TransferPackage extends CyclicReceiverBehaviour {
+		protected TransferPackage(int msgType) {
 			super(MessageTemplate.MatchPerformative(msgType));
 		}
 
-		public void onMessage(ACLMessage msg) throws UnreadableException {
-			PackageAgent currentAgent = (PackageAgent) myAgent;
-
-			PackageData myPackage = (PackageData) msg.getContentObject();
-			currentAgent.lstPackage.remove(myPackage);
-
-			if (Debugging.showPackageMessages)
-				logger.log(Level.INFO, myAgent.getLocalName() + ": package " + myPackage.getPackageID() + " removed");
+		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+			int dstConveyorID = Integer.parseInt(msg.getUserDefinedParameter("dstConveyorID"));
 			
+			// get first package
+			PackageData myData = lstPackage.get(0);
+			
+			// remove package from own list
+			lstPackage.remove(0);
+			
+			if (Debugging.showPackageMessages)
+				logger.log(Level.INFO, myAgent.getLocalName() + ": package " + myData.getPackageID() + " removed");
+			
+			// fire event, to inform client
+			EventHelper.addEvent(new PackageRemovedEvent(myConveyor.getID()));
+			
+			// tell destination conveyor to add the package
+			ACLMessage msgAddPackageToDestination = new ACLMessage(MessageType.ADD_PACKAGE);
+			msgAddPackageToDestination.setContentObject(myData);
+			AgentHelper.addReceiver(msgAddPackageToDestination, myAgent, PackageAgent.NAME, dstConveyorID, mySzenario.getId());
+			send(msgAddPackageToDestination);
+			
+			// allow new job assignments
 			hasPendingOutgoingJob = false;
 		}
 	}
-	
 	
 	/**
 	 * Got message:
@@ -314,7 +333,7 @@ public class PackageAgent extends Agent {
 			int packageID = Integer.parseInt(msg.getUserDefinedParameter("packageID"));
 			int destinationID = Integer.parseInt(msg.getUserDefinedParameter("destinationID"));
 			
-			logger.log(Level.INFO, "setDST");
+			//logger.log(Level.INFO, "setDST");
 			
 			for(PackageData myData : lstPackage) {
 				if (myData.getPackageID() == packageID) {
@@ -328,9 +347,10 @@ public class PackageAgent extends Agent {
 	
 	/**
 	 * Got message:
-	 * 
+	 * 		RampRoutingAgent::SetPendingIncomingStatusRelay
+	 * 		VehicleRoutingAgent::HandleEstimationRequestAssignment
 	 * Send message:
-	 * 
+	 * 		none
 	 * 
 	 * sets pending incoming job flag
 	 * 

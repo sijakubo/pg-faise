@@ -17,7 +17,6 @@ import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
-import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.Szenario;
 import uni.oldenburg.shared.model.SzenarioInfo;
@@ -27,7 +26,7 @@ import uni.oldenburg.shared.model.SzenarioInfo;
 public class RampOrderAgent extends Agent {
 	public final static String NAME = "RampOrderAgent";
 
-	private Conveyor myConveyor;
+	private ConveyorRamp myConveyor;
 	private Szenario mySzenario;
 	
 	SzenarioInfo myInfo = null;
@@ -41,16 +40,15 @@ public class RampOrderAgent extends Agent {
 		Object[] args = getArguments();
 		if (args != null) {
 			mySzenario = (Szenario) args[0];
-			myConveyor = (Conveyor) args[1];
+			myConveyor = (ConveyorRamp) args[1];
 		}
-		
-		ConveyorRamp myRampConveyor = (ConveyorRamp)myConveyor;		
+				
 		myInfo = AgentHelper.getSimulationConveyorCounts(mySzenario);
 		
 		addBehaviour(new SetDestinationRelay(MessageType.SET_DESTINATION));
 		
 		// what ramp type am i?
-		switch(myRampConveyor.getRampType()) {
+		switch(myConveyor.getRampType()) {
 			case ConveyorRamp.RAMP_ENTRANCE:
 				addBehaviour(new SendEquirePackageRequestRelay());
 				break;

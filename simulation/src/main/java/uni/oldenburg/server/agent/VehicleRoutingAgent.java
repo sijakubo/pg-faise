@@ -10,26 +10,18 @@ import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
+import uni.oldenburg.shared.model.ConveyorVehicle;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import uni.oldenburg.shared.model.Szenario;
 
-/// bekomme anfrage für estimation
-/// berechne estimation
-/// sende estimation
-
-/// 1. bot wurde nicht ausgewählt
-///		-> pech gehabt
-/// 2. bot wurde ausgewählt
-///		-> VehiclePlattform -> fahre zum eingang
-
 @SuppressWarnings("serial")
 public class VehicleRoutingAgent extends Agent {
 	public final static String NAME = "VehicleRoutingAgent";
 
-	private Conveyor myConveyor;
+	private ConveyorVehicle myConveyor;
 	private Szenario mySzenario;
 	
 	private Logger logger = Logger.getLogger(VehicleRoutingAgent.class);
@@ -42,7 +34,7 @@ public class VehicleRoutingAgent extends Agent {
 		Object[] args = getArguments();
 		if (args != null) {
 			mySzenario = (Szenario) args[0];
-			myConveyor = (Conveyor) args[1];
+			myConveyor = (ConveyorVehicle) args[1];
 		}
 		
 		addBehaviour(new HandleEstimationRequestAssignment());
@@ -148,14 +140,9 @@ public class VehicleRoutingAgent extends Agent {
 						send(msgSetPendingStatus);
 						
 						// send me "VehiclePlattformAgent" a message where to drive to
-						ACLMessage msgSendPaths = new ACLMessage(MessageType.PATHS_SEND);
-						//msgSendPaths.addUserDefinedParameter("srcRampID", "" + Integer.parseInt(msgAssignJob.getUserDefinedParameter("srcRampID")));
-						//msgSendPaths.addUserDefinedParameter("dstRampID", "" + Integer.parseInt(msgAssignJob.getUserDefinedParameter("dstRampID")));
-						
-						msgSendPaths.addUserDefinedParameter("point_x_to_source", 		"" + this.srcRampPoint.x);
-						msgSendPaths.addUserDefinedParameter("point_y_to_source", 		"" + this.srcRampPoint.y);
-						msgSendPaths.addUserDefinedParameter("point_x_to_destionation", "" + this.dstRampPoint.x);
-						msgSendPaths.addUserDefinedParameter("point_y_to_destionation", "" + this.dstRampPoint.y);
+						ACLMessage msgSendPaths = new ACLMessage(MessageType.DRIVING_START);
+						msgSendPaths.addUserDefinedParameter("srcRampID", "" + Integer.parseInt(msgAssignJob.getUserDefinedParameter("srcRampID")));
+						msgSendPaths.addUserDefinedParameter("dstRampID", "" + Integer.parseInt(msgAssignJob.getUserDefinedParameter("dstRampID")));
 						
 						AgentHelper.addReceiver(msgSendPaths, myAgent, VehiclePlattformAgent.NAME, myConveyor.getID(), mySzenario.getId());
 						send(msgSendPaths);

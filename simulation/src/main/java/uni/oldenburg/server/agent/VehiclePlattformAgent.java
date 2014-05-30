@@ -11,6 +11,8 @@ import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
+import uni.oldenburg.shared.model.ConveyorRamp;
+import uni.oldenburg.shared.model.ConveyorVehicle;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -18,18 +20,11 @@ import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import uni.oldenburg.shared.model.Szenario;
 
-/// fahre zur position xy (eingang)
-/// nehme paket von der rampe runter -> rampplatform
-/// fahre zur position xy (ausgang)
-/// gebe paket an die zielrampe -> rampplatform
-/// fahre zur position xy (weg vom ausgang, damit platz frei wird)
-
-
 @SuppressWarnings("serial")
 public class VehiclePlattformAgent extends Agent {
 	public final static String NAME = "VehiclePlattformAgent";
 	
-	private Conveyor myConveyor;
+	private ConveyorVehicle myConveyor;
 	private Szenario mySzenario;
 	
 	private Logger logger = Logger.getLogger(VehiclePlattformAgent.class);
@@ -42,7 +37,7 @@ public class VehiclePlattformAgent extends Agent {
 		Object[] args = getArguments();
 		if (args != null) {
 			mySzenario = (Szenario) args[0];
-			myConveyor = (Conveyor) args[1];
+			myConveyor = (ConveyorVehicle) args[1];
 		}
 		
 		addBehaviour(new DrivePath());
@@ -60,6 +55,16 @@ public class VehiclePlattformAgent extends Agent {
 		AgentHelper.unregister(this);
 	}
 	
+	/**
+	 * Got message:
+	 *		VehicleRoutingAgent::HandleEstimationRequestAssignment	
+	 * Send message:
+	 * 		VehicleRoutingAgent::HandleEstimationRequestAssignment
+	 * 
+	 * sends the coordinates of the own conveyor
+	 * 
+     * @author Matthias
+     */
 	private class GetCurrentPosition extends CyclicReceiverBehaviour {
 		protected GetCurrentPosition(int msgType) {
 			super(MessageTemplate.MatchPerformative(msgType));
@@ -76,25 +81,50 @@ public class VehiclePlattformAgent extends Agent {
 		}
 	}
 	
+	/**
+	 * Got message:
+	 *		VehicleRoutingAgent::HandleEstimationRequestAssignment				
+	 * Send message:
+	 * 		RampPlattformAgent::TransferPackageRelay
+	 * 		PackageAgent::TransferPackage
+	 * 
+	 * - drives to the source ramp
+	 * - gets the package from the source ramp
+	 * - drives to the destination ramp
+	 * - gives package to destination ramp
+	 * 
+     * @author Matthias
+     */
 	private class DrivePath extends CyclicBehaviour {
 		int step = 0;
-		//Point curPoint = new Point(myConveyor.getX(), myConveyor.getY());
 		Point srcPoint = null;
 		Point dstPoint = null;
+		
+		int srcRampID = 0;
+		int dstRampID = 0;
 		
 		public void action() {
 			// start driving
 			if (step == 0) {
-				ACLMessage msgResponse = myAgent.receive(MessageTemplate.MatchPerformative(MessageType.PATHS_SEND));
+				ACLMessage msgResponse = myAgent.receive(MessageTemplate.MatchPerformative(MessageType.DRIVING_START));
 				
-				if (msgResponse != null) {
-					int srcPosX = Integer.parseInt(msgResponse.getUserDefinedParameter("point_x_to_source"));
-					int srcPosY = Integer.parseInt(msgResponse.getUserDefinedParameter("point_y_to_source"));
-					srcPoint = new Point(srcPosX, srcPosY);
+				if (msgResponse != null) {					
+					srcRampID = Integer.parseInt(msgResponse.getUserDefinedParameter("srcRampID"));
+					dstRampID = Integer.parseInt(msgResponse.getUserDefinedParameter("dstRampID"));
 					
-					int dstPosX = Integer.parseInt(msgResponse.getUserDefinedParameter("point_x_to_destionation"));
-					int dstPosY = Integer.parseInt(msgResponse.getUserDefinedParameter("point_y_to_destionation"));
-					dstPoint = new Point(dstPosX, dstPosY);
+					// get entry/exit positions of ramps
+					for(Conveyor tmpConveyor: mySzenario.getConveyorList()) {
+						if (tmpConveyor instanceof ConveyorRamp) {
+							ConveyorRamp tmpRampConveyor = (ConveyorRamp)tmpConveyor;
+							
+							if (tmpRampConveyor.getID() == srcRampID) {
+								srcPoint = tmpRampConveyor.getExitPosition();
+							}
+							else if (tmpRampConveyor.getID() == dstRampID) {
+								dstPoint = tmpRampConveyor.getEntryPosition();
+							}
+						}
+					}
 					
 					step = 1;
 				}
@@ -105,14 +135,22 @@ public class VehiclePlattformAgent extends Agent {
 				// go to source ramp
 				myConveyor.setPosition(srcPoint.x, srcPoint.y);
 				
-				
-				// take package from source ramp
+				// take package from source ramp to this vehicle
+				ACLMessage msgTransferFromSource = new ACLMessage(MessageType.TRANSFER_PACKAGE);;
+				msgTransferFromSource.addUserDefinedParameter("dstConveyorID", "" + myConveyor.getID());
+				AgentHelper.addReceiver(msgTransferFromSource, myAgent, RampPlattformAgent.NAME, srcRampID, mySzenario.getId());
+				send(msgTransferFromSource);
 				
 				// go to destination ramp				
 				myConveyor.setPosition(dstPoint.x, dstPoint.y);
 				
-				// give package to destination ramp				
+				// give package to destination ramp
+				ACLMessage msgTransferToDestination = new ACLMessage(MessageType.TRANSFER_PACKAGE);
+				msgTransferFromSource.addUserDefinedParameter("dstConveyorID", "" + dstRampID);
+				AgentHelper.addReceiver(msgTransferToDestination, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
+				send(msgTransferToDestination);
 				
+				// allow new drive request
 				step = 0;
 			}
 		}
