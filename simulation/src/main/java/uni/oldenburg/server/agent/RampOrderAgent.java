@@ -22,6 +22,7 @@ import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.Szenario;
 import uni.oldenburg.shared.model.SzenarioInfo;
 
+
 @SuppressWarnings("serial")
 public class RampOrderAgent extends Agent {
 	public final static String NAME = "RampOrderAgent";
@@ -44,7 +45,7 @@ public class RampOrderAgent extends Agent {
 		}
 		
 		ConveyorRamp myRampConveyor = (ConveyorRamp)myConveyor;		
-		myInfo = AgentHelper.calculateRampCounts(mySzenario);
+		myInfo = AgentHelper.getSimulationConveyorCounts(mySzenario);
 		
 		addBehaviour(new SetDestinationRelay(MessageType.SET_DESTINATION));
 		
@@ -80,8 +81,11 @@ public class RampOrderAgent extends Agent {
 	 * Got message:
 	 * 		PackageAgent::SendEquirePackageRequest
 	 * 		RampOrderAgent::GetEnquirePackageRequest
+	 * 		RampRoutingAgent::Auction
 	 * Send message:
-	 * 		RampOrderAgent::GetEnquirePackageRequest		
+	 * 		RampOrderAgent::GetEnquirePackageRequest
+	 * 		RampRoutingAgent::Auction
+	 * 		RampOrderAgent::SetDestinationRelay	
 	 * 
 	 * enquires ramp(s) if they want/demand to get a package
 	 * 
@@ -169,17 +173,29 @@ public class RampOrderAgent extends Agent {
 					if (lstConveyorRamps.size() > 0) {
 						int randomIndex = (int)(Math.random() * 100) % lstConveyorRamps.size();
 						
-						int randomConveyorID = lstConveyorRamps.get(randomIndex);
-						
+						int destinationConveyorID = lstConveyorRamps.get(randomIndex);
 						
 						if (Debugging.showDebugMessages)
-							logger.log(Level.INFO, myAgent.getLocalName() + " chosen conveyor: " + randomConveyorID);
+							logger.log(Level.INFO, myAgent.getLocalName() + " chosen conveyor: " + destinationConveyorID);
 						
-						ACLMessage msgSetDestination = new ACLMessage(MessageType.SET_DESTINATION);
-						msgSetDestination.addUserDefinedParameter("packageID", "" + packageID);
-						msgSetDestination.addUserDefinedParameter("destinationID", "" + randomConveyorID);
-						AgentHelper.addReceiver(msgSetDestination, myAgent, RampOrderAgent.NAME, requestingConveyorID, mySzenario.getId());
-						send(msgSetDestination);
+						// initialize auction
+						ACLMessage msgAuctionStart = new ACLMessage(MessageType.AUCTION_START);
+						msgAuctionStart.addUserDefinedParameter("srcRampID", "" + requestingConveyorID);
+						msgAuctionStart.addUserDefinedParameter("dstRampID", "" + destinationConveyorID);
+						AgentHelper.addReceiver(msgAuctionStart, myAgent, RampRoutingAgent.NAME, myConveyor.getID(), mySzenario.getId());
+						send(msgAuctionStart);
+						
+						// wait till action is done
+						ACLMessage msgAuctionEnd = myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.AUCTION_END));
+						
+						if (msgAuctionEnd.getUserDefinedParameter("vehicle_found").equals("1")) {
+							// vehicle was found? -> set new destination for the package
+							ACLMessage msgSetDestination = new ACLMessage(MessageType.SET_DESTINATION);
+							msgSetDestination.addUserDefinedParameter("packageID", "" + packageID);
+							msgSetDestination.addUserDefinedParameter("destinationID", "" + destinationConveyorID);
+							AgentHelper.addReceiver(msgSetDestination, myAgent, RampOrderAgent.NAME, requestingConveyorID, mySzenario.getId());
+							send(msgSetDestination);	
+						}
 					}
 					
 					step = 0;
@@ -224,6 +240,8 @@ public class RampOrderAgent extends Agent {
 	 * Send message:
 	 * 		PackageAgent::Job_Available
 	 * 		PackageAgent::GetPackageCountBehaviour
+	 * 		PackageAgent::PackageFoundInStorage
+	 * 		RampOrderAgent::SendEquirePackageRequestRelay
 	 * 
 	 * determines if ramp has space to take a package
 	 * and demands to get it when ramp has a job for it

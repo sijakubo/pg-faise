@@ -5,6 +5,7 @@ import java.util.List;
 
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
+import uni.oldenburg.shared.model.ConveyorVehicle;
 import uni.oldenburg.shared.model.Szenario;
 import uni.oldenburg.shared.model.SzenarioInfo;
 import jade.core.AID;
@@ -137,7 +138,7 @@ public class AgentHelper {
 	 * 
 	 * @author Matthias
 	 */
-	public static SzenarioInfo calculateRampCounts(Szenario mySzenario) {
+	public static SzenarioInfo getSimulationConveyorCounts(Szenario mySzenario) {
 		SzenarioInfo myInfo = new SzenarioInfo();
 		
 		for(Conveyor myConveyor : mySzenario.getConveyorList()) {
@@ -155,6 +156,9 @@ public class AgentHelper {
 						++myInfo.StorageRampCount;
 						break;
 				}
+			}
+			else if(myConveyor instanceof ConveyorVehicle) {
+				++myInfo.VehicleCount;
 			}
 		}
 		

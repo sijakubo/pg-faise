@@ -55,6 +55,7 @@ public class PackageAgent extends Agent {
 		addBehaviour(new GetPackageCountBehaviour(MessageType.GET_PACKAGE_COUNT));
 		addBehaviour(new RemovePackageBehaviour(MessageType.REMOVE_PACKAGE));
 		addBehaviour(new SetDestination(MessageType.SET_DESTINATION));
+		addBehaviour(new SetPendingIncomingStatus(MessageType.SET_PENDING_INCOMING_STATUS));
 		
 		// am i am ramp?
 		if (myConveyor instanceof ConveyorRamp) {
@@ -324,4 +325,26 @@ public class PackageAgent extends Agent {
 			}
 		}		
 	}
+	
+	/**
+	 * Got message:
+	 * 
+	 * Send message:
+	 * 
+	 * 
+	 * sets pending incoming job flag
+	 * 
+     * @author Matthias
+     */
+	private class SetPendingIncomingStatus extends CyclicReceiverBehaviour {
+		protected SetPendingIncomingStatus(int msgType) {
+			super(MessageTemplate.MatchPerformative(msgType));
+		}
+
+		@Override
+		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+			hasPendingIncomingJob = true;
+		}		
+	}
+	
 }

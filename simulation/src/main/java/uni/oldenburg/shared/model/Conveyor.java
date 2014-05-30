@@ -16,14 +16,14 @@ import com.google.gwt.dom.client.CanvasElement;
 @SuppressWarnings("serial")
 public abstract class Conveyor implements Serializable {
 	public static final String TABLE_NAME = "szenario_conveyor";	
-	private final static int rasterSize = 20;
+	public final static int RASTER_SIZE = 20;
 	
 	public static final int DIRECTION_UP 	= 0;
 	public static final int DIRECTION_RIGHT = 1;	
 	public static final int DIRECTION_DOWN 	= 2;
 	public static final int DIRECTION_LEFT 	= 3;	
 	
-	protected static final int ENTRY_BORDER_SIZE = rasterSize / 8;	
+	protected static final int ENTRY_BORDER_SIZE = RASTER_SIZE / 8;	
 	protected static final String CONVEYOR_COLOR_INPUT = "red";
 	protected static final String CONVEYOR_COLOR_OUTPUT  = "green";	
 
@@ -111,11 +111,11 @@ public abstract class Conveyor implements Serializable {
 	 * @author Matthias
 	 */
 	public int getX() {
-		return this.x  - (this.x % rasterSize);
+		return this.x  - (this.x % RASTER_SIZE);
 	}
 
 	public int getY() {
-		return this.y - (this.y % rasterSize);
+		return this.y - (this.y % RASTER_SIZE);
 	}
 	
 	//------------------------------------
@@ -187,7 +187,7 @@ public abstract class Conveyor implements Serializable {
 	}	
 	
 	public static int getRastersize() {
-		return rasterSize;
+		return RASTER_SIZE;
 	}
 	
 	public int getPackageCount() {

@@ -22,4 +22,12 @@ public class MessageType {
 	public final static int ENQUIRE_RAMPS_STORAGE					= 15;
 	public final static int FIND_PACKAGE_IN_STORAGE					= 16;
 	public final static int SET_DESTINATION							= 17;
+	public final static int AUCTION_START							= 18;
+	public final static int AUCTION_END								= 19;
+	public final static int ESTIMATION_REQUEST						= 20;
+	public final static int ESTIMATION_RESPONSE						= 21;
+	public final static int ASSIGN_JOB_TO_VEHICLE					= 22;
+	public final static int PATHS_SEND								= 23;
+	public final static int SET_PENDING_INCOMING_STATUS				= 24;
+	public final static int GET_CURRENT_POSITION					= 25;
 }

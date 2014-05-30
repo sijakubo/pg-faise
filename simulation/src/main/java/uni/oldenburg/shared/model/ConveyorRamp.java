@@ -1,6 +1,9 @@
 package uni.oldenburg.shared.model;
 
+import java.awt.Point;
+
 import uni.oldenburg.client.view.MainFrameView;
+
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
@@ -32,6 +35,60 @@ public class ConveyorRamp extends Conveyor {
 		this.packageCountMax = 4;		
 		setPosition(x, y);
 		this.setVertical(bVertical);
+	}
+	
+	/**
+	 * get (raster-)position of the entry side 
+	 * 
+	 * @author Matthias
+	 */
+	public Point getEntryPosition() {
+		int x = this.getX();
+		int y = this.getY();
+		
+		switch(this.getDirection()) {
+		case DIRECTION_UP:
+			y += this.getHeight();
+			break;
+		case DIRECTION_LEFT:
+			x += this.getWidth();
+			break;			
+		case DIRECTION_DOWN:
+			y -= Conveyor.RASTER_SIZE;
+			break;			
+		case DIRECTION_RIGHT:
+			x -= Conveyor.RASTER_SIZE;
+			break;			
+		}
+		
+		return new Point(x, y);
+	}
+	
+	/**
+	 * get (raster-)position of the exit side 
+	 * 
+	 * @author Matthias
+	 */
+	public Point getExitPosition() {
+		int x = this.getX();
+		int y = this.getY();
+		
+		switch(this.getDirection()) {
+		case DIRECTION_UP:
+			y -= Conveyor.RASTER_SIZE;
+			break;
+		case DIRECTION_LEFT:
+			x -= Conveyor.RASTER_SIZE;			
+			break;			
+		case DIRECTION_DOWN:
+			y += this.getHeight();
+			break;			
+		case DIRECTION_RIGHT:
+			x += this.getWidth();
+			break;			
+		}
+		
+		return new Point(x, y);
 	}
 
 	/**
