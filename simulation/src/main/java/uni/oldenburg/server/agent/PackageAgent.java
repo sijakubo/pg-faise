@@ -65,10 +65,10 @@ public class PackageAgent extends Agent {
 			// what ramp type am i?
 			switch(myRampConveyor.getRampType()) {
 				case ConveyorRamp.RAMP_ENTRANCE:
-					addBehaviour(new SendEquirePackageRequest(this, 1000));
+					addBehaviour(new SendEnquirePackageRequest(this, 1000));
 					break;
 				case ConveyorRamp.RAMP_EXIT:
-					addBehaviour(new SendEquirePackageRequest(this, 1000));
+					addBehaviour(new SendEnquirePackageRequest(this, 1000));
 					addBehaviour(new JobAvailable(MessageType.DEMAND_PACKAGE)); // only for exit ramps?					
 					break;
 				case ConveyorRamp.RAMP_STOREAGE:
@@ -204,8 +204,8 @@ public class PackageAgent extends Agent {
 	 * 
      * @author Matthias
      */
-	private class SendEquirePackageRequest extends TickerBehaviour {
-		public SendEquirePackageRequest(Agent a, long period) {
+	private class SendEnquirePackageRequest extends TickerBehaviour {
+		public SendEnquirePackageRequest(Agent a, long period) {
 			super(a, period);
 		}
 

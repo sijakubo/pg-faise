@@ -50,10 +50,10 @@ public class RampOrderAgent extends Agent {
 		// what ramp type am i?
 		switch(myConveyor.getRampType()) {
 			case ConveyorRamp.RAMP_ENTRANCE:
-				addBehaviour(new SendEquirePackageRequestRelay());
+				addBehaviour(new SendEnquirePackageRequestRelay());
 				break;
 			case ConveyorRamp.RAMP_EXIT:
-				addBehaviour(new SendEquirePackageRequestRelay());
+				addBehaviour(new SendEnquirePackageRequestRelay());
 				addBehaviour(new GetEnquirePackageRequest(MessageTemplate.MatchPerformative(MessageType.ENQUIRE_RAMPS_WITHOUT_ENTRANCE)));
 				break;
 			case ConveyorRamp.RAMP_STOREAGE:
@@ -77,7 +77,7 @@ public class RampOrderAgent extends Agent {
 	
 	/**
 	 * Got message:
-	 * 		PackageAgent::SendEquirePackageRequest
+	 * 		PackageAgent::SendEnquirePackageRequest
 	 * 		RampOrderAgent::GetEnquirePackageRequest
 	 * 		RampRoutingAgent::Auction
 	 * Send message:
@@ -89,7 +89,7 @@ public class RampOrderAgent extends Agent {
 	 * 
      * @author Matthias
      */
-	private class SendEquirePackageRequestRelay extends CyclicBehaviour {
+	private class SendEnquirePackageRequestRelay extends CyclicBehaviour {
 		int step = 0;
 		int rampsResponded = 0;
 		int requestingRampType = 0;
@@ -206,7 +206,7 @@ public class RampOrderAgent extends Agent {
 	
 	/**
 	 * Got message:
-	 * 		RampOrderAgent::SendEquirePackageRequestRelay
+	 * 		RampOrderAgent::SendEnquirePackageRequestRelay
 	 * Send message:
 	 * 		RampAgent::SetDestinationRelay		
 	 * 
@@ -232,14 +232,14 @@ public class RampOrderAgent extends Agent {
 	
 	/**
 	 * Got message:
-	 * 		RamOrderAgent::SendEquirePackageRequestRelay
+	 * 		RamOrderAgent::SendEnquirePackageRequestRelay
 	 * 		PackageAgent::Job_Available
 	 * 		PackageAgent::GetPackageCountBehaviour
 	 * Send message:
 	 * 		PackageAgent::Job_Available
 	 * 		PackageAgent::GetPackageCountBehaviour
 	 * 		PackageAgent::PackageFoundInStorage
-	 * 		RampOrderAgent::SendEquirePackageRequestRelay
+	 * 		RampOrderAgent::SendEnquirePackageRequestRelay
 	 * 
 	 * determines if ramp has space to take a package
 	 * and demands to get it when ramp has a job for it

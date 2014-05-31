@@ -61,12 +61,12 @@ public class RampRoutingAgent extends Agent {
 	
 	/**
 	 * Got message:
-	 *		RampOrderAgent::SendEquirePackageRequestRelay
-	 *		VehicleRoutingAgent::HandleEstimationRequestAssignment		 		
+	 *		RampOrderAgent::SendEnquirePackageRequestRelay
+	 *		VehicleRoutingAgent::EstimationRequest		 		
 	 * Send message:
-	 * 		VehicleRoutingAgent::HandleEstimationRequestAssignment
+	 * 		VehicleRoutingAgent::AssignJob
 	 * 		RampRoutingAgent::SetPendingIncomingStatusRelay
-	 * 		RampOrderAgent::SendEquirePackageRequestRelay
+	 * 		RampOrderAgent::SendEnquirePackageRequestRelay
 	 * 
 	 * handles complete auction process
 	 * 
@@ -162,14 +162,14 @@ public class RampRoutingAgent extends Agent {
 					msgAssignJob.addUserDefinedParameter("dstRampID", "" + dstRampID);
 					AgentHelper.addReceivers(msgAssignJob, myAgent, mySzenario.getId());
 					send(msgAssignJob);
-					
-					// auction has ended and "hopefully" a vehicle has been found
-					ACLMessage msgAuctionEnd = new ACLMessage(MessageType.AUCTION_END);
-					msgAuctionEnd.addUserDefinedParameter("vehicle_found", (bestVehicleID > -1) ? "1" : "0");
-					msgAuctionEnd.addUserDefinedParameter("vehicleID", "" + bestVehicleID);
-					AgentHelper.addReceiver(msgAuctionEnd, myAgent, RampOrderAgent.NAME, myConveyor.getID(), mySzenario.getId());
-					send(msgAuctionEnd);
 				}
+				
+				// auction has ended and "hopefully" a vehicle has been found
+				ACLMessage msgAuctionEnd = new ACLMessage(MessageType.AUCTION_END);
+				msgAuctionEnd.addUserDefinedParameter("vehicle_found", (bestVehicleID > -1) ? "1" : "0");
+				msgAuctionEnd.addUserDefinedParameter("vehicleID", "" + bestVehicleID);
+				AgentHelper.addReceiver(msgAuctionEnd, myAgent, RampOrderAgent.NAME, myConveyor.getID(), mySzenario.getId());
+				send(msgAuctionEnd);				
 				
 				step = 0;
 			}

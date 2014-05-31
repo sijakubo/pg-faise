@@ -83,7 +83,7 @@ public class VehiclePlattformAgent extends Agent {
 	
 	/**
 	 * Got message:
-	 *		VehicleRoutingAgent::HandleEstimationRequestAssignment				
+	 *		VehicleRoutingAgent::AssignJob				
 	 * Send message:
 	 * 		RampPlattformAgent::TransferPackageRelay
 	 * 		PackageAgent::TransferPackage
