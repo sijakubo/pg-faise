@@ -135,8 +135,10 @@ public class VehiclePlattformAgent extends Agent {
 				// go to source ramp							
 				myConveyor.setPosition(srcPoint.getX(), srcPoint.getY(), true);
 				
+				
+				logger.log(Level.INFO, "Transfer 01 ---");
 				// take package from source ramp to this vehicle				
-				ACLMessage msgTransferFromSource = new ACLMessage(MessageType.TRANSFER_PACKAGE);;
+				ACLMessage msgTransferFromSource = new ACLMessage(MessageType.TRANSFER_PACKAGE);
 				msgTransferFromSource.addUserDefinedParameter("dstConveyorID", "" + myConveyor.getID());
 				AgentHelper.addReceiver(msgTransferFromSource, myAgent, RampPlattformAgent.NAME, srcRampID, mySzenario.getId());
 				send(msgTransferFromSource);
@@ -144,6 +146,8 @@ public class VehiclePlattformAgent extends Agent {
 				// go to destination ramp						
 				myConveyor.setPosition(dstPoint.getX(), dstPoint.getY(), true);
 				
+				
+				logger.log(Level.INFO, "Transfer 02 ---");
 				// give package to destination ramp				
 				ACLMessage msgTransferToDestination = new ACLMessage(MessageType.TRANSFER_PACKAGE);
 				msgTransferToDestination.addUserDefinedParameter("dstConveyorID", "" + dstRampID);

@@ -43,7 +43,7 @@ public abstract class Conveyor implements Serializable {
 	private int direction = DIRECTION_UP;
 
 	//private int packageCount = 0;
-	private List<String> lstPackage = new ArrayList<String>(); 
+	protected List<String> lstPackage = new ArrayList<String>(); 
 	
 	protected int packageCountMax = 0;
 
