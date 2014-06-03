@@ -1,6 +1,5 @@
 package uni.oldenburg.server.agent;
 
-import java.awt.Point;
 import java.io.IOException;
 
 import org.apache.log4j.Level;
@@ -13,6 +12,7 @@ import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.ConveyorVehicle;
+import uni.oldenburg.shared.model.Point;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;

@@ -1,6 +1,5 @@
 package uni.oldenburg.server.agent;
 
-import java.awt.Point;
 import java.io.IOException;
 
 import org.apache.log4j.Level;
@@ -13,6 +12,7 @@ import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.ConveyorVehicle;
+import uni.oldenburg.shared.model.Point;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -133,7 +133,7 @@ public class VehiclePlattformAgent extends Agent {
 			}
 			else if (step == 1) {
 				// go to source ramp
-				myConveyor.setPosition(srcPoint.x, srcPoint.y);
+				myConveyor.setPosition(srcPoint.getX(), srcPoint.getY());
 				
 				// take package from source ramp to this vehicle
 				ACLMessage msgTransferFromSource = new ACLMessage(MessageType.TRANSFER_PACKAGE);;
@@ -142,7 +142,7 @@ public class VehiclePlattformAgent extends Agent {
 				send(msgTransferFromSource);
 				
 				// go to destination ramp				
-				myConveyor.setPosition(dstPoint.x, dstPoint.y);
+				myConveyor.setPosition(dstPoint.getX(), dstPoint.getY());
 				
 				// give package to destination ramp
 				ACLMessage msgTransferToDestination = new ACLMessage(MessageType.TRANSFER_PACKAGE);

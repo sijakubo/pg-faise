@@ -1,7 +1,5 @@
 package uni.oldenburg.shared.model;
 
-import java.awt.Point;
-
 import uni.oldenburg.client.view.MainFrameView;
 
 import com.google.gwt.canvas.client.Canvas;
