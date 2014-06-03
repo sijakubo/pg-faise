@@ -1,6 +1,5 @@
 package uni.oldenburg.server.agent;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +9,6 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import uni.oldenburg.Debugging;
-import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.ConveyorRamp;
@@ -18,7 +16,6 @@ import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import jade.lang.acl.UnreadableException;
 import uni.oldenburg.shared.model.Szenario;
 
 @SuppressWarnings("serial")
@@ -43,7 +40,6 @@ public class RampRoutingAgent extends Agent {
 		}		
 		
 		addBehaviour(new Auction());
-		addBehaviour(new SetPendingIncomingStatusRelay(MessageType.SET_PENDING_INCOMING_STATUS));
 		
 		vehicleCount = AgentHelper.getSimulationConveyorCounts(mySzenario).VehicleCount;
 
@@ -61,11 +57,9 @@ public class RampRoutingAgent extends Agent {
 	
 	/**
 	 * Got message:
-	 *		RampOrderAgent::SendEnquirePackageRequestRelay
 	 *		VehicleRoutingAgent::EstimationRequest		 		
 	 * Send message:
 	 * 		VehicleRoutingAgent::AssignJob
-	 * 		RampRoutingAgent::SetPendingIncomingStatusRelay
 	 * 		RampOrderAgent::SendEnquirePackageRequestRelay
 	 * 
 	 * handles complete auction process
@@ -86,8 +80,12 @@ public class RampRoutingAgent extends Agent {
 				ACLMessage msgReceive = myAgent.receive(MessageTemplate.MatchPerformative(MessageType.AUCTION_START));
 				
 				if (msgReceive != null) {
+					//logger.log(Level.INFO, "Action request received");
+					
 					srcRampID = Integer.parseInt(msgReceive.getUserDefinedParameter("srcRampID"));
 					dstRampID = Integer.parseInt(msgReceive.getUserDefinedParameter("dstRampID"));
+					
+					//logger.log(Level.INFO, "Request estimation");
 					
 					// request estimation
 					ACLMessage msgEstimationRequest = new ACLMessage(MessageType.ESTIMATION_REQUEST);
@@ -106,6 +104,11 @@ public class RampRoutingAgent extends Agent {
 				ACLMessage msgReceive = myAgent.receive(MessageTemplate.MatchPerformative(MessageType.ESTIMATION_RESPONSE));
 				
 				if (msgReceive != null) {
+					/*logger.log(Level.INFO, 	"[Estimation response]" +
+											" ID: " + msgReceive.getUserDefinedParameter("vehicleID") +
+											" Est: " + msgReceive.getUserDefinedParameter("estimation") +
+											" HasJob: " + msgReceive.getUserDefinedParameter("pendingJob"));*/
+					
 					if (vehiclesAnswered < vehicleCount) {
 						++vehiclesAnswered;
 						
@@ -115,17 +118,18 @@ public class RampRoutingAgent extends Agent {
 									Integer.parseInt(msgReceive.getUserDefinedParameter("vehicleID")),
 									Integer.parseInt(msgReceive.getUserDefinedParameter("estimation")));
 						}
-					}
-					else {
-						step = 2;
-						vehiclesAnswered = 0;
+						
+						if (vehiclesAnswered == vehicleCount) {
+							step = 2;
+							vehiclesAnswered = 0;
+						}
 					}
 				}
 				else
 					block();
 			}
 			// choose vehicle with best estimation
-			else if (step == 2) {
+			else if (step == 2) {				
 				int bestVehicleID = -1;
 				int bestVehicleEstimation = 0;
 				List<Integer> lstBestVehicles = new ArrayList<Integer>();
@@ -137,6 +141,8 @@ public class RampRoutingAgent extends Agent {
 					}
 				}
 				
+				//logger.log(Level.INFO, "Best estimation: " + bestVehicleEstimation);
+				
 				// collect vehicles with the best estimation (in case there is more than one)
 				for(Integer myVehicleID : mapVehicleEstimation.keySet()) {
 					if (mapVehicleEstimation.get(myVehicleID) <= bestVehicleEstimation) {
@@ -144,15 +150,19 @@ public class RampRoutingAgent extends Agent {
 					}
 				}
 				
+				//logger.log(Level.INFO, "VehicleCount with best estimation: " + lstBestVehicles.size());
+				
 				// choose a random vehicle with the best estimation
 				if (lstBestVehicles.size() > 0) {					
 					int randomIndex = (int)(Math.random() * 100) % lstBestVehicles.size();
 					
 					bestVehicleID = lstBestVehicles.get(randomIndex);
 					
+					logger.log(Level.INFO, "Ramdom choice: " + bestVehicleID + " send incoming status...");	
+					
 					// set pending incoming job status in destination ramp
 					ACLMessage msgSetPendingStatus = new ACLMessage(MessageType.SET_PENDING_INCOMING_STATUS);
-					AgentHelper.addReceiver(msgSetPendingStatus, myAgent, RampRoutingAgent.NAME, dstRampID, mySzenario.getId());
+					AgentHelper.addReceiver(msgSetPendingStatus, myAgent, PackageAgent.NAME, dstRampID, mySzenario.getId());
 					send(msgSetPendingStatus);
 					
 					// send message to all "VehicleRoutingAgents" about who got the job
@@ -174,28 +184,5 @@ public class RampRoutingAgent extends Agent {
 				step = 0;
 			}
 		}
-	}
-	
-	/**
-	 * Got message:
-	 *		RampRoutingAgent::Auction	 		
-	 * Send message:
-	 * 		PackageAgent::SetPendingIncomingStatus
-	 * 
-	 * sets pending incoming job flag in own package-agent
-	 * 
-     * @author Matthias
-     */
-	private class SetPendingIncomingStatusRelay extends CyclicReceiverBehaviour {
-		protected SetPendingIncomingStatusRelay(int msgType) {
-			super(MessageTemplate.MatchPerformative(msgType));
-		}
-
-		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-			// set pending incoming job status to own package-agent
-			ACLMessage msgSetPendingStatus = new ACLMessage(MessageType.SET_PENDING_INCOMING_STATUS);
-			AgentHelper.addReceiver(msgSetPendingStatus, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
-			send(msgSetPendingStatus);
-		}		
 	}
 }

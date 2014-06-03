@@ -11,7 +11,7 @@ import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.data.PackageData;
 import uni.oldenburg.server.agent.helper.AgentHelper;
-import uni.oldenburg.server.agent.helper.EventHelper;
+import uni.oldenburg.server.agent.helper.DelayTimes;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
@@ -21,6 +21,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import uni.oldenburg.shared.model.Szenario;
+import uni.oldenburg.shared.model.event.EventHelper;
 import uni.oldenburg.shared.model.event.PackageAddedEvent;
 import uni.oldenburg.shared.model.event.PackageRemovedEvent;
 
@@ -57,6 +58,8 @@ public class PackageAgent extends Agent {
 		addBehaviour(new SetDestination(MessageType.SET_DESTINATION));
 		addBehaviour(new SetPendingIncomingStatus(MessageType.SET_PENDING_INCOMING_STATUS));
 		addBehaviour(new TransferPackage(MessageType.TRANSFER_PACKAGE));
+		addBehaviour(new GetPendingJobStatus(MessageType.GET_PENDING_JOB_STATUS));
+		
 		
 		// am i am ramp?
 		if (myConveyor instanceof ConveyorRamp) {
@@ -89,6 +92,20 @@ public class PackageAgent extends Agent {
 		AgentHelper.unregister(this);
 	}
 	
+	private class GetPendingJobStatus extends CyclicReceiverBehaviour {
+		protected GetPendingJobStatus(int msgType) {
+			super(MessageTemplate.MatchPerformative(msgType));
+		}
+
+		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+			ACLMessage msgGetPendingJobStatus = new ACLMessage(MessageType.GET_PENDING_JOB_STATUS);
+			msgGetPendingJobStatus.addUserDefinedParameter("pendingJob", (hasPendingIncomingJob || hasPendingOutgoingJob) ? "1" : "0");
+			msgGetPendingJobStatus.addReceiver(msg.getSender());
+			
+			send(msgGetPendingJobStatus);
+		}
+	}
+	
 	/**
 	 * Got message:
 	 * 		RampPlattformAgent::IsPackageSpaceAvailableBehaviour
@@ -111,7 +128,7 @@ public class PackageAgent extends Agent {
 			
 			currentAgent.lstPackage.add(myPackage);
 			
-			EventHelper.addEvent(new PackageAddedEvent(myConveyor.getID()));
+			EventHelper.addEvent(new PackageAddedEvent(myConveyor.getID(), myPackage.getPackageID()));
    
 			if (Debugging.showPackageMessages)
 				logger.log(Level.INFO, myAgent.getLocalName() + ": package "+ myPackage.getPackageID() + " added");
@@ -174,6 +191,8 @@ public class PackageAgent extends Agent {
 			// get first package
 			PackageData myData = lstPackage.get(0);
 			
+			EventHelper.WaitForMS(DelayTimes.TRANSFER_PACKAGE);
+			
 			// remove package from own list
 			lstPackage.remove(0);
 			
@@ -181,7 +200,7 @@ public class PackageAgent extends Agent {
 				logger.log(Level.INFO, myAgent.getLocalName() + ": package " + myData.getPackageID() + " removed");
 			
 			// fire event, to inform client
-			EventHelper.addEvent(new PackageRemovedEvent(myConveyor.getID()));
+			EventHelper.addEvent(new PackageRemovedEvent(myConveyor.getID(), myData.getPackageID()));
 			
 			// tell destination conveyor to add the package
 			ACLMessage msgAddPackageToDestination = new ACLMessage(MessageType.ADD_PACKAGE);

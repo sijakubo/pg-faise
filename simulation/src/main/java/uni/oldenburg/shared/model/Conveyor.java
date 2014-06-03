@@ -1,6 +1,12 @@
 package uni.oldenburg.shared.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import uni.oldenburg.server.agent.helper.DelayTimes;
+import uni.oldenburg.shared.model.event.EventHelper;
+import uni.oldenburg.shared.model.event.PositionChangedEvent;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
@@ -36,7 +42,9 @@ public abstract class Conveyor implements Serializable {
 	
 	private int direction = DIRECTION_UP;
 
-	private int packageCount = 0;
+	//private int packageCount = 0;
+	private List<String> lstPackage = new ArrayList<String>(); 
+	
 	protected int packageCountMax = 0;
 
 	private transient Canvas canvas;
@@ -103,6 +111,15 @@ public abstract class Conveyor implements Serializable {
 	public void setPosition(int x, int y) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	public void setPosition(int x, int y, boolean onServer) {
+		this.setPosition(x, y);
+		
+		if (onServer) {
+			EventHelper.WaitForMS(DelayTimes.DRIVE_TO_DELAY);
+			EventHelper.addEvent(new PositionChangedEvent(x, y, this.getID()));
+		}
 	}
 
 	/**
@@ -191,18 +208,28 @@ public abstract class Conveyor implements Serializable {
 	}
 	
 	public int getPackageCount() {
-		return packageCount;
+		return lstPackage.size();
+		//return packageCount;
 	}
 	
-	public void setPackageCount(int packageCount) {
-		if (packageCount >= getPackageCountMax())
-			packageCount = getPackageCountMax();
+	/*public void setPackageCount(int count) {
+		this.packageCount = count;
 		
-		this.packageCount = packageCount;
+		canvas = null;
+	}*/
+	
+	public void addPackage(String sid) {
+		lstPackage.add(sid);
 		
 		this.canvas = null;
 	}
 	
+	public void removePackage(String sid) {
+		lstPackage.remove(sid);
+		
+		this.canvas = null;
+	}
+
 	public int getPackageCountMax() {
 		return packageCountMax;
 	}

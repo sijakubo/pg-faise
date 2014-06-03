@@ -3,16 +3,14 @@ package uni.oldenburg.shared.model.event;
 import de.novanic.eventservice.client.event.Event;
 
 @SuppressWarnings("serial")
-public class BotChangedPositionEvent implements Event {
+public class PositionChangedEvent implements Event {
 	private int id;
 	private int x;
 	private int y;
 
-	public BotChangedPositionEvent() {
+	public PositionChangedEvent() {}
 
-	}
-
-	public BotChangedPositionEvent(int x, int y, int id) {
+	public PositionChangedEvent(int x, int y, int id) {
          this.x=x;
          this.y=y;
          this.id=id;

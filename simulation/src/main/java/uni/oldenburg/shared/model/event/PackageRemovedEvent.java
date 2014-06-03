@@ -4,21 +4,29 @@ import de.novanic.eventservice.client.event.Event;
 
 @SuppressWarnings("serial")
 public class PackageRemovedEvent implements Event {
-    private int id;
+	private int conveyorID;
+	private int packageID;
 	
-	public PackageRemovedEvent(){
-		
-	}
+	public PackageRemovedEvent() {}
 	
-    public PackageRemovedEvent(int id){
-		this.id=id;
+    public PackageRemovedEvent(int conveyorID, int packageID){
+		this.setConveyorID(conveyorID);
+		this.setPackageID(packageID);
 	}
 
-	public int getId() {
-		return id;
+	public int getPackageID() {
+		return packageID;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setPackageID(int packageID) {
+		this.packageID = packageID;
+	}
+
+	public int getConveyorID() {
+		return conveyorID;
+	}
+
+	public void setConveyorID(int conveyorID) {
+		this.conveyorID = conveyorID;
 	}
 }

@@ -132,21 +132,21 @@ public class VehiclePlattformAgent extends Agent {
 					block();
 			}
 			else if (step == 1) {
-				// go to source ramp
-				myConveyor.setPosition(srcPoint.getX(), srcPoint.getY());
+				// go to source ramp							
+				myConveyor.setPosition(srcPoint.getX(), srcPoint.getY(), true);
 				
-				// take package from source ramp to this vehicle
+				// take package from source ramp to this vehicle				
 				ACLMessage msgTransferFromSource = new ACLMessage(MessageType.TRANSFER_PACKAGE);;
 				msgTransferFromSource.addUserDefinedParameter("dstConveyorID", "" + myConveyor.getID());
 				AgentHelper.addReceiver(msgTransferFromSource, myAgent, RampPlattformAgent.NAME, srcRampID, mySzenario.getId());
 				send(msgTransferFromSource);
 				
-				// go to destination ramp				
-				myConveyor.setPosition(dstPoint.getX(), dstPoint.getY());
+				// go to destination ramp						
+				myConveyor.setPosition(dstPoint.getX(), dstPoint.getY(), true);
 				
-				// give package to destination ramp
+				// give package to destination ramp				
 				ACLMessage msgTransferToDestination = new ACLMessage(MessageType.TRANSFER_PACKAGE);
-				msgTransferFromSource.addUserDefinedParameter("dstConveyorID", "" + dstRampID);
+				msgTransferToDestination.addUserDefinedParameter("dstConveyorID", "" + dstRampID);
 				AgentHelper.addReceiver(msgTransferToDestination, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
 				send(msgTransferToDestination);
 				

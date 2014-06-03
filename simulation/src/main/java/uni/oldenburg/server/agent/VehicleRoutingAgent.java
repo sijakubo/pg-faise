@@ -1,5 +1,10 @@
 package uni.oldenburg.server.agent;
 
+import jade.core.Agent;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.UnreadableException;
+
 import java.io.IOException;
 
 import org.apache.log4j.Level;
@@ -13,10 +18,6 @@ import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.ConveyorVehicle;
 import uni.oldenburg.shared.model.Point;
-import jade.core.Agent;
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
-import jade.lang.acl.UnreadableException;
 import uni.oldenburg.shared.model.Szenario;
 
 @SuppressWarnings("serial")
@@ -84,8 +85,21 @@ public class VehicleRoutingAgent extends Agent {
 			int sumEstimation = 1;
 			boolean hasPendingJob = false;
 			
-			if (auctionInProgress == false) {
+			ACLMessage msgGetPendingJobStatus = new ACLMessage(MessageType.GET_PENDING_JOB_STATUS);
+			AgentHelper.addReceiver(msgGetPendingJobStatus, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
+			send(msgGetPendingJobStatus);
+			
+			ACLMessage msgPendingJobStatus = myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.GET_PENDING_JOB_STATUS));
+			hasPendingJob = msgPendingJobStatus.getUserDefinedParameter("pendingJob").equals("1") ? true : false;
+			
+			//logger.log(Level.INFO, "Request estimation in process...");
+			
+			//logger.log(Level.INFO, "Conveyor " + myConveyor.getID() + " has job: " + hasPendingJob);
+			
+			if (auctionInProgress == false && hasPendingJob == false) {
 				auctionInProgress = true;
+				
+				//logger.log(Level.INFO, "No auction in progress -> request current position");
 				
 				// request current position
 				ACLMessage msgPositionRequest = new ACLMessage(MessageType.GET_CURRENT_POSITION);
@@ -97,6 +111,8 @@ public class VehicleRoutingAgent extends Agent {
 				int cur_x = Integer.parseInt(msgPositionResponse.getUserDefinedParameter("pos_x"));
 				int cur_y = Integer.parseInt(msgPositionResponse.getUserDefinedParameter("pos_y"));
 				Point curPoint = new Point(cur_x, cur_y);
+				
+				//logger.log(Level.INFO, "Got current position: " + curPoint.toString());
 				
 				srcRampID = Integer.parseInt(msg.getUserDefinedParameter("srcRampID"));
 				dstRampID = Integer.parseInt(msg.getUserDefinedParameter("dstRampID"));
@@ -115,15 +131,23 @@ public class VehicleRoutingAgent extends Agent {
 					}
 				}
 				
+				//logger.log(Level.INFO, "SRC position: " + srcRampPoint.toString());
+				//logger.log(Level.INFO, "DST position: " + dstRampPoint.toString());
+				
 				// calculate estimations
 				int toSourceRampEstimation = CalculateEstimation(curPoint, srcRampPoint);
 				int toDestinationRampEstimation = CalculateEstimation(srcRampPoint, dstRampPoint);
 				
 				sumEstimation = toSourceRampEstimation + toDestinationRampEstimation;
+				
+				//logger.log(Level.INFO, "Estimation: " + sumEstimation);
 			}
 			else {
 				hasPendingJob = true;
 			}
+			
+			if (hasPendingJob)
+				logger.log(Level.INFO, "INFO: Conveyor " + myConveyor.getID() + " already has a pending job");
 			
 			// send estimation response
 			ACLMessage msgEstimationResponse = new ACLMessage(MessageType.ESTIMATION_RESPONSE);
@@ -155,12 +179,18 @@ public class VehicleRoutingAgent extends Agent {
 		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
 			int vehicleWhoGotJobID = Integer.parseInt(msg.getUserDefinedParameter("vehicleID"));
 			
+			//logger.log(Level.INFO, "Assign Job...");
+			
 			// am i the one who got the job?
 			if (myConveyor.getID() == vehicleWhoGotJobID) {
+				logger.log(Level.INFO, "Set Conveyor " + myConveyor.getID() + " incoming flag status");	
+				
 				// set pending incoming job status in own package-agent
 				ACLMessage msgSetPendingStatus = new ACLMessage(MessageType.SET_PENDING_INCOMING_STATUS);
 				AgentHelper.addReceiver(msgSetPendingStatus, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
 				send(msgSetPendingStatus);
+				
+				//logger.log(Level.INFO, "Conveyor " + myConveyor.getID() + " -> start driving!");
 				
 				// send me "VehiclePlattformAgent" a message where to drive to
 				ACLMessage msgSendPaths = new ACLMessage(MessageType.DRIVING_START);

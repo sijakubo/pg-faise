@@ -27,13 +27,11 @@ import uni.oldenburg.shared.model.Job;
 import uni.oldenburg.shared.model.JobList;
 import uni.oldenburg.shared.model.Szenario;
 import uni.oldenburg.shared.model.SzenarioInfo;
-import uni.oldenburg.shared.model.event.BotAddPackageEvent;
-import uni.oldenburg.shared.model.event.BotChangedPositionEvent;
-import uni.oldenburg.shared.model.event.BotRemovePackageEvent;
 import uni.oldenburg.shared.model.event.JobAssignedEvent;
 import uni.oldenburg.shared.model.event.JobUnassignableEvent;
 import uni.oldenburg.shared.model.event.PackageAddedEvent;
 import uni.oldenburg.shared.model.event.PackageRemovedEvent;
+import uni.oldenburg.shared.model.event.PositionChangedEvent;
 import uni.oldenburg.shared.model.event.SimStartedEvent;
 import uni.oldenburg.shared.model.event.SimStoppedEvent;
 
@@ -470,6 +468,7 @@ public class MainFramePresenter extends Presenter {
 	private void drawConveyor(Conveyor myConveyor) {
 		Context2d context = display.getCanvas().getContext2d();
 		context.drawImage(myConveyor.getCanvasElement(), myConveyor.getX(), myConveyor.getY());
+		
 		if(Debugging.showCharge) { 
 			if(myConveyor instanceof ConveyorVehicle) {
 				double charge = ((ConveyorVehicle) myConveyor).getBatteryCharge();
@@ -999,11 +998,11 @@ public class MainFramePresenter extends Presenter {
 					return;
 				}
 				
-				if (anEvent instanceof BotChangedPositionEvent) {					
-					BotChangedPositionEvent myEvent = (BotChangedPositionEvent)anEvent;
+				if (anEvent instanceof PositionChangedEvent) {					
+					PositionChangedEvent myEvent = (PositionChangedEvent)anEvent;
 					
-					Conveyor ramp=currentSzenario.getConveyorById(myEvent.getId());
-					ramp.setPosition(myEvent.getX(), myEvent.getY());
+					Conveyor myConveyor = currentSzenario.getConveyorById(myEvent.getId());
+					myConveyor.setPosition(myEvent.getX(), myEvent.getY());
 					
 					loadSzenario(currentSzenario);
 					
@@ -1013,8 +1012,9 @@ public class MainFramePresenter extends Presenter {
 				if (anEvent instanceof PackageAddedEvent) {					
 					PackageAddedEvent myEvent = (PackageAddedEvent)anEvent;
 					
-					Conveyor ramp=currentSzenario.getConveyorById(myEvent.getId());
-					ramp.setPackageCount(ramp.getPackageCount()+1);
+					Conveyor myConveyor = currentSzenario.getConveyorById(myEvent.getConveyorID());
+					//myConveyor.setPackageCount(myConveyor.getPackageCount() + 1);
+					myConveyor.addPackage("" + myEvent.getPackageID());
 					
 					loadSzenario(currentSzenario);
 					
@@ -1024,36 +1024,14 @@ public class MainFramePresenter extends Presenter {
 				if (anEvent instanceof PackageRemovedEvent) {					
 					PackageRemovedEvent myEvent = (PackageRemovedEvent)anEvent;
 					
-					Conveyor ramp=currentSzenario.getConveyorById(myEvent.getId());
-					ramp.setPackageCount(ramp.getPackageCount()-1);
+					Conveyor myConveyor = currentSzenario.getConveyorById(myEvent.getConveyorID());
+					//myConveyor.setPackageCount(myConveyor.getPackageCount() - 1);
+					myConveyor.removePackage("" + myEvent.getPackageID());
 					
 					loadSzenario(currentSzenario);
 					
 					return;
 				}
-				
-				if (anEvent instanceof BotAddPackageEvent) {					
-					BotAddPackageEvent myEvent = (BotAddPackageEvent)anEvent;
-					
-					Conveyor ramp=currentSzenario.getConveyorById(myEvent.getId());
-					ramp.setPackageCount(ramp.getPackageCount()+1);
-					
-					loadSzenario(currentSzenario);
-					
-					return;
-				}
-				
-				if (anEvent instanceof BotRemovePackageEvent) {					
-					BotRemovePackageEvent myEvent = (BotRemovePackageEvent)anEvent;
-					
-					Conveyor ramp=currentSzenario.getConveyorById(myEvent.getId());
-					ramp.setPackageCount(ramp.getPackageCount()-1);
-					
-					loadSzenario(currentSzenario);
-					
-					return;
-				}
-				
 			}
 		});
 	}

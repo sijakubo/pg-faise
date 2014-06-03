@@ -106,6 +106,7 @@ public class ConveyorRamp extends Conveyor {
 			case DIRECTION_UP:
 				drawEntry(context, CONVEYOR_COLOR_INPUT, 0, this.getHeight() - ENTRY_BORDER_SIZE, this.getWidth(), ENTRY_BORDER_SIZE);
 				drawEntry(context, CONVEYOR_COLOR_OUTPUT, 0, 0, this.getWidth(), ENTRY_BORDER_SIZE);
+				
 				//packages:
 				context.setFillStyle(CssColor.make(0, 63, 127));
 				for(int i = 0; i < this.getPackageCount(); i++) {
@@ -115,6 +116,7 @@ public class ConveyorRamp extends Conveyor {
 			case DIRECTION_LEFT:
 				drawEntry(context, CONVEYOR_COLOR_INPUT, this.getWidth() - ENTRY_BORDER_SIZE, 0, ENTRY_BORDER_SIZE, this.getWidth());
 				drawEntry(context, CONVEYOR_COLOR_OUTPUT, 0, 0, ENTRY_BORDER_SIZE, this.getWidth());
+				
 				//packages:
 				context.setFillStyle(CssColor.make(0, 63, 127));
 				for(int i = 0; i < this.getPackageCount(); i++) {
@@ -124,6 +126,7 @@ public class ConveyorRamp extends Conveyor {
 			case DIRECTION_DOWN:
 				drawEntry(context, CONVEYOR_COLOR_INPUT, 0, 0, this.getWidth(), ENTRY_BORDER_SIZE);
 				drawEntry(context, CONVEYOR_COLOR_OUTPUT, 0, this.getHeight() - ENTRY_BORDER_SIZE, this.getWidth(), ENTRY_BORDER_SIZE);
+
 				//packages:
 				context.setFillStyle(CssColor.make(0, 63, 127));
 				for(int i = this.getPackageCountMax() - this.getPackageCount(); i < this.getPackageCountMax(); i++) {
@@ -134,6 +137,7 @@ public class ConveyorRamp extends Conveyor {
 				drawEntry(context, CONVEYOR_COLOR_INPUT, 0, 0, ENTRY_BORDER_SIZE, this.getWidth());				
 				drawEntry(context, CONVEYOR_COLOR_OUTPUT , this.getWidth() - ENTRY_BORDER_SIZE, 0, ENTRY_BORDER_SIZE, this.getWidth());
 				//packages:
+				
 				context.setFillStyle(CssColor.make(0, 63, 127));
 				for(int i = this.getPackageCountMax() - this.getPackageCount(); i < this.getPackageCountMax(); i++) {
 					context.fillRect(0.025 * getWidth() + i * getWidth() / 4, 0.2 * getHeight(), getWidth() / 5, 0.6 * getHeight());

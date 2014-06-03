@@ -29,13 +29,13 @@ import uni.oldenburg.server.agent.RampRoutingAgent;
 import uni.oldenburg.server.agent.VehiclePlattformAgent;
 import uni.oldenburg.server.agent.VehicleRoutingAgent;
 import uni.oldenburg.server.agent.helper.AgentHelper;
-import uni.oldenburg.server.agent.helper.EventHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.ConveyorVehicle;
 import uni.oldenburg.shared.model.Job;
 import uni.oldenburg.shared.model.Szenario;
+import uni.oldenburg.shared.model.event.EventHelper;
 import uni.oldenburg.shared.model.event.SimStoppedEvent;
 
 @SuppressWarnings("serial")

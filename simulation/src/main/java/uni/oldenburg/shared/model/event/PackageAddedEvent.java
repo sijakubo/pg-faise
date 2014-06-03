@@ -4,25 +4,29 @@ import de.novanic.eventservice.client.event.Event;
 
 @SuppressWarnings("serial")
 public class PackageAddedEvent implements Event {
+	private int conveyorID;
+	private int packageID;
 	
-	private int id;
+	public PackageAddedEvent() {}
 	
-	public PackageAddedEvent(){
-		
-	}
-	
-    public PackageAddedEvent(int id){
-		this.id=id;
-	}
-
-	public int getId() {
-		return id;
+    public PackageAddedEvent(int conveyorID, int packageID){
+		this.setConveyorID(conveyorID);
+		this.setPackageID(packageID);
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public int getPackageID() {
+		return packageID;
 	}
-	
-	
 
+	public void setPackageID(int packageID) {
+		this.packageID = packageID;
+	}
+
+	public int getConveyorID() {
+		return conveyorID;
+	}
+
+	public void setConveyorID(int conveyorID) {
+		this.conveyorID = conveyorID;
+	}
 }

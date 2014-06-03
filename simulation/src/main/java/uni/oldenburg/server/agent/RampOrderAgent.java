@@ -173,8 +173,10 @@ public class RampOrderAgent extends Agent {
 						
 						int destinationConveyorID = lstConveyorRamps.get(randomIndex);
 						
-						if (Debugging.showDebugMessages)
-							logger.log(Level.INFO, myAgent.getLocalName() + " chosen conveyor: " + destinationConveyorID);
+						//if (Debugging.showDebugMessages)
+							//logger.log(Level.INFO, myAgent.getLocalName() + " chosen conveyor: " + destinationConveyorID + " -> start auction");
+						
+						logger.log(Level.INFO, "ConveyorID: " + myConveyor.getID() + " Auction running...");
 						
 						// initialize auction
 						ACLMessage msgAuctionStart = new ACLMessage(MessageType.AUCTION_START);
@@ -192,8 +194,10 @@ public class RampOrderAgent extends Agent {
 							msgSetDestination.addUserDefinedParameter("packageID", "" + packageID);
 							msgSetDestination.addUserDefinedParameter("destinationID", "" + destinationConveyorID);
 							AgentHelper.addReceiver(msgSetDestination, myAgent, RampOrderAgent.NAME, requestingConveyorID, mySzenario.getId());
-							send(msgSetDestination);	
+							send(msgSetDestination);
 						}
+						
+						logger.log(Level.INFO, "ConveyorID: " + myConveyor.getID() + "Auction ended!");
 					}
 					
 					step = 0;
@@ -262,9 +266,11 @@ public class RampOrderAgent extends Agent {
 			ConveyorRamp myRampConveyor = (ConveyorRamp)myConveyor;
 			
 			// entrance ramp sent enquire -> send to exit and storage ramps
-			if (requestingRampType == ConveyorRamp.RAMP_ENTRANCE) {				
+			if (requestingRampType == ConveyorRamp.RAMP_ENTRANCE) {								
 				// send to exit ramps and ask, if it has an available job
-				if (myRampConveyor.getRampType() == ConveyorRamp.RAMP_EXIT) {					
+				if (myRampConveyor.getRampType() == ConveyorRamp.RAMP_EXIT) {	
+					//logger.log(Level.INFO, "Requestor: " + "Entrance - asks: " + "Exit");
+					
 					// ask if job is available and force demanding if so
 					ACLMessage msgDemandPackage = new ACLMessage(MessageType.DEMAND_PACKAGE);
 					msgDemandPackage.addUserDefinedParameter("packageID", "" + packageID);
@@ -279,6 +285,8 @@ public class RampOrderAgent extends Agent {
 				
 				} // send to storage ramps and ask if they have space to take a package
 				else if (myRampConveyor.getRampType() == ConveyorRamp.RAMP_STOREAGE) {	
+					//logger.log(Level.INFO, "Requestor: " + "Entrance - asks: " + "Storage");
+					
 					ACLMessage msgSizeRequest = new ACLMessage(MessageType.GET_PACKAGE_COUNT);
 					AgentHelper.addReceiver(msgSizeRequest, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
 					send(msgSizeRequest);
@@ -294,6 +302,8 @@ public class RampOrderAgent extends Agent {
 			
 			} // exit ramp sent enquire -> send to storage ramps 
 			else if (requestingRampType == ConveyorRamp.RAMP_EXIT) {
+				//logger.log(Level.INFO, "Requestor: " + "Exit - asks: " + "Storage");
+				
 				ACLMessage msgDemandPackage = new ACLMessage(MessageType.FIND_PACKAGE_IN_STORAGE);
 				msgDemandPackage.addUserDefinedParameter("packageID", "" + packageID);
 				AgentHelper.addReceiver(msgDemandPackage, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
@@ -308,9 +318,10 @@ public class RampOrderAgent extends Agent {
 			}
 			
 			if (Debugging.showEnquirePackageMessages) {
-				logger.log(Level.INFO, myAgent.getLocalName() + " - send enquire [I am: " + 
-								((myRampConveyor.getRampType() == ConveyorRamp.RAMP_EXIT) ? "Exit" : "Storage") + " - " +
-								"Requester: " + ((requestingRampType == ConveyorRamp.RAMP_ENTRANCE) ? "Entrance" : "Exit") +
+				logger.log(Level.INFO, myAgent.getLocalName() + " - send enquire ["
+								+ ((requestingRampType == ConveyorRamp.RAMP_ENTRANCE) ? "Entrance" : "Exit") + " -> " +
+								((myRampConveyor.getRampType() == ConveyorRamp.RAMP_EXIT) ? "Exit" : "Storage") +
+								
 								"]: space: " + isSpaceAvailable + " (for entrance only) - demand package: " + doDemandPackage + " - packageID: " + packageID);	
 			}
 			
