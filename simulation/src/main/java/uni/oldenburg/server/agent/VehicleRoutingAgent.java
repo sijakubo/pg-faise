@@ -146,8 +146,8 @@ public class VehicleRoutingAgent extends Agent {
 				hasPendingJob = true;
 			}
 			
-			if (hasPendingJob)
-				logger.log(Level.INFO, "INFO: Conveyor " + myConveyor.getID() + " already has a pending job");
+			//if (hasPendingJob)
+				//logger.log(Level.INFO, "INFO: Conveyor " + myConveyor.getID() + " already has a pending job");
 			
 			// send estimation response
 			ACLMessage msgEstimationResponse = new ACLMessage(MessageType.ESTIMATION_RESPONSE);

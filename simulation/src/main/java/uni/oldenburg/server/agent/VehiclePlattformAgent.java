@@ -136,7 +136,7 @@ public class VehiclePlattformAgent extends Agent {
 				myConveyor.setPosition(srcPoint.getX(), srcPoint.getY(), true);
 				
 				
-				logger.log(Level.INFO, "Transfer 01 --- " + srcRampID + "->" + myConveyor.getID());
+				//logger.log(Level.INFO, "Transfer 01 --- " + srcRampID + "->" + myConveyor.getID());
 				// take package from source ramp to this vehicle				
 				ACLMessage msgTransferFromSource = new ACLMessage(MessageType.TRANSFER_PACKAGE);
 				msgTransferFromSource.addUserDefinedParameter("dstConveyorID", "" + myConveyor.getID());
@@ -145,7 +145,7 @@ public class VehiclePlattformAgent extends Agent {
 				
 				myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.TRANSFER_PACKAGE_COMPLETED));
 				
-				logger.log(Level.INFO, "Conveyor " + myConveyor.getID() + ": 01 TRANSFER package completed");
+				//logger.log(Level.INFO, "Conveyor " + myConveyor.getID() + ": 01 TRANSFER package completed");
 				
 				// go to destination ramp						
 				myConveyor.setPosition(dstPoint.getX(), dstPoint.getY(), true);
@@ -155,10 +155,15 @@ public class VehiclePlattformAgent extends Agent {
 				// give package to destination ramp				
 				ACLMessage msgTransferToDestination = new ACLMessage(MessageType.TRANSFER_PACKAGE);
 				msgTransferToDestination.addUserDefinedParameter("dstConveyorID", "" + dstRampID);
+				// -------------------------------------------------------------------------------------------------------------------------------------------------
+				//msgTransferToDestination.addUserDefinedParameter("transfering", "1");
+				// -------------------------------------------------------------------------------------------------------------------------------------------------				
 				AgentHelper.addReceiver(msgTransferToDestination, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
 				send(msgTransferToDestination);
 				
 				myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.TRANSFER_PACKAGE_COMPLETED));
+				
+				logger.log(Level.INFO, "Conveyor " + myConveyor.getID() + ": 02 TRANSFER package completed");
 				
 				// allow new drive request
 				step = 0;

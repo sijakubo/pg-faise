@@ -126,11 +126,24 @@ public class PackageAgent extends Agent {
 			PackageAgent currentAgent = (PackageAgent) myAgent;
 			PackageData myPackage = (PackageData) msg.getContentObject();
 			
+			// only sent from "TransferPackage"
+			if (msg.getUserDefinedParameter("dstConveyorID") != null) {
+				int dstConveyorID = Integer.parseInt(msg.getUserDefinedParameter("dstConveyorID"));
+				
+				if (dstConveyorID != myConveyor.getID()) {
+					return;
+				}
+			}
+			
+			/*if (msg.getUserDefinedParameter("transfering") != null) {
+				logger.log(Level.INFO, "Transfering to conveyor " + myConveyor.getID() + "...");
+			}*/
+			
 			currentAgent.lstPackage.add(myPackage);
 			
 			EventHelper.addEvent(new PackageAddedEvent(myConveyor.getID(), myPackage.getPackageID()));
    
-			if (Debugging.showPackageMessages)
+			//if (Debugging.showPackageMessages)
 				logger.log(Level.INFO, "Conveyor " + myConveyor.getID() + ": package "+ myPackage.getPackageID() + " added");
             
 			hasPendingIncomingJob = false;
@@ -209,13 +222,18 @@ public class PackageAgent extends Agent {
 			// tell destination conveyor to add the package
 			ACLMessage msgAddPackageToDestination = new ACLMessage(MessageType.ADD_PACKAGE);
 			msgAddPackageToDestination.setContentObject(myData);
+			msgAddPackageToDestination.addUserDefinedParameter("dstConveyorID", "" + dstConveyorID);
+			// -------------------------------------------------------------------------------------------------------------------------------------------------
+			//if (msg.getUserDefinedParameter("transfering") != null)
+				//msgAddPackageToDestination.addUserDefinedParameter("transfering", msg.getUserDefinedParameter("transfering"));
+			// -------------------------------------------------------------------------------------------------------------------------------------------------			
 			AgentHelper.addReceiver(msgAddPackageToDestination, myAgent, PackageAgent.NAME, dstConveyorID, mySzenario.getId());
 			send(msgAddPackageToDestination);
 			
 			// wait till completion
 			myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.ADD_PACKAGE_COMPLETED));
 			
-			logger.log(Level.INFO, "Conveyor " + myConveyor.getID() + ": package " + myData.getPackageID() + " package added completed");
+			//logger.log(Level.INFO, "Conveyor " + myConveyor.getID() + ": package " + myData.getPackageID() + " package added completed");
 			
 			// send complete notification
 			ACLMessage msgCompleted = new ACLMessage(MessageType.TRANSFER_PACKAGE_COMPLETED);
