@@ -29,4 +29,6 @@ public class MessageType {
 	public final static int GET_CURRENT_POSITION					= 22;
 	public final static int TRANSFER_PACKAGE						= 23;
 	public final static int GET_PENDING_JOB_STATUS					= 24;
+	public final static int ADD_PACKAGE_COMPLETED					= 25;
+	public final static int TRANSFER_PACKAGE_COMPLETED				= 26;
 }

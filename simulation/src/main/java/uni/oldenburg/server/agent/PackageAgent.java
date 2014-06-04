@@ -131,9 +131,13 @@ public class PackageAgent extends Agent {
 			EventHelper.addEvent(new PackageAddedEvent(myConveyor.getID(), myPackage.getPackageID()));
    
 			if (Debugging.showPackageMessages)
-				logger.log(Level.INFO, myAgent.getLocalName() + ": package "+ myPackage.getPackageID() + " added");
+				logger.log(Level.INFO, "Conveyor " + myConveyor.getID() + ": package "+ myPackage.getPackageID() + " added");
             
 			hasPendingIncomingJob = false;
+			
+			ACLMessage msgCompleted = new ACLMessage(MessageType.ADD_PACKAGE_COMPLETED);
+			msgCompleted.addReceiver(msg.getSender());
+			send(msgCompleted);
 		}
 	}
 
@@ -196,8 +200,8 @@ public class PackageAgent extends Agent {
 			// remove package from own list
 			lstPackage.remove(0);
 			
-			if (Debugging.showPackageMessages)
-				logger.log(Level.INFO, myAgent.getLocalName() + ": package " + myData.getPackageID() + " removed");
+			//if (Debugging.showPackageMessages)
+				logger.log(Level.INFO, "Conveyor " + myConveyor.getID() + ": package " + myData.getPackageID() + " removed");
 			
 			// fire event, to inform client
 			EventHelper.addEvent(new PackageRemovedEvent(myConveyor.getID(), myData.getPackageID()));
@@ -207,6 +211,16 @@ public class PackageAgent extends Agent {
 			msgAddPackageToDestination.setContentObject(myData);
 			AgentHelper.addReceiver(msgAddPackageToDestination, myAgent, PackageAgent.NAME, dstConveyorID, mySzenario.getId());
 			send(msgAddPackageToDestination);
+			
+			// wait till completion
+			myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.ADD_PACKAGE_COMPLETED));
+			
+			logger.log(Level.INFO, "Conveyor " + myConveyor.getID() + ": package " + myData.getPackageID() + " package added completed");
+			
+			// send complete notification
+			ACLMessage msgCompleted = new ACLMessage(MessageType.TRANSFER_PACKAGE_COMPLETED);
+			msgCompleted.addReceiver(msg.getSender());
+			send(msgCompleted);
 			
 			// allow new job assignments
 			hasPendingOutgoingJob = false;

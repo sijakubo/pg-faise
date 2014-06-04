@@ -158,7 +158,7 @@ public class RampRoutingAgent extends Agent {
 					
 					bestVehicleID = lstBestVehicles.get(randomIndex);
 					
-					logger.log(Level.INFO, "Ramdom choice: " + bestVehicleID + " send incoming status...");	
+					//logger.log(Level.INFO, "Ramdom choice: " + bestVehicleID + " send incoming status...");	
 					
 					// set pending incoming job status in destination ramp
 					ACLMessage msgSetPendingStatus = new ACLMessage(MessageType.SET_PENDING_INCOMING_STATUS);

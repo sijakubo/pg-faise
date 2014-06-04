@@ -136,23 +136,29 @@ public class VehiclePlattformAgent extends Agent {
 				myConveyor.setPosition(srcPoint.getX(), srcPoint.getY(), true);
 				
 				
-				logger.log(Level.INFO, "Transfer 01 ---");
+				logger.log(Level.INFO, "Transfer 01 --- " + srcRampID + "->" + myConveyor.getID());
 				// take package from source ramp to this vehicle				
 				ACLMessage msgTransferFromSource = new ACLMessage(MessageType.TRANSFER_PACKAGE);
 				msgTransferFromSource.addUserDefinedParameter("dstConveyorID", "" + myConveyor.getID());
 				AgentHelper.addReceiver(msgTransferFromSource, myAgent, RampPlattformAgent.NAME, srcRampID, mySzenario.getId());
 				send(msgTransferFromSource);
 				
+				myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.TRANSFER_PACKAGE_COMPLETED));
+				
+				logger.log(Level.INFO, "Conveyor " + myConveyor.getID() + ": 01 TRANSFER package completed");
+				
 				// go to destination ramp						
 				myConveyor.setPosition(dstPoint.getX(), dstPoint.getY(), true);
 				
 				
-				logger.log(Level.INFO, "Transfer 02 ---");
+				logger.log(Level.INFO, "Transfer 02 --- " + myConveyor.getID() + "->" + dstRampID);
 				// give package to destination ramp				
 				ACLMessage msgTransferToDestination = new ACLMessage(MessageType.TRANSFER_PACKAGE);
 				msgTransferToDestination.addUserDefinedParameter("dstConveyorID", "" + dstRampID);
 				AgentHelper.addReceiver(msgTransferToDestination, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
 				send(msgTransferToDestination);
+				
+				myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.TRANSFER_PACKAGE_COMPLETED));
 				
 				// allow new drive request
 				step = 0;

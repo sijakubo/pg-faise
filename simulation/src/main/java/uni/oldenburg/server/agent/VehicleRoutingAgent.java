@@ -183,7 +183,7 @@ public class VehicleRoutingAgent extends Agent {
 			
 			// am i the one who got the job?
 			if (myConveyor.getID() == vehicleWhoGotJobID) {
-				logger.log(Level.INFO, "Set Conveyor " + myConveyor.getID() + " incoming flag status");	
+				//logger.log(Level.INFO, "Set Conveyor " + myConveyor.getID() + " incoming flag status");	
 				
 				// set pending incoming job status in own package-agent
 				ACLMessage msgSetPendingStatus = new ACLMessage(MessageType.SET_PENDING_INCOMING_STATUS);

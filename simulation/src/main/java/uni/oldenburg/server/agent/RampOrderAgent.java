@@ -176,7 +176,7 @@ public class RampOrderAgent extends Agent {
 						//if (Debugging.showDebugMessages)
 							//logger.log(Level.INFO, myAgent.getLocalName() + " chosen conveyor: " + destinationConveyorID + " -> start auction");
 						
-						logger.log(Level.INFO, "ConveyorID: " + myConveyor.getID() + " Auction running...");
+						//logger.log(Level.INFO, "ConveyorID: " + myConveyor.getID() + " Auction running...");
 						
 						// initialize auction
 						ACLMessage msgAuctionStart = new ACLMessage(MessageType.AUCTION_START);
@@ -197,7 +197,7 @@ public class RampOrderAgent extends Agent {
 							send(msgSetDestination);
 						}
 						
-						logger.log(Level.INFO, "ConveyorID: " + myConveyor.getID() + "Auction ended!");
+						//logger.log(Level.INFO, "ConveyorID: " + myConveyor.getID() + ": auction ended!");
 					}
 					
 					step = 0;

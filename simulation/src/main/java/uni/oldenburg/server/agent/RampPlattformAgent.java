@@ -246,6 +246,12 @@ public class RampPlattformAgent extends Agent {
 			msgTransportPackage.addUserDefinedParameter("dstConveyorID", msg.getUserDefinedParameter("dstConveyorID"));
 			AgentHelper.addReceiver(msgTransportPackage, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
 			send(msgTransportPackage);
+			
+			myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.TRANSFER_PACKAGE_COMPLETED));
+			
+			ACLMessage msgCompleted = new ACLMessage(MessageType.TRANSFER_PACKAGE_COMPLETED);
+			msgCompleted.addReceiver(msg.getSender());
+			send(msgCompleted);
 		}
 	}
 }
