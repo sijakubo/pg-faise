@@ -91,8 +91,6 @@ public class AgentPlatformServiceImpl extends RemoteServiceServlet implements Ag
 	   
 	   startAgentPlatform(szenario);
 	   
-	   addAgentToSimulation(0, szenario.getId(), argsJobAgent, JobAgent.NAME, new JobAgent());
-	   
 	   for (Conveyor myConveyor : lstConveyor) {
 		   Object[] argsAgent = new Object[2];
 		   argsAgent[0] = szenario;
@@ -111,6 +109,8 @@ public class AgentPlatformServiceImpl extends RemoteServiceServlet implements Ag
 			   addAgentToSimulation(id, szenario.getId(), argsAgent, VehicleRoutingAgent.NAME	, new VehicleRoutingAgent());
 		   }
 	   }
+	   
+	   addAgentToSimulation(0, szenario.getId(), argsJobAgent, JobAgent.NAME, new JobAgent());
 	   
 	   startAgents();
 	   
