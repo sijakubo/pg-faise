@@ -1,4 +1,6 @@
-package uni.oldenburg.server.agent.helper;
+package uni.oldenburg.shared.model.event;
+
+import java.util.Date;
 
 import uni.oldenburg.client.presenter.MainFramePresenter;
 import de.novanic.eventservice.client.event.Event;
@@ -18,5 +20,13 @@ public class EventHelper extends RemoteEventServiceServlet {
 	
 	public static void addEvent(Event newEvent) {
 		EventHelper.getInstance().addEvent(DomainFactory.getDomain(MainFramePresenter.DOMAIN_NAME), newEvent);
+	}
+	
+	public static void WaitForMS(int ms) {
+		long startTime = new Date().getTime();
+		
+		while(new Date().getTime() - startTime < ms){
+			// active waiting...
+		}
 	}
 }

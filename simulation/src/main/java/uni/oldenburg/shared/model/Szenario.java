@@ -20,7 +20,7 @@ public class Szenario implements Serializable {
 	private String title;
 	private String time_created;
 	private String created_by_user;
-	private List<Conveyor> lstConveyor;
+	private List<Conveyor> lstConveyor = new ArrayList<Conveyor>();
 	
 	private int width = MainFrameView.canvasWidth;
 	private int height = MainFrameView.canvasHeight;	
@@ -29,16 +29,12 @@ public class Szenario implements Serializable {
 		this.title = "new Szenario";
 		this.time_created = "now";
 		this.created_by_user = "unknown user";
-		
-		lstConveyor = new ArrayList<Conveyor>();
 	}
 
 	public Szenario (String title, String time_created, String created_by_user) {
 		this.title = title;
 		this.time_created = time_created;
 		this.created_by_user = created_by_user;
-		
-		lstConveyor = new ArrayList<Conveyor>();
 	}
 	
 	public void addConveyor(Conveyor newConveyor) {
@@ -99,7 +95,7 @@ public class Szenario implements Serializable {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setID(int id) {
 		this.id = id;
-	}	
+	}
 }

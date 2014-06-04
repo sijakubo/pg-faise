@@ -3,6 +3,11 @@ package uni.oldenburg.server.agent.helper;
 import java.util.ArrayList;
 import java.util.List;
 
+import uni.oldenburg.shared.model.Conveyor;
+import uni.oldenburg.shared.model.ConveyorRamp;
+import uni.oldenburg.shared.model.ConveyorVehicle;
+import uni.oldenburg.shared.model.Szenario;
+import uni.oldenburg.shared.model.SzenarioInfo;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
@@ -37,7 +42,6 @@ public class AgentHelper {
 	 * unregister agent as global identifier
 	 * 
 	 * @author Matthias
-	 *
 	 */
 	public static void unregister(Agent myAgent) {
 		try {
@@ -96,7 +100,6 @@ public class AgentHelper {
 	 * set list of AIDs as receivers
 	 * 
 	 * @author Matthias
-	 *
 	 */
 	public static void addReceivers(ACLMessage msg, List<AID> lstAID) {
 		for (AID myAID : lstAID) {	
@@ -108,7 +111,6 @@ public class AgentHelper {
 	 * set all agents in current szenario as receivers
 	 * 
 	 * @author Matthias
-	 *
 	 */
 	public static void addReceivers(ACLMessage msg, Agent myAgent, int szenarioID) {
 		List<AID> lstAID = getAgentList(szenarioID, myAgent);
@@ -129,5 +131,37 @@ public class AgentHelper {
 			nickname += "-" + conveyorID;
 		
 		return nickname;
+	}
+	
+	/**
+	 * retrieve infos (ramp type counts) about the current szenario
+	 * 
+	 * @author Matthias
+	 */
+	public static SzenarioInfo getSimulationConveyorCounts(Szenario mySzenario) {
+		SzenarioInfo myInfo = new SzenarioInfo();
+		
+		for(Conveyor myConveyor : mySzenario.getConveyorList()) {
+			if (myConveyor instanceof ConveyorRamp) {
+				ConveyorRamp myRampConveyor = (ConveyorRamp)myConveyor;
+				
+				switch(myRampConveyor.getRampType()) {
+					case ConveyorRamp.RAMP_ENTRANCE:
+						++myInfo.EntryRampCount;
+						break;
+					case ConveyorRamp.RAMP_EXIT:
+						++myInfo.ExitRampCount;
+						break;
+					case ConveyorRamp.RAMP_STOREAGE:
+						++myInfo.StorageRampCount;
+						break;
+				}
+			}
+			else if(myConveyor instanceof ConveyorVehicle) {
+				++myInfo.VehicleCount;
+			}
+		}
+		
+		return myInfo;
 	}
 }

@@ -29,13 +29,13 @@ import uni.oldenburg.server.agent.RampRoutingAgent;
 import uni.oldenburg.server.agent.VehiclePlattformAgent;
 import uni.oldenburg.server.agent.VehicleRoutingAgent;
 import uni.oldenburg.server.agent.helper.AgentHelper;
-import uni.oldenburg.server.agent.helper.EventHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.ConveyorVehicle;
 import uni.oldenburg.shared.model.Job;
 import uni.oldenburg.shared.model.Szenario;
+import uni.oldenburg.shared.model.event.EventHelper;
 import uni.oldenburg.shared.model.event.SimStoppedEvent;
 
 @SuppressWarnings("serial")
@@ -79,7 +79,7 @@ public class AgentPlatformServiceImpl extends RemoteServiceServlet implements Ag
    public int startSimulation(Szenario szenario) {
 	   // async function call and static variable, so remember,
 	   // in case someone else starts before function is finished
-	   szenario.setId(++szenarioID);
+	   szenario.setID(++szenarioID);
 
 	   Object[] argsJobAgent = new Object[1];
 	   argsJobAgent[0] = szenario;
@@ -90,8 +90,6 @@ public class AgentPlatformServiceImpl extends RemoteServiceServlet implements Ag
 		   return -1;
 	   
 	   startAgentPlatform(szenario);
-	   
-	   addAgentToSimulation(0, szenario.getId(), argsJobAgent, JobAgent.NAME, new JobAgent());
 	   
 	   for (Conveyor myConveyor : lstConveyor) {
 		   Object[] argsAgent = new Object[2];
@@ -111,6 +109,8 @@ public class AgentPlatformServiceImpl extends RemoteServiceServlet implements Ag
 			   addAgentToSimulation(id, szenario.getId(), argsAgent, VehicleRoutingAgent.NAME	, new VehicleRoutingAgent());
 		   }
 	   }
+	   
+	   addAgentToSimulation(0, szenario.getId(), argsJobAgent, JobAgent.NAME, new JobAgent());
 	   
 	   startAgents();
 	   
