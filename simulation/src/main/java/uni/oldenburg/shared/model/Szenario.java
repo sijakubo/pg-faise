@@ -21,6 +21,8 @@ public class Szenario implements Serializable {
 	private String time_created;
 	private String created_by_user;
 	private List<Conveyor> lstConveyor = new ArrayList<Conveyor>();
+	private int multiplicatorClient;
+	private int multiplicatorServer;
 	
 	private int width = MainFrameView.canvasWidth;
 	private int height = MainFrameView.canvasHeight;	
@@ -29,12 +31,16 @@ public class Szenario implements Serializable {
 		this.title = "new Szenario";
 		this.time_created = "now";
 		this.created_by_user = "unknown user";
+		this.multiplicatorClient=1;
+		this.multiplicatorServer=1;
 	}
 
 	public Szenario (String title, String time_created, String created_by_user) {
 		this.title = title;
 		this.time_created = time_created;
 		this.created_by_user = created_by_user;
+		this.multiplicatorClient=1;
+		this.multiplicatorServer=1;
 	}
 	
 	public void addConveyor(Conveyor newConveyor) {
@@ -97,5 +103,21 @@ public class Szenario implements Serializable {
 
 	public void setID(int id) {
 		this.id = id;
+	}
+
+	public int getMultiplicatorClient() {
+		return multiplicatorClient;
+	}
+
+	public void setMultiplicatorClient(int multiplicatorClient) {
+		this.multiplicatorClient = multiplicatorClient;
+	}
+
+	public int getMultiplicatorServer() {
+		return multiplicatorServer;
+	}
+
+	public void setMultiplicatorServer(int multiplicatorServer) {
+		this.multiplicatorServer = multiplicatorServer;
 	}
 }

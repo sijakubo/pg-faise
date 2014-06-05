@@ -27,6 +27,7 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	private Button			   btnAddJobs;
 	private Button         	btnStrategies;
 	
+	
 	// conveyor menu
 	private VerticalPanel 	vpConveyor;
 	
@@ -37,7 +38,8 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	// -------------
 	private TextBox 		txtJobCount;
 	private Label			lblUserName;
-	private TextArea 		txtDebug;	
+	private TextArea 		txtDebug;
+	private SliderBarSimpleHorizontal slider;
 	
 	private Canvas			canvas;
 	
@@ -129,6 +131,7 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		
 		lblUserName = new Label();
 		vpLeftFrame.add(lblUserName);
+		
 
       // -------------
 		
@@ -146,11 +149,18 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		txtDebug.setWidth("100%");
 		txtDebug.setHeight("100px");
 		
+		
+		
 		vpMainFrame.add(menuBar);
 		vpMainFrame.add(hpSubFrame);
 		vpMainFrame.add(txtDebug);
 		
+		slider=new SliderBarSimpleHorizontal("100px",true);
+		vpMainFrame.add(slider);
+		
+		
 		initWidget(vpMainFrame);
+		
 	}
 
     public HasClickHandlers getStrategiesButton() {

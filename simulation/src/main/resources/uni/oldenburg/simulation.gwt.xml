@@ -3,6 +3,7 @@
    <!-- Inherit the core Web Toolkit stuff.                        -->
    <inherits name='com.google.gwt.user.User'/>
    <inherits name="de.novanic.eventservice.GWTEventService"/>
+   <inherits name="com.kiouri.sliderbar.SliderBarMVP" />
 
    <!-- We need the JUnit module in the main module,               -->
    <!-- otherwise eclipse complains (Google plugin bug?)           -->

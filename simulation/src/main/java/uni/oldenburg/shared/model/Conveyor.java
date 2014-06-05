@@ -39,6 +39,7 @@ public abstract class Conveyor implements Serializable {
 	private int y;
 	private int width;
 	private int height;
+
 	
 	private int direction = DIRECTION_UP;
 
@@ -74,6 +75,8 @@ public abstract class Conveyor implements Serializable {
 	public int getID() {
 		return ID;
 	}
+	
+	
 	
 	/**
 	 * rotate conveyor clockwise 
@@ -117,7 +120,7 @@ public abstract class Conveyor implements Serializable {
 		this.setPosition(x, y);
 		
 		if (onServer) {
-			EventHelper.WaitForMS(DelayTimes.DRIVE_TO_DELAY);
+			//EventHelper.WaitForMS(DelayTimes.DRIVE_TO_DELAY/mySzenario.getMultiplicatorServer());
 			EventHelper.addEvent(new PositionChangedEvent(x, y, this.getID()));
 		}
 	}

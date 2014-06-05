@@ -208,7 +208,7 @@ public class PackageAgent extends Agent {
 			// get first package
 			PackageData myData = lstPackage.get(0);
 			
-			EventHelper.WaitForMS(DelayTimes.TRANSFER_PACKAGE);
+			EventHelper.WaitForMS(DelayTimes.TRANSFER_PACKAGE/mySzenario.getMultiplicatorServer());
 			
 			// remove package from own list
 			lstPackage.remove(0);

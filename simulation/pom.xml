@@ -89,6 +89,11 @@
          <artifactId>mockito-core</artifactId>
          <version>1.9.5</version>
       </dependency>
+      <dependency>
+         <groupId>google.code</groupId>
+         <artifactId>slide-bar</artifactId>
+         <version>1</version>
+      </dependency>
 	</dependencies>
 
 	<build>

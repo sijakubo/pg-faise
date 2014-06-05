@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.helper.AgentHelper;
+import uni.oldenburg.server.agent.helper.DelayTimes;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
@@ -19,6 +20,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import uni.oldenburg.shared.model.Szenario;
+import uni.oldenburg.shared.model.event.EventHelper;
 
 @SuppressWarnings("serial")
 public class VehiclePlattformAgent extends Agent {
@@ -132,7 +134,8 @@ public class VehiclePlattformAgent extends Agent {
 					block();
 			}
 			else if (step == 1) {
-				// go to source ramp							
+				// go to source ramp
+				EventHelper.WaitForMS(DelayTimes.DRIVE_TO_DELAY/mySzenario.getMultiplicatorServer());
 				myConveyor.setPosition(srcPoint.getX(), srcPoint.getY(), true);
 				
 				
@@ -147,7 +150,8 @@ public class VehiclePlattformAgent extends Agent {
 				
 				//logger.log(Level.INFO, "Conveyor " + myConveyor.getID() + ": 01 TRANSFER package completed");
 				
-				// go to destination ramp						
+				// go to destination ramp
+				EventHelper.WaitForMS(DelayTimes.DRIVE_TO_DELAY/mySzenario.getMultiplicatorServer());
 				myConveyor.setPosition(dstPoint.getX(), dstPoint.getY(), true);
 				
 				

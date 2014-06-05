@@ -1058,7 +1058,7 @@ public class MainFramePresenter extends Presenter {
 			}
 		};
 		
-		tmrJobStarter.scheduleRepeating(1000);
+		tmrJobStarter.scheduleRepeating(1000/currentSzenario.getMultiplicatorClient());
 		tmrJobStarter.run();
 	}
 	
