@@ -1,0 +1,97 @@
+\documentclass[	11pt,		% 11 Punkte hohe Schrift
+				a4paper,	% Einstellung des Ausdrucks auf DIN A4
+				fleqn,		% linksbündige, abgesetzte Formeln
+				reqno,		% rechts stehende Formelnummer
+				BCOR12mm,	% Bindekorrektur von 12mm
+				chapterprefix=false,	% Ausgabe von Kapitel: 
+				appendixprefix=true, % Überschrift im Anhang X und dann neue Zeile und Titel
+				parskip=half,
+				DIV=calc,
+				final,		% Abgabe Version
+]{scrartcl}
+
+\usepackage{packages}
+\usepackage{layout}
+
+\graphicspath{{image/}}
+\DeclareGraphicsExtensions{.png,.pdf}
+
+\bibliography{src/literatur}	% Literaturverzeichnis
+
+\newtheorem{defi}{Definition}
+\newtheorem{bsp}{Beispiel}
+\newtheorem{satz}{Satz}
+\newtheorem{theo}{Theorem}
+
+\newcommand{\bspautorefname}{Beispiel}
+\newcommand{\defiautorefname}[1]{Definition #1}
+\newcommand{\theoautorefname}{Theorem}
+
+\newcommand{\RM}[1]{\MakeUppercase{\romannumeral #1{}}} 
+
+\begin{document}
+	% Cover
+	\include{src/title}
+	\pagenumbering{Roman}
+	% Abstract
+	\include{src/abstract}
+
+	% Table of contents
+	\include{src/tableofcontents}
+	
+	% Chapter 1 Einleitung
+	\pagenumbering{arabic}
+	\clearpage
+	\ohead[Einleitung]{Einleitung}
+	\chead[Uni Oldenburg]{Uni Oldenburg}
+	\ihead[PG FAISE]{PG FAISE}
+	\setheadtopline{1pt}
+	\setheadsepline{0.5pt}
+	\ofoot[Endbericht]{Endbericht}
+	\cfoot[\pagemark]{\pagemark}
+	\ifoot[30. September 2014]{30. September 2014}
+	\setfootsepline{0.5pt}
+	\setfootbotline{1pt}
+	\include{src/chapter1}
+	
+	% Chapter 2 Stand der Technik
+	\clearpage
+	\ohead[Stand der Technik]{Stand der Technik}
+	\chead[Uni Oldenburg]{Uni Oldenburg}
+	\ihead[PG FAISE]{PG FAISE}
+	\setheadtopline{1pt}
+	\setheadsepline{0.5pt}
+	\ofoot[Endbericht]{Endbericht}
+	\cfoot[\pagemark]{\pagemark}
+	\ifoot[30. September 2014]{30. September 2014}
+	\setfootsepline{0.5pt}
+	\setfootbotline{1pt}
+	\include{src/chapter2}
+	
+	% Chapter 3 Projektorganisation
+	\clearpage
+	\ohead[Projektorganisation]{Projektorganisation}
+	\chead[Uni Oldenburg]{Uni Oldenburg}
+	\ihead[PG FAISE]{PG FAISE}
+	\setheadtopline{1pt}
+	\setheadsepline{0.5pt}
+	\ofoot[Endbericht]{Endbericht}
+	\cfoot[\pagemark]{\pagemark}
+	\ifoot[30. September 2014]{30. September 2014}
+	\setfootsepline{0.5pt}
+	\setfootbotline{1pt}
+	\include{src/chapter3}
+	
+	% Bibliography
+	\clearpage
+	\clearscrheadfoot
+	\ohead[Inhaltsverzeichnis]{Inhaltsverzeichnis}
+	\chead[Uni Oldenburg]{Uni Oldenburg}
+	\ihead[Malte Falk]{Malte Falk}
+	\ofoot[Seminararbeit]{Seminararbeit}
+	\cfoot[\pagemark]{\pagemark}
+	\ifoot[WS 2013/14]{WS 2013/14}
+	\ohead[Literaturverzeichnis]{Literaturverzeichnis}
+	\printbibliography
+
+\end{document}
