@@ -71,6 +71,10 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
+import com.kiouri.sliderbar.client.event.BarValueChangedEvent;
+import com.kiouri.sliderbar.client.event.BarValueChangedHandler;
+import com.kiouri.sliderbar.client.solution.simplehorizontal.SliderBarSimpleHorizontal;
+import com.kiouri.sliderbar.client.view.SliderBarHorizontal;
 
 import de.novanic.eventservice.client.event.Event;
 import de.novanic.eventservice.client.event.RemoteEventService;
@@ -80,59 +84,70 @@ import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 
 public class MainFramePresenter extends Presenter {
 	public final static String DOMAIN_NAME = "uni.oldenburg.faise";
-	
+
 	private final IDisplay display;
 	private Szenario currentSzenario;
 	Conveyor dropableConveyor;
 	JobList lstJobs = new JobList();
-	
-    private AgentPlatformServiceAsync agentPlatformService = null;
-    private RemoteEventService myRES = null;
-	
-    // client started simulation
+
+	private AgentPlatformServiceAsync agentPlatformService = null;
+	private RemoteEventService myRES = null;
+
+	// client started simulation
 	private boolean bSimulationStarted = false;
 	// server started simulation
 	private boolean bSimulationRunning = false;
-	
+
 	private int elapsedTimeSec = 0;
-	
+
 	Timer tmrJobStarter = null;
-	
+
 	Map<String, MenuItem> mapSimMenuItems = new HashMap<String, MenuItem>();
 	Map<String, MenuItem> mapJobMenuItems = new HashMap<String, MenuItem>();
 
 	public interface IDisplay {
 		CellTable<Job> getJobTable();
-		
+
 		HasClickHandlers getAddJobsButton();
+
 		HasClickHandlers getStrategiesButton();
+
 		HasClickHandlers getConveyorRampButton();
+
 		HasClickHandlers getConveyorVehicleButton();
+
 		HasClickHandlers getConveyorWallButton();
-		
-		Panel 	getConveyorPanel();
-		
-		HasText	getJobCount();
+
+		Panel getConveyorPanel();
+
+		HasText getJobCount();
 
 		MenuBar getMenuBar();
+
 		MenuBar getSimulationMenuBar();
+
 		MenuBar getJobMenuBar();
-		Label 	getLabelUserName();
-		Canvas 	getCanvas();
-		
-		void log(String log);		
+
+		Label getLabelUserName();
+
+		Canvas getCanvas();
+
+		SliderBarHorizontal getSliderBar();
+
+		void log(String log);
 	}
 
-	public MainFramePresenter(SimulationServiceAsync rpcService, HandlerManager eventBus, IDisplay view) {
+	public MainFramePresenter(SimulationServiceAsync rpcService,
+			HandlerManager eventBus, IDisplay view) {
 		super(rpcService, eventBus);
 		this.display = view;
 		this.currentSzenario = new Szenario();
 		this.dropableConveyor = null;
-		
+
 		agentPlatformService = GWT.create(AgentPlatformService.class);
 		handleEvents();
-		
-		if (Debugging.isDebugging) {			
+
+		if (Debugging.isDebugging) {
 			this.loadSzenario("TestSzenario");
 			this.lstJobs.addRandomJobs(100);
 		}
@@ -141,7 +156,7 @@ public class MainFramePresenter extends Presenter {
 	public Widget getDisplay() {
 		return (Widget) display;
 	}
-	
+
 	/**
 	 * client simulation state
 	 * 
@@ -149,8 +164,8 @@ public class MainFramePresenter extends Presenter {
 	 */
 	public boolean hasSimulationStarted() {
 		return bSimulationStarted;
-	}	
-	
+	}
+
 	/**
 	 * server simulation state
 	 * 
@@ -168,15 +183,17 @@ public class MainFramePresenter extends Presenter {
 	private void setLabelUserName() {
 
 		// Get the Username from Server
-		((SimulationServiceAsync) rpcService).getUserName(new AsyncCallback<String>() {
+		((SimulationServiceAsync) rpcService)
+				.getUserName(new AsyncCallback<String>() {
 					public void onFailure(Throwable arg0) {
 						Window.alert(arg0.getLocalizedMessage());
 					}
 
 					public void onSuccess(String result) {
 						// Write the String into the Label
-						((MainFramePresenter.IDisplay) MainFramePresenter.this.getDisplay())
-							.getLabelUserName().setText("Eingeloggt als: " + result);
+						((MainFramePresenter.IDisplay) MainFramePresenter.this
+								.getDisplay()).getLabelUserName().setText(
+								"Eingeloggt als: " + result);
 					}
 				});
 	}
@@ -206,25 +223,25 @@ public class MainFramePresenter extends Presenter {
 		 */
 		display.getCanvas().addMouseMoveHandler(new MouseMoveHandler() {
 			public void onMouseMove(MouseMoveEvent event) {
-				Conveyor myConveyor = MainFramePresenter.this.dropableConveyor;			
-				
+				Conveyor myConveyor = MainFramePresenter.this.dropableConveyor;
+
 				if (isSimulationRunning()) {
 					return;
 				}
 
 				if (myConveyor == null) {
-					return;	
+					return;
 				}
 
 				myConveyor.setPosition(event.getX(), event.getY());
-				
+
 				loadSzenario(MainFramePresenter.this.currentSzenario);
 				drawConveyor(myConveyor);
 
 				display.getCanvas().setFocus(true);
 			}
 		});
-		
+
 		/**
 		 * remove drag&drop-able object when mouse leaves canvas object
 		 * 
@@ -234,7 +251,7 @@ public class MainFramePresenter extends Presenter {
 			public void onMouseOut(MouseOutEvent event) {
 				if (isSimulationRunning())
 					return;
-				
+
 				MainFramePresenter.this.dropableConveyor = null;
 				loadSzenario(MainFramePresenter.this.currentSzenario);
 			}
@@ -248,7 +265,7 @@ public class MainFramePresenter extends Presenter {
 		display.getCanvas().addMouseUpHandler(new MouseUpHandler() {
 			public void onMouseUp(MouseUpEvent event) {
 				Conveyor myConveyor = MainFramePresenter.this.dropableConveyor;
-				
+
 				if (isSimulationRunning())
 					return;
 
@@ -258,12 +275,15 @@ public class MainFramePresenter extends Presenter {
 					if (myConveyor != null) {
 						// when spot available
 						if (isSpotAvailable(event.getX(), event.getY())) {
-							MainFramePresenter.this.currentSzenario.addConveyor(myConveyor);
+							MainFramePresenter.this.currentSzenario
+									.addConveyor(myConveyor);
 							MainFramePresenter.this.dropableConveyor = null;
 							loadSzenario(MainFramePresenter.this.currentSzenario);
-							
+
 							if (myConveyor instanceof ConveyorRamp)
-								MainFramePresenter.this.display.log("" +((ConveyorRamp)myConveyor).getRampType());
+								MainFramePresenter.this.display.log(""
+										+ ((ConveyorRamp) myConveyor)
+												.getRampType());
 						}
 					} else {
 						// grab & move conveyor
@@ -274,7 +294,8 @@ public class MainFramePresenter extends Presenter {
 					if (myConveyor == null)
 						return;
 
-					if (myConveyor instanceof ConveyorRamp || myConveyor instanceof ConveyorVehicle) {
+					if (myConveyor instanceof ConveyorRamp
+							|| myConveyor instanceof ConveyorVehicle) {
 						myConveyor.rotateClockwise();
 
 						loadSzenario(MainFramePresenter.this.currentSzenario);
@@ -295,13 +316,66 @@ public class MainFramePresenter extends Presenter {
 			public void onKeyUp(KeyUpEvent event) {
 				if (isSimulationRunning())
 					return;
-				
+
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ESCAPE) {
 					MainFramePresenter.this.dropableConveyor = null;
 					loadSzenario(MainFramePresenter.this.currentSzenario);
 				}
 			}
 		});
+	}
+
+	private void addSliderChangeListener(){
+		display.getSliderBar().addBarValueChangedHandler(
+				new BarValueChangedHandler() {
+            public void onBarValueChanged(BarValueChangedEvent event) {
+                //valueBox.setValue("" + event.getValue());
+            	final int value=display.getSliderBar().getValue();
+            	
+            	//Is Simulation is not Running the Values just has to be set in the Szenario Object
+            	if(!isSimulationRunning()){
+            		if(value==0){
+            			currentSzenario.setMultiplicatorClient(1);
+            			currentSzenario.setMultiplicatorServer(1);
+            		}else if(value==1){
+            			currentSzenario.setMultiplicatorClient(2);
+            			currentSzenario.setMultiplicatorServer(2);
+            		}else {
+            			currentSzenario.setMultiplicatorClient(4);
+            			currentSzenario.setMultiplicatorServer(4);
+            		}
+            		
+            	}else {
+            		agentPlatformService.setSimulationSpeed(
+							MainFramePresenter.this.currentSzenario.getId(),value,
+							new AsyncCallback<Void>() {
+
+								public void onFailure(Throwable caught) {
+									
+									
+								}
+
+								
+
+								public void onSuccess(Void result) {
+									//Set it on the client after it was setted on Server
+									if(value==0){
+				            			currentSzenario.setMultiplicatorClient(1);
+				            			currentSzenario.setMultiplicatorServer(1);
+				            		}else if(value==1){
+				            			currentSzenario.setMultiplicatorClient(2);
+				            			currentSzenario.setMultiplicatorServer(2);
+				            		}else {
+				            			currentSzenario.setMultiplicatorClient(4);
+				            			currentSzenario.setMultiplicatorServer(4);
+				            		}
+									
+								}
+								
+							});
+            	}
+            	
+            }});		
 	}
 
 	/**
@@ -313,16 +387,16 @@ public class MainFramePresenter extends Presenter {
 		display.getAddJobsButton().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 
-				String jobCount = MainFramePresenter.this.display.getJobCount().getText();
-				
+				String jobCount = MainFramePresenter.this.display.getJobCount()
+						.getText();
+
 				if (!jobCount.matches("^\\d+$")) {
 					Window.alert("Fehler: Es wurde keine Zahl eingetragen!");
-				}
-				else {
+				} else {
 					lstJobs.addRandomJobs(Integer.parseInt(jobCount));
 					setupJobTable();
 				}
-				
+
 				MainFramePresenter.this.display.getJobCount().setText("1");
 			}
 		});
@@ -377,7 +451,7 @@ public class MainFramePresenter extends Presenter {
 	/**
 	 * @author Christopher Matthias
 	 */
-	private void setupJobTable() {		
+	private void setupJobTable() {
 		TextColumn<Job> timestampColumn = new TextColumn<Job>() {
 			@Override
 			public String getValue(Job object) {
@@ -395,47 +469,50 @@ public class MainFramePresenter extends Presenter {
 			public String getValue(Job object) {
 				if (object.getDestinationId() == 0)
 					return "Eingang";
-				
+
 				if (object.getDestinationId() == -1)
 					return "Ausgang";
-				
+
 				return "" + object.getDestinationId();
 			}
 		};
-		
-		while(display.getJobTable().getColumnCount() > 0) {
+
+		while (display.getJobTable().getColumnCount() > 0) {
 			display.getJobTable().removeColumn(0);
 		}
 		display.getJobTable().addColumn(timestampColumn, "Zeit");
 		display.getJobTable().addColumn(packageColumn, "Paket");
 		display.getJobTable().addColumn(destinationColumn, "Ziel");
-		
+
 		// add clickable action button column
-		ActionCell<Job> actionDeleteCell = new ActionCell<Job>("-", new ActionCell.Delegate<Job>() {
-			public void execute(Job job) {
-				List<Job> lstJobDeleteable = new ArrayList<Job>();
-				// mark selected job as deleteable
-				lstJobDeleteable.add(job);
-				
-				if (job.getType() == Job.INCOMING) {
-					// delete linked outgoing job too
-					for (Job jobEntry : MainFramePresenter.this.lstJobs.getJoblist()) {
-						if (jobEntry.getPackageId() == job.getPackageId()) {
-							lstJobDeleteable.add(jobEntry);
+		ActionCell<Job> actionDeleteCell = new ActionCell<Job>("-",
+				new ActionCell.Delegate<Job>() {
+					public void execute(Job job) {
+						List<Job> lstJobDeleteable = new ArrayList<Job>();
+						// mark selected job as deleteable
+						lstJobDeleteable.add(job);
+
+						if (job.getType() == Job.INCOMING) {
+							// delete linked outgoing job too
+							for (Job jobEntry : MainFramePresenter.this.lstJobs
+									.getJoblist()) {
+								if (jobEntry.getPackageId() == job
+										.getPackageId()) {
+									lstJobDeleteable.add(jobEntry);
+								}
+							}
 						}
-					}	
-				}
-				
-				// delete in actual joblist
-				for (Job jobEntry : lstJobDeleteable) {
-					MainFramePresenter.this.lstJobs.removeJob(jobEntry);	
-				}
-				
-				// update joblist
-				MainFramePresenter.this.setupJobTable();
-			}
-		});
-		
+
+						// delete in actual joblist
+						for (Job jobEntry : lstJobDeleteable) {
+							MainFramePresenter.this.lstJobs.removeJob(jobEntry);
+						}
+
+						// update joblist
+						MainFramePresenter.this.setupJobTable();
+					}
+				});
+
 		display.getJobTable().addColumn(new Column<Job, Job>(actionDeleteCell) {
 			@Override
 			public Job getValue(Job job) {
@@ -467,19 +544,23 @@ public class MainFramePresenter extends Presenter {
 	 */
 	private void drawConveyor(Conveyor myConveyor) {
 		Context2d context = display.getCanvas().getContext2d();
-		context.drawImage(myConveyor.getCanvasElement(), myConveyor.getX(), myConveyor.getY());
-		
-		if(Debugging.showCharge) { 
-			if(myConveyor instanceof ConveyorVehicle) {
-				double charge = ((ConveyorVehicle) myConveyor).getBatteryCharge();
+		context.drawImage(myConveyor.getCanvasElement(), myConveyor.getX(),
+				myConveyor.getY());
+
+		if (Debugging.showCharge) {
+			if (myConveyor instanceof ConveyorVehicle) {
+				double charge = ((ConveyorVehicle) myConveyor)
+						.getBatteryCharge();
 				int width = myConveyor.getCanvasElement().getWidth();
-				//battery charge
+				// battery charge
 				context.setFillStyle(CssColor.make(128, 128, 128));
-				context.fillRect(myConveyor.getX() - (width / 2), myConveyor.getY() - 8, 2 * width, 4);
-				int red = (int)(255 * (charge < 0.5 ? 1 : 2 * (1 - charge)));
-				int green = (int)(255 * (charge > 0.5 ? 1 : 2 * charge));
+				context.fillRect(myConveyor.getX() - (width / 2),
+						myConveyor.getY() - 8, 2 * width, 4);
+				int red = (int) (255 * (charge < 0.5 ? 1 : 2 * (1 - charge)));
+				int green = (int) (255 * (charge > 0.5 ? 1 : 2 * charge));
 				context.setFillStyle(CssColor.make(red, green, 0));
-				context.fillRect(myConveyor.getX() - (width / 2) + 1, myConveyor.getY() - 7, charge * 2 * (width - 1), 2);
+				context.fillRect(myConveyor.getX() - (width / 2) + 1,
+						myConveyor.getY() - 7, charge * 2 * (width - 1), 2);
 			}
 		}
 	}
@@ -596,7 +677,7 @@ public class MainFramePresenter extends Presenter {
 						Window.alert(arg0.getLocalizedMessage());
 					}
 
-					public void onSuccess(Szenario szenario) {						
+					public void onSuccess(Szenario szenario) {
 						MainFramePresenter.this.currentSzenario = szenario;
 						loadSzenario(szenario);
 					}
@@ -616,7 +697,8 @@ public class MainFramePresenter extends Presenter {
 					}
 
 					public void onSuccess(ArrayList<SzenarioInfo> result) {
-						DialogBoxScenarioSelection dialog = new DialogBoxScenarioSelection(result, MainFramePresenter.this);
+						DialogBoxScenarioSelection dialog = new DialogBoxScenarioSelection(
+								result, MainFramePresenter.this);
 						dialog.show();
 					}
 				});
@@ -681,7 +763,7 @@ public class MainFramePresenter extends Presenter {
 
 				});
 	}
-	
+
 	/**
 	 * draw current joblist
 	 * 
@@ -788,7 +870,7 @@ public class MainFramePresenter extends Presenter {
 
 				});
 	}
-	
+
 	/**
 	 * (de)activate simulation state
 	 * 
@@ -796,26 +878,29 @@ public class MainFramePresenter extends Presenter {
 	 */
 	public void setSimulationState(boolean started) {
 		bSimulationStarted = started;
-		
+
 		mapSimMenuItems.get("Laden").setEnabled(!hasSimulationStarted());
 		mapSimMenuItems.get("Speichern").setEnabled(!hasSimulationStarted());
-		mapSimMenuItems.get("Speichern unter...").setEnabled(!hasSimulationStarted());
-		mapSimMenuItems.get("Einstellungen").setEnabled(!hasSimulationStarted());
-		
+		mapSimMenuItems.get("Speichern unter...").setEnabled(
+				!hasSimulationStarted());
+		mapSimMenuItems.get("Einstellungen")
+				.setEnabled(!hasSimulationStarted());
+
 		mapJobMenuItems.get("Laden").setEnabled(!hasSimulationStarted());
 		mapJobMenuItems.get("Speichern").setEnabled(!hasSimulationStarted());
-		mapJobMenuItems.get("Speichern unter...").setEnabled(!hasSimulationStarted());
-		
+		mapJobMenuItems.get("Speichern unter...").setEnabled(
+				!hasSimulationStarted());
+
 		display.getConveyorPanel().setVisible(!hasSimulationStarted());
-		
+
 		MainFramePresenter.this.dropableConveyor = null;
 	}
-	
+
 	/**
 	 * toggle simulation state
 	 * 
 	 * @author Matthias
-	 */	
+	 */
 	public void toggleSimulationState() {
 		setSimulationState(!isSimulationRunning());
 	}
@@ -830,6 +915,7 @@ public class MainFramePresenter extends Presenter {
 		this.addCanvasListener();
 		this.setupJobTable();
 		this.setLabelUserName();
+		this.addSliderChangeListener();
 
 	}
 
@@ -847,36 +933,42 @@ public class MainFramePresenter extends Presenter {
 		// file menu
 
 		String menuName = "Laden";
-		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar().addItem(menuName, new Command() {
-			public void execute() {
-				getScenarioInfosFromServerAndShow();
-			}
-		}));
+		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar()
+				.addItem(menuName, new Command() {
+					public void execute() {
+						getScenarioInfosFromServerAndShow();
+					}
+				}));
 
 		menuName = "Speichern";
-		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar().addItem(menuName, new Command() {
-			public void execute() {
-				trySaveSzenario(MainFramePresenter.this.getActualSzenario());
-			}
-		}));
-		
+		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar()
+				.addItem(menuName, new Command() {
+					public void execute() {
+						trySaveSzenario(MainFramePresenter.this
+								.getActualSzenario());
+					}
+				}));
+
 		menuName = "Speichern unter...";
-		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar().addItem(menuName, new Command() {
-			public void execute() {
-				// Open Save as Dialog
-				DialogBoxSaveAs dialog = new DialogBoxSaveAs(MainFramePresenter.this);
-				dialog.show();
-			}
-		}));
+		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar()
+				.addItem(menuName, new Command() {
+					public void execute() {
+						// Open Save as Dialog
+						DialogBoxSaveAs dialog = new DialogBoxSaveAs(
+								MainFramePresenter.this);
+						dialog.show();
+					}
+				}));
 
 		this.display.getSimulationMenuBar().addSeparator();
 
 		menuName = "Einstellungen";
-		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar().addItem(menuName, new Command() {
-			public void execute() {
+		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar()
+				.addItem(menuName, new Command() {
+					public void execute() {
 
-			}
-		}));
+					}
+				}));
 
 		this.display.getSimulationMenuBar().addSeparator();
 
@@ -884,67 +976,79 @@ public class MainFramePresenter extends Presenter {
 		 * start / stop simulation
 		 * 
 		 * @author Matthias
-		 */	
+		 */
 		menuName = "Starten/Anhalten";
-		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar().addItem(menuName, new Command() {
-			public void execute() {
-				// doesn't run yet?
-				if (!isSimulationRunning()) {
-					// start simulation
-		            agentPlatformService.startSimulation(MainFramePresenter.this.currentSzenario, new AsyncCallback<Integer>() {
-						public void onFailure(Throwable caught) {
-							Window.alert("Simulation error: An error occured during start of simulation!");
-						}
+		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar()
+				.addItem(menuName, new Command() {
+					public void execute() {
+						// doesn't run yet?
+						if (!isSimulationRunning()) {
+							// start simulation
+							agentPlatformService.startSimulation(
+									MainFramePresenter.this.currentSzenario,
+									new AsyncCallback<Integer>() {
+										public void onFailure(Throwable caught) {
+											Window.alert("Simulation error: An error occured during start of simulation!");
+										}
 
-						public void onSuccess(Integer id) {
-							MainFramePresenter.this.currentSzenario.setID(id);
-							MainFramePresenter.this.setSimulationState(true);
+										public void onSuccess(Integer id) {
+											MainFramePresenter.this.currentSzenario
+													.setID(id);
+											MainFramePresenter.this
+													.setSimulationState(true);
+										}
+									});
+						} else {
+							// stop simulation
+							agentPlatformService
+									.stopSimulation(new EmptyAsyncCallback());
+							MainFramePresenter.this.setSimulationState(false);
 						}
-		            });
-				}
-				else {
-					// stop simulation
-					agentPlatformService.stopSimulation(new EmptyAsyncCallback());
-					MainFramePresenter.this.setSimulationState(false);
-				}
-			}
-		}));
+					}
+				}));
 
 		// edit menu
 		menuName = "Laden";
-		mapJobMenuItems.put(menuName, this.display.getJobMenuBar().addItem(menuName, new Command() {
-			public void execute() {
-				getJoblistTitlesFromServerAndShow();
-			}
-		}));
+		mapJobMenuItems.put(menuName,
+				this.display.getJobMenuBar().addItem(menuName, new Command() {
+					public void execute() {
+						getJoblistTitlesFromServerAndShow();
+					}
+				}));
 
 		menuName = "Speichern";
-		mapJobMenuItems.put(menuName, this.display.getJobMenuBar().addItem(menuName, new Command() {
-			public void execute() {
-				trySaveJoblist(MainFramePresenter.this.getActualJoblist());
-			}
-		}));
-		
+		mapJobMenuItems.put(menuName,
+				this.display.getJobMenuBar().addItem(menuName, new Command() {
+					public void execute() {
+						trySaveJoblist(MainFramePresenter.this
+								.getActualJoblist());
+					}
+				}));
+
 		menuName = "Speichern unter...";
-		mapJobMenuItems.put(menuName, this.display.getJobMenuBar().addItem(menuName, new Command() {
-			public void execute() {
-				// Open Save as Dialog
-				DialogBoxSaveAsJoblist dialog = new DialogBoxSaveAsJoblist(MainFramePresenter.this);
-				dialog.show();
-			}
-		}));
+		mapJobMenuItems.put(menuName,
+				this.display.getJobMenuBar().addItem(menuName, new Command() {
+					public void execute() {
+						// Open Save as Dialog
+						DialogBoxSaveAsJoblist dialog = new DialogBoxSaveAsJoblist(
+								MainFramePresenter.this);
+						dialog.show();
+					}
+				}));
 
 		// menu bar
 
-		this.display.getMenuBar().addItem("Simulation", this.display.getSimulationMenuBar());
+		this.display.getMenuBar().addItem("Simulation",
+				this.display.getSimulationMenuBar());
 		this.display.getMenuBar().addSeparator();
-		this.display.getMenuBar().addItem("Auftragsliste", this.display.getJobMenuBar());
+		this.display.getMenuBar().addItem("Auftragsliste",
+				this.display.getJobMenuBar());
 	}
 
 	public Szenario getActualSzenario() {
 		return this.currentSzenario;
 	}
-	
+
 	public JobList getActualJoblist() {
 		return this.lstJobs;
 	}
@@ -952,120 +1056,132 @@ public class MainFramePresenter extends Presenter {
 	public ServiceAsync getService() {
 		return this.rpcService;
 	}
-	
+
 	private void handleEvents() {
 		myRES = RemoteEventServiceFactory.getInstance().getRemoteEventService();
 		myRES.removeListeners();
-		
-		myRES.addListener(DomainFactory.getDomain(DOMAIN_NAME), new RemoteEventListener() {
-			public void apply(Event anEvent) {
-				if (anEvent instanceof SimStartedEvent) {
-					bSimulationRunning = true;
-					display.log("Simulation started!");
-					
-					startJobTimer();
-					
-					return;
-				}
-				
-				if (anEvent instanceof SimStoppedEvent) {
-					bSimulationRunning = false;
-					display.log("Simulation stopped!");
-					
-					stopJobTimer();
-					
-					return;
-				}
-				
-				if (anEvent instanceof JobAssignedEvent) {					
-					JobAssignedEvent myEvent = (JobAssignedEvent)anEvent;
-						
-					lstJobs.removeJob(myEvent.getJob().getPackageId(), myEvent.getJob().getType());
-					
-					setupJobTable();
-					
-					return;
-				}
-				
-				if (anEvent instanceof JobUnassignableEvent) {					
-					JobUnassignableEvent myEvent = (JobUnassignableEvent)anEvent;
-					
-					Job clonedJob = myEvent.getJob().clone(elapsedTimeSec + 10);
-					lstJobs.removeJob(myEvent.getJob().getPackageId(), myEvent.getJob().getType());
-					lstJobs.addJob(clonedJob);
-					
-					setupJobTable();
-					return;
-				}
-				
-				if (anEvent instanceof PositionChangedEvent) {					
-					PositionChangedEvent myEvent = (PositionChangedEvent)anEvent;
-					
-					Conveyor myConveyor = currentSzenario.getConveyorById(myEvent.getId());
-					myConveyor.setPosition(myEvent.getX(), myEvent.getY());
-					
-					loadSzenario(currentSzenario);
-					
-					return;
-				}
-				
-				if (anEvent instanceof PackageAddedEvent) {					
-					PackageAddedEvent myEvent = (PackageAddedEvent)anEvent;
-					
-					Conveyor myConveyor = currentSzenario.getConveyorById(myEvent.getConveyorID());
-					//myConveyor.setPackageCount(myConveyor.getPackageCount() + 1);
-					myConveyor.addPackage("" + myEvent.getPackageID());
-					
-					loadSzenario(currentSzenario);
-					
-					return;
-				}
-				
-				if (anEvent instanceof PackageRemovedEvent) {					
-					PackageRemovedEvent myEvent = (PackageRemovedEvent)anEvent;
-					
-					Conveyor myConveyor = currentSzenario.getConveyorById(myEvent.getConveyorID());
-					//myConveyor.setPackageCount(myConveyor.getPackageCount() - 1);
-					myConveyor.removePackage("" + myEvent.getPackageID());
-					
-					loadSzenario(currentSzenario);
-					
-					return;
-				}
-			}
-		});
+
+		myRES.addListener(DomainFactory.getDomain(DOMAIN_NAME),
+				new RemoteEventListener() {
+					public void apply(Event anEvent) {
+						if (anEvent instanceof SimStartedEvent) {
+							bSimulationRunning = true;
+							display.log("Simulation started!");
+
+							startJobTimer();
+
+							return;
+						}
+
+						if (anEvent instanceof SimStoppedEvent) {
+							bSimulationRunning = false;
+							display.log("Simulation stopped!");
+
+							stopJobTimer();
+
+							return;
+						}
+
+						if (anEvent instanceof JobAssignedEvent) {
+							JobAssignedEvent myEvent = (JobAssignedEvent) anEvent;
+
+							lstJobs.removeJob(myEvent.getJob().getPackageId(),
+									myEvent.getJob().getType());
+
+							setupJobTable();
+
+							return;
+						}
+
+						if (anEvent instanceof JobUnassignableEvent) {
+							JobUnassignableEvent myEvent = (JobUnassignableEvent) anEvent;
+
+							Job clonedJob = myEvent.getJob().clone(
+									elapsedTimeSec + 10);
+							lstJobs.removeJob(myEvent.getJob().getPackageId(),
+									myEvent.getJob().getType());
+							lstJobs.addJob(clonedJob);
+
+							setupJobTable();
+							return;
+						}
+
+						if (anEvent instanceof PositionChangedEvent) {
+							PositionChangedEvent myEvent = (PositionChangedEvent) anEvent;
+
+							Conveyor myConveyor = currentSzenario
+									.getConveyorById(myEvent.getId());
+							myConveyor.setPosition(myEvent.getX(),
+									myEvent.getY());
+
+							loadSzenario(currentSzenario);
+
+							return;
+						}
+
+						if (anEvent instanceof PackageAddedEvent) {
+							PackageAddedEvent myEvent = (PackageAddedEvent) anEvent;
+
+							Conveyor myConveyor = currentSzenario
+									.getConveyorById(myEvent.getConveyorID());
+							// myConveyor.setPackageCount(myConveyor.getPackageCount()
+							// + 1);
+							myConveyor.addPackage("" + myEvent.getPackageID());
+
+							loadSzenario(currentSzenario);
+
+							return;
+						}
+
+						if (anEvent instanceof PackageRemovedEvent) {
+							PackageRemovedEvent myEvent = (PackageRemovedEvent) anEvent;
+
+							Conveyor myConveyor = currentSzenario
+									.getConveyorById(myEvent.getConveyorID());
+							// myConveyor.setPackageCount(myConveyor.getPackageCount()
+							// - 1);
+							myConveyor.removePackage(""
+									+ myEvent.getPackageID());
+
+							loadSzenario(currentSzenario);
+
+							return;
+						}
+					}
+				});
 	}
-	
-	
+
 	public void startJobTimer() {
 		if (tmrJobStarter != null)
 			return;
-		
+
 		elapsedTimeSec = 0;
-			
+
 		tmrJobStarter = new Timer() {
 			public void run() {
 				elapsedTimeSec += 1;
-				
+
 				if (lstJobs.size() < 1)
-					return;	
-				
+					return;
+
 				Job pendingJob = lstJobs.getJob(0);
-				
+
 				if (elapsedTimeSec >= pendingJob.getTimestamp()) {
-					agentPlatformService.addJob(currentSzenario.getId(), pendingJob, new EmptyAsyncCallback());
+					agentPlatformService.addJob(currentSzenario.getId(),
+							pendingJob, new EmptyAsyncCallback());
 				}
 			}
 		};
-		
-		tmrJobStarter.scheduleRepeating(1000/currentSzenario.getMultiplicatorClient());
+
+		tmrJobStarter.scheduleRepeating(1000 / currentSzenario
+				.getMultiplicatorClient());
 		tmrJobStarter.run();
 	}
-	
+
 	public void stopJobTimer() {
 		if (tmrJobStarter == null)
 			return;
-		
+
 		tmrJobStarter.cancel();
 		tmrJobStarter = null;
 	}

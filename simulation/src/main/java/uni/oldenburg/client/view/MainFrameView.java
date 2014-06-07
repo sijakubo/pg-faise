@@ -4,6 +4,8 @@ import uni.oldenburg.client.presenter.MainFramePresenter;
 import uni.oldenburg.shared.model.Job;
 
 import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.SimplePager;
@@ -17,6 +19,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.kiouri.sliderbar.client.view.SliderBarHorizontal;
 
 public class MainFrameView extends Composite implements MainFramePresenter.IDisplay {
    private MenuBar			menuBar;
@@ -143,6 +146,9 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		canvas.setHeight(canvasHeight + "px");
 		canvas.setCoordinateSpaceWidth(canvasWidth);
 		canvas.setCoordinateSpaceHeight(canvasHeight);
+		//canvas.getElement().getStyle().setBorderColor(value);
+		canvas.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+		canvas.getElement().getStyle().setBorderWidth(1,Unit.PX);
 		hpSubFrame.add(canvas);
 		
 		txtDebug = new TextArea();
@@ -153,10 +159,11 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		
 		vpMainFrame.add(menuBar);
 		vpMainFrame.add(hpSubFrame);
-		vpMainFrame.add(txtDebug);
 		
 		slider=new SliderBarSimpleHorizontal("100px",true);
+		slider.setStyleName("slider");
 		vpMainFrame.add(slider);
+		vpMainFrame.add(txtDebug);
 		
 		
 		initWidget(vpMainFrame);
@@ -217,5 +224,10 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 
 	public Panel getConveyorPanel() {
 		return vpConveyor;
+	}
+
+	public SliderBarHorizontal getSliderBar() {
+		
+		return this.slider;
 	}
 }

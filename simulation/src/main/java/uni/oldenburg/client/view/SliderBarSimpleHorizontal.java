@@ -24,7 +24,7 @@ public class SliderBarSimpleHorizontal extends SliderBarHorizontal {
             }
             setDragWidget(new Image(images.drag()));
             this.setWidth(width);
-            this.setMaxValue(3);             
+            this.setMaxValue(2);             
     }
     
 

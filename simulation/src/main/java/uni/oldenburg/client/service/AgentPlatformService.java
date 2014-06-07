@@ -14,4 +14,5 @@ public interface AgentPlatformService extends RemoteService {
 	int startSimulation(Szenario szenario);
 	void stopSimulation();
 	void addJob(int szenarioID, Job myJob);
+	void setSimulationSpeed(int szenarioID, int value);
 }

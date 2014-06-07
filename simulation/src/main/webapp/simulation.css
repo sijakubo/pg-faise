@@ -42,6 +42,12 @@ h1 {
 }
 
 /** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
+.closeButton {
   margin: 15px 6px 6px;
+}
+
+
+.slider {
+    margin-left: auto;
+    margin-right: auto;
 }
