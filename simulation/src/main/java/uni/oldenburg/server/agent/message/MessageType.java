@@ -19,16 +19,21 @@ public class MessageType {
 	public final static int ENQUIRE_RAMPS_STORAGE					= 12;
 	public final static int FIND_PACKAGE_IN_STORAGE					= 13;
 	public final static int SET_DESTINATION							= 14;
-	public final static int AUCTION_START							= 15;
-	public final static int AUCTION_END								= 16;
-	public final static int ESTIMATION_REQUEST						= 17;
-	public final static int ESTIMATION_RESPONSE						= 18;
-	public final static int ASSIGN_JOB_TO_VEHICLE					= 19;
-	public final static int DRIVING_START							= 20;
-	public final static int SET_PENDING_INCOMING_STATUS				= 21;
-	public final static int GET_CURRENT_POSITION					= 22;
-	public final static int TRANSFER_PACKAGE						= 23;
-	public final static int GET_PENDING_JOB_STATUS					= 24;
-	public final static int ADD_PACKAGE_COMPLETED					= 25;
-	public final static int TRANSFER_PACKAGE_COMPLETED				= 26;
+	public final static int SET_PENDING_INCOMING_STATUS				= 15;
+	public final static int GET_PENDING_JOB_STATUS					= 16;
+	public final static int ADD_PACKAGE_COMPLETED					= 17;
+	public final static int SET_JOB_FLAG_COMPLETED					= 18;
+	public final static int SET_DESTINATION_COMPLETED				= 19;
+	public final static int GET_INCOMING_JOB_STATUS					= 20;
+	public final static int GET_OUTGOING_JOB_STATUS					= 21;
+	
+	//public final static int GET_CURRENT_POSITION					= 18;
+	//public final static int TRANSFER_PACKAGE						= 19;	
+	//public final static int AUCTION_START							= 20;
+	//public final static int AUCTION_END							= 21;
+	//public final static int ESTIMATION_REQUEST					= 22;
+	//public final static int ESTIMATION_RESPONSE					= 23;
+	//public final static int ASSIGN_JOB_TO_VEHICLE					= 24;
+	//public final static int DRIVING_START							= 25;	
+	//public final static int TRANSFER_PACKAGE_COMPLETED			= 26;
 }

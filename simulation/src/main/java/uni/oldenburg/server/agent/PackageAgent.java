@@ -11,7 +11,6 @@ import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.data.PackageData;
 import uni.oldenburg.server.agent.helper.AgentHelper;
-import uni.oldenburg.server.agent.helper.DelayTimes;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
@@ -23,7 +22,6 @@ import jade.lang.acl.UnreadableException;
 import uni.oldenburg.shared.model.Szenario;
 import uni.oldenburg.shared.model.event.EventHelper;
 import uni.oldenburg.shared.model.event.PackageAddedEvent;
-import uni.oldenburg.shared.model.event.PackageRemovedEvent;
 
 /**
  * @author Matthias
@@ -50,15 +48,16 @@ public class PackageAgent extends Agent {
 		Object[] args = getArguments();
 		if (args != null) {
 			mySzenario = (Szenario) args[0];
-			myConveyor = (Conveyor) args[1];
+			myConveyor = (Conveyor) args[1];		
 		}
 		
 		addBehaviour(new AddPackage(MessageType.ADD_PACKAGE));
 		addBehaviour(new GetPackageCount(MessageType.GET_PACKAGE_COUNT));
-		addBehaviour(new SetDestination(MessageType.SET_DESTINATION));
-		addBehaviour(new SetPendingIncomingStatus(MessageType.SET_PENDING_INCOMING_STATUS));
-		addBehaviour(new TransferPackage(MessageType.TRANSFER_PACKAGE));
 		addBehaviour(new GetPendingJobStatus(MessageType.GET_PENDING_JOB_STATUS));
+		addBehaviour(new SetDestination(MessageType.SET_DESTINATION));
+		addBehaviour(new SetIncomingJobFlag(MessageType.SET_PENDING_INCOMING_STATUS));
+		addBehaviour(new GetIncomingJobStatus(MessageType.GET_INCOMING_JOB_STATUS));
+		addBehaviour(new GetOutgoingJobStatus(MessageType.GET_OUTGOING_JOB_STATUS));
 		
 		
 		// am i am ramp?
@@ -126,24 +125,11 @@ public class PackageAgent extends Agent {
 			PackageAgent currentAgent = (PackageAgent) myAgent;
 			PackageData myPackage = (PackageData) msg.getContentObject();
 			
-			// only sent from "TransferPackage"
-			if (msg.getUserDefinedParameter("dstConveyorID") != null) {
-				int dstConveyorID = Integer.parseInt(msg.getUserDefinedParameter("dstConveyorID"));
-				
-				if (dstConveyorID != myConveyor.getID()) {
-					return;
-				}
-			}
-			
-			/*if (msg.getUserDefinedParameter("transfering") != null) {
-				logger.log(Level.INFO, "Transfering to conveyor " + myConveyor.getID() + "...");
-			}*/
-			
 			currentAgent.lstPackage.add(myPackage);
 			
 			EventHelper.addEvent(new PackageAddedEvent(myConveyor.getID(), myPackage.getPackageID()));
    
-			//if (Debugging.showPackageMessages)
+			if (Debugging.showPackageMessages)
 				logger.log(Level.INFO, "Conveyor " + myConveyor.getID() + ": package "+ myPackage.getPackageID() + " added");
             
 			hasPendingIncomingJob = false;
@@ -188,65 +174,6 @@ public class PackageAgent extends Agent {
 	
 	/**
 	 * Got message:
-	 * 		VehiclePlattformAgent::DrivePath
-	 * 		RampPlattformAgent::TransferPackageRelay
-	 * Send message:
-	 * 		PackageAgent::AddPackage
-	 * 
-	 * transfer package from current conveyor to another conveyor
-	 * 
-     * @author Matthias
-     */
-	private class TransferPackage extends CyclicReceiverBehaviour {
-		protected TransferPackage(int msgType) {
-			super(MessageTemplate.MatchPerformative(msgType));
-		}
-
-		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-			int dstConveyorID = Integer.parseInt(msg.getUserDefinedParameter("dstConveyorID"));
-			
-			// get first package
-			PackageData myData = lstPackage.get(0);
-			
-			EventHelper.WaitForMS(DelayTimes.TRANSFER_PACKAGE);
-			
-			// remove package from own list
-			lstPackage.remove(0);
-			
-			//if (Debugging.showPackageMessages)
-				logger.log(Level.INFO, "Conveyor " + myConveyor.getID() + ": package " + myData.getPackageID() + " removed");
-			
-			// fire event, to inform client
-			EventHelper.addEvent(new PackageRemovedEvent(myConveyor.getID(), myData.getPackageID()));
-			
-			// tell destination conveyor to add the package
-			ACLMessage msgAddPackageToDestination = new ACLMessage(MessageType.ADD_PACKAGE);
-			msgAddPackageToDestination.setContentObject(myData);
-			msgAddPackageToDestination.addUserDefinedParameter("dstConveyorID", "" + dstConveyorID);
-			// -------------------------------------------------------------------------------------------------------------------------------------------------
-			//if (msg.getUserDefinedParameter("transfering") != null)
-				//msgAddPackageToDestination.addUserDefinedParameter("transfering", msg.getUserDefinedParameter("transfering"));
-			// -------------------------------------------------------------------------------------------------------------------------------------------------			
-			AgentHelper.addReceiver(msgAddPackageToDestination, myAgent, PackageAgent.NAME, dstConveyorID, mySzenario.getId());
-			send(msgAddPackageToDestination);
-			
-			// wait till completion
-			myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.ADD_PACKAGE_COMPLETED));
-			
-			//logger.log(Level.INFO, "Conveyor " + myConveyor.getID() + ": package " + myData.getPackageID() + " package added completed");
-			
-			// send complete notification
-			ACLMessage msgCompleted = new ACLMessage(MessageType.TRANSFER_PACKAGE_COMPLETED);
-			msgCompleted.addReceiver(msg.getSender());
-			send(msgCompleted);
-			
-			// allow new job assignments
-			hasPendingOutgoingJob = false;
-		}
-	}
-	
-	/**
-	 * Got message:
 	 * 		none [first behaviour to start sending enquires]
 	 * Send message:
 	 * 		RamOrderAgent::SendEquirePackageRequestRelay
@@ -285,8 +212,6 @@ public class PackageAgent extends Agent {
 				default:
 					return;
 			}
-			
-			enquireRampsMsg.addUserDefinedParameter("requestingRampType", "" + myRampConveyor.getRampType());
 			
 			// send to own orderagent
 			AgentHelper.addReceiver(enquireRampsMsg, myAgent, RampOrderAgent.NAME, myConveyor.getID(), mySzenario.getId());
@@ -365,57 +290,63 @@ public class PackageAgent extends Agent {
 		}
 	}
 	
-	/**
-	 * Got message:
-	 * 		RampOrderAgent::SetDestinationRelay
-	 * Send message:
-	 * 		none
-	 * 
-	 * set destionationID for a specific package and block new job assignments
-	 * 
-     * @author Matthias
-     */
 	private class SetDestination extends CyclicReceiverBehaviour {
 		protected SetDestination(int msgType) {
 			super(MessageTemplate.MatchPerformative(msgType));
 		}
 
 		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-			int packageID = Integer.parseInt(msg.getUserDefinedParameter("packageID"));
 			int destinationID = Integer.parseInt(msg.getUserDefinedParameter("destinationID"));
 			
-			//logger.log(Level.INFO, "setDST");
+			lstPackage.get(0).setDestinationID(destinationID);
 			
-			for(PackageData myData : lstPackage) {
-				if (myData.getPackageID() == packageID) {
-					myData.setDestinationID(destinationID);
-					hasPendingOutgoingJob = true;
-					break;
-				}
-			}
+			hasPendingOutgoingJob = true;
+			
+			ACLMessage msgAnswer = new ACLMessage(MessageType.SET_DESTINATION_COMPLETED);
+			msgAnswer.addReceiver(msg.getSender());
+			send(msgAnswer);
 		}		
 	}
 	
-	/**
-	 * Got message:
-	 * 		RampRoutingAgent::SetPendingIncomingStatusRelay
-	 * 		VehicleRoutingAgent::HandleEstimationRequestAssignment
-	 * Send message:
-	 * 		none
-	 * 
-	 * sets pending incoming job flag
-	 * 
-     * @author Matthias
-     */
-	private class SetPendingIncomingStatus extends CyclicReceiverBehaviour {
-		protected SetPendingIncomingStatus(int msgType) {
+	private class SetIncomingJobFlag extends CyclicReceiverBehaviour {
+		protected SetIncomingJobFlag(int msgType) {
 			super(MessageTemplate.MatchPerformative(msgType));
 		}
 
-		@Override
 		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
 			hasPendingIncomingJob = true;
+			
+			//logger.log(Level.INFO, "[SetIncomingJobFlag] Conveyor " + myConveyor.getID() + " incoming !!!");
+			
+			ACLMessage msgAnswer = new ACLMessage(MessageType.SET_JOB_FLAG_COMPLETED);
+			msgAnswer.addReceiver(msg.getSender());
+			send(msgAnswer);
+		}
+	}
+	
+	private class GetIncomingJobStatus extends CyclicReceiverBehaviour {
+		protected GetIncomingJobStatus(int msgType) {
+			super(MessageTemplate.MatchPerformative(msgType));
+		}
+
+		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+			ACLMessage msgAnswer = new ACLMessage(MessageType.GET_INCOMING_JOB_STATUS);
+			msgAnswer.addUserDefinedParameter("status", hasPendingIncomingJob ? "1" : "0");
+			msgAnswer.addReceiver(msg.getSender());
+			send(msgAnswer);
 		}		
 	}
 	
+	private class GetOutgoingJobStatus extends CyclicReceiverBehaviour {
+		protected GetOutgoingJobStatus(int msgType) {
+			super(MessageTemplate.MatchPerformative(msgType));
+		}
+
+		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+			ACLMessage msgAnswer = new ACLMessage(MessageType.GET_OUTGOING_JOB_STATUS);
+			msgAnswer.addUserDefinedParameter("status", hasPendingOutgoingJob ? "1" : "0");
+			msgAnswer.addReceiver(msg.getSender());
+			send(msgAnswer);
+		}		
+	}
 }
