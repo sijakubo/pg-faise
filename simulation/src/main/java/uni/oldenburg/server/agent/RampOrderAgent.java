@@ -2,6 +2,7 @@ package uni.oldenburg.server.agent;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import jade.core.Agent;
@@ -94,9 +95,13 @@ public class RampOrderAgent extends Agent {
 		int rampsResponded = 0;
 		int packageID = 0;
 		
+		long timeoutStart = new Date().getTime();
+		
 		List<Integer> lstConveyorRamps = new ArrayList<Integer>();
 		
 		public void action() {
+			//logger.log(Level.INFO, "[SendEnquirePackageRequestRelay] CID: " + myConveyor.getID() + " step: " + step);
+			
 			if (step == 0) {
 				ACLMessage msgEnquire = myAgent.receive(MessageTemplate.MatchPerformative(MessageType.ENQUIRE_RAMPS_RELAY));
 				
@@ -124,8 +129,12 @@ public class RampOrderAgent extends Agent {
 					send(enquireRampsMsg);
 					
 					step = 1;	
+					
+					timeoutStart = new Date().getTime();
 				}
 				else {
+					//logger.log(Level.INFO, "[SendEnquirePackageRequestRelay] CID: " + myConveyor.getID() + " block for now");
+					
 					block();
 				}
 			}
@@ -145,9 +154,14 @@ public class RampOrderAgent extends Agent {
 				}
 				
 				if (rampsResponded < maxRampToRespond) {
-					ACLMessage msgEnquireResponse =  myAgent.receive(MessageTemplate.MatchPerformative(MessageType.ENQUIRE_RAMP_RESPONSE));
+					ACLMessage msgEnquireResponse = myAgent.receive(MessageTemplate.MatchPerformative(MessageType.ENQUIRE_RAMP_RESPONSE));
+					
 					if (msgEnquireResponse != null) {
 						++rampsResponded;
+						
+						timeoutStart = new Date().getTime();
+						
+						//logger.log(Level.INFO, "[SendEnquirePackageRequestRelay] CID: " + myConveyor.getID() + " responded: " + rampsResponded + "/" + maxRampToRespond);
 						
 						if (msgEnquireResponse.getUserDefinedParameter("demand_package").equals("1")) {
 							rampsResponded = maxRampToRespond;
@@ -159,16 +173,45 @@ public class RampOrderAgent extends Agent {
 						}
 					}
 					else {
+						if (new Date().getTime() - timeoutStart > 3000) {
+							logger.log(Level.INFO, "[SendEnquirePackageRequestRelay] CID: " + myConveyor.getID() + " step=1 -> TIMEOUT!!!");
+							
+							for (int id : lstConveyorRamps) {
+								logger.log(Level.INFO, "Conveyor " + id + " answered!");
+							}
+							
+							rampsResponded = maxRampToRespond;
+						}
+						
 						block();
 					}
 				}
 				else {
+					//logger.log(Level.INFO, "Ramps found: " + lstConveyorRamps.size());
+					
 					if (lstConveyorRamps.size() > 0) {
 						int randomIndex = (int)(Math.random() * 100) % lstConveyorRamps.size();
 						
 						int selectedConveyorID = lstConveyorRamps.get(randomIndex);
 						
 						SetSelectedIDandPendingStatus(myAgent, selectedConveyorID);
+						
+						// initialize auction
+						ACLMessage msgAuctionStart = new ACLMessage(MessageType.AUCTION_START);
+						msgAuctionStart.addUserDefinedParameter("srcRampID", "" + myConveyor.getID());
+						msgAuctionStart.addUserDefinedParameter("dstRampID", "" + selectedConveyorID);
+						AgentHelper.addReceiver(msgAuctionStart, myAgent, RampRoutingAgent.NAME, myConveyor.getID(), mySzenario.getId());
+						send(msgAuctionStart);
+						
+						// wait till auction is finished
+						myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.AUCTION_END));
+					}
+					else {
+						if (myConveyor.getRampType() == ConveyorRamp.RAMP_ENTRANCE)
+							logger.log(Level.INFO, "[SendEnquirePackageRequestRelay] CID: " + myConveyor.getID() + " - no free ramps found!");
+						
+						if (myConveyor.getRampType() == ConveyorRamp.RAMP_EXIT)
+							logger.log(Level.INFO, "[SendEnquirePackageRequestRelay] CID: " + myConveyor.getID() + " - no package found in storage");
 					}
 					
 					step = 0;
@@ -202,7 +245,7 @@ public class RampOrderAgent extends Agent {
 			
 		send(msgSetDST);	
 		
-		myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.SET_DESTINATION_COMPLETED));
+		myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.SET_DESTINATION_COMPLETED), 2000);
 		
 		//logger.log(Level.INFO, "ConveyorID: " + myConveyor.getID() + " -> selCID: " + selectedConveyorID);
 	}
@@ -214,7 +257,7 @@ public class RampOrderAgent extends Agent {
 		AgentHelper.addReceiver(msgSetFlag, myAgent, RampOrderAgent.NAME, receiverID, mySzenario.getId());
 		send(msgSetFlag);
 		
-		myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.SET_JOB_FLAG_COMPLETED));
+		myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.SET_JOB_FLAG_COMPLETED), 2000);
 		
 		//logger.log(Level.INFO, "Conveyor " + receiverID + ": " + "incoming flag set");
 	}
@@ -231,7 +274,7 @@ public class RampOrderAgent extends Agent {
 			AgentHelper.addReceiver(msgSetFlag, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
 			send(msgSetFlag);
 			
-			myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.SET_JOB_FLAG_COMPLETED));
+			myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.SET_JOB_FLAG_COMPLETED), 2000);
 			
 			ACLMessage msgAnswer = new ACLMessage(MessageType.SET_JOB_FLAG_COMPLETED);
 			msgAnswer.addReceiver(msg.getSender());
@@ -267,6 +310,7 @@ public class RampOrderAgent extends Agent {
 			boolean isSpaceAvailable = false;
 			boolean doDemandPackage = false;
 			
+			//logger.log(Level.INFO, "[GetEnquirePackageRequest] ping!");
 			
 			// entrance ramp sent enquire -> send to exit and storage ramps
 			if (requestingRampType == ConveyorRamp.RAMP_ENTRANCE) {		
@@ -275,9 +319,14 @@ public class RampOrderAgent extends Agent {
 				AgentHelper.addReceiver(msgGetJobStatus, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
 				send(msgGetJobStatus);
 				
-				ACLMessage msgJobStatus = myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.GET_INCOMING_JOB_STATUS)); 
+				ACLMessage msgJobStatus = myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.GET_INCOMING_JOB_STATUS), 1000); 
 				
-				boolean hasIncomingJob = msgJobStatus.getUserDefinedParameter("status").equals("1") ? true : false; 
+				boolean hasIncomingJob = true;
+				
+				if (msgJobStatus != null)
+					hasIncomingJob = msgJobStatus.getUserDefinedParameter("status").equals("1") ? true : false;
+				else
+					logger.log(Level.INFO, "[GetEnquirePackageRequest] TIMEOUT: hasIncomingJob");
 				
 				//logger.log(Level.INFO, "Conveyor " + myConveyor.getID() + " has incoming job: " + hasIncomingJob);
 				
@@ -290,8 +339,11 @@ public class RampOrderAgent extends Agent {
 						AgentHelper.addReceiver(msgDemandPackage, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
 						send(msgDemandPackage);
 						
-						ACLMessage msgResponseDemand = myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.DEMAND_PACKAGE));
-						doDemandPackage = msgResponseDemand.getUserDefinedParameter("demanding").equals("1") ? true : false;
+						ACLMessage msgResponseDemand = myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.DEMAND_PACKAGE), 1000);
+						
+						if (msgResponseDemand != null)
+							doDemandPackage = msgResponseDemand.getUserDefinedParameter("demanding").equals("1") ? true : false;
+						
 						// only tell that you have space, when you want something
 						if (doDemandPackage)
 							isSpaceAvailable = true;
@@ -302,8 +354,13 @@ public class RampOrderAgent extends Agent {
 						AgentHelper.addReceiver(msgSizeRequest, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
 						send(msgSizeRequest);
 						
-						ACLMessage msgSizeResponse = myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.GET_PACKAGE_COUNT));
-						int size = Integer.parseInt(msgSizeResponse.getUserDefinedParameter("package_count"));
+						ACLMessage msgSizeResponse = myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.GET_PACKAGE_COUNT), 1000);
+						int size = myConveyor.getPackageCountMax();
+						
+						if (msgSizeResponse != null)
+							size = Integer.parseInt(msgSizeResponse.getUserDefinedParameter("package_count"));
+						else
+							logger.log(Level.INFO, "[GetEnquirePackageRequest] TIMEOUT: size");
 						
 						isSpaceAvailable = (myConveyor.getPackageCountMax() - size) > 0 ? true : false;
 					}
@@ -321,7 +378,12 @@ public class RampOrderAgent extends Agent {
 				
 				ACLMessage msgJobStatus = myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.GET_OUTGOING_JOB_STATUS)); 
 				
-				boolean hasOutgoingJob = msgJobStatus.getUserDefinedParameter("status").equals("1") ? true : false;
+				boolean hasOutgoingJob = true;
+				
+				if (msgJobStatus != null)
+					hasOutgoingJob = msgJobStatus.getUserDefinedParameter("status").equals("1") ? true : false;
+				else
+					logger.log(Level.INFO, "[GetEnquirePackageRequest] TIMEOUT: hasOutgoingJob");
 				
 				if (!hasOutgoingJob) {
 					ACLMessage msgDemandPackage = new ACLMessage(MessageType.FIND_PACKAGE_IN_STORAGE);
@@ -329,8 +391,10 @@ public class RampOrderAgent extends Agent {
 					AgentHelper.addReceiver(msgDemandPackage, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
 					send(msgDemandPackage);
 					
-					ACLMessage msgResponseDemand = myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.FIND_PACKAGE_IN_STORAGE));
-					doDemandPackage = msgResponseDemand.getUserDefinedParameter("demanding").equals("1") ? true : false;
+					ACLMessage msgResponseDemand = myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.FIND_PACKAGE_IN_STORAGE), 1000);
+					
+					if (msgResponseDemand != null)
+						doDemandPackage = msgResponseDemand.getUserDefinedParameter("demanding").equals("1") ? true : false;
 					
 					if (doDemandPackage)
 						isSpaceAvailable = true;

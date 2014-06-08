@@ -26,14 +26,14 @@ public class MessageType {
 	public final static int SET_DESTINATION_COMPLETED				= 19;
 	public final static int GET_INCOMING_JOB_STATUS					= 20;
 	public final static int GET_OUTGOING_JOB_STATUS					= 21;
+	public final static int AUCTION_START							= 22;
+	public final static int AUCTION_END								= 23;
 	
-	//public final static int GET_CURRENT_POSITION					= 18;
-	//public final static int TRANSFER_PACKAGE						= 19;	
-	//public final static int AUCTION_START							= 20;
-	//public final static int AUCTION_END							= 21;
-	//public final static int ESTIMATION_REQUEST					= 22;
-	//public final static int ESTIMATION_RESPONSE					= 23;
-	//public final static int ASSIGN_JOB_TO_VEHICLE					= 24;
-	//public final static int DRIVING_START							= 25;	
-	//public final static int TRANSFER_PACKAGE_COMPLETED			= 26;
+	public final static int ESTIMATION_REQUEST						= 24;
+	public final static int ESTIMATION_RESPONSE						= 25;
+	public final static int ASSIGN_JOB_TO_VEHICLE					= 26;
+	public final static int GET_CURRENT_POSITION					= 27;
+	public final static int DRIVING_START							= 28;	
+	public final static int TRANSFER_PACKAGE						= 29;	
+	public final static int TRANSFER_PACKAGE_COMPLETED				= 30;
 }

@@ -32,6 +32,9 @@ public abstract class Conveyor implements Serializable {
 	protected static final int ENTRY_BORDER_SIZE = RASTER_SIZE / 8;	
 	protected static final String CONVEYOR_COLOR_INPUT = "red";
 	protected static final String CONVEYOR_COLOR_OUTPUT  = "green";	
+	
+	protected boolean hasIncomingJob = false;
+	protected boolean hasOutgoingJob = false;
 
 	private int ID;
 
@@ -42,7 +45,6 @@ public abstract class Conveyor implements Serializable {
 	
 	private int direction = DIRECTION_UP;
 
-	//private int packageCount = 0;
 	protected List<String> lstPackage = new ArrayList<String>(); 
 	
 	protected int packageCountMax = 0;
@@ -69,6 +71,19 @@ public abstract class Conveyor implements Serializable {
 
 		setPosition(x, y);
 		setSize(width, height);
+	}
+    
+	public boolean hasIncomingJob() {
+		return hasIncomingJob;
+	}
+	public void setIncomingJob(boolean hasIncomingJob) {
+		this.hasIncomingJob = hasIncomingJob;
+	}
+	public boolean hasOutgoingJob() {
+		return hasOutgoingJob;
+	}
+	public void setOutgoingJob(boolean hasOutgoingJob) {
+		this.hasOutgoingJob = hasOutgoingJob;
 	}
 
 	public int getID() {
@@ -209,14 +224,7 @@ public abstract class Conveyor implements Serializable {
 	
 	public int getPackageCount() {
 		return lstPackage.size();
-		//return packageCount;
 	}
-	
-	/*public void setPackageCount(int count) {
-		this.packageCount = count;
-		
-		canvas = null;
-	}*/
 	
 	public void addPackage(String sid) {
 		lstPackage.add(sid);

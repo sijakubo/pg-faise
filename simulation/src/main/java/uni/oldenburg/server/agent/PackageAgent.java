@@ -11,9 +11,12 @@ import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.data.PackageData;
 import uni.oldenburg.server.agent.helper.AgentHelper;
+import uni.oldenburg.server.agent.helper.DelayTimes;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
+import uni.oldenburg.shared.model.ConveyorVehicle;
+import uni.oldenburg.shared.model.Job;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -21,7 +24,9 @@ import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import uni.oldenburg.shared.model.Szenario;
 import uni.oldenburg.shared.model.event.EventHelper;
+import uni.oldenburg.shared.model.event.JobStatusUpdatedEvent;
 import uni.oldenburg.shared.model.event.PackageAddedEvent;
+import uni.oldenburg.shared.model.event.PackageRemovedEvent;
 
 /**
  * @author Matthias
@@ -58,6 +63,7 @@ public class PackageAgent extends Agent {
 		addBehaviour(new SetIncomingJobFlag(MessageType.SET_PENDING_INCOMING_STATUS));
 		addBehaviour(new GetIncomingJobStatus(MessageType.GET_INCOMING_JOB_STATUS));
 		addBehaviour(new GetOutgoingJobStatus(MessageType.GET_OUTGOING_JOB_STATUS));
+		addBehaviour(new TransferPackage(MessageType.TRANSFER_PACKAGE));
 		
 		
 		// am i am ramp?
@@ -67,10 +73,10 @@ public class PackageAgent extends Agent {
 			// what ramp type am i?
 			switch(myRampConveyor.getRampType()) {
 				case ConveyorRamp.RAMP_ENTRANCE:
-					addBehaviour(new SendEnquirePackageRequest(this, 1000));
+					addBehaviour(new SendEnquirePackageRequest(this, 1100));
 					break;
 				case ConveyorRamp.RAMP_EXIT:
-					addBehaviour(new SendEnquirePackageRequest(this, 1000));
+					addBehaviour(new SendEnquirePackageRequest(this, 700));
 					addBehaviour(new JobAvailable(MessageType.DEMAND_PACKAGE)); // only for exit ramps?					
 					break;
 				case ConveyorRamp.RAMP_STOREAGE:
@@ -134,6 +140,14 @@ public class PackageAgent extends Agent {
             
 			hasPendingIncomingJob = false;
 			
+			EventHelper.addEvent(new JobStatusUpdatedEvent(myConveyor.getID(), hasPendingIncomingJob, Job.INCOMING));			
+			
+			if (myConveyor instanceof ConveyorVehicle) {
+				hasPendingOutgoingJob = true;
+				
+				EventHelper.addEvent(new JobStatusUpdatedEvent(myConveyor.getID(), hasPendingOutgoingJob, Job.OUTGOING));
+			}
+			
 			ACLMessage msgCompleted = new ACLMessage(MessageType.ADD_PACKAGE_COMPLETED);
 			msgCompleted.addReceiver(msg.getSender());
 			send(msgCompleted);
@@ -195,16 +209,24 @@ public class PackageAgent extends Agent {
 			if (lstPackage.size() < 1)
 				return;
 			
+			//logger.log(Level.INFO, "[SendEnquirePackageRequest] CID: " + myConveyor.getID() + " send enquire");			
+			
 			switch(myRampConveyor.getRampType())  {
 				case ConveyorRamp.RAMP_ENTRANCE:
 					// outgoing job already in progress? -> don't ask for now
-					if (hasPendingOutgoingJob) return;
+					if (hasPendingOutgoingJob) {
+						logger.log(Level.INFO, "[SendEnquirePackageRequest] CID: " + myConveyor.getID() + " has outgoing job" + " [IsRamp: " + (myConveyor instanceof ConveyorRamp) + "]");			
+						return;
+					}
 					
 					enquireRampsMsg.addUserDefinedParameter("packageID", "" + lstPackage.get(0).getPackageID());
 					break;
 				case ConveyorRamp.RAMP_EXIT:
 					// incoming job already in progress? -> don't ask for now
-					if (hasPendingIncomingJob) return;
+					if (hasPendingIncomingJob) {
+						logger.log(Level.INFO, "[SendEnquirePackageRequest] CID: " + myConveyor.getID() + " has incoming job");
+						return;
+					}
 					
 					int randomIndex = (int)(Math.random() * 100) % lstPackage.size();
 					enquireRampsMsg.addUserDefinedParameter("packageID", "" + lstPackage.get(randomIndex).getPackageID());
@@ -251,7 +273,8 @@ public class PackageAgent extends Agent {
 			
 			// response "demanding" status
 			ACLMessage msgDemandPackageResponse = new ACLMessage(MessageType.DEMAND_PACKAGE);
-			msgDemandPackageResponse.addUserDefinedParameter("demanding", demanding == true ? "1" : "0");
+			//msgDemandPackageResponse.addUserDefinedParameter("demanding", demanding == true ? "1" : "0");
+			msgDemandPackageResponse.addUserDefinedParameter("demanding", "0"); // demanding == true ? "1" : "0");
 			msgDemandPackageResponse.addReceiver(msg.getSender());
 			send(msgDemandPackageResponse);
 		}
@@ -298,9 +321,16 @@ public class PackageAgent extends Agent {
 		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
 			int destinationID = Integer.parseInt(msg.getUserDefinedParameter("destinationID"));
 			
+			logger.log(Level.INFO, "[SetDestination] " + 	"CID: " + myConveyor.getID() + " " +
+															"pID: " + lstPackage.get(0).getPackageID() + " " + 
+															"(old)dstID: " + lstPackage.get(0).getDestinationID() + " " + 
+															"(new)dst: " + destinationID);
+			
 			lstPackage.get(0).setDestinationID(destinationID);
 			
 			hasPendingOutgoingJob = true;
+			
+			EventHelper.addEvent(new JobStatusUpdatedEvent(myConveyor.getID(), hasPendingOutgoingJob, Job.OUTGOING));
 			
 			ACLMessage msgAnswer = new ACLMessage(MessageType.SET_DESTINATION_COMPLETED);
 			msgAnswer.addReceiver(msg.getSender());
@@ -316,7 +346,7 @@ public class PackageAgent extends Agent {
 		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
 			hasPendingIncomingJob = true;
 			
-			//logger.log(Level.INFO, "[SetIncomingJobFlag] Conveyor " + myConveyor.getID() + " incoming !!!");
+			EventHelper.addEvent(new JobStatusUpdatedEvent(myConveyor.getID(), hasPendingIncomingJob, Job.INCOMING));
 			
 			ACLMessage msgAnswer = new ACLMessage(MessageType.SET_JOB_FLAG_COMPLETED);
 			msgAnswer.addReceiver(msg.getSender());
@@ -348,5 +378,53 @@ public class PackageAgent extends Agent {
 			msgAnswer.addReceiver(msg.getSender());
 			send(msgAnswer);
 		}		
+	}
+	
+	private class TransferPackage extends CyclicReceiverBehaviour {
+		protected TransferPackage(int msgType) {
+			super(MessageTemplate.MatchPerformative(msgType));
+		}
+
+		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+			int dstConveyorID = Integer.parseInt(msg.getUserDefinedParameter("dstConveyorID"));
+			
+			// get first package
+			PackageData myData = lstPackage.get(0);
+			
+			EventHelper.WaitForMS(DelayTimes.TRANSFER_PACKAGE);
+			
+			// remove package from own list
+			lstPackage.remove(0);
+			
+			if (Debugging.showPackageMessages)
+				logger.log(Level.INFO, "Conveyor " + myConveyor.getID() + ": package " + myData.getPackageID() + " removed");
+			
+			logger.log(Level.INFO, "[TransferPackage] srcID: " + myConveyor.getID() + " pID: " + myData.getPackageID() + " - dstID: " + myData.getDestinationID() + " [dst: " + dstConveyorID + "]");
+			
+			// fire event, to inform client
+			EventHelper.addEvent(new PackageRemovedEvent(myConveyor.getID(), myData.getPackageID()));
+			
+			// tell destination conveyor to add the package
+			ACLMessage msgAddPackageToDestination = new ACLMessage(MessageType.ADD_PACKAGE);
+			msgAddPackageToDestination.setContentObject(myData);			
+			AgentHelper.addReceiver(msgAddPackageToDestination, myAgent, PackageAgent.NAME, dstConveyorID, mySzenario.getId());
+			send(msgAddPackageToDestination);
+			
+			// wait till completion
+			myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.ADD_PACKAGE_COMPLETED));
+			
+			
+			// allow new job assignments
+			hasPendingOutgoingJob = false;			
+			
+			EventHelper.addEvent(new JobStatusUpdatedEvent(myConveyor.getID(), hasPendingOutgoingJob, Job.OUTGOING));
+			
+			//logger.log(Level.INFO, "CID: " + myConveyor.getID() + " - AddPackageComplete - outgoing job: " + hasPendingOutgoingJob);
+				
+			// send complete notification
+			ACLMessage msgCompleted = new ACLMessage(MessageType.TRANSFER_PACKAGE_COMPLETED);
+			msgCompleted.addReceiver(msg.getSender());
+			send(msgCompleted);
+		}
 	}
 }

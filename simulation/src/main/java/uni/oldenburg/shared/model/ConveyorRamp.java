@@ -139,10 +139,12 @@ public class ConveyorRamp extends Conveyor {
 				drawEntry(context, CONVEYOR_COLOR_INPUT, 0, 0, this.getWidth(), ENTRY_BORDER_SIZE);
 				drawEntry(context, CONVEYOR_COLOR_OUTPUT, 0, this.getHeight() - ENTRY_BORDER_SIZE, this.getWidth(), ENTRY_BORDER_SIZE);
 
+				index = this.getPackageCountMax();
+				
 				//packages:
 				for (String sid : lstPackage) {
 					double x = 0.1 * getWidth();
-					double y = 0.025 * getHeight() + (this.getPackageCountMax() - index++) * getHeight() / 4;
+					double y = 0.025 * getHeight() + index-- * getHeight() / 4;
 					
 					context.setFillStyle(CssColor.make(0, 63, 127));					
 					context.fillRect(x, y, 0.8 * getWidth(), getHeight() / 5);
@@ -155,9 +157,11 @@ public class ConveyorRamp extends Conveyor {
 				drawEntry(context, CONVEYOR_COLOR_INPUT, 0, 0, ENTRY_BORDER_SIZE, this.getWidth());				
 				drawEntry(context, CONVEYOR_COLOR_OUTPUT , this.getWidth() - ENTRY_BORDER_SIZE, 0, ENTRY_BORDER_SIZE, this.getWidth());
 
+				index = this.getPackageCountMax();
+				
 				//packages:
 				for (String sid : lstPackage) {
-					double x = 0.025 * getWidth() + (this.getPackageCountMax() - index++) * getWidth() / 4;
+					double x = 0.025 * getWidth() + index-- * getWidth() / 4;
 					double y = 0.2 * getHeight();
 					
 					context.setFillStyle(CssColor.make(0, 63, 127));					

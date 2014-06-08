@@ -125,12 +125,7 @@ public class AgentHelper {
 	 *
 	 */	
 	public static String getUniqueNickname(String nickname, int conveyorID, int szenarioID) {
-		if (conveyorID > 0)
-			nickname += "-" + conveyorID;
-		
-		nickname += "-" + szenarioID;
-		
-		return nickname;
+		return szenarioID + "-" + conveyorID + "-" + nickname;
 	}
 	
 	/**

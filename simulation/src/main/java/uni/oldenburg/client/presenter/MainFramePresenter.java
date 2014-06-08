@@ -28,6 +28,7 @@ import uni.oldenburg.shared.model.JobList;
 import uni.oldenburg.shared.model.Szenario;
 import uni.oldenburg.shared.model.SzenarioInfo;
 import uni.oldenburg.shared.model.event.JobAssignedEvent;
+import uni.oldenburg.shared.model.event.JobStatusUpdatedEvent;
 import uni.oldenburg.shared.model.event.JobUnassignableEvent;
 import uni.oldenburg.shared.model.event.PackageAddedEvent;
 import uni.oldenburg.shared.model.event.PackageRemovedEvent;
@@ -133,7 +134,7 @@ public class MainFramePresenter extends Presenter {
 		handleEvents();
 		
 		if (Debugging.isDebugging) {			
-			this.loadSzenario("TestSzenario");
+			this.loadSzenario("Test04");
 			this.lstJobs.addRandomJobs(100);
 		}
 	}
@@ -481,6 +482,34 @@ public class MainFramePresenter extends Presenter {
 				context.setFillStyle(CssColor.make(red, green, 0));
 				context.fillRect(myConveyor.getX() - (width / 2) + 1, myConveyor.getY() - 7, charge * 2 * (width - 1), 2);
 			}
+		}
+		
+		if (!(myConveyor instanceof ConveyorWall)) {
+			int box_x = myConveyor.getX() + 20;
+			int box_y = myConveyor.getY() - 0;
+			int box_w = 20;
+			int box_h = 12;
+			
+			context.setFillStyle(CssColor.make("black"));
+			context.fillRect(box_x, box_y, box_w, box_h);
+			context.setFillStyle(CssColor.make("white"));
+			context.fillText("" + myConveyor.getID(), box_x + 5, box_y + 10);
+			
+			// incoming job
+			context.setFillStyle(CssColor.make("black"));			
+			
+			if (myConveyor.hasIncomingJob())
+				context.setFillStyle(CssColor.make("red"));
+			
+			context.fillRect(box_x, box_y, 5, box_h / 2);
+			
+			// outgoing job
+			context.setFillStyle(CssColor.make("black"));
+			
+			if (myConveyor.hasOutgoingJob())
+				context.setFillStyle(CssColor.make("green"));
+			
+			context.fillRect(box_x, box_y + (box_h / 2), 5, box_h / 2);
 		}
 	}
 
@@ -1032,6 +1061,23 @@ public class MainFramePresenter extends Presenter {
 					
 					return;
 				}
+				
+				if (anEvent instanceof JobStatusUpdatedEvent) {					
+					JobStatusUpdatedEvent myEvent = (JobStatusUpdatedEvent)anEvent;
+					
+					Conveyor myConveyor = currentSzenario.getConveyorById(myEvent.getConveyorID());
+					
+					switch(myEvent.getJobType()) {
+						case Job.INCOMING:
+							myConveyor.setIncomingJob(myEvent.getJobStatus());
+							break;
+						case Job.OUTGOING:
+							myConveyor.setOutgoingJob(myEvent.getJobStatus());
+							break;
+					}
+					
+					loadSzenario(currentSzenario);
+				}
 			}
 		});
 	}
@@ -1050,10 +1096,13 @@ public class MainFramePresenter extends Presenter {
 				if (lstJobs.size() < 1)
 					return;	
 				
-				Job pendingJob = lstJobs.getJob(0);
+				//Job pendingJob = lstJobs.getJob(0);
 				
-				if (elapsedTimeSec >= pendingJob.getTimestamp()) {
-					agentPlatformService.addJob(currentSzenario.getId(), pendingJob, new EmptyAsyncCallback());
+				for (Job pendingJob : lstJobs.getJoblist()) {
+					if (elapsedTimeSec >= pendingJob.getTimestamp()) {
+						agentPlatformService.addJob(currentSzenario.getId(), pendingJob, new EmptyAsyncCallback());
+						break;
+					}	
 				}
 			}
 		};

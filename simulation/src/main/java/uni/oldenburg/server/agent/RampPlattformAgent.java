@@ -6,6 +6,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import uni.oldenburg.Debugging;
+import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.data.PackageData;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
@@ -41,6 +42,7 @@ public class RampPlattformAgent extends Agent {
 		
 		addBehaviour(new SendRampInfoBehaviour());
 		addBehaviour(new IsPackageSpaceAvailableBehaviour());
+		addBehaviour(new TransferPackageRelay(MessageType.TRANSFER_PACKAGE));
 		
 		String nickname = AgentHelper.getUniqueNickname(RampRoutingAgent.NAME, myConveyor.getID(), mySzenario.getId());
 		AgentHelper.registerAgent(mySzenario.getId(), this, nickname);
@@ -220,6 +222,26 @@ public class RampPlattformAgent extends Agent {
 					block();
 				}
 			}
+		}
+	}
+	
+	private class TransferPackageRelay extends CyclicReceiverBehaviour {
+		protected TransferPackageRelay(int msgType) {
+			super(MessageTemplate.MatchPerformative(msgType));
+		}
+
+		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+			// send transfer request to own package-agent
+			ACLMessage msgTransportPackage = new ACLMessage(MessageType.TRANSFER_PACKAGE);
+			msgTransportPackage.addUserDefinedParameter("dstConveyorID", msg.getUserDefinedParameter("dstConveyorID"));
+			AgentHelper.addReceiver(msgTransportPackage, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
+			send(msgTransportPackage);
+			
+			myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.TRANSFER_PACKAGE_COMPLETED));
+			
+			ACLMessage msgCompleted = new ACLMessage(MessageType.TRANSFER_PACKAGE_COMPLETED);
+			msgCompleted.addReceiver(msg.getSender());
+			send(msgCompleted);
 		}
 	}
 }
