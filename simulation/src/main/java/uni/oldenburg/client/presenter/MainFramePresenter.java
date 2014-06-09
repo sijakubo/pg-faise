@@ -244,7 +244,7 @@ public class MainFramePresenter extends Presenter {
 		/**
 		 * drag, drop and rotate objects on canvas
 		 * 
-		 * @author Matthias
+		 * @author Matthias, Christopher
 		 */
 		display.getCanvas().addMouseUpHandler(new MouseUpHandler() {
 			public void onMouseUp(MouseUpEvent event) {
@@ -257,13 +257,25 @@ public class MainFramePresenter extends Presenter {
 				if (event.getNativeButton() == NativeEvent.BUTTON_LEFT) {
 					// add conveyor
 					if (myConveyor != null) {
-						// when spot available
-						if (isSpotAvailable(event.getX(), event.getY())) {
+						// calculate spot available
+						boolean spotAvailable = true;
+						if(myConveyor instanceof ConveyorRamp) {
+							for(int i = 0; i < ((ConveyorRamp)myConveyor).getNumberOfBlocks(); i++) {
+								if(((ConveyorRamp)myConveyor).isVertical()) {
+									spotAvailable = spotAvailable && isSpotAvailable(event.getX(), event.getY() + i * Conveyor.RASTER_SIZE);
+								} else {
+									spotAvailable = spotAvailable && isSpotAvailable(event.getX() + i * Conveyor.RASTER_SIZE, event.getY());
+								}
+							}
+						} else {
+							spotAvailable = isSpotAvailable(event.getX(), event.getY());
+						}
+						
+						if (spotAvailable) {
 							MainFramePresenter.this.currentSzenario.addConveyor(myConveyor);
 							MainFramePresenter.this.dropableConveyor = null;
 							loadSzenario(MainFramePresenter.this.currentSzenario);
-							
-							if (myConveyor instanceof ConveyorRamp)
+							if(myConveyor instanceof ConveyorRamp)
 								MainFramePresenter.this.display.log("" +((ConveyorRamp)myConveyor).getRampType());
 						}
 					} else {

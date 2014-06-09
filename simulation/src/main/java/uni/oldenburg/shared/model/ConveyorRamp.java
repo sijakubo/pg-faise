@@ -184,6 +184,10 @@ public class ConveyorRamp extends Conveyor {
 	public int getRampType() {
 		return rampType;
 	}
+	
+	public int getNumberOfBlocks() {
+		return numBlocks;
+	}
 		
 	/**
 	 * auto-set type based on location of conveyor
