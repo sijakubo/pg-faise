@@ -19,6 +19,7 @@ import uni.oldenburg.client.view.DialogBoxOverwriteJoblist;
 import uni.oldenburg.client.view.DialogBoxSaveAs;
 import uni.oldenburg.client.view.DialogBoxSaveAsJoblist;
 import uni.oldenburg.client.view.DialogBoxScenarioSelection;
+import uni.oldenburg.client.view.MainFrameView;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.ConveyorVehicle;
@@ -549,7 +550,7 @@ public class MainFramePresenter extends Presenter {
 	 * @author Matthias
 	 */
 	public boolean isSpotAvailable(int x, int y) {
-		return (findConveyor(x, y) == null);
+		return (x < MainFrameView.canvasWidth && y < MainFrameView.canvasHeight && findConveyor(x, y) == null);
 	}
 
 	/**
