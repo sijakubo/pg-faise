@@ -261,6 +261,10 @@ public class PackageAgent extends Agent {
 		}
 
 		protected void onTick() {
+			//If the Multiplicator is bigger than one, the Tickerperiod must be reseted
+			int multiplicator=mySzenario.getMultiplicatorServer();
+            this.reset(1000/multiplicator);
+
 			ACLMessage enquireRampsMsg = new ACLMessage(MessageType.ENQUIRE_RAMPS_RELAY);
 			ConveyorRamp myRampConveyor = (ConveyorRamp)myConveyor;
 			

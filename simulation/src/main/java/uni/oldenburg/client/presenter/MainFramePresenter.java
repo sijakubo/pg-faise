@@ -878,7 +878,7 @@ public class MainFramePresenter extends Presenter {
 	 */
 	public void setSimulationState(boolean started) {
 		bSimulationStarted = started;
-
+		mapSimMenuItems.get("Neues Szenario anlegen").setEnabled(!hasSimulationStarted());
 		mapSimMenuItems.get("Laden").setEnabled(!hasSimulationStarted());
 		mapSimMenuItems.get("Speichern").setEnabled(!hasSimulationStarted());
 		mapSimMenuItems.get("Speichern unter...").setEnabled(
@@ -931,8 +931,16 @@ public class MainFramePresenter extends Presenter {
 		// --- menu bar ---
 
 		// file menu
+		String menuName = "Neues Szenario anlegen";
+		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar()
+				.addItem(menuName, new Command() {
+					public void execute() {
+						currentSzenario=new Szenario();
+						loadSzenario(currentSzenario);
+					}
+				}));
 
-		String menuName = "Laden";
+		menuName = "Laden";
 		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar()
 				.addItem(menuName, new Command() {
 					public void execute() {
