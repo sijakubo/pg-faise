@@ -119,7 +119,6 @@ public class MainFramePresenter extends Presenter {
 		MenuBar getMenuBar();
 		MenuBar getSimulationMenuBar();
 		MenuBar getJobMenuBar();
-		Label 	getLabelUserName();
 		Canvas 	getCanvas();
 		
 		void log(String log);		
@@ -160,27 +159,6 @@ public class MainFramePresenter extends Presenter {
 	 */
 	public boolean isSimulationRunning() {
 		return bSimulationRunning;
-	}
-
-	/**
-	 * Method gets UserName from Server and writes it into the Label
-	 * 
-	 * @author Nagi
-	 */
-	private void setLabelUserName() {
-
-		// Get the Username from Server
-		((SimulationServiceAsync) rpcService).getUserName(new AsyncCallback<String>() {
-					public void onFailure(Throwable arg0) {
-						Window.alert(arg0.getLocalizedMessage());
-					}
-
-					public void onSuccess(String result) {
-						// Write the String into the Label
-						((MainFramePresenter.IDisplay) MainFramePresenter.this.getDisplay())
-							.getLabelUserName().setText("Eingeloggt als: " + result);
-					}
-				});
 	}
 
 	/**
@@ -871,8 +849,6 @@ public class MainFramePresenter extends Presenter {
 		this.addConveyorWallButtonListener();
 		this.addCanvasListener();
 		this.setupJobTable();
-		this.setLabelUserName();
-
 	}
 
 	/**

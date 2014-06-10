@@ -36,8 +36,7 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	private Button			btnConveyorWall;
 	// -------------
 	private TextBox 		txtJobCount;
-	private Label			lblUserName;
-	private TextArea 		txtDebug;	
+	private TextArea 		txtDebug;
 	
 	private Canvas			canvas;
 	
@@ -127,9 +126,6 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		vpLeftFrame.add(vpConveyor);
 		
 		
-		lblUserName = new Label();
-		vpLeftFrame.add(lblUserName);
-
       // -------------
 		
 		hpSubFrame.add(vpLeftFrame);
@@ -193,11 +189,7 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		return this.btnConveyorWall;
 	}
 
-	public Label getLabelUserName() {
-		return this.lblUserName;
-	}
-
-	public void log(String log) {		
+	public void log(String log) {
 		this.txtDebug.setText(++logLineCount + ": " + log + "\n" + this.txtDebug.getText());
 	}
 
