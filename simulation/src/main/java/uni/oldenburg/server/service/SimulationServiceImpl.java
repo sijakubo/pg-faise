@@ -89,22 +89,6 @@ public class SimulationServiceImpl extends RemoteServiceServlet implements Simul
 		return result;
 	}
 
-
-   public String getUserName() {
-      HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
-      HttpSession session = httpServletRequest.getSession(true);
-      SimulationUser simUser = (SimulationUser) session.getAttribute("user");
-
-      String username;
-      if (simUser != null) {
-         username = simUser.getName();
-      } else {
-         username = "";
-      }
-      return username;
-   }
-
-	
 	/**
 	 * load Joblist based on unique name
 	 * 
