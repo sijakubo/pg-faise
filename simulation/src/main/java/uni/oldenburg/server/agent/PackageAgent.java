@@ -147,6 +147,14 @@ public class PackageAgent extends Agent {
 				
 				EventHelper.addEvent(new JobStatusUpdatedEvent(myConveyor.getID(), hasPendingOutgoingJob, Job.OUTGOING));
 			}
+			//If it is an Exit remove the package immediately
+			if(myConveyor instanceof ConveyorRamp){
+				ConveyorRamp dummy=((ConveyorRamp) myConveyor);
+				if(dummy.getRampType()==ConveyorRamp.RAMP_EXIT){
+					currentAgent.lstPackage.remove(myPackage);
+					EventHelper.addEvent(new PackageRemovedEvent(myConveyor.getID(), myPackage.getPackageID()));
+				}
+			}
 			
 			ACLMessage msgCompleted = new ACLMessage(MessageType.ADD_PACKAGE_COMPLETED);
 			msgCompleted.addReceiver(msg.getSender());
