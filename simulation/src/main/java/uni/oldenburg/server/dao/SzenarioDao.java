@@ -150,13 +150,11 @@ public class SzenarioDao {
 	 * @author Raschid Matthias
 	 */
 	public Szenario loadSzenario(String name) throws SQLException {
-		String strSQL = "SELECT szenario.id AS id, time_created, simulationuser.name AS user_name "
+		String strSQL = "SELECT szenario.id AS id, time_created "
 				+ "FROM "
 				+ Szenario.TABLE_NAME
-				+ ", "
-				+ SimulationUser.TABLE_NAME
 				+ " "
-				+ "WHERE szenario.user_id = simulationuser.id AND szenario.title=?";
+				+ "WHERE szenario.title=?";
 
 		PreparedStatement preparedStatement = ConnectionPool.getConnection()
 				.prepareStatement(strSQL);
@@ -171,8 +169,8 @@ public class SzenarioDao {
 
 		Szenario newSzenario = new Szenario(
 				name,
-				resultSet.getString("time_created"),
-				resultSet.getString("user_name"));
+				resultSet.getString("time_created")
+      );
 
 		List<Conveyor> lstConveyor = loadConveyor(resultSet.getInt("id"));
 
