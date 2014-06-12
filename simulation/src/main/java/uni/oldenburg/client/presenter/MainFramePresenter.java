@@ -850,6 +850,33 @@ public class MainFramePresenter extends Presenter {
 		this.addCanvasListener();
 		this.setupJobTable();
 	}
+	
+	/**
+	 * Method should check if the current Szenario is consisten.
+	 * Consistency means that there is at least one Ramp from each type
+	 * @author Nagi
+	 */	
+	private boolean checkIfSzenarioIsConsistent(){
+		 //Get the Conveyor list
+		 List<Conveyor> list=currentSzenario.getConveyorList();
+		 //Iterate through the list
+		 int exit=0;
+		 int entry=0;
+		 int storage=0;
+		 for(int i=0;i<list.size();i++){
+			 Conveyor dummy=list.get(i);
+			 if(dummy instanceof ConveyorRamp){
+				 if(((ConveyorRamp) dummy).getRampType()==ConveyorRamp.RAMP_ENTRANCE){
+					 entry++;
+				 }else if(((ConveyorRamp) dummy).getRampType()==ConveyorRamp.RAMP_EXIT){
+					  exit++;
+				 }else storage++;
+			 }
+		 }
+		 if(exit==0||entry==0||storage==0){
+			 return false;
+		 }else return true;
+	}
 
 	/**
 	 * Method initializes the Menubar. This is done here, because it is
@@ -901,13 +928,15 @@ public class MainFramePresenter extends Presenter {
 		/**
 		 * start / stop simulation
 		 * 
-		 * @author Matthias
+		 * @author Matthias, Nagi
 		 */	
 		menuName = "Starten/Anhalten";
 		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar().addItem(menuName, new Command() {
 			public void execute() {
 				// doesn't run yet?
 				if (!isSimulationRunning()) {
+					//Only start simulation if szenario is consisten
+					if(checkIfSzenarioIsConsistent()){
 					// start simulation
 		            agentPlatformService.startSimulation(MainFramePresenter.this.currentSzenario, new AsyncCallback<Integer>() {
 						public void onFailure(Throwable caught) {
@@ -919,6 +948,9 @@ public class MainFramePresenter extends Presenter {
 							MainFramePresenter.this.setSimulationState(true);
 						}
 		            });
+					}else {
+						Window.alert("Szenario cannot be started, because it is inconsisten. You need at least from each Ramptype one exemplar");
+					}
 				}
 				else {
 					// stop simulation
