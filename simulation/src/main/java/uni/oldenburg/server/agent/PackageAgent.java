@@ -174,9 +174,14 @@ public class PackageAgent extends Agent {
 
 			if (Debugging.showPackageMessages)
 				logger.log(Level.INFO, myAgent.getLocalName() + " <- GET_PACKAGE_COUNT");
+			
+			int packageCount = currentAgent.lstPackage.size();
+			
+			if (hasPendingIncomingJob)
+				++packageCount;
 
 			ACLMessage msgReply = new ACLMessage(MessageType.GET_PACKAGE_COUNT);
-			msgReply.addUserDefinedParameter("package_count", "" + currentAgent.lstPackage.size());
+			msgReply.addUserDefinedParameter("package_count", "" + packageCount);
 			msgReply.addReceiver(msg.getSender());
 
 			if (Debugging.showPackageMessages)
@@ -273,8 +278,8 @@ public class PackageAgent extends Agent {
 			
 			// response "demanding" status
 			ACLMessage msgDemandPackageResponse = new ACLMessage(MessageType.DEMAND_PACKAGE);
-			//msgDemandPackageResponse.addUserDefinedParameter("demanding", demanding == true ? "1" : "0");
-			msgDemandPackageResponse.addUserDefinedParameter("demanding", "0"); // demanding == true ? "1" : "0");
+			msgDemandPackageResponse.addUserDefinedParameter("demanding", demanding == true ? "1" : "0");
+			//msgDemandPackageResponse.addUserDefinedParameter("demanding", "0"); // demanding == true ? "1" : "0");
 			msgDemandPackageResponse.addReceiver(msg.getSender());
 			send(msgDemandPackageResponse);
 		}
