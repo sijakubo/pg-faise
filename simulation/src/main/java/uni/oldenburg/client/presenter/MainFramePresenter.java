@@ -29,6 +29,7 @@ import uni.oldenburg.shared.model.JobList;
 import uni.oldenburg.shared.model.Szenario;
 import uni.oldenburg.shared.model.SzenarioInfo;
 import uni.oldenburg.shared.model.event.JobAssignedEvent;
+import uni.oldenburg.shared.model.event.JobCounterUpdateEvent;
 import uni.oldenburg.shared.model.event.JobStatusUpdatedEvent;
 import uni.oldenburg.shared.model.event.JobUnassignableEvent;
 import uni.oldenburg.shared.model.event.PackageAddedEvent;
@@ -474,6 +475,7 @@ public class MainFramePresenter extends Presenter {
 			}
 		}
 		
+		//conveyor-ID
 		if (!(myConveyor instanceof ConveyorWall)) {
 			int box_x = myConveyor.getX() + 20;
 			int box_y = myConveyor.getY() - 0;
@@ -500,6 +502,12 @@ public class MainFramePresenter extends Presenter {
 				context.setFillStyle(CssColor.make("green"));
 			
 			context.fillRect(box_x, box_y + (box_h / 2), 5, box_h / 2);
+		}
+		
+		//jobcounter
+		if(myConveyor instanceof ConveyorRamp && ((ConveyorRamp) myConveyor).getRampType() == ConveyorRamp.RAMP_EXIT) {
+			context.setFillStyle(CssColor.make(0, 63, 127));
+			context.fillText(((ConveyorRamp) myConveyor).getJobCounter() + "", myConveyor.getX() + 22, myConveyor.getY() + 22);
 		}
 	}
 
@@ -1063,6 +1071,17 @@ public class MainFramePresenter extends Presenter {
 							myConveyor.setOutgoingJob(myEvent.getJobStatus());
 							break;
 					}
+					
+					loadSzenario(currentSzenario);
+				}
+				
+				if (anEvent instanceof JobCounterUpdateEvent) {					
+					JobCounterUpdateEvent myEvent = (JobCounterUpdateEvent)anEvent;
+					
+					Conveyor myConveyor = currentSzenario.getConveyorById(myEvent.getConveyorID());
+					
+					if(myConveyor instanceof ConveyorRamp)
+						((ConveyorRamp) myConveyor).setJobCounter(myEvent.getJobCounter());
 					
 					loadSzenario(currentSzenario);
 				}

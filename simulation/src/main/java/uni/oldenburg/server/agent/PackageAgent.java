@@ -24,6 +24,7 @@ import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import uni.oldenburg.shared.model.Szenario;
 import uni.oldenburg.shared.model.event.EventHelper;
+import uni.oldenburg.shared.model.event.JobCounterUpdateEvent;
 import uni.oldenburg.shared.model.event.JobStatusUpdatedEvent;
 import uni.oldenburg.shared.model.event.PackageAddedEvent;
 import uni.oldenburg.shared.model.event.PackageRemovedEvent;
@@ -352,6 +353,9 @@ public class PackageAgent extends Agent {
 			hasPendingIncomingJob = true;
 			
 			EventHelper.addEvent(new JobStatusUpdatedEvent(myConveyor.getID(), hasPendingIncomingJob, Job.INCOMING));
+			if(myConveyor instanceof ConveyorRamp) {
+				EventHelper.addEvent(new JobCounterUpdateEvent(myConveyor.getID(), ((ConveyorRamp) myConveyor).getJobCounter() + 1));
+			}
 			
 			ACLMessage msgAnswer = new ACLMessage(MessageType.SET_JOB_FLAG_COMPLETED);
 			msgAnswer.addReceiver(msg.getSender());
