@@ -1014,8 +1014,16 @@ public class MainFramePresenter extends Presenter {
 						}
 					}
 				}));
-
 		// edit menu
+				menuName = "Neue Auftragsliste anlegen";
+				mapJobMenuItems.put(menuName,
+						this.display.getJobMenuBar().addItem(menuName, new Command() {
+							public void execute() {
+								lstJobs=new JobList();
+								setupJobTable();
+							}
+						}));
+		
 		menuName = "Laden";
 		mapJobMenuItems.put(menuName,
 				this.display.getJobMenuBar().addItem(menuName, new Command() {
