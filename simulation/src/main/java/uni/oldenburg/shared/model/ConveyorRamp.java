@@ -23,6 +23,8 @@ public class ConveyorRamp extends Conveyor {
 	private int numBlocks = 4;
 	private int rampType = RAMP_STOREAGE;
 	
+	private int jobCounter = 0;
+	
 	public ConveyorRamp() {
 		this.packageCountMax = 4;		
 		this.setVertical(bVertical);
@@ -174,6 +176,15 @@ public class ConveyorRamp extends Conveyor {
 		}			
 		
 		return canvas;
+	}
+
+	public int getJobCounter() {
+		return jobCounter;
+	}
+
+
+	public void setJobCounter(int jobCounter) {
+		this.jobCounter = jobCounter;
 	}
 
 	@Override

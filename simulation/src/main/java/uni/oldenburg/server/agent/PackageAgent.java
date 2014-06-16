@@ -24,6 +24,7 @@ import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import uni.oldenburg.shared.model.Szenario;
 import uni.oldenburg.shared.model.event.EventHelper;
+import uni.oldenburg.shared.model.event.JobCounterUpdateEvent;
 import uni.oldenburg.shared.model.event.JobStatusUpdatedEvent;
 import uni.oldenburg.shared.model.event.PackageAddedEvent;
 import uni.oldenburg.shared.model.event.PackageRemovedEvent;
@@ -174,9 +175,14 @@ public class PackageAgent extends Agent {
 
 			if (Debugging.showPackageMessages)
 				logger.log(Level.INFO, myAgent.getLocalName() + " <- GET_PACKAGE_COUNT");
+			
+			int packageCount = currentAgent.lstPackage.size();
+			
+			if (hasPendingIncomingJob)
+				++packageCount;
 
 			ACLMessage msgReply = new ACLMessage(MessageType.GET_PACKAGE_COUNT);
-			msgReply.addUserDefinedParameter("package_count", "" + currentAgent.lstPackage.size());
+			msgReply.addUserDefinedParameter("package_count", "" + packageCount);
 			msgReply.addReceiver(msg.getSender());
 
 			if (Debugging.showPackageMessages)
@@ -273,8 +279,8 @@ public class PackageAgent extends Agent {
 			
 			// response "demanding" status
 			ACLMessage msgDemandPackageResponse = new ACLMessage(MessageType.DEMAND_PACKAGE);
-			//msgDemandPackageResponse.addUserDefinedParameter("demanding", demanding == true ? "1" : "0");
-			msgDemandPackageResponse.addUserDefinedParameter("demanding", "0"); // demanding == true ? "1" : "0");
+			msgDemandPackageResponse.addUserDefinedParameter("demanding", demanding == true ? "1" : "0");
+			//msgDemandPackageResponse.addUserDefinedParameter("demanding", "0"); // demanding == true ? "1" : "0");
 			msgDemandPackageResponse.addReceiver(msg.getSender());
 			send(msgDemandPackageResponse);
 		}
@@ -347,6 +353,9 @@ public class PackageAgent extends Agent {
 			hasPendingIncomingJob = true;
 			
 			EventHelper.addEvent(new JobStatusUpdatedEvent(myConveyor.getID(), hasPendingIncomingJob, Job.INCOMING));
+			if(myConveyor instanceof ConveyorRamp) {
+				EventHelper.addEvent(new JobCounterUpdateEvent(myConveyor.getID(), ((ConveyorRamp) myConveyor).getJobCounter() + 1));
+			}
 			
 			ACLMessage msgAnswer = new ACLMessage(MessageType.SET_JOB_FLAG_COMPLETED);
 			msgAnswer.addReceiver(msg.getSender());
