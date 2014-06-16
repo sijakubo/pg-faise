@@ -63,6 +63,20 @@ public class JoblistDao {
 		return joblistTitles;
 
 	}
+	/**
+	 * Removes a Joblist by its name
+	 * 
+	 * @author Raschid 
+	 * @throws SQLException 
+	 */
+	public void removeJobList(String name) throws SQLException{
+		// delete current Joblist
+		PreparedStatement prepStatement = ConnectionPool.getConnection().prepareStatement(
+						"DELETE FROM joblist WHERE name = ?");
+
+		prepStatement.setString(1, name);
+		prepStatement.executeUpdate();
+	}
 
 	/**
 	 * Persists a Joblist into the Database by executing an Insert

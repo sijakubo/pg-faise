@@ -230,4 +230,20 @@ public class SzenarioDao {
 
 		return lstConveyor;
 	}
+	/**
+	 * Deletes a Szenario by its name
+	 * 
+	 * @author Raschid
+	 */
+	public void deleteSzenario (String title) throws SQLException{		
+        // delete current szenario
+        PreparedStatement prepStatement = ConnectionPool
+                .getConnection()
+                .prepareStatement("DELETE FROM szenario WHERE title = ?");
+
+     
+			prepStatement.setString(1, title);      
+			prepStatement.executeUpdate();
+		
+	}
 }
