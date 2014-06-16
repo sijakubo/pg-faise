@@ -36,6 +36,7 @@ public class JobAgent extends Agent {
 	
 	private List<AID> lstRampIncoming = new ArrayList<AID>();
 	private List<AID> lstRampOutgoing = new ArrayList<AID>();
+	int storageCounter=0;
 	
 	public List<AID> getRampListIncoming() {
 		return lstRampIncoming;
@@ -120,17 +121,21 @@ public class JobAgent extends Agent {
 			
 			AID senderAID = msg.getSender();
 			int rampType = Integer.parseInt(msg.getUserDefinedParameter("rampType"));
-
+            
+			
 			if (rampType == ConveyorRamp.RAMP_ENTRANCE)
 				currentAgent.getRampListIncoming().add(senderAID);
 			else if (rampType == ConveyorRamp.RAMP_EXIT)
 				currentAgent.getRampListOutgoing().add(senderAID);
+			else if (rampType == ConveyorRamp.RAMP_STOREAGE)
+				storageCounter++;
 		}
 
 		public void onTimeout() throws IOException {
 			if(Debugging.showJobInitMessages) {
 				logger.log(Level.INFO, "Incoming Ramp Count: " + ((JobAgent)myAgent).getRampListIncoming().size());
 				logger.log(Level.INFO, "Outgoing Ramp Count: " + ((JobAgent)myAgent).getRampListOutgoing().size());	
+				logger.log(Level.INFO, "Storage Ramp Count: " + storageCounter);	
 			}
 			
 			// fire SimStartedEvent

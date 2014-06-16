@@ -190,8 +190,8 @@ public class RampOrderAgent extends Agent {
 					//logger.log(Level.INFO, "Ramps found: " + lstConveyorRamps.size());
 					
 					if (lstConveyorRamps.size() > 0) {
-						int randomIndex = (int)(Math.random() * 100) % lstConveyorRamps.size();
-						
+						int randomIndex = (int)(0+(Math.random() *(lstConveyorRamps.size()-0))) ;
+						System.out.println(randomIndex);
 						int selectedConveyorID = lstConveyorRamps.get(randomIndex);
 						
 						SetSelectedIDandPendingStatus(myAgent, selectedConveyorID);

@@ -7,7 +7,7 @@ package uni.oldenburg;
 public class Debugging {
 	// Logger Messages
 	public final static boolean showAgentStartupMessages	= false;
-	public final static boolean showJobInitMessages			= false;
+	public final static boolean showJobInitMessages			= true;
 	public final static boolean showPackageMessages			= false;
 	public final static boolean showEnquirePackageMessages	= false;
 	
