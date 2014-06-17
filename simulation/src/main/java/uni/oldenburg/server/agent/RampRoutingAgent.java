@@ -164,15 +164,15 @@ public class RampRoutingAgent extends Agent {
 					ACLMessage msgSetPendingStatus = new ACLMessage(MessageType.SET_PENDING_INCOMING_STATUS);
 					AgentHelper.addReceiver(msgSetPendingStatus, myAgent, PackageAgent.NAME, dstRampID, mySzenario.getId());
 					send(msgSetPendingStatus);
-					
-					// send message to all "VehicleRoutingAgents" about who got the job
-					ACLMessage msgAssignJob = new ACLMessage(MessageType.ASSIGN_JOB_TO_VEHICLE);
-					msgAssignJob.addUserDefinedParameter("vehicleID", "" + bestVehicleID);
-					msgAssignJob.addUserDefinedParameter("srcRampID", "" + srcRampID);
-					msgAssignJob.addUserDefinedParameter("dstRampID", "" + dstRampID);
-					AgentHelper.addReceivers(msgAssignJob, myAgent, mySzenario.getId());
-					send(msgAssignJob);
 				}
+				
+				// send message to all "VehicleRoutingAgents" about who got the job
+				ACLMessage msgAssignJob = new ACLMessage(MessageType.ASSIGN_JOB_TO_VEHICLE);
+				msgAssignJob.addUserDefinedParameter("vehicleID", "" + bestVehicleID);
+				msgAssignJob.addUserDefinedParameter("srcRampID", "" + srcRampID);
+				msgAssignJob.addUserDefinedParameter("dstRampID", "" + dstRampID);
+				AgentHelper.addReceivers(msgAssignJob, myAgent, mySzenario.getId());
+				send(msgAssignJob);
 				
 				// auction has ended and "hopefully" a vehicle has been found
 				ACLMessage msgAuctionEnd = new ACLMessage(MessageType.AUCTION_END);
