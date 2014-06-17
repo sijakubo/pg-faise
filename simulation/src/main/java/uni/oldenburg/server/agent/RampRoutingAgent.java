@@ -80,12 +80,8 @@ public class RampRoutingAgent extends Agent {
 				ACLMessage msgReceive = myAgent.receive(MessageTemplate.MatchPerformative(MessageType.AUCTION_START));
 				
 				if (msgReceive != null) {
-					//logger.log(Level.INFO, "Action request received");
-					
 					srcRampID = Integer.parseInt(msgReceive.getUserDefinedParameter("srcRampID"));
 					dstRampID = Integer.parseInt(msgReceive.getUserDefinedParameter("dstRampID"));
-					
-					//logger.log(Level.INFO, "Request estimation");
 					
 					// request estimation
 					ACLMessage msgEstimationRequest = new ACLMessage(MessageType.ESTIMATION_REQUEST);
@@ -141,8 +137,6 @@ public class RampRoutingAgent extends Agent {
 					}
 				}
 				
-				//logger.log(Level.INFO, "Best estimation: " + bestVehicleEstimation);
-				
 				// collect vehicles with the best estimation (in case there is more than one)
 				for(Integer myVehicleID : mapVehicleEstimation.keySet()) {
 					if (mapVehicleEstimation.get(myVehicleID) <= bestVehicleEstimation) {
@@ -150,27 +144,25 @@ public class RampRoutingAgent extends Agent {
 					}
 				}
 				
-				//logger.log(Level.INFO, "VehicleCount with best estimation: " + lstBestVehicles.size());
-				
 				// choose a random vehicle with the best estimation
-				if (lstBestVehicles.size() > 0) {										
-					//logger.log(Level.INFO, "Random choice: " + bestVehicleID + " send incoming status...");
+				if (lstBestVehicles.size() > 0) {			
+					int randomIndex = (int)(Math.random() * 100) % lstBestVehicles.size();
+					bestVehicleID = lstBestVehicles.get(randomIndex);
+					
 					ACLMessage msgGetPendingStatus = new ACLMessage(MessageType.GET_INCOMING_JOB_STATUS);
-					AgentHelper.addReceiver(msgGetPendingStatus, myAgent, PackageAgent.NAME, dstRampID, mySzenario.getId());
+					AgentHelper.addReceiver(msgGetPendingStatus, myAgent, PackageAgent.NAME, bestVehicleID, mySzenario.getId());
 					send(msgGetPendingStatus);
 					
 					ACLMessage msgAnswer = myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.GET_INCOMING_JOB_STATUS));
 					
-					logger.log(Level.INFO, "Status: " + msgAnswer.getUserDefinedParameter("status"));
-					
-					if (msgAnswer.getUserDefinedParameter("status").equals("0")) {
-						int randomIndex = (int)(Math.random() * 100) % lstBestVehicles.size();
-						bestVehicleID = lstBestVehicles.get(randomIndex);
-						
+					if (msgAnswer.getUserDefinedParameter("status").equals("1")) {
+						bestVehicleID = -1;	
+					}
+					else {
 						// set pending incoming job status in destination ramp
 						ACLMessage msgSetPendingStatus = new ACLMessage(MessageType.SET_PENDING_INCOMING_STATUS);
 						AgentHelper.addReceiver(msgSetPendingStatus, myAgent, PackageAgent.NAME, dstRampID, mySzenario.getId());
-						send(msgSetPendingStatus);	
+						send(msgSetPendingStatus);
 					}
 				}
 				

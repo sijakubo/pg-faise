@@ -350,8 +350,6 @@ public class PackageAgent extends Agent {
 		}
 
 		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-			//logger.log(Level.INFO, msg.getSender().toString());
-			
 			hasPendingIncomingJob = true;
 			
 			EventHelper.addEvent(new JobStatusUpdatedEvent(myConveyor.getID(), hasPendingIncomingJob, Job.INCOMING));
@@ -372,8 +370,6 @@ public class PackageAgent extends Agent {
 		}
 
 		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-			logger.log(Level.INFO, "a: " + hasPendingIncomingJob);
-			
 			ACLMessage msgAnswer = new ACLMessage(MessageType.GET_INCOMING_JOB_STATUS);
 			msgAnswer.addUserDefinedParameter("status", hasPendingIncomingJob ? "1" : "0");
 			msgAnswer.addReceiver(msg.getSender());
