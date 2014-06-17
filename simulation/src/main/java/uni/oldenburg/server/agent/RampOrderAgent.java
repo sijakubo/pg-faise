@@ -198,8 +198,14 @@ public class RampOrderAgent extends Agent {
 						
 						// initialize auction
 						ACLMessage msgAuctionStart = new ACLMessage(MessageType.AUCTION_START);
-						msgAuctionStart.addUserDefinedParameter("srcRampID", "" + myConveyor.getID());
-						msgAuctionStart.addUserDefinedParameter("dstRampID", "" + selectedConveyorID);
+						if (myConveyor.getRampType() == ConveyorRamp.RAMP_ENTRANCE) {
+							msgAuctionStart.addUserDefinedParameter("srcRampID", "" + myConveyor.getID());
+							msgAuctionStart.addUserDefinedParameter("dstRampID", "" + selectedConveyorID);	
+						}
+						else {
+							msgAuctionStart.addUserDefinedParameter("srcRampID", "" + selectedConveyorID);
+							msgAuctionStart.addUserDefinedParameter("dstRampID", "" + myConveyor.getID());
+						}
 						AgentHelper.addReceiver(msgAuctionStart, myAgent, RampRoutingAgent.NAME, myConveyor.getID(), mySzenario.getId());
 						send(msgAuctionStart);
 						
