@@ -26,12 +26,12 @@ public class ConveyorRamp extends Conveyor {
 	private int jobCounter = 0;
 	
 	public ConveyorRamp() {
-		this.packageCountMax = 4;		
+		this.packageCountMax = 2;		
 		this.setVertical(bVertical);
 	}
 	
 	public ConveyorRamp(int x, int y) {
-		this.packageCountMax = 4;		
+		this.packageCountMax = 2;		
 		setPosition(x, y);
 		this.setVertical(bVertical);
 	}
