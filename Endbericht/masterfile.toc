@@ -16,7 +16,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.3}Materialflusssysteme}{10}{subsection.2.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{\nonumberline Funktionen von Materialflusssystemen}{11}{section*.13}
+\contentsline {paragraph}{Funktionen von Materialflusssystemen}{11}{section*.13}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.4}Fallbeispiele}{13}{subsection.2.4}
 \defcounter {refsection}{0}\relax 
