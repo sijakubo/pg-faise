@@ -11,11 +11,11 @@ import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.behaviour.TimeoutReceiverBehaviour;
 import uni.oldenburg.server.agent.helper.AgentHelper;
-import uni.oldenburg.server.agent.helper.EventHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.Job;
 import uni.oldenburg.shared.model.Szenario;
+import uni.oldenburg.shared.model.event.EventHelper;
 import uni.oldenburg.shared.model.event.JobAssignedEvent;
 import uni.oldenburg.shared.model.event.JobUnassignableEvent;
 import uni.oldenburg.shared.model.event.SimStartedEvent;
@@ -88,7 +88,7 @@ public class JobAgent extends Agent {
 			ACLMessage msg = new ACLMessage(MessageType.REQUEST_RAMP_INFO);
 			AgentHelper.addReceivers(msg, myAgent, szenario.getId());
 			
-			if(Debugging.showInfoMessages)
+			if(Debugging.showJobInitMessages)
 				logger.log(Level.INFO, myAgent.getLocalName() + " -> REQUEST_RAMP_INFO");
 			
 			send(msg);
@@ -115,25 +115,20 @@ public class JobAgent extends Agent {
 			JobAgent currentAgent = (JobAgent)myAgent;
 			
 			// get ramp infos
-			if(Debugging.showInfoMessages)
+			if(Debugging.showJobInitMessages)
 				logger.log(Level.INFO, myAgent.getLocalName() + " <- SEND_RAMP_INFO");
 			
 			AID senderAID = msg.getSender();
 			int rampType = Integer.parseInt(msg.getUserDefinedParameter("rampType"));
 
-			if (rampType == ConveyorRamp.RAMP_ENTRANCE) {
+			if (rampType == ConveyorRamp.RAMP_ENTRANCE)
 				currentAgent.getRampListIncoming().add(senderAID);
-            logger.log(Level.INFO, myAgent.getLocalName() + " Entrance Ramp registered");
-			} else if (rampType == ConveyorRamp.RAMP_EXIT) {
+			else if (rampType == ConveyorRamp.RAMP_EXIT)
 				currentAgent.getRampListOutgoing().add(senderAID);
-            logger.log(Level.INFO, myAgent.getLocalName() + " Exit Ramp registered");
-			} else if (rampType == ConveyorRamp.RAMP_STOREAGE) {
-            logger.log(Level.INFO, myAgent.getLocalName() + " Storage Ramp detected");
-			}
 		}
 
 		public void onTimeout() throws IOException {
-			if(Debugging.showInfoMessages) {
+			if(Debugging.showJobInitMessages) {
 				logger.log(Level.INFO, "Incoming Ramp Count: " + ((JobAgent)myAgent).getRampListIncoming().size());
 				logger.log(Level.INFO, "Outgoing Ramp Count: " + ((JobAgent)myAgent).getRampListOutgoing().size());	
 			}
@@ -159,7 +154,7 @@ public class JobAgent extends Agent {
 		}
 
 		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-			if(Debugging.showInfoMessages)
+			if(Debugging.showJobInitMessages)
 				logger.log(Level.INFO, "Incoming Job!");
 			
 			Job currentJob = (Job)msg.getContentObject();
@@ -169,7 +164,7 @@ public class JobAgent extends Agent {
 
 			msgReply.setContentObject(currentJob);
 			
-			if(Debugging.showInfoMessages)
+			if(Debugging.showJobInitMessages)
 				logger.log(Level.INFO, myAgent.getLocalName() + " -> SEND_JOB");		
 			
 			send(msgReply);
@@ -194,7 +189,7 @@ public class JobAgent extends Agent {
 		}
 
 		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-			if(Debugging.showInfoMessages)
+			if(Debugging.showJobInitMessages)
 				logger.log(Level.INFO, myAgent.getLocalName() + " <- SEND_JOB");
 			
 			Job currentJob = (Job)msg.getContentObject();
@@ -202,11 +197,10 @@ public class JobAgent extends Agent {
 			// send ramp space request
 			ACLMessage msgInfo = new ACLMessage(MessageType.PACKAGE_SPACE_AVAILABLE);
 
+			// TODO: maybe depricated
 			msgInfo.setContentObject(currentJob);
 			
 			switch(currentJob.getType()) {
-
-
 				case Job.INCOMING:
 					AgentHelper.addReceivers(msgInfo, lstRampIncoming);
 					break;
@@ -215,7 +209,7 @@ public class JobAgent extends Agent {
 					break;
 			}
 			
-			if(Debugging.showInfoMessages)
+			if(Debugging.showJobInitMessages)
 				logger.log(Level.INFO, myAgent.getLocalName() + " -> PACKAGE_SPACE_AVAILABLE");
 			
 			send(msgInfo);				
@@ -266,12 +260,12 @@ public class JobAgent extends Agent {
 				lstRampsWithSpace.add(msg.getSender());
 			}
 
-			if(Debugging.showInfoMessages)
+			if(Debugging.showJobInitMessages)
 				logger.log(Level.INFO, "Ramps responsed: " + rampsResponded + "/" + rampCount);
 
 			// pick one of the available ramps with free space
 			if (rampsResponded == rampCount) {
-				if(Debugging.showInfoMessages)
+				if(Debugging.showJobInitMessages)
 					logger.log(Level.INFO, "Available Ramp Count: " + lstRampsWithSpace.size());
 
 				ACLMessage msgReply = new ACLMessage(MessageType.RESERVE_SPACE);
@@ -280,18 +274,10 @@ public class JobAgent extends Agent {
 				if (lstRampsWithSpace.size() > 0) {
 					int randomRamp = ((int)(Math.random() * 1000)) % lstRampsWithSpace.size();
 					target = lstRampsWithSpace.get(randomRamp).toString();
-
-					// fire JobAssignedEvent
-					if (Debugging.showDebugMessages)
-						logger.log(Level.INFO, "fire JobAssignedEvent");
 						
 					EventHelper.addEvent(new JobAssignedEvent(pendingJob));
 				}
 				else {
-					// fire JobUnassignableEvent
-					if (Debugging.showDebugMessages)
-						logger.log(Level.INFO, "fire JobUnassignableEvent");
-	
 					EventHelper.addEvent(new JobUnassignableEvent(pendingJob));
 				}
 	
@@ -303,7 +289,7 @@ public class JobAgent extends Agent {
 
 				AgentHelper.addReceivers(msgReply, selectedList);
 
-				if(Debugging.showInfoMessages)
+				if(Debugging.showJobInitMessages)
 					logger.log(Level.INFO, myAgent.getLocalName() + " -> RESERVE_SPACE: " + target);
 	
 				send(msgReply);

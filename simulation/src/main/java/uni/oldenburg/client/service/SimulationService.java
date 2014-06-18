@@ -19,5 +19,4 @@ public interface SimulationService extends RemoteService {
 	ArrayList<String> getJoblistTitles();
 	void saveJoblist(JobList list);
 	boolean checkIfJobListExists(String title);
-	String getUserName();
 }

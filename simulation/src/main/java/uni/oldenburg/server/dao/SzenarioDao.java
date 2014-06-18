@@ -150,13 +150,11 @@ public class SzenarioDao {
 	 * @author Raschid Matthias
 	 */
 	public Szenario loadSzenario(String name) throws SQLException {
-		String strSQL = "SELECT szenario.id AS id, time_created, simulationuser.name AS user_name "
+		String strSQL = "SELECT szenario.id AS id, time_created "
 				+ "FROM "
 				+ Szenario.TABLE_NAME
-				+ ", "
-				+ SimulationUser.TABLE_NAME
 				+ " "
-				+ "WHERE szenario.user_id = simulationuser.id AND szenario.title=?";
+				+ "WHERE szenario.title=?";
 
 		PreparedStatement preparedStatement = ConnectionPool.getConnection()
 				.prepareStatement(strSQL);
@@ -171,8 +169,8 @@ public class SzenarioDao {
 
 		Szenario newSzenario = new Szenario(
 				name,
-				resultSet.getString("time_created"),
-				resultSet.getString("user_name"));
+				resultSet.getString("time_created")
+      );
 
 		List<Conveyor> lstConveyor = loadConveyor(resultSet.getInt("id"));
 
@@ -231,5 +229,21 @@ public class SzenarioDao {
 		preparedStatement.close();
 
 		return lstConveyor;
+	}
+	/**
+	 * Deletes a Szenario by its name
+	 * 
+	 * @author Raschid
+	 */
+	public void deleteSzenario (String title) throws SQLException{		
+        // delete current szenario
+        PreparedStatement prepStatement = ConnectionPool
+                .getConnection()
+                .prepareStatement("DELETE FROM szenario WHERE title = ?");
+
+     
+			prepStatement.setString(1, title);      
+			prepStatement.executeUpdate();
+		
 	}
 }

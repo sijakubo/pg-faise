@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author Christopher Matthias
@@ -34,10 +33,10 @@ public class JobList implements Serializable {
 		for (int i = 0; i < numberOfJobs; i++) {
 			int destinationId = (Math.random() < 0.5) ? 0 : -1;
 
-			int expectedValue = 6;
-			int standardDeviation = 3;
+			//int expectedValue = 6;
+			//int standardDeviation = 3;
 
-			int timestamp = (lastTimestamp) + (int) ((expectedValue + (standardDeviation * new Random().nextGaussian())) % 1000);
+			int timestamp = (lastTimestamp) + 1; // + (int) ((expectedValue + (standardDeviation * new Random().nextGaussian())) % 1000);
 			lastTimestamp = timestamp;
 			
 			addJob(new Job(timestamp, destinationId, this));

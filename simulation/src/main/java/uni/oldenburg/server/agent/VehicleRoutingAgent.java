@@ -2,6 +2,11 @@ package uni.oldenburg.server.agent;
 
 import java.io.IOException;
 
+import jade.core.Agent;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.UnreadableException;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -10,21 +15,25 @@ import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
-import jade.core.Agent;
-import jade.core.behaviours.Behaviour;
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
-import jade.lang.acl.UnreadableException;
+import uni.oldenburg.shared.model.ConveyorRamp;
+import uni.oldenburg.shared.model.ConveyorVehicle;
+import uni.oldenburg.shared.model.Point;
 import uni.oldenburg.shared.model.Szenario;
 
 @SuppressWarnings("serial")
 public class VehicleRoutingAgent extends Agent {
 	public final static String NAME = "VehicleRoutingAgent";
 
-	private int conveyorID = 0;
-	private Szenario szenario;
-	private boolean reserved=false;
-	private int currentAuction = -1; //to prevent the bot from taking part in two auctions at the same time.
+	private ConveyorVehicle myConveyor;
+	private Szenario mySzenario;
+	
+	private int srcRampID = 0;
+	private int dstRampID = 0;
+	
+	private Point srcRampPoint = null;
+	private Point dstRampPoint = null;
+	
+	private boolean auctionInProgress = false;
 	
 	private Logger logger = Logger.getLogger(VehicleRoutingAgent.class);
 
@@ -35,21 +44,15 @@ public class VehicleRoutingAgent extends Agent {
 	protected void setup() {
 		Object[] args = getArguments();
 		if (args != null) {
-			szenario = (Szenario) args[0];
-
-			Conveyor myConveyor = (Conveyor) args[1];
-			conveyorID = myConveyor.getID();
+			mySzenario = (Szenario) args[0];
+			myConveyor = (ConveyorVehicle) args[1];
 		}
+		
+		addBehaviour(new EstimationRequest(MessageType.ESTIMATION_REQUEST));
+		addBehaviour(new AssignJob(MessageType.ASSIGN_JOB_TO_VEHICLE));
 
-		addBehaviour(new SendEstimationBehaviour(MessageTemplate.MatchPerformative(MessageType.START_AUCTION)));
-		addBehaviour(new AssignVehicleForPackageBehaviour(MessageTemplate.MatchPerformative(MessageType.ASSIGN_VEHICLE_FOR_PACKAGE)));
-		addBehaviour(new InitializePacketAgentBehaviour());
-		addBehaviour(new IsFreeForTransportBehaviour());
-		addBehaviour(new SetBotUnreservedBehaviour(MessageTemplate.MatchPerformative(MessageType.SET_BOT_UNRESERVED)));
-
-
-		String nickname = AgentHelper.getUniqueNickname(VehicleRoutingAgent.NAME, conveyorID, szenario.getId());
-		AgentHelper.registerAgent(szenario.getId(), this, nickname);
+		String nickname = AgentHelper.getUniqueNickname(VehicleRoutingAgent.NAME, myConveyor.getID(), mySzenario.getId());
+		AgentHelper.registerAgent(mySzenario.getId(), this, nickname);
 
 		if(Debugging.showAgentStartupMessages)
 			logger.log(Level.INFO, nickname + " started");
@@ -59,167 +62,130 @@ public class VehicleRoutingAgent extends Agent {
 	protected void takeDown() {
 		AgentHelper.unregister(this);
 	}
-
-	public int getConveyorID() {
-		return this.conveyorID;
-	}
-
+	
 	/**
-	 * @author Christopher, sijakubo
-	 */
-	private class SendEstimationBehaviour extends CyclicReceiverBehaviour {
-
-      int auctionID;
-      int sourceID;
-      int destinationID;
-
-      protected SendEstimationBehaviour(MessageTemplate mt) {
-         super(mt);
-      }
-
-      @Override
-      public void onMessage(ACLMessage msgIn) throws UnreadableException, IOException {
-         if (!reserved && currentAuction == -1) {
-            logger.log(Level.INFO, "VehicleRoutingAgent -> calculating estimation");
-
-            auctionID = Integer.valueOf(msgIn.getUserDefinedParameter("auctionID"));
-            sourceID = Integer.valueOf(msgIn.getUserDefinedParameter("sourceID"));
-            destinationID = Integer.valueOf(msgIn.getUserDefinedParameter("destinationID"));
-
-            logger.log(Level.INFO, myAgent.getLocalName() + " received START_AUCTION message #"
-                  + auctionID + " from " + sourceID + " to " + destinationID);
-
-            currentAuction = auctionID;
-            
-            //send estimation
-            int estimation = calculateEstimation(sourceID, destinationID);
-            ACLMessage msgOut = new ACLMessage(MessageType.SEND_ESTIMATION);
-
-            msgOut.addUserDefinedParameter("auctionID", "" + auctionID);
-            msgOut.addUserDefinedParameter("vehicleID", "" + conveyorID);
-            msgOut.addUserDefinedParameter("estimation", "" + estimation);
-            msgOut.addUserDefinedParameter("destinationID", "" + destinationID);
-
-            msgOut.addReceiver(msgIn.getSender());
-
-            logger.log(Level.INFO, myAgent.getLocalName() + " sent SEND_ESTIMATION message with vehicleID "
-                  + conveyorID + " auctionID " + auctionID + " and estimation: " + estimation);
-            send(msgOut);
-         } else {
-            logger.log(Level.INFO, "VehicleRoutingAgent -> no estimation, Vehicle is already reserved");
-         }
-      }
-	}
-
-	private int calculateEstimation(int sourceID, int destinationID) {
-		//random dummy values
-		//TODO: pathfinding etc.
-		return (int)(Math.random() * 100);
-	}
-
-	public boolean isReserved() {
-		return reserved;
-	}
-
-	public void setReserved(boolean reserved) {
-		this.reserved = reserved;
-	}
-
-	/**
-	 * @author Christopher, Raschid, sijakubo
-	 */
-	private class AssignVehicleForPackageBehaviour extends CyclicReceiverBehaviour {
-
-      protected AssignVehicleForPackageBehaviour(MessageTemplate mt) {
-         super(mt);
-      }
-
-      @Override
-      public void onMessage(ACLMessage msgIn) throws UnreadableException, IOException {
-         logger.log(Level.INFO, "VehicleRoutingAgent <- ASSIGN_VEHICLE_FOR_PACKAGE");
-
-
-         VehicleRoutingAgent currentAgent = (VehicleRoutingAgent) myAgent;
-         int auctionID;
-         int sourceID;
-         int destinationID;
-         int vehicleID;
-         int packageID;
-
-         auctionID = Integer.valueOf(msgIn.getUserDefinedParameter("auctionID"));
-         sourceID = Integer.valueOf(msgIn.getUserDefinedParameter("sourceID"));
-         destinationID = Integer.valueOf(msgIn.getUserDefinedParameter("destinationID"));
-         vehicleID = Integer.valueOf(msgIn.getUserDefinedParameter("vehicleID"));
-         packageID = Integer.valueOf(msgIn.getUserDefinedParameter("packageID"));
-
-         if (Debugging.showAuctionMessages) {
-            logger.log(Level.INFO, myAgent.getLocalName() + " received ASSIGN_VEHICLE_FOR_TRANSPORT message for bot "
-                  + vehicleID + " to carry " + packageID + " from " + sourceID + " to " + destinationID);
-         }
-
-         if(vehicleID == getConveyorID()) {
-             //Tell the plattform Agent to get the Package from its Source
-             setReserved(true);
-             ACLMessage msgStartGetting = new ACLMessage(MessageType.GET_PACKAGE_FROM_SOURCE);
-             msgStartGetting.addUserDefinedParameter("destinationID", "" + destinationID);
-             msgStartGetting.addUserDefinedParameter("sourceID", "" + sourceID);
-             msgStartGetting.addUserDefinedParameter("packageID", "" + packageID);
-             AgentHelper.addReceiver(msgStartGetting, myAgent, VehiclePlattformAgent.NAME, currentAgent.conveyorID, currentAgent.szenario.getId());
-             send(msgStartGetting);
-         }
-         
-         //allow taking part in auctions again
-         if(auctionID == currentAuction) {
-        	 currentAuction = -1;
-         }
-      }
-   }
-
-	/**Got message:
-	 *      VehiclePlattformAgent: BotGoToDestinationBehaviour
+	 * Got message:
+	 *		RampRoutingAgent::Auction
+	 *		VehiclePlattformAgent::GetCurrentPosition		 		
 	 * Send message:
-	 *      none
-	 * Behaviour should set the Bot unreserved
-	 * @author Raschid
-	 */
-	private class SetBotUnreservedBehaviour extends
-			CyclicReceiverBehaviour {
+	 * 		VehiclePlattformAgent::GetCurrentPosition
+	 * 		RampRoutingAgent::Auction
+	 * 
+	 * handles estimation requests
+	 * 
+     * @author Matthias
+     */
 
-		protected SetBotUnreservedBehaviour (MessageTemplate mt) {
-			super(mt);
+	private class EstimationRequest extends CyclicReceiverBehaviour {
+		protected EstimationRequest(int msgType) {
+			super(MessageTemplate.MatchPerformative(msgType));
 		}
 
-		@Override
-		public void onMessage(ACLMessage msg) throws UnreadableException,
-				IOException {
-			//Receive the Message from Plattformagent and set the Status of the Bot unreserved
-
-			if (Debugging.showInfoMessages)
-				logger.log(Level.INFO, myAgent.getLocalName()+ " <- SET_BOT_UNRESERVED");
-			setReserved(false);
+		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+			int sumEstimation = 1;
+			boolean hasPendingJob = false;
+			
+			ACLMessage msgGetPendingJobStatus = new ACLMessage(MessageType.GET_PENDING_JOB_STATUS);
+			AgentHelper.addReceiver(msgGetPendingJobStatus, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
+			send(msgGetPendingJobStatus);
+			
+			ACLMessage msgPendingJobStatus = myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.GET_PENDING_JOB_STATUS));
+			hasPendingJob = msgPendingJobStatus.getUserDefinedParameter("pendingJob").equals("1") ? true : false;
+			
+			if (hasPendingJob)
+				logger.log(Level.INFO, "Vehicle: " + myConveyor.getID() + " - has pending job");
+			
+			if (auctionInProgress == false && hasPendingJob == false) {
+				auctionInProgress = true;
+				
+				// request current position
+				ACLMessage msgPositionRequest = new ACLMessage(MessageType.GET_CURRENT_POSITION);
+				AgentHelper.addReceiver(msgPositionRequest, myAgent, VehiclePlattformAgent.NAME, myConveyor.getID(), mySzenario.getId());
+				send(msgPositionRequest);
+				
+				// get current position
+				ACLMessage msgPositionResponse = myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.GET_CURRENT_POSITION));
+				int cur_x = Integer.parseInt(msgPositionResponse.getUserDefinedParameter("pos_x"));
+				int cur_y = Integer.parseInt(msgPositionResponse.getUserDefinedParameter("pos_y"));
+				Point curPoint = new Point(cur_x, cur_y);
+				
+				srcRampID = Integer.parseInt(msg.getUserDefinedParameter("srcRampID"));
+				dstRampID = Integer.parseInt(msg.getUserDefinedParameter("dstRampID"));
+				
+				// get entry/exit positions of ramps
+				for(Conveyor tmpConveyor: mySzenario.getConveyorList()) {
+					if (tmpConveyor instanceof ConveyorRamp) {
+						ConveyorRamp tmpRampConveyor = (ConveyorRamp)tmpConveyor;
+						
+						if (tmpRampConveyor.getID() == srcRampID) {
+							srcRampPoint = tmpRampConveyor.getExitPosition();
+						}
+						else if (tmpRampConveyor.getID() == dstRampID) {
+							dstRampPoint = tmpRampConveyor.getEntryPosition();
+						}
+					}
+				}
+				// calculate estimations
+				int toSourceRampEstimation = CalculateEstimation(curPoint, srcRampPoint);
+				int toDestinationRampEstimation = CalculateEstimation(srcRampPoint, dstRampPoint);
+				
+				sumEstimation = toSourceRampEstimation + toDestinationRampEstimation;
+			}
+			else {
+				hasPendingJob = true;
+			}
+			
+			// send estimation response
+			ACLMessage msgEstimationResponse = new ACLMessage(MessageType.ESTIMATION_RESPONSE);
+			msgEstimationResponse.addUserDefinedParameter("estimation", "" + sumEstimation);
+			msgEstimationResponse.addUserDefinedParameter("vehicleID", "" + myConveyor.getID());
+			
+			msgEstimationResponse.addUserDefinedParameter("pendingJob", hasPendingJob ? "1" : "0");
+			msgEstimationResponse.addReceiver(msg.getSender());
+			send(msgEstimationResponse);			
 		}
-
 	}
-
-	private class InitializePacketAgentBehaviour extends Behaviour {
-
-		public void action() {
-
+		
+	/**
+	 * Got message:
+	 *		RampRoutingAgent::Auction		 		
+	 * Send message:
+	 * 		PackageAgent::SetPendingIncomingStatus
+	 * 		VehiclePlattformAgent::DrivePath
+	 * 
+	 * assign job to current vehicle when ids match
+	 * 
+     * @author Matthias
+     */
+	private class AssignJob extends CyclicReceiverBehaviour {
+		protected AssignJob(int msgType) {
+			super(MessageTemplate.MatchPerformative(msgType));
 		}
 
-		public boolean done() {
-			return false;
+		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+			int vehicleWhoGotJobID = Integer.parseInt(msg.getUserDefinedParameter("vehicleID"));
+			
+			// am i the one who got the job?
+			if (myConveyor.getID() == vehicleWhoGotJobID) {	
+				// set pending incoming job status in own package-agent
+				ACLMessage msgSetPendingStatus = new ACLMessage(MessageType.SET_PENDING_INCOMING_STATUS);
+				AgentHelper.addReceiver(msgSetPendingStatus, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
+				send(msgSetPendingStatus);
+				
+				// send me "VehiclePlattformAgent" a message where to drive to
+				ACLMessage msgSendPaths = new ACLMessage(MessageType.DRIVING_START);
+				msgSendPaths.addUserDefinedParameter("srcRampID", "" + srcRampID);
+				msgSendPaths.addUserDefinedParameter("dstRampID", "" + dstRampID);
+				
+				AgentHelper.addReceiver(msgSendPaths, myAgent, VehiclePlattformAgent.NAME, myConveyor.getID(), mySzenario.getId());
+				send(msgSendPaths);
+			}
+			
+			auctionInProgress = false;
 		}
 	}
-
-	private class IsFreeForTransportBehaviour extends Behaviour {
-
-		public void action() {
-
-		}
-
-		public boolean done() {
-			return false;
-		}
+	
+	private int CalculateEstimation(Point startPoint, Point stopPoint) {
+		return (int)(Math.random() * 100);
 	}
 }

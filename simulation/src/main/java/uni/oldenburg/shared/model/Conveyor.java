@@ -1,6 +1,12 @@
 package uni.oldenburg.shared.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import uni.oldenburg.server.agent.helper.DelayTimes;
+import uni.oldenburg.shared.model.event.EventHelper;
+import uni.oldenburg.shared.model.event.PositionChangedEvent;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
@@ -16,16 +22,19 @@ import com.google.gwt.dom.client.CanvasElement;
 @SuppressWarnings("serial")
 public abstract class Conveyor implements Serializable {
 	public static final String TABLE_NAME = "szenario_conveyor";	
-	private final static int rasterSize = 20;
+	public final static int RASTER_SIZE = 20;
 	
 	public static final int DIRECTION_UP 	= 0;
 	public static final int DIRECTION_RIGHT = 1;	
 	public static final int DIRECTION_DOWN 	= 2;
 	public static final int DIRECTION_LEFT 	= 3;	
 	
-	protected static final int ENTRY_BORDER_SIZE = rasterSize / 8;	
+	protected static final int ENTRY_BORDER_SIZE = RASTER_SIZE / 8;	
 	protected static final String CONVEYOR_COLOR_INPUT = "red";
 	protected static final String CONVEYOR_COLOR_OUTPUT  = "green";	
+	
+	protected boolean hasIncomingJob = false;
+	protected boolean hasOutgoingJob = false;
 
 	private int ID;
 
@@ -36,7 +45,8 @@ public abstract class Conveyor implements Serializable {
 	
 	private int direction = DIRECTION_UP;
 
-	private int packageCount = 0;
+	protected List<String> lstPackage = new ArrayList<String>(); 
+	
 	protected int packageCountMax = 0;
 
 	private transient Canvas canvas;
@@ -61,6 +71,19 @@ public abstract class Conveyor implements Serializable {
 
 		setPosition(x, y);
 		setSize(width, height);
+	}
+    
+	public boolean hasIncomingJob() {
+		return hasIncomingJob;
+	}
+	public void setIncomingJob(boolean hasIncomingJob) {
+		this.hasIncomingJob = hasIncomingJob;
+	}
+	public boolean hasOutgoingJob() {
+		return hasOutgoingJob;
+	}
+	public void setOutgoingJob(boolean hasOutgoingJob) {
+		this.hasOutgoingJob = hasOutgoingJob;
 	}
 
 	public int getID() {
@@ -104,6 +127,15 @@ public abstract class Conveyor implements Serializable {
 		this.x = x;
 		this.y = y;
 	}
+	
+	public void setPosition(int x, int y, boolean onServer) {
+		this.setPosition(x, y);
+		
+		if (onServer) {
+			EventHelper.WaitForMS(DelayTimes.DRIVE_TO_DELAY);
+			EventHelper.addEvent(new PositionChangedEvent(x, y, this.getID()));
+		}
+	}
 
 	/**
 	 * get position based on raster layout
@@ -111,11 +143,11 @@ public abstract class Conveyor implements Serializable {
 	 * @author Matthias
 	 */
 	public int getX() {
-		return this.x  - (this.x % rasterSize);
+		return this.x  - (this.x % RASTER_SIZE);
 	}
 
 	public int getY() {
-		return this.y - (this.y % rasterSize);
+		return this.y - (this.y % RASTER_SIZE);
 	}
 	
 	//------------------------------------
@@ -187,22 +219,25 @@ public abstract class Conveyor implements Serializable {
 	}	
 	
 	public static int getRastersize() {
-		return rasterSize;
+		return RASTER_SIZE;
 	}
 	
 	public int getPackageCount() {
-		return packageCount;
+		return lstPackage.size();
 	}
 	
-	public void setPackageCount(int packageCount) {
-		if (packageCount >= getPackageCountMax())
-			packageCount = getPackageCountMax();
-		
-		this.packageCount = packageCount;
+	public void addPackage(String sid) {
+		lstPackage.add(sid);
 		
 		this.canvas = null;
 	}
 	
+	public void removePackage(String sid) {
+		lstPackage.remove(sid);
+		
+		this.canvas = null;
+	}
+
 	public int getPackageCountMax() {
 		return packageCountMax;
 	}

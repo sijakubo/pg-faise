@@ -19,6 +19,7 @@ import uni.oldenburg.client.view.DialogBoxOverwriteJoblist;
 import uni.oldenburg.client.view.DialogBoxSaveAs;
 import uni.oldenburg.client.view.DialogBoxSaveAsJoblist;
 import uni.oldenburg.client.view.DialogBoxScenarioSelection;
+import uni.oldenburg.client.view.MainFrameView;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.ConveyorVehicle;
@@ -27,13 +28,13 @@ import uni.oldenburg.shared.model.Job;
 import uni.oldenburg.shared.model.JobList;
 import uni.oldenburg.shared.model.Szenario;
 import uni.oldenburg.shared.model.SzenarioInfo;
-import uni.oldenburg.shared.model.event.BotAddPackageEvent;
-import uni.oldenburg.shared.model.event.BotChangedPositionEvent;
-import uni.oldenburg.shared.model.event.BotRemovePackageEvent;
 import uni.oldenburg.shared.model.event.JobAssignedEvent;
+import uni.oldenburg.shared.model.event.JobCounterUpdateEvent;
+import uni.oldenburg.shared.model.event.JobStatusUpdatedEvent;
 import uni.oldenburg.shared.model.event.JobUnassignableEvent;
 import uni.oldenburg.shared.model.event.PackageAddedEvent;
 import uni.oldenburg.shared.model.event.PackageRemovedEvent;
+import uni.oldenburg.shared.model.event.PositionChangedEvent;
 import uni.oldenburg.shared.model.event.SimStartedEvent;
 import uni.oldenburg.shared.model.event.SimStoppedEvent;
 
@@ -66,7 +67,6 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasText;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Panel;
@@ -119,7 +119,6 @@ public class MainFramePresenter extends Presenter {
 		MenuBar getMenuBar();
 		MenuBar getSimulationMenuBar();
 		MenuBar getJobMenuBar();
-		Label 	getLabelUserName();
 		Canvas 	getCanvas();
 		
 		void log(String log);		
@@ -135,7 +134,7 @@ public class MainFramePresenter extends Presenter {
 		handleEvents();
 		
 		if (Debugging.isDebugging) {			
-			this.loadSzenario("TestSzenario");
+			this.loadSzenario("Test05");
 			this.lstJobs.addRandomJobs(100);
 		}
 	}
@@ -160,27 +159,6 @@ public class MainFramePresenter extends Presenter {
 	 */
 	public boolean isSimulationRunning() {
 		return bSimulationRunning;
-	}
-
-	/**
-	 * Method gets UserName from Server and writes it into the Label
-	 * 
-	 * @author Nagi
-	 */
-	private void setLabelUserName() {
-
-		// Get the Username from Server
-		((SimulationServiceAsync) rpcService).getUserName(new AsyncCallback<String>() {
-					public void onFailure(Throwable arg0) {
-						Window.alert(arg0.getLocalizedMessage());
-					}
-
-					public void onSuccess(String result) {
-						// Write the String into the Label
-						((MainFramePresenter.IDisplay) MainFramePresenter.this.getDisplay())
-							.getLabelUserName().setText("Eingeloggt als: " + result);
-					}
-				});
 	}
 
 	/**
@@ -245,7 +223,7 @@ public class MainFramePresenter extends Presenter {
 		/**
 		 * drag, drop and rotate objects on canvas
 		 * 
-		 * @author Matthias
+		 * @author Matthias, Christopher
 		 */
 		display.getCanvas().addMouseUpHandler(new MouseUpHandler() {
 			public void onMouseUp(MouseUpEvent event) {
@@ -258,13 +236,25 @@ public class MainFramePresenter extends Presenter {
 				if (event.getNativeButton() == NativeEvent.BUTTON_LEFT) {
 					// add conveyor
 					if (myConveyor != null) {
-						// when spot available
-						if (isSpotAvailable(event.getX(), event.getY())) {
+						// calculate spot available
+						boolean spotAvailable = true;
+						if(myConveyor instanceof ConveyorRamp) {
+							for(int i = 0; i < ((ConveyorRamp)myConveyor).getNumberOfBlocks(); i++) {
+								if(((ConveyorRamp)myConveyor).isVertical()) {
+									spotAvailable = spotAvailable && isSpotAvailable(event.getX(), event.getY() + i * Conveyor.RASTER_SIZE);
+								} else {
+									spotAvailable = spotAvailable && isSpotAvailable(event.getX() + i * Conveyor.RASTER_SIZE, event.getY());
+								}
+							}
+						} else {
+							spotAvailable = isSpotAvailable(event.getX(), event.getY());
+						}
+						
+						if (spotAvailable) {
 							MainFramePresenter.this.currentSzenario.addConveyor(myConveyor);
 							MainFramePresenter.this.dropableConveyor = null;
 							loadSzenario(MainFramePresenter.this.currentSzenario);
-							
-							if (myConveyor instanceof ConveyorRamp)
+							if(myConveyor instanceof ConveyorRamp)
 								MainFramePresenter.this.display.log("" +((ConveyorRamp)myConveyor).getRampType());
 						}
 					} else {
@@ -470,6 +460,7 @@ public class MainFramePresenter extends Presenter {
 	private void drawConveyor(Conveyor myConveyor) {
 		Context2d context = display.getCanvas().getContext2d();
 		context.drawImage(myConveyor.getCanvasElement(), myConveyor.getX(), myConveyor.getY());
+		
 		if(Debugging.showCharge) { 
 			if(myConveyor instanceof ConveyorVehicle) {
 				double charge = ((ConveyorVehicle) myConveyor).getBatteryCharge();
@@ -482,6 +473,41 @@ public class MainFramePresenter extends Presenter {
 				context.setFillStyle(CssColor.make(red, green, 0));
 				context.fillRect(myConveyor.getX() - (width / 2) + 1, myConveyor.getY() - 7, charge * 2 * (width - 1), 2);
 			}
+		}
+		
+		//conveyor-ID
+		if (!(myConveyor instanceof ConveyorWall)) {
+			int box_x = myConveyor.getX() + 20;
+			int box_y = myConveyor.getY() - 0;
+			int box_w = 20;
+			int box_h = 12;
+			
+			context.setFillStyle(CssColor.make("black"));
+			context.fillRect(box_x, box_y, box_w, box_h);
+			context.setFillStyle(CssColor.make("white"));
+			context.fillText("" + myConveyor.getID(), box_x + 5, box_y + 10);
+			
+			// incoming job
+			context.setFillStyle(CssColor.make("black"));			
+			
+			if (myConveyor.hasIncomingJob())
+				context.setFillStyle(CssColor.make("red"));
+			
+			context.fillRect(box_x, box_y, 5, box_h / 2);
+			
+			// outgoing job
+			context.setFillStyle(CssColor.make("black"));
+			
+			if (myConveyor.hasOutgoingJob())
+				context.setFillStyle(CssColor.make("green"));
+			
+			context.fillRect(box_x, box_y + (box_h / 2), 5, box_h / 2);
+		}
+		
+		//jobcounter
+		if(myConveyor instanceof ConveyorRamp && ((ConveyorRamp) myConveyor).getRampType() == ConveyorRamp.RAMP_EXIT) {
+			context.setFillStyle(CssColor.make(0, 63, 127));
+			context.fillText(((ConveyorRamp) myConveyor).getJobCounter() + "", myConveyor.getX() + 22, myConveyor.getY() + 22);
 		}
 	}
 
@@ -509,7 +535,7 @@ public class MainFramePresenter extends Presenter {
 	 * @author Matthias
 	 */
 	public boolean isSpotAvailable(int x, int y) {
-		return (findConveyor(x, y) == null);
+		return (x < MainFrameView.canvasWidth && y < MainFrameView.canvasHeight && findConveyor(x, y) == null);
 	}
 
 	/**
@@ -830,8 +856,33 @@ public class MainFramePresenter extends Presenter {
 		this.addConveyorWallButtonListener();
 		this.addCanvasListener();
 		this.setupJobTable();
-		this.setLabelUserName();
-
+	}
+	
+	/**
+	 * Method should check if the current Szenario is consisten.
+	 * Consistency means that there is at least one Ramp from each type
+	 * @author Nagi
+	 */	
+	private boolean checkIfSzenarioIsConsistent(){
+		 //Get the Conveyor list
+		 List<Conveyor> list=currentSzenario.getConveyorList();
+		 //Iterate through the list
+		 int exit=0;
+		 int entry=0;
+		 int storage=0;
+		 for(int i=0;i<list.size();i++){
+			 Conveyor dummy=list.get(i);
+			 if(dummy instanceof ConveyorRamp){
+				 if(((ConveyorRamp) dummy).getRampType()==ConveyorRamp.RAMP_ENTRANCE){
+					 entry++;
+				 }else if(((ConveyorRamp) dummy).getRampType()==ConveyorRamp.RAMP_EXIT){
+					  exit++;
+				 }else storage++;
+			 }
+		 }
+		 if(exit==0||entry==0||storage==0){
+			 return false;
+		 }else return true;
 	}
 
 	/**
@@ -884,13 +935,15 @@ public class MainFramePresenter extends Presenter {
 		/**
 		 * start / stop simulation
 		 * 
-		 * @author Matthias
+		 * @author Matthias, Nagi
 		 */	
 		menuName = "Starten/Anhalten";
 		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar().addItem(menuName, new Command() {
 			public void execute() {
 				// doesn't run yet?
 				if (!isSimulationRunning()) {
+					//Only start simulation if szenario is consisten
+					if(checkIfSzenarioIsConsistent()){
 					// start simulation
 		            agentPlatformService.startSimulation(MainFramePresenter.this.currentSzenario, new AsyncCallback<Integer>() {
 						public void onFailure(Throwable caught) {
@@ -898,10 +951,13 @@ public class MainFramePresenter extends Presenter {
 						}
 
 						public void onSuccess(Integer id) {
-							MainFramePresenter.this.currentSzenario.setId(id);
+							MainFramePresenter.this.currentSzenario.setID(id);
 							MainFramePresenter.this.setSimulationState(true);
 						}
 		            });
+					}else {
+						Window.alert("Szenario cannot be started, because it is inconsisten. You need at least from each Ramptype one exemplar");
+					}
 				}
 				else {
 					// stop simulation
@@ -999,11 +1055,11 @@ public class MainFramePresenter extends Presenter {
 					return;
 				}
 				
-				if (anEvent instanceof BotChangedPositionEvent) {					
-					BotChangedPositionEvent myEvent = (BotChangedPositionEvent)anEvent;
+				if (anEvent instanceof PositionChangedEvent) {					
+					PositionChangedEvent myEvent = (PositionChangedEvent)anEvent;
 					
-					Conveyor ramp=currentSzenario.getConveyorById(myEvent.getId());
-					ramp.setPosition(myEvent.getX(), myEvent.getY());
+					Conveyor myConveyor = currentSzenario.getConveyorById(myEvent.getId());
+					myConveyor.setPosition(myEvent.getX(), myEvent.getY());
 					
 					loadSzenario(currentSzenario);
 					
@@ -1013,8 +1069,9 @@ public class MainFramePresenter extends Presenter {
 				if (anEvent instanceof PackageAddedEvent) {					
 					PackageAddedEvent myEvent = (PackageAddedEvent)anEvent;
 					
-					Conveyor ramp=currentSzenario.getConveyorById(myEvent.getId());
-					ramp.setPackageCount(ramp.getPackageCount()+1);
+					Conveyor myConveyor = currentSzenario.getConveyorById(myEvent.getConveyorID());
+					//myConveyor.setPackageCount(myConveyor.getPackageCount() + 1);
+					myConveyor.addPackage("" + myEvent.getPackageID());
 					
 					loadSzenario(currentSzenario);
 					
@@ -1024,36 +1081,42 @@ public class MainFramePresenter extends Presenter {
 				if (anEvent instanceof PackageRemovedEvent) {					
 					PackageRemovedEvent myEvent = (PackageRemovedEvent)anEvent;
 					
-					Conveyor ramp=currentSzenario.getConveyorById(myEvent.getId());
-					ramp.setPackageCount(ramp.getPackageCount()-1);
+					Conveyor myConveyor = currentSzenario.getConveyorById(myEvent.getConveyorID());
+					//myConveyor.setPackageCount(myConveyor.getPackageCount() - 1);
+					myConveyor.removePackage("" + myEvent.getPackageID());
 					
 					loadSzenario(currentSzenario);
 					
 					return;
 				}
 				
-				if (anEvent instanceof BotAddPackageEvent) {					
-					BotAddPackageEvent myEvent = (BotAddPackageEvent)anEvent;
+				if (anEvent instanceof JobStatusUpdatedEvent) {					
+					JobStatusUpdatedEvent myEvent = (JobStatusUpdatedEvent)anEvent;
 					
-					Conveyor ramp=currentSzenario.getConveyorById(myEvent.getId());
-					ramp.setPackageCount(ramp.getPackageCount()+1);
+					Conveyor myConveyor = currentSzenario.getConveyorById(myEvent.getConveyorID());
 					
-					loadSzenario(currentSzenario);
-					
-					return;
-				}
-				
-				if (anEvent instanceof BotRemovePackageEvent) {					
-					BotRemovePackageEvent myEvent = (BotRemovePackageEvent)anEvent;
-					
-					Conveyor ramp=currentSzenario.getConveyorById(myEvent.getId());
-					ramp.setPackageCount(ramp.getPackageCount()-1);
+					switch(myEvent.getJobType()) {
+						case Job.INCOMING:
+							myConveyor.setIncomingJob(myEvent.getJobStatus());
+							break;
+						case Job.OUTGOING:
+							myConveyor.setOutgoingJob(myEvent.getJobStatus());
+							break;
+					}
 					
 					loadSzenario(currentSzenario);
-					
-					return;
 				}
 				
+				if (anEvent instanceof JobCounterUpdateEvent) {					
+					JobCounterUpdateEvent myEvent = (JobCounterUpdateEvent)anEvent;
+					
+					Conveyor myConveyor = currentSzenario.getConveyorById(myEvent.getConveyorID());
+					
+					if(myConveyor instanceof ConveyorRamp)
+						((ConveyorRamp) myConveyor).setJobCounter(myEvent.getJobCounter());
+					
+					loadSzenario(currentSzenario);
+				}
 			}
 		});
 	}
@@ -1072,10 +1135,13 @@ public class MainFramePresenter extends Presenter {
 				if (lstJobs.size() < 1)
 					return;	
 				
-				Job pendingJob = lstJobs.getJob(0);
+				//Job pendingJob = lstJobs.getJob(0);
 				
-				if (elapsedTimeSec >= pendingJob.getTimestamp()) {
-					agentPlatformService.addJob(currentSzenario.getId(), pendingJob, new EmptyAsyncCallback());
+				for (Job pendingJob : lstJobs.getJoblist()) {
+					if (elapsedTimeSec >= pendingJob.getTimestamp()) {
+						agentPlatformService.addJob(currentSzenario.getId(), pendingJob, new EmptyAsyncCallback());
+						break;
+					}	
 				}
 			}
 		};

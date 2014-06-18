@@ -95,10 +95,10 @@ public class Job implements Serializable, Comparable<Job> {
 
     // used for sorting
     public int compareTo(Job job) {
-		if (this.timestamp < job.timestamp)
+		if (this.packageId < job.packageId)
             return -1;
 		
-        if (this.timestamp == job.timestamp)
+        if (this.packageId == job.packageId)
             return 0;
            
         return 1;
