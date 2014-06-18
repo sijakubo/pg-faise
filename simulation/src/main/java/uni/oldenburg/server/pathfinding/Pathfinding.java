@@ -1,8 +1,10 @@
 package uni.oldenburg.server.pathfinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.touch.client.Point;
+import uni.oldenburg.server.pathfinding.GridItem.GridItemType;
+import uni.oldenburg.shared.model.Point;
 
 public abstract class Pathfinding implements IPathfinding {
 	public enum PathMessageType {
@@ -123,4 +125,73 @@ public abstract class Pathfinding implements IPathfinding {
 		return tmpPoint;
 	}
 	
+	protected boolean inArea(Point newPoint) {
+		if (newPoint.getX() >= 0 && newPoint.getY() >= 0 && newPoint.getX() < myColumnCount && newPoint.getY() < myRowCount)
+			return true;
+		
+		return false;
+	}
+	
+	public static int getIndex(int x, int y, int myColumnCount) {
+		return y * myColumnCount + x;
+	}
+	
+	public static int getIndex(Point newPoint, int myColumnCount){
+		return getIndex(newPoint.getX(), newPoint.getY(), myColumnCount);
+	}
+	
+	protected boolean isWall(Point newPoint, Direction newDirection) {
+		if (!inArea(newPoint)) 
+			return true;
+		
+		int index = getIndex(getNeighborPoint(newPoint, newDirection), myColumnCount);
+		
+		if (index >= lstGridItem.size() || index < 0)
+			return true;
+		
+		GridItem neighborItem = lstGridItem.get(index);
+		
+		if(neighborItem.getItemType() == GridItemType.WallItem)
+			return true;
+		
+		return false;
+	}
+	
+	protected GridValueReturnType setValueOfSurroundingBlock(GridItem curItem, Point curPoint, Direction newDirection, List<Point> lstBlocksWithNewValues) {
+		Point neighborPoint = getNeighborPoint(curPoint, newDirection);
+		int nextStepValue = 10;
+		
+		if (!inArea(neighborPoint))
+			return GridValueReturnType.DoesNotExists;
+		
+		GridItem nextItem = lstGridItem.get(getIndex(neighborPoint.getX(), neighborPoint.getY(), myColumnCount));
+		
+		if (nextItem.getItemType() != GridItemType.WallItem){
+			if (newDirection == Direction.TopLeft ||
+				newDirection == Direction.TopRight ||
+				newDirection == Direction.BottomLeft ||
+				newDirection == Direction.BottomRight) {
+				
+				nextStepValue= 14;
+			}
+			
+			if (nextItem.getGridValue() < 0 || nextItem.getGridValue() > curItem.getGridValue() + nextStepValue){
+				nextItem.setGridValue(nextStepValue + curItem.getGridValue());
+				
+				lstBlocksWithNewValues.add(neighborPoint);
+		
+				return GridValueReturnType.ValueUpdated;
+			}
+		}
+		else 
+			return GridValueReturnType.IsWall;
+		
+		return GridValueReturnType.Unchanged;
+	}
+	
+	/*protected void ComputeBlocksValues(){
+		List<Point> lstBlocksWithNewValue = new ArrayList<Point>();
+		
+		
+	}*/
 }

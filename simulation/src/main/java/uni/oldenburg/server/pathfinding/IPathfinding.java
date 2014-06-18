@@ -3,8 +3,7 @@ package uni.oldenburg.server.pathfinding;
 import java.util.List;
 
 import uni.oldenburg.server.pathfinding.Pathfinding.PathMessageType;
-
-import com.google.gwt.touch.client.Point;
+import uni.oldenburg.shared.model.Point;
 
 public interface IPathfinding {
 	boolean isRunning();
