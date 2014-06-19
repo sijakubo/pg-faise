@@ -189,9 +189,56 @@ public abstract class Pathfinding implements IPathfinding {
 		return GridValueReturnType.Unchanged;
 	}
 	
-	/*protected void ComputeBlocksValues(){
+	protected void resetValues(){
+		for (GridItem myItem : lstGridItem){
+			myItem.setItemType(myItem.getItemType(), true);
+		}
+		
+	}
+	
+	protected void ComputeBlocksValues(){
 		List<Point> lstBlocksWithNewValue = new ArrayList<Point>();
 		
+		List<Direction> lstDirectionBase =  new ArrayList<Direction>();
+		lstDirectionBase.add(Direction.Left);
+		lstDirectionBase.add(Direction.Top);
+		lstDirectionBase.add(Direction.Right);
+		lstDirectionBase.add(Direction.Bottom);
 		
+		lstBlocksWithNewValue.add(new Point(myStartPoint.getX(), myStartPoint.getY()));
+		
+		resetValues();
+		
+		while (lstBlocksWithNewValue.size() > 0){
+			Point curPoint = lstBlocksWithNewValue.get(0);
+			lstBlocksWithNewValue.remove(curPoint);
+			
+			GridItem myItem = lstGridItem.get(getIndex(curPoint, myColumnCount));
+			
+			if (myItem.myGridValue >= 0) {
+				for (Direction myDirection : lstDirectionBase) {
+					setValueOfSurroundingBlock(myItem, curPoint, myDirection, lstBlocksWithNewValue);
+				}
+			
+			
+				if(bDriveDiagonal){
+					setValueOfSurroundingBlock(myItem, curPoint, Direction.TopLeft, lstBlocksWithNewValue);
+					setValueOfSurroundingBlock(myItem, curPoint, Direction.TopRight, lstBlocksWithNewValue);
+					setValueOfSurroundingBlock(myItem, curPoint, Direction.BottomLeft, lstBlocksWithNewValue);
+					setValueOfSurroundingBlock(myItem, curPoint, Direction.BottomRight, lstBlocksWithNewValue);
+				}
+			}
+			
+		}
+	}
+	
+	/*protected int saveBestPoint(PathPoint curPathPoint, Direction newDirection, int minValue,List<PathPoint> lstPossiblePoints){
+		Point neighborPoint = getNeighborPoint(curPathPoint.getPoint(), newDirection);
+		int newValue = 
+		
+		
+		return 0;
 	}*/
+	
+	
 }

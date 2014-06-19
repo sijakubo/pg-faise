@@ -1,6 +1,6 @@
 package uni.oldenburg.server.pathfinding;
 
-import java.awt.Point;
+import uni.oldenburg.shared.model.Point;
 
 public class PathPoint {
 	private Point myPoint= new Point(0,0);
