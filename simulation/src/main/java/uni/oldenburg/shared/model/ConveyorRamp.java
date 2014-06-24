@@ -182,9 +182,12 @@ public class ConveyorRamp extends Conveyor {
 		return jobCounter;
 	}
 
+	public void addJob() {
+		jobCounter++;
+	}
 
-	public void setJobCounter(int jobCounter) {
-		this.jobCounter = jobCounter;
+	public void removeJob() {
+		jobCounter--;
 	}
 
 	@Override

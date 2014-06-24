@@ -8,21 +8,22 @@ import de.novanic.eventservice.client.event.Event;
 
 @SuppressWarnings("serial")
 public class JobCounterUpdateEvent implements Event {
-	int conveyorID = 0;
-	int jobCounter = 0;
+	private int conveyorID = 0;
+	private boolean jobAdded = true; // if false, a job is being removed
 	
+	@Deprecated
 	public JobCounterUpdateEvent () {}
 	
-	public JobCounterUpdateEvent (int conveyorID, int jobCounter) {
+	public JobCounterUpdateEvent (int conveyorID, boolean added) {
 		this.conveyorID = conveyorID;
-		this.jobCounter = jobCounter;
-	}
-	
-	public int getJobCounter() {
-		return jobCounter;
+		this.jobAdded = added;
 	}
 	
 	public int getConveyorID() {
 		return conveyorID;
+	}
+	
+	public boolean isJobAdded() {
+		return jobAdded;
 	}
 }

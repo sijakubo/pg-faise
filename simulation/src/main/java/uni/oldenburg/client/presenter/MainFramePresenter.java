@@ -1112,8 +1112,13 @@ public class MainFramePresenter extends Presenter {
 					
 					Conveyor myConveyor = currentSzenario.getConveyorById(myEvent.getConveyorID());
 					
-					if(myConveyor instanceof ConveyorRamp)
-						((ConveyorRamp) myConveyor).setJobCounter(myEvent.getJobCounter());
+					if(myConveyor instanceof ConveyorRamp) {
+						if(myEvent.isJobAdded()) {
+							((ConveyorRamp) myConveyor).addJob();
+						} else {
+							((ConveyorRamp) myConveyor).removeJob();
+						}
+					}
 					
 					loadSzenario(currentSzenario);
 				}
