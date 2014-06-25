@@ -149,6 +149,10 @@ public class PackageAgent extends Agent {
 				EventHelper.addEvent(new JobStatusUpdatedEvent(myConveyor.getID(), hasPendingOutgoingJob, Job.OUTGOING));
 			}
 			
+			if(myConveyor instanceof ConveyorRamp) {
+				EventHelper.addEvent(new JobCounterUpdateEvent(myConveyor.getID(), true));
+			}
+			
 			ACLMessage msgCompleted = new ACLMessage(MessageType.ADD_PACKAGE_COMPLETED);
 			msgCompleted.addReceiver(msg.getSender());
 			send(msgCompleted);
@@ -353,11 +357,7 @@ public class PackageAgent extends Agent {
 			hasPendingIncomingJob = true;
 			
 			EventHelper.addEvent(new JobStatusUpdatedEvent(myConveyor.getID(), hasPendingIncomingJob, Job.INCOMING));
-			
-			if(myConveyor instanceof ConveyorRamp) {
-				EventHelper.addEvent(new JobCounterUpdateEvent(myConveyor.getID(), ((ConveyorRamp) myConveyor).getJobCounter() + 1));
-			}
-			
+						
 			ACLMessage msgAnswer = new ACLMessage(MessageType.SET_JOB_FLAG_COMPLETED);
 			msgAnswer.addReceiver(msg.getSender());
 			send(msgAnswer);
@@ -428,6 +428,10 @@ public class PackageAgent extends Agent {
 			hasPendingOutgoingJob = false;			
 			
 			EventHelper.addEvent(new JobStatusUpdatedEvent(myConveyor.getID(), hasPendingOutgoingJob, Job.OUTGOING));
+
+			if(myConveyor instanceof ConveyorRamp) {
+				EventHelper.addEvent(new JobCounterUpdateEvent(myConveyor.getID(), false));
+			}
 			
 			//logger.log(Level.INFO, "CID: " + myConveyor.getID() + " - AddPackageComplete - outgoing job: " + hasPendingOutgoingJob);
 				
