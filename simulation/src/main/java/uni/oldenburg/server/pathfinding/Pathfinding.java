@@ -232,13 +232,118 @@ public abstract class Pathfinding implements IPathfinding {
 		}
 	}
 	
-	/*protected int saveBestPoint(PathPoint curPathPoint, Direction newDirection, int minValue,List<PathPoint> lstPossiblePoints){
+	protected int getGridValue(Point newPoint){
+		return getGridValue(newPoint.getX(), newPoint.getY());
+		
+	}
+	
+	protected int getGridValue(int x, int y){
+		if (inArea(new Point(x,y))){
+			int value = lstGridItem.get(getIndex(new Point(x, y), myColumnCount)).getGridValue();
+			
+			if (value >= 0){
+				return value;
+			}
+			
+		}
+		return lstGridItem.get(getIndex(myStopPoint.getX(), myStartPoint.getY(), myColumnCount)).getGridValue()+1;
+
+	}
+	
+	protected void saveBestPoint(PathPoint curPathPoint, Direction newDirection, int minValue,List<PathPoint> lstPossiblePoints){
 		Point neighborPoint = getNeighborPoint(curPathPoint.getPoint(), newDirection);
-		int newValue = 
+		int newValue = getGridValue(neighborPoint);	
 		
 		
+		switch(newDirection){
+		case TopLeft:
+			 if (isWall(curPathPoint.getPoint(), Direction.Top)) return;
+			 if (isWall(curPathPoint.getPoint(), Direction.Left)) return;
+			break;
+		case TopRight:
+			if (isWall(curPathPoint.getPoint(), Direction.Top)) return;
+			if (isWall(curPathPoint.getPoint(), Direction.Right)) return;
+			break;
+		case BottomLeft:
+			if (isWall(curPathPoint.getPoint(), Direction.Bottom)) return;
+			if (isWall(curPathPoint.getPoint(), Direction.Left)) return;
+			break;
+		case BottomRight:
+			if (isWall(curPathPoint.getPoint(), Direction.Bottom)) return;
+			if (isWall(curPathPoint.getPoint(), Direction.Right)) return;
+			 break;
+		default:
+			break;
+		
+		}
+		
+		if (newValue <= curPathPoint.getStepValue() && newValue <= minValue){
+			if (bDriveDiagonal){
+				List<PathPoint> lstDeleteableValues= new ArrayList<PathPoint>();
+				
+				for (PathPoint myPoint : lstPossiblePoints){
+					if (getGridValue(myPoint.getPoint()) > newValue){
+						lstDeleteableValues.add(myPoint);
+					}
+				}
+				
+				for (PathPoint myPoint : lstDeleteableValues){
+					lstPossiblePoints.remove(myPoint);
+				}
+				
+				lstDeleteableValues.clear();
+				
+			}
+			
+			PathPoint myPathPoint = new PathPoint();
+			myPathPoint.setPoint(neighborPoint);
+			myPathPoint.setStepValue(newValue);
+			myPathPoint.setEstimationValue(myPathPoint.getStepValue());
+			myPathPoint.Direction = newDirection;
+			
+			if (curPathPoint.Direction != newDirection){
+				myPathPoint.setEstimationValue(myPathPoint.getEstimationValue() + myPathPoint.getEstimationValue()); 				
+			}
+			
+			lstPossiblePoints.add(myPathPoint);
+			
+			minValue = newValue;
+		}
+		
+	}
+
+	
+	public static int countRotations(List<PathPoint> lstPathPoints){
+		
+		int numRotation = 0;
+		
+		if(lstPathPoints.size() == 0){
+			return numRotation;
+		}
+		
+		Direction lastDirection = lstPathPoints.get(0).Direction;
+		
+		for (PathPoint myPathPoint : lstPathPoints){
+			if (lastDirection != myPathPoint.Direction){
+				numRotation += 1;
+			}
+			
+			lastDirection = myPathPoint.Direction;
+		}
+		
+		return numRotation;
+		
+	}
+	// später prüfen
+	public static int countRotations2(List<List<PathPoint>> lstPathPoint) {
+		if(lstPathPoint.size() >=1){
+			return countRotations(lstPathPoint.get(0));
+			
+		}
 		return 0;
-	}*/
+	}
+	
+	
 	
 	
 }
