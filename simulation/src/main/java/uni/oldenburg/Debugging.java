@@ -18,4 +18,6 @@ public class Debugging {
 	
 	//View
 	public static final boolean showCharge					= false;
+	public static final boolean showIDs						= true;
+	public static final boolean showJobCounter				= true;
 }

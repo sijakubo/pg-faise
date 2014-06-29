@@ -476,38 +476,42 @@ public class MainFramePresenter extends Presenter {
 		}
 		
 		//conveyor-ID
-		if (!(myConveyor instanceof ConveyorWall)) {
-			int box_x = myConveyor.getX() + 20;
-			int box_y = myConveyor.getY() - 0;
-			int box_w = 20;
-			int box_h = 12;
-			
-			context.setFillStyle(CssColor.make("black"));
-			context.fillRect(box_x, box_y, box_w, box_h);
-			context.setFillStyle(CssColor.make("white"));
-			context.fillText("" + myConveyor.getID(), box_x + 5, box_y + 10);
-			
-			// incoming job
-			context.setFillStyle(CssColor.make("black"));			
-			
-			if (myConveyor.hasIncomingJob())
-				context.setFillStyle(CssColor.make("red"));
-			
-			context.fillRect(box_x, box_y, 5, box_h / 2);
-			
-			// outgoing job
-			context.setFillStyle(CssColor.make("black"));
-			
-			if (myConveyor.hasOutgoingJob())
-				context.setFillStyle(CssColor.make("green"));
-			
-			context.fillRect(box_x, box_y + (box_h / 2), 5, box_h / 2);
+		if(Debugging.showIDs) {
+			if (!(myConveyor instanceof ConveyorWall)) {
+				int box_x = myConveyor.getX() + 20;
+				int box_y = myConveyor.getY() - 0;
+				int box_w = 20;
+				int box_h = 12;
+				
+				context.setFillStyle(CssColor.make("black"));
+				context.fillRect(box_x, box_y, box_w, box_h);
+				context.setFillStyle(CssColor.make("white"));
+				context.fillText("" + myConveyor.getID(), box_x + 5, box_y + 10);
+				
+				// incoming job
+				context.setFillStyle(CssColor.make("black"));
+				
+				if (myConveyor.hasIncomingJob())
+					context.setFillStyle(CssColor.make("red"));
+				
+				context.fillRect(box_x, box_y, 5, box_h / 2);
+				
+				// outgoing job
+				context.setFillStyle(CssColor.make("black"));
+				
+				if (myConveyor.hasOutgoingJob())
+					context.setFillStyle(CssColor.make("green"));
+				
+				context.fillRect(box_x, box_y + (box_h / 2), 5, box_h / 2);
+			}
 		}
 		
 		//jobcounter
-		if(myConveyor instanceof ConveyorRamp && ((ConveyorRamp) myConveyor).getRampType() == ConveyorRamp.RAMP_EXIT) {
-			context.setFillStyle(CssColor.make(0, 63, 127));
-			context.fillText(((ConveyorRamp) myConveyor).getJobCounter() + "", myConveyor.getX() + 22, myConveyor.getY() + 22);
+		if(Debugging.showJobCounter) {
+			if(myConveyor instanceof ConveyorRamp && ((ConveyorRamp) myConveyor).getRampType() == ConveyorRamp.RAMP_EXIT) {
+				context.setFillStyle(CssColor.make(0, 63, 127));
+				context.fillText(((ConveyorRamp) myConveyor).getJobCounter() + "", myConveyor.getX() + 22, myConveyor.getY() + 22);
+			}
 		}
 	}
 
