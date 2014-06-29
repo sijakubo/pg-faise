@@ -10,26 +10,46 @@ Die FTF sind flurgebundene F\"ordermittel mit eigenem Fahrantrieb, die automatis
 Als Zusammenfassung kann man sagen, dass die Fahrzeugsteuerung die Systemsicherheit, das Energiemanagement, das Lastaufnahmemittel und die Lenkung eines FTF gew\"ahrleistet. Ein FTF kann ohne Energie nicht funktionieren. Damit ein FTF seine Aufgabe erf\"ullen kann, ist eine Energieversorgung notwendig. Die FTF können durch Akkus oder Traktionsbatterien oder mit Hilfe eines Induktionssystems oder einer Stromschiene mit Energie versorgt werden. Jedoch k\"onnen die beiden Versorgungsarten gekoppelt werden, um ein Hybridsystem zu bekommen. Die Notwendigkeit der Existenz einer Ladestation in einem FTS ist unumstritten. Die FTF m\"ussen immer mit Energie versorgt werden. Je nachdem wie die FTF programmiert sind, kann ein FTF bei Energiebedarf selber zur Ladestation fahren oder von einem Auftraggeber (Mensch) zur Ladestation gef\"uhrt werden.
 
 \subsubsection{Orientierungssystem bzw. Navigation}
-Das Orientierungssystem bzw. die Navigation dient zur Lokalisierung des Fahrzeugs. Sie ist ein Hilfsmittel zur Berechnung des sichersten Wegs um das Ziel zu erreichen. Au\"sserdem dient die Navigation auch zur Vermeidung von eventuellen Kollisionen. Sie gilt sowohl als f\"ur die Orientierung als auch f\"ur die Sicherheit des Fahrzeuges und sein Umfeld. W\"ahrend seiner Bewegung bzw. Orientierung folgt das FTF einer physischen oder virtuellen Linie (Spur), damit es sein Ziel Gefahrlos erreichen kann. Allerdings aufgrund eines Sicherheitssystems sollte das FTF sofort anhalten, wenn Hindernisse oder Kollisionsgefahr vor ihn stehen. 
-Mit Navigationshilfe kennt man nicht nur die Positionierung und Orientierung des Fahrzeuges sondern auch wohin das Fahrzeug gelangen w\"urde, wenn keine auf seine Bewegung ver\"andernden Ma\"ssnahmen ergriffen wurde. Die Steuerung sagt was zu tun ist, und die Navigation bestimmt durch welchen Weg das Fahrzeug dem gew\"unschten Ziel sicher zu erreichen ist bzw. auf einem vorgegebenen Weg zu verfolgen oder eine alternative Weg zu nehmen. Die Steuerung von fahrerlosen Transportfahrzeugen, deren Grundfunktionen und der Umgang mit diesen werden in den VDI- Richtlinien [VDI92], [VDI94], [VDI04] vorgestellt. F\"ur das Konstrukt von fahrerlose Transportsysteme werden verschiedene Ans\"atze verfolgt, die  abh\"angig vom System verschiedene Konstruktionsbem\"uhungen auf das Fahrzeug oder auf der Strecke erfordern. Es gibt mehrere Navigationsverfahren: die physische Leitlinie, die Orientierung durch Magnetmarken, das Global Positioning System (GPS) und die Lasernavigation (vgl. G\"unter Ullrich, 2011 S. 112).
+Das Orientierungssystem bzw. die Navigation dient zur Lokalisierung des Fahrzeugs. Sie ist ein Hilfsmittel zur Berechnung des sichersten Wegs, um das Ziel zu erreichen. Au\ss erdem dient die Navigation auch zur Vermeidung von eventuellen Kollisionen. Sie gilt sowohl f\"ur die Orientierung als auch f\"ur die Sicherheit des Fahrzeuges und seines Umfeldes. W\"ahrend seiner Bewegung bzw. Orientierung folgt das FTF einer physischen oder virtuellen Linie (Spur), damit es sein Ziel gefahrlos erreichen kann. Aufgrund eines Sicherheitssystems sollte das FTF bei Kollisionsgefahr oder wenn Hindernisse vor ihm stehen, sofort anhalten. 
+Unter Navigationshilfe versteht man nicht nur die Positionierung und Orientierung des Fahrzeuges sondern auch, wohin das Fahrzeug gelangen w\"urde, wenn keine auf seine Bewegung ver\"andernden Ma\ss nahmen ergriffen würden.
+Die Steuerung sagt, was zu tun ist, und die Navigation bestimmt, auf welchem Weg das gew\"unschte Ziel sicher zu erreichen ist bzw. ob das FTF einen vorgegebenen Weg weiter verfolgen oder einen alternative Weg nehmen soll.
+Die Steuerung von fahrerlosen Transportfahrzeugen, deren Grundfunktionen und der Umgang mit diesen werden in den VDI-Richtlinien [VDI92], [VDI94], [VDI04] vorgestellt.
+F\"ur das Konstrukt der fahrerlosen Transportsysteme werden verschiedene Ans\"atze verfolgt, die abh\"angig vom System verschiedene Konstruktionsbem\"uhungen auf das Fahrzeug oder auf der Strecke erfordern.
+Es gibt mehrere Navigationsverfahren: die physische Leitlinie, die Orientierung durch Magnetmarken, das Global Positioning System (GPS) und die Lasernavigation (vgl. G\"unter Ullrich, 2011 S. 112).
 \begin{itemize}
-	\item \textbf{Die physische Leitlinie:}  Fahrerlose Transportsysteme, die auf physischen Leitlinien navigieren bzw. fahren, benutzen Einrichtungen am oder im Fu\"ssboden. Die verschiedenen Varianten sind:
- \item \textbf{Orientierung durch optische Leitspur:} Bei dieser Methode wird ein farbstrich mit deutlichem Farbkontrast zum umgebenden Boden entweder lackiert oder mit einem speziellen Gewebeband aufgebracht wird. Eine geeignete Kamerasensorik unter dem Fahrzeug nutzt ebenfalls Kantendetektions-Algorithmen  und errechnet so die Ansteuerungssignale f\"ur den Lenkmotor (G\"unter Ullrich, 2011 S. 112). Optische Verfahren dienen durch eine st\"andige Kurskorrektur eine hohe  Fahrgenauigkeit zu erreichen. 
-\item \textbf{Orientierung durch induktive Leitspur:} Diese Methode der Navigation fahrerloser Transportfahrzeuge ist profitabel aufgrund der permanenten Kurskorrektur und ist au\"sserdem besonders zuverl\"assig und fahrzeugseitig durch die Nutzung einfacher Komponente. Es ist m\"oglich, die Stromversorgung der Fahrzeuge fahrbahnseitig zu realisieren, so dass die Nutzung schweren Akkumulatoren entf\"allt. Jedoch sind Systeme mit Leitdrahtsteuerung nicht flexibel und sie sind in der Konstruktion sehr teuer.
+	\item \textbf{Die physische Leitlinie:}  Fahrerlose Transportsysteme, die auf physischen Leitlinien navigieren bzw. fahren, benutzen Einrichtungen am oder im Fu\ss boden. Die verschiedenen Varianten sind:
+ \item \textbf{Orientierung durch optische Leitspur:} Bei dieser Methode wird ein Farbstrich mit deutlichem Farbkontrast zum umgebenden Boden entweder lackiert oder mit einem speziellen Gewebeband aufgebracht.
+Eine geeignete Kamerasensorik unter dem Fahrzeug nutzt Kantendetektions-Algorithmen und errechnet so die Ansteuerungssignale f\"ur den Lenkmotor (G\"unter Ullrich, 2011 S. 112).
+Optische Verfahren dienen durch eine st\"andige Kurskorrektur dazu, eine hohe Fahrgenauigkeit zu erreichen. 
+\item \textbf{Orientierung durch induktive Leitspur:} Diese Methode der Navigation fahrerloser Transportfahrzeuge ist profitabel aufgrund der permanenten Kurskorrektur und au\ss erdem besonders zuverl\"assig und fahrzeugseitig durch die Nutzung einfacher Komponente zu realisieren.
+Es ist m\"oglich, die Stromversorgung der Fahrzeuge fahrbahnseitig zu realisieren, sodass die Nutzung schwerer Akkumulatoren entf\"allt.
+Jedoch sind Systeme mit Leitdrahtsteuerung nicht flexibel und in der Konstruktion sehr teuer.
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.9\textwidth]{Prinzipskizze_induktiven.jpg}
 	\caption{Prinzipskizze zur induktiven und optischen Spurf\"uhrung (Quelle: G\"unter Ullrich, 2011 S. 79)}
 	\label{Prinzipskizze_induktiven}
 \end{figure}  
-	\item \textbf{Orientierung durch Magnetmarken:} Eine weitere M\"oglichkeit der Steuerung ist die Abtastung von Magnetstreifen oder magnetischen Markierungen auf der Straßenoberfl\"ache. Dabei bedarf es zur Berechnung der Leitlinie einerseits der Koppelnavigation, zus\"atzlich der f\"ur die Peilung in regelm\"a\"ssigen Abst\"anden in den Boden eingelassenen Marken. Diese Marken k\"onnen rein passive Dauermagnete oder aber quasi-aktive Transponder sein (G\"unter Ullrich, 2011 S. 80). Das Bild \ref{Prinzipskizze_Koppelnavigation_rechts} ist eine Repr\"asentation der Navigation durch Magnetstreifen.
+	\item \textbf{Orientierung durch Magnetmarken:} Eine weitere M\"oglichkeit der Steuerung ist die Abtastung von Magnetstreifen oder magnetischen Markierungen auf der Straßenoberfl\"ache.
+Dabei bedarf es zur Berechnung der Leitlinie entweder der Koppelnavigation, oder der Peilung von in regelm\"a\ss igen Abst\"anden in den Boden eingelassenen Marken.
+Diese Marken k\"onnen rein passive Dauermagnete oder aber quasi-aktive Transponder sein (G\"unter Ullrich, 2011 S. 80).
+Das Bild \ref{Prinzipskizze_Koppelnavigation_rechts} ist eine Repr\"asentation der Navigation durch Magnetstreifen.
 	\begin{figure}[h!]
 		\centering
 			\includegraphics[width=0.9\textwidth]{Prinzipskizze_Koppelnavigation_rechts.jpg}
 			\caption{Prinzipskizze zur Koppelnavigation (links) und zur Magnet- bzw. Transpondernavigation (rechts) (Quelle: G\"unter Ullrich, 2011 S. 79)}
 			\label{Prinzipskizze_Koppelnavigation_rechts}
 	\end{figure}	
-	\item Bei der Lasernavigation bestimmt der Laserscanner die Position des FTF, dazu kommen noch optische Sensoren f\"ur Hinderniserkennung z.B. Mensch. Lasergef\"uhrte FTS bieten einen hohen Wert an Flexibilit\"at, da sie ohne Bodeninstallation funktionieren. Nur bei engerem Raum, kann die Lasernavigation nicht so effizient wie z.B. eine induktive Spurf\"uhrung sein, wenn viele Fahrzeuge zum Einsatz kommen. Um die Systemvorteile eine Lasernavigation optimal zu benutzen, ben\"otigt man allerdings ein passendes Anlagenkonzept. Die wichtigen Kriterien sind: die Einbindung in den gesamtbetrieblichen Materialflusssystem, die Anpassung an die vorhandenen Steuerungshierarchien und die optimale Auslegung der Technik in Bezug auf Fahrzeugbauart, Lastaufnahmemittel, Energiekonzept, Kommunikation und Leitsystem. Ein Aspekt, der f\"ur das Laser-gef\"uhrte FTS spricht, ist die Wirtschaftlichkeit. Und dies trotz der Alternativen Elektro-, Low-Cost- sowie induktiv gef\"uhrtes FTS. Letztere lassen sich so einrichten, dass sie auch auf leitdrahtlosen, rein rechnergef\"uhrten Teilstrecken verkehren k\"onnen. Keinerlei kostenintensive Bodeninstallation ben\"otigt dagegen das \"uber Lasersensor gesteuerte, v\"ollig frei navigierende Laser-FTS. Die Fahrzeuge orientieren sich lediglich an im Raum verteilten Reflektoren und mit Hilfe der Kombination von Winkel- und Distanzmessung. (Werner Swoboda, Industrie Anzeiger). Das Bild \ref{Prinzipskizze_Koppelnavigation_links} ist eine Visualisierung der Lasernavigation.
+	\item Bei der Lasernavigation bestimmt der Laserscanner die Position des FTF, dazu kommen noch optische Sensoren f\"ur die Erkennung von Hindernissen wie z.~B. Menschen.
+Lasergef\"uhrte FTS bieten einen hohen Wert an Flexibilit\"at, da sie ohne Bodeninstallation funktionieren.
+Nur bei engerem Raum kann die Lasernavigation nicht so effizient wie z.~B. eine induktive Spurf\"uhrung sein, wenn viele Fahrzeuge zum Einsatz kommen.
+Um die Systemvorteile einer Lasernavigation optimal zu nutzen, ben\"otigt man allerdings ein passendes Anlagenkonzept.
+Die wichtigsten Kriterien sind: die Einbindung in das gesamtbetriebliche Materialflusssystem, die Anpassung an die vorhandenen Steuerungshierarchien und die optimale Auslegung der Technik in Bezug auf Fahrzeugbauart, Lastaufnahmemittel, Energiekonzept, Kommunikation und Leitsystem.
+Ein Aspekt, der f\"ur das Laser-gef\"uhrte FTS spricht, ist die Wirtschaftlichkeit.
+Und dies trotz der Alternativen Elektro-, Low-Cost- sowie induktiv gef\"uhrten FTS.
+Letztere lassen sich so einrichten, dass sie auch auf leitdrahtlosen, rein rechnergef\"uhrten Teilstrecken verkehren k\"onnen.
+Keinerlei kostenintensive Bodeninstallation ben\"otigt dagegen das \"uber Lasersensor gesteuerte, v\"ollig frei navigierende Laser-FTS.
+Die Fahrzeuge orientieren sich lediglich an im Raum verteilten Reflektoren und mit Hilfe der Kombination von Winkel- und Distanzmessung. (Werner Swoboda, Industrie Anzeiger). Das Bild \ref{Prinzipskizze_Koppelnavigation_links} ist eine Visualisierung der Lasernavigation.
 	\begin{figure}[h!]
 		\centering
 		\includegraphics[width=0.8\textwidth]{Prinzipskizze_Koppelnavigation_links.jpg}
@@ -37,7 +57,12 @@ Mit Navigationshilfe kennt man nicht nur die Positionierung und Orientierung des
 		\label{Prinzipskizze_Koppelnavigation_links}
 	\end{figure}
 
-	\item \textbf{Orientierung durch GPS:} Seine Anwendung im Bereich der Fahrzeugsteuerung wird in Form des DGPS eingesetzt, die als Referenzsignal dient. DGPS bedeutet differential GPS und meint die Verwendung eines zus\"atzlichen GPS-Empf\"angers, der nicht auf dem FTF, sondern station\"ar fest installiert ist. Mit Hilfe dieses ortsfesten GPS-Empf\"angers wird der sich zeitlich \"andernde Fehler ermittelt, der dem GPS-System eigen ist. Mit Hilfe dieser Kenntnis k\"onnen zeitgleich die fahrenden GPS-Empf\"anger auf den FTF exakte Positionen ermitteln (Quelle: G\"unter Ullrich, 2011 S. 27). Diese Navigationstechnik braucht eine freie Sichtkegel von 15 Grad  nach oben (siehe Bild 4), m zuverl\"assig arbeiten zu k\"onnen. DieSchritte zur Erlangung der erforderlichen Fahr- und Positioniergenauigkeit sind:
+	\item \textbf{Orientierung durch GPS:} Seine Anwendung im Bereich der Fahrzeugsteuerung wird in Form des DGPS eingesetzt.
+DGPS bedeutet differential GPS und meint die Verwendung eines zus\"atzlichen GPS-Empf\"angers, der nicht auf dem FTF, sondern station\"ar fest installiert ist.
+Mit Hilfe dieses ortsfesten GPS-Empf\"angers wird der sich zeitlich \"andernde Fehler ermittelt, der dem GPS-System eigen ist.
+Mit Hilfe dieser Kenntnis k\"onnen zeitgleich die fahrenden GPS-Empf\"anger auf den FTF exakte Positionen ermitteln (Quelle: G\"unter Ullrich, 2011 S. 27).
+Diese Navigationstechnik benötigt einen freie Sichtkegel von 15 Grad nach oben (siehe Bild 4), um zuverl\"assig arbeiten zu k\"onnen.
+Die Schritte zur Erlangung der erforderlichen Fahr- und Positioniergenauigkeit sind:
 	\begin{itemize}
 		\item Pr\"ufung der \"ortlichen Gegebenheiten, insb. der Empfangsst\"arken der Satelliten
  \item Einsatz des Differential-GPS
@@ -49,7 +74,8 @@ Mit Navigationshilfe kennt man nicht nur die Positionierung und Orientierung des
 		\caption{Prinzipskizze zur Koppelnavigation (links) und zur Magnet- bzw. Transpondernavigation (rechts) (Quelle: G\"unter Ullrich, 2011 S. 79)}
 		\label{Systemarchitektur_FTS}
 \end{figure}
-Im Rahmen des Projekt FAISE wird die Navigation durch den Laser durchgef\"uhrt. Es kann hier kein Global Positioning System (GPS) verwendet werden, da das ganze Experiment in einem geschlossenen Raum gemacht wird. Weiterhin es kann auch keine Navigation durch die physische Leitlinie oder durch die St\"utzpunkte im Boden erzielt, weil der Boden gebrochen werden m\"usste.
+Im Rahmen des Projekt FAISE wird die Navigation durch den Laser durchgef\"uhrt. Es kann hier kein Global Positioning System (GPS) verwendet werden, da das ganze Experiment in einem geschlossenen Raum gemacht wird.
+Weiterhin wird auch keine Navigation durch die physische Leitlinie oder durch die St\"utzpunkte im Boden erzielt, weil dazu der Boden gebrochen werden m\"usste.
 \end{itemize}
 
 \subsubsection{Steuerungstechnik}
