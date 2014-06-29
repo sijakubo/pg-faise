@@ -397,14 +397,11 @@ public class PackageAgent extends Agent {
 
 		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
 			int dstConveyorID = Integer.parseInt(msg.getUserDefinedParameter("dstConveyorID"));
-			
-			// get first package
-			PackageData myData = lstPackage.get(0);
+
+         // remove package from own list
+			PackageData myData = lstPackage.remove(0);
 			
 			EventHelper.WaitForMS(DelayTimes.TRANSFER_PACKAGE);
-			
-			// remove package from own list
-			lstPackage.remove(0);
 			
 			if (Debugging.showPackageMessages)
 				logger.log(Level.INFO, "Conveyor " + myConveyor.getID() + ": package " + myData.getPackageID() + " removed");
