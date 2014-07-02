@@ -37,6 +37,10 @@ public class GridItem {
 		return this.type;
 	}
 	
+	public void setItemType(GridItemType newType) {
+		setItemType(newType, false);
+	}
+	
 	public void setItemType(GridItemType newType, boolean reseting) {
 		if (!reseting) {
 			if (newType == GridItemType.WallItem && getItemType() == GridItemType.WallItem) {

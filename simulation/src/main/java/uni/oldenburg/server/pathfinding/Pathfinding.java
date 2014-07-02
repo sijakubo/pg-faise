@@ -82,7 +82,7 @@ public abstract class Pathfinding implements IPathfinding {
 		return myStopPoint;
 	}
 
-	public void Init(int columnCount, int rowCount, List<GridItem> lstGridItem) {
+	public void init(int columnCount, int rowCount, List<GridItem> lstGridItem) {
 		myColumnCount = columnCount;
 		myRowCount = rowCount;
 		
