@@ -78,6 +78,57 @@ public class PathfindingSingle extends Pathfinding {
             	
             }
             
+            if (lstPossiblePoints.size() > 0){
+            	int randomIndex = (int)Math.round((float)lstPossiblePoints.size());
+            	PathPoint lessRotatingPathPoint = null;
+            	
+            	if(bAvoidRotations){
+            		for(PathPoint myPathPoint : lstPossiblePoints){
+            			if(curPathPoint.Direction == myPathPoint.Direction){
+            				lessRotatingPathPoint = myPathPoint;
+            				break;
+            			}
+            		}
+            	}
+            	
+            	if(lessRotatingPathPoint == null)
+            		curPathPoint = lstPossiblePoints.get(randomIndex);
+            	else
+            		curPathPoint = lessRotatingPathPoint;
+            	
+            	lstPossiblePoints.clear();
+            	
+            	lstSinglePathpoints.add(curPathPoint);
+            	
+                if(curPathPoint.getPoint().getX() == myStartPoint.getX() && curPathPoint.getPoint().getY() == myStartPoint.getY()){
+                	break;
+                }
+                
+        		lstGridItem.get(getIndex(curPathPoint.getPoint(), myColumnCount)).setItemType(GridItemType.PathItem);
+            }
+            else {
+            	lstSinglePathpoints.clear();
+            	
+            	resetValues();
+            	
+            	if(bDriveDiagonal){
+            		bRunning = false;
+            		bDriveDiagonal = false;
+            		lstPathPoints.clear();
+            		returnValue = findPath(myStartPoint, myStopPoint, lstPathPoints);
+            		bDriveDiagonal = true;
+            		
+            	} else{
+            		returnValue = PathMessageType.PathBlocked;
+            	}
+            	break;
+            	
+            	//lstSinglePathpoints.reverse();
+            
+            
+            
+            }
+            
         }
         
         

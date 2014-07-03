@@ -10,7 +10,8 @@ public class GridItem {
 		DefaultItem,
 		StartItem,
 		StopItem,
-		WallItem				
+		WallItem,
+		PathItem				
 	}
 
 	public GridItem(int newGridItemSize) {
