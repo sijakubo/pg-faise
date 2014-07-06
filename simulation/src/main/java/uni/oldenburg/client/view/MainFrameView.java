@@ -4,6 +4,8 @@ import uni.oldenburg.client.presenter.MainFramePresenter;
 import uni.oldenburg.shared.model.Job;
 
 import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.SimplePager;
@@ -136,6 +138,8 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		canvas.setHeight(canvasHeight + "px");
 		canvas.setCoordinateSpaceWidth(canvasWidth);
 		canvas.setCoordinateSpaceHeight(canvasHeight);
+		canvas.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+		canvas.getElement().getStyle().setBorderWidth(1,Unit.PX);
 		hpSubFrame.add(canvas);
 		
 		txtDebug = new TextArea();
