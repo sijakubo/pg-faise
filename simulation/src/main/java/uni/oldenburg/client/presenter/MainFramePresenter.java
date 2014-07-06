@@ -79,7 +79,11 @@ import de.novanic.eventservice.client.event.RemoteEventService;
 import de.novanic.eventservice.client.event.RemoteEventServiceFactory;
 import de.novanic.eventservice.client.event.domain.DomainFactory;
 import de.novanic.eventservice.client.event.listener.RemoteEventListener;
-
+/**
+ * Der Mainframepresenter ist dafuer da das Hauptfenster zu initialisieren und alle Aktionen durchzuführen, die durch
+ * das Drücken eines Gui-Elements initialisiert werden.
+ * @author Matthias, Raschid, Nagihan, Simon, Christopher
+ */
 public class MainFramePresenter extends Presenter {
 	public final static String DOMAIN_NAME = "uni.oldenburg.faise";
 	
@@ -102,7 +106,7 @@ public class MainFramePresenter extends Presenter {
 	
 	Map<String, MenuItem> mapSimMenuItems = new HashMap<String, MenuItem>();
 	Map<String, MenuItem> mapJobMenuItems = new HashMap<String, MenuItem>();
-
+    //Das Display ist dafür da von den eigentlichen Gui-Elementen zu abstrahieren, damit diese beliebig austauschbar sind.
 	public interface IDisplay {
 		CellTable<Job> getJobTable();
 		
@@ -144,7 +148,7 @@ public class MainFramePresenter extends Presenter {
 	}
 	
 	/**
-	 * client simulation state
+	 * Liefert den clientseitigen Simulationsstatus.
 	 * 
 	 * @author Matthias
 	 */
@@ -153,7 +157,7 @@ public class MainFramePresenter extends Presenter {
 	}	
 	
 	/**
-	 * server simulation state
+	 * Liefert den serverseitigen Simulationsstatus.
 	 * 
 	 * @author Matthias
 	 */
@@ -826,8 +830,8 @@ public class MainFramePresenter extends Presenter {
 	 * @author Matthias
 	 */
 	public void setSimulationState(boolean started) {
-		bSimulationStarted = started;
-		
+		bSimulationStarted = started;		
+		mapSimMenuItems.get("Neues Szenario anlegen").setEnabled(!hasSimulationStarted());
 		mapSimMenuItems.get("Laden").setEnabled(!hasSimulationStarted());
 		mapSimMenuItems.get("Speichern").setEnabled(!hasSimulationStarted());
 		mapSimMenuItems.get("Speichern unter...").setEnabled(!hasSimulationStarted());
@@ -901,8 +905,15 @@ public class MainFramePresenter extends Presenter {
 		// --- menu bar ---
 
 		// file menu
+		String menuName = "Neues Szenario anlegen";
+		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar().addItem(menuName, new Command() {
+			public void execute() {
+				currentSzenario=new Szenario();
+				loadSzenario(currentSzenario);
+			}
+		}));
 
-		String menuName = "Laden";
+		menuName = "Laden";
 		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar().addItem(menuName, new Command() {
 			public void execute() {
 				getScenarioInfosFromServerAndShow();

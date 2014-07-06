@@ -11,9 +11,9 @@ import uni.oldenburg.client.service.SimulationService;
 import uni.oldenburg.client.util.LoggingUtil;
 
 /**
- * Entry point classes define <code>onModuleLoad()</code>.
+ * Entry point Klasse. Beim starten der GWT-Applikation wird die onModuleLoad-Methode aufgerufen.
+ * Es werden alle notwendigen Klassen fuer Viewwechsel und Client-Server Kommunikation initialisiert.  
  */
-
 public class Simulation implements EntryPoint {
 
 	/**

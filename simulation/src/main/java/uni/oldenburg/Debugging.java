@@ -3,7 +3,6 @@ package uni.oldenburg;
 /**
  * @author Christopher Matthias
  */
-
 public class Debugging {
 	// Logger Messages
 	public final static boolean showAgentStartupMessages	= false;
