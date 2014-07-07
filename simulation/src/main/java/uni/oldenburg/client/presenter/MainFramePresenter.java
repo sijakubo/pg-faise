@@ -79,7 +79,11 @@ import de.novanic.eventservice.client.event.RemoteEventService;
 import de.novanic.eventservice.client.event.RemoteEventServiceFactory;
 import de.novanic.eventservice.client.event.domain.DomainFactory;
 import de.novanic.eventservice.client.event.listener.RemoteEventListener;
-
+/**
+ * Der Mainframepresenter ist dafuer da das Hauptfenster zu initialisieren und alle Aktionen durchzuführen, die durch
+ * das Drücken eines Gui-Elements initialisiert werden.
+ * @author Matthias, Raschid, Nagihan, Simon, Christopher
+ */
 public class MainFramePresenter extends Presenter {
 	public final static String DOMAIN_NAME = "uni.oldenburg.faise";
 	
@@ -102,7 +106,7 @@ public class MainFramePresenter extends Presenter {
 	
 	Map<String, MenuItem> mapSimMenuItems = new HashMap<String, MenuItem>();
 	Map<String, MenuItem> mapJobMenuItems = new HashMap<String, MenuItem>();
-
+    //Das Display ist dafür da von den eigentlichen Gui-Elementen zu abstrahieren, damit diese beliebig austauschbar sind.
 	public interface IDisplay {
 		CellTable<Job> getJobTable();
 		
@@ -144,7 +148,7 @@ public class MainFramePresenter extends Presenter {
 	}
 	
 	/**
-	 * client simulation state
+	 * Liefert den clientseitigen Simulationsstatus.
 	 * 
 	 * @author Matthias
 	 */
@@ -153,7 +157,7 @@ public class MainFramePresenter extends Presenter {
 	}	
 	
 	/**
-	 * server simulation state
+	 * Liefert den serverseitigen Simulationsstatus.
 	 * 
 	 * @author Matthias
 	 */
@@ -476,38 +480,42 @@ public class MainFramePresenter extends Presenter {
 		}
 		
 		//conveyor-ID
-		if (!(myConveyor instanceof ConveyorWall)) {
-			int box_x = myConveyor.getX() + 20;
-			int box_y = myConveyor.getY() - 0;
-			int box_w = 20;
-			int box_h = 12;
-			
-			context.setFillStyle(CssColor.make("black"));
-			context.fillRect(box_x, box_y, box_w, box_h);
-			context.setFillStyle(CssColor.make("white"));
-			context.fillText("" + myConveyor.getID(), box_x + 5, box_y + 10);
-			
-			// incoming job
-			context.setFillStyle(CssColor.make("black"));			
-			
-			if (myConveyor.hasIncomingJob())
-				context.setFillStyle(CssColor.make("red"));
-			
-			context.fillRect(box_x, box_y, 5, box_h / 2);
-			
-			// outgoing job
-			context.setFillStyle(CssColor.make("black"));
-			
-			if (myConveyor.hasOutgoingJob())
-				context.setFillStyle(CssColor.make("green"));
-			
-			context.fillRect(box_x, box_y + (box_h / 2), 5, box_h / 2);
+		if(Debugging.showIDs) {
+			if (!(myConveyor instanceof ConveyorWall)) {
+				int box_x = myConveyor.getX() + 20;
+				int box_y = myConveyor.getY() - 0;
+				int box_w = 20;
+				int box_h = 12;
+				
+				context.setFillStyle(CssColor.make("black"));
+				context.fillRect(box_x, box_y, box_w, box_h);
+				context.setFillStyle(CssColor.make("white"));
+				context.fillText("" + myConveyor.getID(), box_x + 5, box_y + 10);
+				
+				// incoming job
+				context.setFillStyle(CssColor.make("black"));
+				
+				if (myConveyor.hasIncomingJob())
+					context.setFillStyle(CssColor.make("red"));
+				
+				context.fillRect(box_x, box_y, 5, box_h / 2);
+				
+				// outgoing job
+				context.setFillStyle(CssColor.make("black"));
+				
+				if (myConveyor.hasOutgoingJob())
+					context.setFillStyle(CssColor.make("green"));
+				
+				context.fillRect(box_x, box_y + (box_h / 2), 5, box_h / 2);
+			}
 		}
 		
 		//jobcounter
-		if(myConveyor instanceof ConveyorRamp && ((ConveyorRamp) myConveyor).getRampType() == ConveyorRamp.RAMP_EXIT) {
-			context.setFillStyle(CssColor.make(0, 63, 127));
-			context.fillText(((ConveyorRamp) myConveyor).getJobCounter() + "", myConveyor.getX() + 22, myConveyor.getY() + 22);
+		if(Debugging.showJobCounter) {
+			if(myConveyor instanceof ConveyorRamp && ((ConveyorRamp) myConveyor).getRampType() == ConveyorRamp.RAMP_EXIT) {
+				context.setFillStyle(CssColor.make(0, 63, 127));
+				context.fillText(((ConveyorRamp) myConveyor).getJobCounter() + "", myConveyor.getX() + 22, myConveyor.getY() + 22);
+			}
 		}
 	}
 
@@ -822,8 +830,8 @@ public class MainFramePresenter extends Presenter {
 	 * @author Matthias
 	 */
 	public void setSimulationState(boolean started) {
-		bSimulationStarted = started;
-		
+		bSimulationStarted = started;		
+		mapSimMenuItems.get("Neues Szenario anlegen").setEnabled(!hasSimulationStarted());
 		mapSimMenuItems.get("Laden").setEnabled(!hasSimulationStarted());
 		mapSimMenuItems.get("Speichern").setEnabled(!hasSimulationStarted());
 		mapSimMenuItems.get("Speichern unter...").setEnabled(!hasSimulationStarted());
@@ -903,8 +911,15 @@ public class MainFramePresenter extends Presenter {
 		// --- menu bar ---
 
 		// file menu
+		String menuName = "Neues Szenario anlegen";
+		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar().addItem(menuName, new Command() {
+			public void execute() {
+				currentSzenario=new Szenario();
+				loadSzenario(currentSzenario);
+			}
+		}));
 
-		String menuName = "Laden";
+		menuName = "Laden";
 		mapSimMenuItems.put(menuName, this.display.getSimulationMenuBar().addItem(menuName, new Command() {
 			public void execute() {
 				getScenarioInfosFromServerAndShow();

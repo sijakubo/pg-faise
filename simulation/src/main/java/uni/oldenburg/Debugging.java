@@ -3,7 +3,6 @@ package uni.oldenburg;
 /**
  * @author Christopher Matthias
  */
-
 public class Debugging {
 	// Logger Messages
 	public final static boolean showAgentStartupMessages	= false;
@@ -18,4 +17,6 @@ public class Debugging {
 	
 	//View
 	public static final boolean showCharge					= false;
+	public static final boolean showIDs						= true;
+	public static final boolean showJobCounter				= true;
 }

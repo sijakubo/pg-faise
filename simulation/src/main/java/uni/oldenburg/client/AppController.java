@@ -14,7 +14,12 @@ import uni.oldenburg.client.service.SimulationService;
 import uni.oldenburg.client.service.SimulationServiceAsync;
 import uni.oldenburg.client.view.MainFrameView;
 
-
+/**
+ * Klasse erstellt View und ermoeglicht einen Viewwechsel. Falls weitere Views eingebaut werden sollen, kann in der onValueChange
+ * Methode ein Viewwechsel eingebaut werden.
+ * @author Raschid
+ * 
+ */
 public class AppController extends Presenter implements ValueChangeHandler<String> {
    private HasWidgets container;
 
