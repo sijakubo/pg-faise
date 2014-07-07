@@ -112,6 +112,7 @@ public class RampOrderAgent extends Agent {
 					switch(myConveyor.getRampType()) {
 						case ConveyorRamp.RAMP_ENTRANCE:
 							enquireRampsMsg = new ACLMessage(MessageType.ENQUIRE_RAMPS_WITHOUT_ENTRANCE);
+                     logger.log(Level.INFO, "[SendEnquirePackageRequestRelay] enquiring for package: " + packageID);
 							break;
 						case ConveyorRamp.RAMP_EXIT:
 							enquireRampsMsg = new ACLMessage(MessageType.ENQUIRE_RAMPS_STORAGE);
@@ -194,7 +195,7 @@ public class RampOrderAgent extends Agent {
 						
 						int selectedConveyorID = lstConveyorRamps.get(randomIndex);
 						
-						SetSelectedIDandPendingStatus(myAgent, selectedConveyorID);
+						setSelectedIdAndPendingStatus(myAgent, selectedConveyorID);
 						
 						// initialize auction
 						ACLMessage msgAuctionStart = new ACLMessage(MessageType.AUCTION_START);
@@ -228,7 +229,7 @@ public class RampOrderAgent extends Agent {
 		}
 	}
 	
-	void SetSelectedIDandPendingStatus(Agent myAgent, int selectedConveyorID) {
+	void setSelectedIdAndPendingStatus(Agent myAgent, int selectedConveyorID) {
 		ACLMessage msgSetDST = new ACLMessage(MessageType.SET_DESTINATION);
 		
 		//logger.log(Level.INFO, "Selected ConveyorID: " + selectedConveyorID);
@@ -237,14 +238,14 @@ public class RampOrderAgent extends Agent {
 			msgSetDST.addUserDefinedParameter("destinationID", "" + selectedConveyorID);
 			AgentHelper.addReceiver(msgSetDST, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
 			
-			SendIncomingJobFlag(myAgent, selectedConveyorID);
+			sendIncomingJobFlag(myAgent, selectedConveyorID);
 			
 		}
 		else if (myConveyor.getRampType() == ConveyorRamp.RAMP_EXIT) {
 			msgSetDST.addUserDefinedParameter("destinationID", "" + myConveyor.getID());
 			AgentHelper.addReceiver(msgSetDST, myAgent, PackageAgent.NAME, selectedConveyorID, mySzenario.getId());
 			
-			SendIncomingJobFlag(myAgent, myConveyor.getID());
+			sendIncomingJobFlag(myAgent, myConveyor.getID());
 		}
 		else
 			return;
@@ -256,13 +257,13 @@ public class RampOrderAgent extends Agent {
 		//logger.log(Level.INFO, "ConveyorID: " + myConveyor.getID() + " -> selCID: " + selectedConveyorID);
 	}
 	
-	void SendIncomingJobFlag(Agent myAgent, int receiverID) {
-		//logger.log(Level.INFO, "[SendIncomingJobFlag] Receiver: " + receiverID);
-		
+	private void sendIncomingJobFlag(Agent myAgent, int receiverID) {
+		logger.log(Level.INFO, "[SendIncomingJobFlag] Receiver: " + receiverID);
+
 		ACLMessage msgSetFlag = new ACLMessage(MessageType.SET_PENDING_INCOMING_STATUS);
 		AgentHelper.addReceiver(msgSetFlag, myAgent, RampOrderAgent.NAME, receiverID, mySzenario.getId());
 		send(msgSetFlag);
-		
+
 		myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.SET_JOB_FLAG_COMPLETED), 2000);
 		
 		//logger.log(Level.INFO, "Conveyor " + receiverID + ": " + "incoming flag set");
