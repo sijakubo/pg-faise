@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author Christopher Matthias
+ * @author Christopher, Matthias, Raschid, Nagi
  */
 
 @SuppressWarnings("serial")
@@ -30,6 +30,12 @@ public class JobList implements Serializable {
 	}
 	
 	public void addRandomJobs(int numberOfJobs) {
+		if(lstJobs.size() == 0) {
+			Job.idCounterPacket = 0;
+			JobList.lastTimestamp = 0;
+			lstOutgoingPackageIDs.clear();
+		}
+		
 		for (int i = 0; i < numberOfJobs; i++) {
 			int destinationId = (Math.random() < 0.5) ? 0 : -1;
 
@@ -37,7 +43,7 @@ public class JobList implements Serializable {
 			//int standardDeviation = 3;
 
 			int timestamp = (lastTimestamp) + 1; // + (int) ((expectedValue + (standardDeviation * new Random().nextGaussian())) % 1000);
-			lastTimestamp = timestamp;
+			JobList.lastTimestamp = timestamp;
 			
 			addJob(new Job(timestamp, destinationId, this));
 		}

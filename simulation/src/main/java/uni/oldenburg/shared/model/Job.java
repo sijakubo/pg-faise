@@ -12,7 +12,7 @@ public class Job implements Serializable, Comparable<Job> {
 	public static final int INCOMING = 0;
 	public static final int OUTGOING = 1;
 	
-	private static int idCounterPacket = 0;
+	 static int idCounterPacket = 0;
 	
     private int type = -1;
     private int timestamp = 0;
@@ -58,7 +58,7 @@ public class Job implements Serializable, Comparable<Job> {
 			if (this.packageId < 1)
 				this.packageId = 1;
 
-			if (Math.random() < 0.1 || idCounterPacket < 5)
+			if (Math.random() < 0.1 || idCounterPacket < 3)
 				packageId += 5 + (packageId / 10);
 			
 			foundUseablePackageID = lstJob.isPackageIDAvailableOutgoing(this.packageId);
