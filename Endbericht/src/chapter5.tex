@@ -1,0 +1,12 @@
+\section{Teilbericht Simulation}
+Der Teilbericht der Simulationsgruppe beschreibt die entwickelte Simulationssoftware von der Anforderungsanalyse über die Implementierung hinzu Testen und Validieren. 
+\subsection{Lastenheft}
+Mit der Komponente Simulation soll auf Basis des Ablaufkonzepts eine Software erstellt werden, die es erlaubt einen automatisierten Materialfluss auf Basis von FTS zu simulieren ohne dabei an die zahlenmäßigen Beschränkungen des physischen Systems gebunden zu sein. Vonseiten des Auftraggebers wurde ein Lastenheft vorgegeben, dass die gewünschten Kernfunktionalitäten der Simulationssoftware beschreibt. Es enthält folgende Anforderungen:
+\begin{enumerate}
+\item \textbf{Akteure}: Die virtuellen Akteure sind in ihrem Verhalten und Eigenschaften (Geschwindigkeit, Dauer einer Paketübergabe etc.) den echten Objekten aus dem physischen System nachempfunden (Volksbots und passive Rampen).
+\item \textbf{Ablauf}: Der in Abschnitt 4.1 beschriebene Ablauf, wird in der Simulation umgesetzt. 
+\item \textbf{Visualisierung}: Die Zustände der Akteure werden dynamisch visualisiert. Wird beispielsweise die Anzahl der Pakete auf einer Rampe um eins erhöht, dann soll dies unmittelbar in der Anzeige visualisiert werden.
+\item \textbf{Generierung von Aufträgen}: Eingehende und Ausgehende Transportaufträge können erstellt und simuliert werden. 
+\item \textbf{Einstellungen}: Verschiedene Parameter der Simulation (Anzahl und Art der Akteure, Anzahl der Aufträge etc.) können angepasst werden.
+\item \textbf{Statistiken}: Es werden wichtige Daten geloggt, um am Ende eines Simulationslaufs aussagekräftige Analysen über Stromverbrauch, gefahrene Strecken, Vergabe von Aufträgen usw. machen zu können.
+\end{enumerate}

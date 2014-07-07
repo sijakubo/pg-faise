@@ -1,0 +1,20 @@
+\section{Allgemeine Anforderungen}
+In diesem Abschnitt sollen allgemeine Anforderungen beschrieben werden, die für das Gesamtsystem gelten. Zunächst soll ein Ablaufszenario beschrieben werden, dass beschreibt, wie Rampen und Volksbots im Lager miteinander kommunizieren.
+\subsection{Ablaufszenario}
+Das Ablaufszenario beschreibt die logischen Schritte, die von den Akteuren ausgeführt werden, um das Ziel zu erreichen, ohne dabei auf die technischen Implementierungsdetails einzugehen. Es dient als Basis für die Implementierung sowohl des physischen Systems als auch der Simulationssoftware.
+In der Software soll der Ablauf komplett umgesetzt werden. Aus zeitlichen Gründen ist es nicht möglich den gesamten Ablauf im physischen System umzusetzen, weshalb dort eine Anpassung erfolgt. Der Ablauf lässt sich in folgende Schritte unterteilen:
+
+\begin{itemize}
+\item Nachdem ein Paket am Eingang angekommen ist, wird ihm eine ID zugewiesen, so dass es eindeutig anhand seiner ID identifiziert werden kann.
+\item Die Eingangsrampe auf der sich das Paket befindet, fragt alle Ausgänge, ob dieses Paket benötigt wird und zeitgleich werden die Zwischenrampen kontaktiert, um zu überprüfen, ob dort Platz frei ist. Falls ein Ausgang antwortet, wird dem Paket die ID des Ausgangs als Ziel zugewiesen. Falls nicht, wird dem Paket die ID eines der freien Zwischenlager zugeordnet.
+\item
+Falls der Ausgang eine oder mehrere Pakete benötigt, fragt der Ausgang die Zwischenrampen, ob ein Paket mit der vorhandenen ID verfügbar ist. Falls dies der Fall ist, wird dem Paket aus dem Zwischenlager die Ausgangs ID als Ziel zugewiesen.
+\item
+Sowohl Eingang als auch Ausgang stellen ihre Anfragen zyklisch, da bei einer einzigen Anfrage keine Garantie besteht, dass eine Zielrampe gefunden wird.
+\item
+Nachdem einem Paket ein Ziel zugewiesen wurde, versucht die Rampe ein Transportmittel zu finden. Dazu werden die Volksbots kontaktiert, die anhand des Energie- und Zeitaufwands ein Angebot abgeben. Die Rampe wählt den Bot mit dem besten Angebot aus.
+\item
+Der ausgewählte Volksbot bewegt sich zur Rampe mit dem Paket und meldet sich an der Rampe, wenn er seine Zielposition erreicht hat. Die Rampe übergibt dem Volksbot das Paket mit allen notwendigen Informationen (ID und Ziel).
+\item
+Der Volksbot fährt zur Zielrampe, meldet sich dort an und übergibt das Paket.
+\end{itemize} 
