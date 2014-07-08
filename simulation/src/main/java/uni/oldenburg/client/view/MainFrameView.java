@@ -26,8 +26,7 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	private MenuBar			jobMenuBar;
 	
 	private CellTable<Job>	ctJobTable = new CellTable<Job>();
-	private Button			   btnAddJobs;
-	private Button         	btnStrategies;
+	private Button			btnAddJobs;
 	
 	// conveyor menu
 	private VerticalPanel 	vpConveyor;
@@ -102,12 +101,6 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	    
 	    vpLeftFrame.add(hpGenerateJobs);
 		
-		//button for changing pathfinding strategy
-		
-		btnStrategies = new Button("Strategien");
-		btnStrategies.setText("Strategien");
-		vpLeftFrame.add(btnStrategies);
-		
 		// conveyor list
 		vpConveyor = new VerticalPanel();
 		vpConveyor.addStyleName("conveyor_panel");
@@ -152,10 +145,6 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		
 		initWidget(vpMainFrame);
 	}
-
-    public HasClickHandlers getStrategiesButton() {
-        return btnStrategies;
-    }
 
     public CellTable<Job> getJobTable() {
         return ctJobTable;

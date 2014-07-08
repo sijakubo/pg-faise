@@ -80,7 +80,7 @@ import de.novanic.eventservice.client.event.RemoteEventServiceFactory;
 import de.novanic.eventservice.client.event.domain.DomainFactory;
 import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 /**
- * Der Mainframepresenter ist dafuer da das Hauptfenster zu initialisieren und alle Aktionen durchzuführen, die durch
+ * Der Mainframepresenter ist dafuer da, das Hauptfenster zu initialisieren und alle Aktionen durchzuführen, die durch
  * das Drücken eines Gui-Elements initialisiert werden.
  * @author Matthias, Raschid, Nagihan, Simon, Christopher
  */
@@ -106,12 +106,11 @@ public class MainFramePresenter extends Presenter {
 	
 	Map<String, MenuItem> mapSimMenuItems = new HashMap<String, MenuItem>();
 	Map<String, MenuItem> mapJobMenuItems = new HashMap<String, MenuItem>();
-    //Das Display ist dafür da von den eigentlichen Gui-Elementen zu abstrahieren, damit diese beliebig austauschbar sind.
+    //Das Display ist dafür da, von den eigentlichen Gui-Elementen zu abstrahieren, damit diese beliebig austauschbar sind.
 	public interface IDisplay {
 		CellTable<Job> getJobTable();
 		
 		HasClickHandlers getAddJobsButton();
-		HasClickHandlers getStrategiesButton();
 		HasClickHandlers getConveyorRampButton();
 		HasClickHandlers getConveyorVehicleButton();
 		HasClickHandlers getConveyorWallButton();
@@ -320,13 +319,6 @@ public class MainFramePresenter extends Presenter {
 				}
 				
 				MainFramePresenter.this.display.getJobCount().setText("1");
-			}
-		});
-	}
-
-	private void addStrategiesButtonListener() {
-		display.getStrategiesButton().addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
 			}
 		});
 	}
@@ -858,7 +850,6 @@ public class MainFramePresenter extends Presenter {
 	public void bind() {
 		this.initializeMenuBars();
 		this.addAddJobsButtonListener();
-		this.addStrategiesButtonListener();
 		this.addConveyorRampButtonListener();
 		this.addConveyorVehicleButtonListener();
 		this.addConveyorWallButtonListener();
@@ -867,7 +858,7 @@ public class MainFramePresenter extends Presenter {
 	}
 	
 	/**
-	 * Method should check if the current Szenario is consisten.
+	 * Method should check if the current Szenario is consistent.
 	 * Consistency means that there is at least one Ramp from each type
 	 * @author Nagi
 	 */	
