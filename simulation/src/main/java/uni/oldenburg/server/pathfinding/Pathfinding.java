@@ -250,27 +250,27 @@ public abstract class Pathfinding implements IPathfinding {
 
 	}
 	
-	protected void saveBestPoint(PathPoint curPathPoint, Direction newDirection, int minValue,List<PathPoint> lstPossiblePoints){
+	protected int saveBestPoint(PathPoint curPathPoint, Direction newDirection, int minValue,List<PathPoint> lstPossiblePoints){
 		Point neighborPoint = getNeighborPoint(curPathPoint.getPoint(), newDirection);
 		int newValue = getGridValue(neighborPoint);	
 		
 		
 		switch(newDirection){
 		case TopLeft:
-			 if (isWall(curPathPoint.getPoint(), Direction.Top)) return;
-			 if (isWall(curPathPoint.getPoint(), Direction.Left)) return;
+			 if (isWall(curPathPoint.getPoint(), Direction.Top)) return minValue;
+			 if (isWall(curPathPoint.getPoint(), Direction.Left)) return minValue;
 			break;
 		case TopRight:
-			if (isWall(curPathPoint.getPoint(), Direction.Top)) return;
-			if (isWall(curPathPoint.getPoint(), Direction.Right)) return;
+			if (isWall(curPathPoint.getPoint(), Direction.Top)) return minValue;
+			if (isWall(curPathPoint.getPoint(), Direction.Right)) return minValue;
 			break;
 		case BottomLeft:
-			if (isWall(curPathPoint.getPoint(), Direction.Bottom)) return;
-			if (isWall(curPathPoint.getPoint(), Direction.Left)) return;
+			if (isWall(curPathPoint.getPoint(), Direction.Bottom)) return minValue;
+			if (isWall(curPathPoint.getPoint(), Direction.Left)) return minValue;
 			break;
 		case BottomRight:
-			if (isWall(curPathPoint.getPoint(), Direction.Bottom)) return;
-			if (isWall(curPathPoint.getPoint(), Direction.Right)) return;
+			if (isWall(curPathPoint.getPoint(), Direction.Bottom)) return minValue;
+			if (isWall(curPathPoint.getPoint(), Direction.Right)) return minValue;
 			 break;
 		default:
 			break;
@@ -310,6 +310,7 @@ public abstract class Pathfinding implements IPathfinding {
 			minValue = newValue;
 		}
 		
+		return minValue;
 	}
 
 	

@@ -1,6 +1,9 @@
 package uni.oldenburg.server.agent;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
@@ -11,9 +14,17 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import uni.oldenburg.Debugging;
+import uni.oldenburg.client.view.MainFrameView;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
+import uni.oldenburg.server.pathfinding.GridItem;
+import uni.oldenburg.server.pathfinding.IPathfinding;
+import uni.oldenburg.server.pathfinding.PathPoint;
+import uni.oldenburg.server.pathfinding.Pathfinding;
+import uni.oldenburg.server.pathfinding.GridItem.GridItemType;
+import uni.oldenburg.server.pathfinding.Pathfinding.PathMessageType;
+import uni.oldenburg.server.pathfinding.PathfindingSingle;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.ConveyorVehicle;
@@ -35,7 +46,11 @@ public class VehicleRoutingAgent extends Agent {
 	
 	private boolean auctionInProgress = false;
 	
+	private IPathfinding myPF = null;
+	
 	private Logger logger = Logger.getLogger(VehicleRoutingAgent.class);
+
+	private List<List<PathPoint>> lstPathPoints = null;
 
 	/**
      * @author Matthias
@@ -47,6 +62,22 @@ public class VehicleRoutingAgent extends Agent {
 			mySzenario = (Szenario) args[0];
 			myConveyor = (ConveyorVehicle) args[1];
 		}
+		
+		int myColumnCount = MainFrameView.canvasWidth / Conveyor.RASTER_SIZE;
+		int myRowCount = MainFrameView.canvasHeight / Conveyor.RASTER_SIZE;
+		
+		List<GridItem> lstGridItem = new ArrayList<GridItem>(myColumnCount * myRowCount);
+		
+		for(Conveyor myConveyor : mySzenario.getConveyorList()) {
+			if (!(myConveyor instanceof ConveyorVehicle)) {
+				int x = myConveyor.getX();
+				int y = myConveyor.getY();
+				GridItem myItem = lstGridItem.get(Pathfinding.getIndex(x, y, myColumnCount));
+				myItem.setItemType(GridItemType.WallItem);
+			}
+		}
+		
+		myPF = new PathfindingSingle(myColumnCount, myRowCount, lstGridItem);
 		
 		addBehaviour(new EstimationRequest(MessageType.ESTIMATION_REQUEST));
 		addBehaviour(new AssignJob(MessageType.ASSIGN_JOB_TO_VEHICLE));
@@ -155,7 +186,7 @@ public class VehicleRoutingAgent extends Agent {
 	 * 
 	 * assign job to current vehicle when ids match
 	 * 
-     * @author Matthias
+     * @author Matthias, Nagi
      */
 	private class AssignJob extends CyclicReceiverBehaviour {
 		protected AssignJob(int msgType) {
@@ -176,6 +207,7 @@ public class VehicleRoutingAgent extends Agent {
 				ACLMessage msgSendPaths = new ACLMessage(MessageType.DRIVING_START);
 				msgSendPaths.addUserDefinedParameter("srcRampID", "" + srcRampID);
 				msgSendPaths.addUserDefinedParameter("dstRampID", "" + dstRampID);
+				msgSendPaths.setContentObject((Serializable) lstPathPoints.get(0));
 				
 				AgentHelper.addReceiver(msgSendPaths, myAgent, VehiclePlattformAgent.NAME, myConveyor.getID(), mySzenario.getId());
 				send(msgSendPaths);
@@ -186,6 +218,19 @@ public class VehicleRoutingAgent extends Agent {
 	}
 	
 	private int CalculateEstimation(Point startPoint, Point stopPoint) {
-		return (int)(Math.random() * 100);
+		PathMessageType pmtReturn = myPF.findPath(startPoint, stopPoint, lstPathPoints);
+		
+		if (pmtReturn != PathMessageType.PathFound)
+			return -1;
+		
+		int sumEstimation = 0;
+		
+		List<PathPoint> lstPoints = lstPathPoints.get(0);
+		
+		for(PathPoint tmpPathPoint : lstPoints) {
+			sumEstimation += tmpPathPoint.getEstimationValue();
+		}
+		
+		return sumEstimation;
 	}
 }

@@ -110,7 +110,10 @@ public class RampRoutingAgent extends Agent {
 						
 						// remember vehicles, who don't have a pending job
 						if (msgReceive.getUserDefinedParameter("pendingJob").equals("0")) {	
-							mapVehicleEstimation.put(
+							int estimation = Integer.parseInt(msgReceive.getUserDefinedParameter("estimation"));
+							
+							if (estimation > 0)
+								mapVehicleEstimation.put(
 									Integer.parseInt(msgReceive.getUserDefinedParameter("vehicleID")),
 									Integer.parseInt(msgReceive.getUserDefinedParameter("estimation")));
 						}

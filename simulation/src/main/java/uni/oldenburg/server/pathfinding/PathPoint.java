@@ -1,13 +1,17 @@
 package uni.oldenburg.server.pathfinding;
 
+import jade.util.leap.Serializable;
 import uni.oldenburg.shared.model.Point;
 
-public class PathPoint {
+@SuppressWarnings("serial")
+public class PathPoint implements Serializable {
 	private Point myPoint= new Point(0,0);
 	private int myStepValue = 0;
 	private int myEstimationValue = 0;
 	
 	uni.oldenburg.server.pathfinding.Pathfinding.Direction Direction;
+	
+	public PathPoint() {};
 	
 	public Point getPoint() {
 		return myPoint;

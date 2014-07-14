@@ -1,6 +1,7 @@
 package uni.oldenburg.server.pathfinding;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import uni.oldenburg.server.pathfinding.GridItem.GridItemType;
@@ -65,17 +66,16 @@ public class PathfindingSingle extends Pathfinding {
         	curPathPoint.setStepValue(lstGridItem.get(getIndex(curPathPoint.getPoint().getX(), curPathPoint.getPoint().getY(), myColumnCount)).getGridValue());
             int minValue = curPathPoint.getStepValue();
 
-            saveBestPoint(curPathPoint, Direction.Left, minValue, lstPossiblePoints);
-            saveBestPoint(curPathPoint, Direction.Top, minValue, lstPossiblePoints);
-            saveBestPoint(curPathPoint, Direction.Right, minValue, lstPossiblePoints);
-            saveBestPoint(curPathPoint, Direction.Bottom, minValue, lstPossiblePoints);
+            minValue = saveBestPoint(curPathPoint, Direction.Left, minValue, lstPossiblePoints);
+            minValue = saveBestPoint(curPathPoint, Direction.Top, minValue, lstPossiblePoints);
+            minValue = saveBestPoint(curPathPoint, Direction.Right, minValue, lstPossiblePoints);
+            minValue = saveBestPoint(curPathPoint, Direction.Bottom, minValue, lstPossiblePoints);
     	            
             if(bDriveDiagonal){
-            	saveBestPoint(curPathPoint, Direction.TopLeft, minValue, lstPossiblePoints);
-                saveBestPoint(curPathPoint, Direction.TopRight, minValue, lstPossiblePoints);
-                saveBestPoint(curPathPoint, Direction.BottomLeft, minValue, lstPossiblePoints);
-                saveBestPoint(curPathPoint, Direction.BottomRight, minValue, lstPossiblePoints);
-            	
+            	minValue = saveBestPoint(curPathPoint, Direction.TopLeft, minValue, lstPossiblePoints);
+            	minValue = saveBestPoint(curPathPoint, Direction.TopRight, minValue, lstPossiblePoints);
+            	minValue = saveBestPoint(curPathPoint, Direction.BottomLeft, minValue, lstPossiblePoints);
+            	minValue = saveBestPoint(curPathPoint, Direction.BottomRight, minValue, lstPossiblePoints);
             }
             
             if (lstPossiblePoints.size() > 0){
@@ -121,18 +121,18 @@ public class PathfindingSingle extends Pathfinding {
             	} else{
             		returnValue = PathMessageType.PathBlocked;
             	}
-            	break;
-            	
-            	//lstSinglePathpoints.reverse();
-            
-            
-            
+            	break;            
             }
-            
         }
         
+        Collections.reverse(lstSinglePathpoints);
         
+    	this.lstPathPoints.add(lstSinglePathpoints);
+    	
+    	lstPathPoints = this.lstPathPoints;
+    	
+    	bRunning = false;
         
-		return null;
+		return returnValue;
 	}
 }

@@ -64,6 +64,8 @@ public class GridItem {
 			case WallItem:
 				myGridValue = -3;
 				break;
+			default:
+				break;
 		}
 	}
 }
