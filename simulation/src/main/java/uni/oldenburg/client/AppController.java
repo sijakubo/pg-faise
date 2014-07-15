@@ -15,7 +15,7 @@ import uni.oldenburg.client.service.SimulationServiceAsync;
 import uni.oldenburg.client.view.MainFrameView;
 
 /**
- * Klasse erstellt View und ermoeglicht einen Viewwechsel. Falls weitere Views eingebaut werden sollen, kann in der onValueChange
+ * Klasse initialisiert das Hauptfenster und ermöglicht einen Viewwechsel. Falls weitere Views eingebaut werden sollen, kann in der onValueChange
  * Methode ein Viewwechsel eingebaut werden.
  * @author Raschid
  * 

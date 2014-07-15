@@ -80,33 +80,34 @@ import de.novanic.eventservice.client.event.RemoteEventServiceFactory;
 import de.novanic.eventservice.client.event.domain.DomainFactory;
 import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 /**
- * Der Mainframepresenter ist dafuer da, das Hauptfenster zu initialisieren und alle Aktionen durchzuführen, die durch
+ * Der Mainframepresenter ist dafür da, das Hauptfenster zu initialisieren und alle Aktionen durchzuführen, die durch
  * das Drücken eines Gui-Elements initialisiert werden.
  * @author Matthias, Raschid, Nagihan, Simon, Christopher
  */
 public class MainFramePresenter extends Presenter {
-	public final static String DOMAIN_NAME = "uni.oldenburg.faise";
+	public final static String DOMAIN_NAME = "uni.oldenburg.faise";//Domain für den Eventservice
 	
-	private final IDisplay display;
-	private Szenario currentSzenario;
-	Conveyor dropableConveyor;
-	JobList lstJobs = new JobList();
+	private final IDisplay display;//Display Variable
+	private Szenario currentSzenario;//Aktuelles Szenario. Speichert Informationen zu Bots, Rampen und Hindernissen
+	Conveyor dropableConveyor;//Conveyor Variable für Dragn an Drop
+	JobList lstJobs = new JobList();//Aktuelle Auftragsliste
 	
     private AgentPlatformServiceAsync agentPlatformService = null;
     private RemoteEventService myRES = null;
 	
-    // client started simulation
+    // Variable merkt sich, ob die Simulation auf dem Client gestartet wurde
 	private boolean bSimulationStarted = false;
-	// server started simulation
+	// Variable merkt sich, ob die Simulation auf dem Server gestartet wurde
 	private boolean bSimulationRunning = false;
 	
 	private int elapsedTimeSec = 0;
-	
+	//Timer Variable. Der Timer schickt die Aufträge zum richtigen Zeitpunkt an den Server
 	Timer tmrJobStarter = null;
 	
 	Map<String, MenuItem> mapSimMenuItems = new HashMap<String, MenuItem>();
 	Map<String, MenuItem> mapJobMenuItems = new HashMap<String, MenuItem>();
-    //Das Display ist dafür da, von den eigentlichen Gui-Elementen zu abstrahieren, damit diese beliebig austauschbar sind.
+	
+    //Das Display ist dafür da, von den eigentlichen Gui-Elementen zu abstrahieren, damit Änderungen an der View keine Änderungen am Presenter erfordern.
 	public interface IDisplay {
 		CellTable<Job> getJobTable();
 		
@@ -165,13 +166,13 @@ public class MainFramePresenter extends Presenter {
 	}
 
 	/**
-	 * setup listener of canvas object for managing drag & drop handling
+	 * Fügt dem Canvas Listener hinzu für das Drag an Drop von Objekten
 	 * 
 	 * @author Matthias
 	 */
 	private void addCanvasListener() {
 		/**
-		 * disable default context menu in canvas
+		 * Das Default Kontext Menu im Canvas wird disabled
 		 * 
 		 * @author Matthias
 		 */
@@ -183,7 +184,7 @@ public class MainFramePresenter extends Presenter {
 		}, ContextMenuEvent.getType());
 
 		/**
-		 * show movement of drag&drop-able object
+		 * Zeigt die Bewegung eines Drag an Drop Objekts an, wenn ein Objekt ausgewählt wurde und wenn eine Simulation nicht läuft.
 		 * 
 		 * @author Matthias
 		 */
@@ -209,7 +210,7 @@ public class MainFramePresenter extends Presenter {
 		});
 		
 		/**
-		 * remove drag&drop-able object when mouse leaves canvas object
+		 * Entfernt Drag an Drop Objekt, wenn die Mouse den Bereich des Canvas verlässt.
 		 * 
 		 * @author Matthias
 		 */
@@ -224,7 +225,7 @@ public class MainFramePresenter extends Presenter {
 		});
 
 		/**
-		 * drag, drop and rotate objects on canvas
+		 * Drag, Drop und Rotation von Objekten auf dem Canvas
 		 * 
 		 * @author Matthias, Christopher
 		 */
@@ -235,9 +236,9 @@ public class MainFramePresenter extends Presenter {
 				if (isSimulationRunning())
 					return;
 
-				// conveyor drag & drop
+				// Drag & Drop von Conveyorn durch Drücken der linken Maustaste
 				if (event.getNativeButton() == NativeEvent.BUTTON_LEFT) {
-					// add conveyor
+					// Wenn vor dem Drücken der Maustaste schon ein Objekt ausgewählt wurde, dann wird geprüft, ob es platziert werden kann.
 					if (myConveyor != null) {
 						// calculate spot available
 						boolean spotAvailable = true;
@@ -261,11 +262,11 @@ public class MainFramePresenter extends Presenter {
 								MainFramePresenter.this.display.log("" +((ConveyorRamp)myConveyor).getRampType());
 						}
 					} else {
-						// grab & move conveyor
+						// Falls kein Objekt ausgewählt wurde, wird ein Objekt gedragged, falls auf der entsprechenden Position vorhanden.
 						grabConveyor(event.getX(), event.getY());
 					}
 				} else if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT) {
-					// rotate conveyors
+					// Wird die rechte Maustaste gedrückt, dann wird das Objekt rotiert, sofern es sich um eine Rampe oder einen Bot handelt.
 					if (myConveyor == null)
 						return;
 
@@ -282,7 +283,7 @@ public class MainFramePresenter extends Presenter {
 		});
 
 		/**
-		 * keyboard handling for canvas to delete conveyor
+		 * Wenn der Escape Button gedrückt wird, dann wird ein Objekt gelöscht.
 		 * 
 		 * @author Matthias
 		 */
@@ -300,7 +301,7 @@ public class MainFramePresenter extends Presenter {
 	}
 
 	/**
-	 * add random jobs
+	 * Zufälliges Hinzufügen von Jobs
 	 * 
 	 * @author Matthias
 	 */
@@ -530,7 +531,7 @@ public class MainFramePresenter extends Presenter {
 	}
 
 	/**
-	 * check if spot is taken by a conveyor
+	 * Prüft, ob auf der entsprechenden x und y Position ein Conveyor ist.
 	 * 
 	 * @author Matthias
 	 */
