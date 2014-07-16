@@ -16,6 +16,7 @@ public class GridItem {
 
 	public GridItem(int newGridItemSize) {
 		this.gridSize = newGridItemSize;
+		setItemType(GridItemType.DefaultItem, true);
 	}
 	
 	public int getGridValue() {

@@ -66,12 +66,21 @@ public class VehicleRoutingAgent extends Agent {
 		int myColumnCount = MainFrameView.canvasWidth / Conveyor.RASTER_SIZE;
 		int myRowCount = MainFrameView.canvasHeight / Conveyor.RASTER_SIZE;
 		
-		List<GridItem> lstGridItem = new ArrayList<GridItem>(myColumnCount * myRowCount);
+		List<GridItem> lstGridItem = new ArrayList<GridItem>();
+		
+		for (int i = 0; i < myColumnCount * myRowCount; ++i) {
+			lstGridItem.add(new GridItem(1));
+		}
+		
+		logger.log(Level.INFO, "w/h: " + myColumnCount + " / " + myRowCount);
 		
 		for(Conveyor myConveyor : mySzenario.getConveyorList()) {
 			if (!(myConveyor instanceof ConveyorVehicle)) {
-				int x = myConveyor.getX();
-				int y = myConveyor.getY();
+				int x = myConveyor.getX() / Conveyor.RASTER_SIZE;
+				int y = myConveyor.getY() / Conveyor.RASTER_SIZE;
+				
+				logger.log(Level.INFO, "x/y: " + x + " / " + y + " -> " + Pathfinding.getIndex(x, y, myColumnCount));
+				
 				GridItem myItem = lstGridItem.get(Pathfinding.getIndex(x, y, myColumnCount));
 				myItem.setItemType(GridItemType.WallItem);
 			}
@@ -157,10 +166,24 @@ public class VehicleRoutingAgent extends Agent {
 					}
 				}
 				// calculate estimations
+				if (lstPathPoints != null) {
+					for (List<PathPoint> lstPoints : lstPathPoints) {
+						if (lstPoints != null)
+							lstPoints.clear();
+					}
+					
+					lstPathPoints.clear();
+						
+				}
+				
 				int toSourceRampEstimation = CalculateEstimation(curPoint, srcRampPoint);
 				int toDestinationRampEstimation = CalculateEstimation(srcRampPoint, dstRampPoint);
 				
 				sumEstimation = toSourceRampEstimation + toDestinationRampEstimation;
+				
+
+				if (toSourceRampEstimation < 0 || toDestinationRampEstimation < 0)
+					sumEstimation = -1;
 			}
 			else {
 				hasPendingJob = true;
@@ -207,7 +230,7 @@ public class VehicleRoutingAgent extends Agent {
 				ACLMessage msgSendPaths = new ACLMessage(MessageType.DRIVING_START);
 				msgSendPaths.addUserDefinedParameter("srcRampID", "" + srcRampID);
 				msgSendPaths.addUserDefinedParameter("dstRampID", "" + dstRampID);
-				msgSendPaths.setContentObject((Serializable) lstPathPoints.get(0));
+				msgSendPaths.setContentObject((Serializable) lstPathPoints);
 				
 				AgentHelper.addReceiver(msgSendPaths, myAgent, VehiclePlattformAgent.NAME, myConveyor.getID(), mySzenario.getId());
 				send(msgSendPaths);
@@ -217,19 +240,27 @@ public class VehicleRoutingAgent extends Agent {
 		}
 	}
 	
+	@SuppressWarnings("null")
 	private int CalculateEstimation(Point startPoint, Point stopPoint) {
-		PathMessageType pmtReturn = myPF.findPath(startPoint, stopPoint, lstPathPoints);
+		List<List<PathPoint>> lstPathPointsTmp = null;
+				
+		PathMessageType pmtReturn = myPF.findPath(startPoint, stopPoint, lstPathPointsTmp);
+		
+		lstPathPoints.add(lstPathPointsTmp.get(0));		
+	
 		
 		if (pmtReturn != PathMessageType.PathFound)
 			return -1;
 		
 		int sumEstimation = 0;
 		
-		List<PathPoint> lstPoints = lstPathPoints.get(0);
+		List<PathPoint> lstPoints = lstPathPointsTmp.get(0);
 		
 		for(PathPoint tmpPathPoint : lstPoints) {
 			sumEstimation += tmpPathPoint.getEstimationValue();
 		}
+		
+		logger.log(Level.INFO, "Est: " + sumEstimation);
 		
 		return sumEstimation;
 	}

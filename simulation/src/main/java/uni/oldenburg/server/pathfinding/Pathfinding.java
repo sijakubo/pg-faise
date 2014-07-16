@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uni.oldenburg.server.pathfinding.GridItem.GridItemType;
+import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.Point;
 
 public abstract class Pathfinding implements IPathfinding {
@@ -133,7 +134,7 @@ public abstract class Pathfinding implements IPathfinding {
 	}
 	
 	public static int getIndex(int x, int y, int myColumnCount) {
-		return y * myColumnCount + x;
+		return (y / Conveyor.RASTER_SIZE) * myColumnCount + (x / Conveyor.RASTER_SIZE);
 	}
 	
 	public static int getIndex(Point newPoint, int myColumnCount){
@@ -213,7 +214,7 @@ public abstract class Pathfinding implements IPathfinding {
 			Point curPoint = lstBlocksWithNewValue.get(0);
 			lstBlocksWithNewValue.remove(curPoint);
 			
-			GridItem myItem = lstGridItem.get(getIndex(curPoint, myColumnCount));
+			GridItem myItem = lstGridItem.get(getIndex(curPoint.getX(), curPoint.getY(), myColumnCount));
 			
 			if (myItem.myGridValue >= 0) {
 				for (Direction myDirection : lstDirectionBase) {

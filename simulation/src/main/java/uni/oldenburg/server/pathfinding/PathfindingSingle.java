@@ -25,7 +25,11 @@ public class PathfindingSingle extends Pathfinding {
 		if (bRunning)
 			return returnValue;
 		
-		lstPathPoints.clear();
+		if (lstPathPoints != null)
+			lstPathPoints.clear();
+		else {
+			lstPathPoints = new ArrayList<List<PathPoint>>();
+		}
 		
 		myStartPoint = newStartPoint;
 		myStopPoint = newStopPoint;
