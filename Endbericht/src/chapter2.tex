@@ -75,14 +75,30 @@ Die Schritte zur Erlangung der erforderlichen Fahr- und Positioniergenauigkeit s
 		\label{Systemarchitektur_FTS}
 \end{figure}
 Im Rahmen des Projekt FAISE wird die Navigation durch den Laser durchgef\"uhrt. Es kann hier kein Global Positioning System (GPS) verwendet werden, da das ganze Experiment in einem geschlossenen Raum gemacht wird.
-Weiterhin wird auch keine Navigation durch die physische Leitlinie oder durch die St\"utzpunkte im Boden erzielt, weil dazu der Boden gebrochen werden m\"usste.
+Weiterhin wird auch keine Navigation durch die physische Leitlinie oder durch die St\"utzpunkte im Boden erzielt, weil dazu der Boden aufgebrochen werden m\"usste.
 \end{itemize}
 
 \subsubsection{Steuerungstechnik}
-Die interne Materialflusssteuerung ist eine Vorstufe der Transportauftragsabwicklung und wird nur dann ben\"otigt, wenn die Transportauftr\"age nicht klar dezidiert \"ubertragen, sondern aufbereitet werden m\"ussen. Eine Anforderung wie z. B. ben\"otige Ware A an Maschine B erfordert eine Umsetzung in einen oder mehrere Transportauftr\"age nach dem klassischen Muster. Hole von C und Bringe nach D. Die FTS-interne Materialflusssteuerung kombiniert also Quelle und Senke \"uber die in ihr hinterlegten Transportbeziehungen zu einem Transportauftrag und schickt diesen zur Durchf\"uhrung an die Transportauftragsverwaltung. Diese ganze Transportauftragsverwaltung ist in der FTS-Leisteuerung geregelt. 
-Die FTS-Leitsteuerung ist die Kommandozentrale, um das FTS in das Umfeld zu integrieren. Au\"sserdem steuert es die FTF, die sich im System befinden. Damit ist das FTS dann in der 
-Lage, die ihm \"ubertragenen Auftr\"age zu erf\"ullen. "`Eine FTS-Leitsteuerung besteht aus Hard- und Software. Kern ist ein Computerprogramm, das auf einem oder mehreren Rechnern abl\"auft. Sie dient der Koordination mehrerer Fahrerloser Transportfahrzeuge und/oder \"ubernimmt die Integration des FTS in die innerbetrieblichen Abl\"aufe."' (VDI 4451). Die Leitsteuerung bringt das FTS in seinem Umfeld zusammen, bietet seinen Bedienern vielf\"altige Service-M\"oglichkeiten und nimmt Transportauftr\"age entgegen. Weiterhin stellt sie den Aufgaben entsprechende Funktionsbl\"ocke zur Verf\"ugung. 
-Die FTS-Leitsteuerung ist der Kern der FTS. In Rahmen des Projekt FAISE, wird es auch eine Leisteuerung ben\"otigt. Eine Leitsteuerung ist nur mit Hilfe eine Systemarchitektur zu implementieren und zu verstehen. In seinem Buch Fahrerlose Transportsysteme, hat G\"unter Ulrich zwei verschiedene Systemarchitekturen dargestellt. Eine f\"ur eine einfache FTS und eine andere f\"ur eine komplexe FTS. Da es bei FAISE nur mit vier FTF gearbeitet wird, ist es sinnvoll mit einer einfachen Systemarchitektur zu arbeiten. Das Bild 3 ist eine Repr\"asentation einer einfachen Systemarchitektur.
+Die interne Materialflusssteuerung ist eine Vorstufe der Transportauftragsabwicklung und wird nur dann ben\"otigt, wenn die Transportauftr\"age nicht klar dezidiert \"ubertragen, sondern aufbereitet werden m\"ussen.
+Eine Anforderung wie z.~B. ben\"otige Ware A an Maschine B erfordert eine Umsetzung in einen oder mehrere Transportauftr\"age nach dem klassischen Muster.
+Hole von C und bringe nach D.
+Die FTS-interne Materialflusssteuerung kombiniert also Quelle und Senke \"uber die in ihr hinterlegten Transportbeziehungen zu einem Transportauftrag und schickt diesen zur Durchf\"uhrung an die Transportauftragsverwaltung.
+Diese ganze Transportauftragsverwaltung ist in der FTS-Leitsteuerung geregelt. 
+Die FTS-Leitsteuerung ist die Kommandozentrale, um das FTS in das Umfeld zu integrieren.
+Au\ss erdem steuert es die FTF, die sich im System befinden.
+Damit ist das FTS dann in der Lage, die ihm \"ubertragenen Auftr\"age zu erf\"ullen.
+"`Eine FTS-Leitsteuerung besteht aus Hard- und Software.
+Kern ist ein Computerprogramm, das auf einem oder mehreren Rechnern abl\"auft.
+Sie dient der Koordination mehrerer Fahrerloser Transportfahrzeuge und/oder \"ubernimmt die Integration des FTS in die innerbetrieblichen Abl\"aufe."' (VDI 4451).
+Die Leitsteuerung bringt das FTS in seinem Umfeld zusammen, bietet seinen Bedienern vielf\"altige Service-M\"oglichkeiten und nimmt Transportauftr\"age entgegen.
+Weiterhin stellt sie den Aufgaben entsprechende Funktionsbl\"ocke zur Verf\"ugung. 
+Die FTS-Leitsteuerung ist der Kern des FTS.
+In Rahmen des Projekt FAISE, wird auch eine Leisteuerung ben\"otigt.
+Eine Leitsteuerung ist nur mit Hilfe einer Systemarchitektur zu implementieren und zu verstehen.
+In seinem Buch Fahrerlose Transportsysteme, hat G\"unter Ulrich zwei verschiedene Systemarchitekturen dargestellt.
+Eine f\"ur ein einfaches FTS und eine andere f\"ur ein komplexes FTS.
+Da bei FAISE nur mit vier FTF gearbeitet wird, ist es sinnvoll mit einer einfachen Systemarchitektur zu arbeiten.
+Das Bild 3 ist eine Repr\"asentation einer einfachen Systemarchitektur.
 	\begin{figure}[h!]
 		\centering
 		\includegraphics[width=0.9\textwidth]{Systemarchitektur_FTS.jpg}
@@ -90,19 +106,37 @@ Die FTS-Leitsteuerung ist der Kern der FTS. In Rahmen des Projekt FAISE, wird es
 		\label{Systemarchitektur_FTS}
 	\end{figure}
 
-Es gibt eine geringe Anzahl von FTF, mit denen die Leitsteuerung per WLAN in Verbindung ist. Au\"sserdem gibt es ein LAN, \"uber das es eine direkte Verbindung mit einem \"ubergeordneten Rechner gibt, von dem die Transportauftr\"age kommen. \"uber die angedeutete Telefonleitung ist eine VPN-Verbindung zur Ferndiagnose eingerichtet. Die Daten\"ubertragung zu den \"ubergeordneten Host-Rechnern erfolgt meist \"uber lokale, Ethernet basierte Netzwerke mit dem Protokoll TCP/IP. Solche Host-Rechner k\"onnen beispielweise Materialflusssteuerungssysteme zur Produktionssteuerung (z. B. SAP) Produktionsplanungssysteme (PPS) Lagerverwaltungssysteme (LVS) sein.“( vgl. G\"unter Ullrich, 2011 S. 96). 
-Au\"sserdem nach der VDI 4451(Blatt 3) „zum internen Umfeld der FTF-Steuerung geh\"oren das Lastaufnahmemittel (LAM), Sensoren und Aktoren, Bedienfeld am Fahrzeug und das Sicherheitssystem. Das externe Umfeld besteht aus der FTS-Leisteuerung, anderen FTF, automatischen Stationen und Geb\"audeeinrichtungen“. Die Abbildung 1 stellt eine Darstellung eine FTF-Steuerung und ihr Steuerungsumfeld dar.
+Es gibt eine geringe Anzahl von FTF, mit denen die Leitsteuerung per WLAN in Verbindung ist.
+Au\ss erdem gibt es ein LAN, \"uber das es eine direkte Verbindung mit einem \"ubergeordneten Rechner gibt, von dem die Transportauftr\"age kommen.
+\"Uber die angedeutete Telefonleitung ist eine VPN-Verbindung zur Ferndiagnose eingerichtet.
+Die Daten\"ubertragung zu den \"ubergeordneten Host-Rechnern erfolgt meist \"uber lokale, Ethernet basierte Netzwerke mit dem Protokoll TCP/IP.
+Solche Host-Rechner k\"onnen beispielweise Materialflusssteuerungssysteme zur Produktionssteuerung (z. B. SAP) Produktionsplanungssysteme (PPS) Lagerverwaltungssysteme (LVS) sein.“( vgl. G\"unter Ullrich, 2011 S. 96). 
+Au\ss erdem geh\"oren nach der VDI 4451(Blatt 3) „zum internen Umfeld der FTF-Steuerung [...] das Lastaufnahmemittel (LAM), Sensoren und Aktoren, Bedienfeld am Fahrzeug und das Sicherheitssystem.
+Das externe Umfeld besteht aus der FTS-Leisteuerung, anderen FTF, automatischen Stationen und Geb\"audeeinrichtungen“.
+Die Abbildung 1 stellt eine Darstellung eine FTF-Steuerung und ihr Steuerungsumfeld dar.
 	\begin{figure}[h!]
 		\centering
 		\includegraphics[width=0.9\textwidth]{Systemarchitektur_FTS.jpg}
 		\caption{Allgemeine Darstellung einer FTF-Steuerung mit Datenschnittstellen (vgl. VDI 4451)}
 		\label{Wertschoepfungskette}
 	\end{figure}
-Die administrative Ebene, die h\"aufig \"uber einen station\"aren Leitrechner realisiert wird, verwaltet die Transportauftr\"age der ganzen Materialflusssteuerung. Die operative Ebene, die auch als Fahrzeugsteuerung bezeichnet wird, erh\"alt ihre Informationen \"uber die Fahrzeugdisposition der administrativen Ebene. Der Funktionsblock Kommunikation leitet den stattgefundenen Datenaustausch zum Manager weiter. Dieser sorgt f\"ur die Koordination, indem er die Fahrauftr\"age in einzelne Befehle aufteilt, sowie f\"ur ein reibungsloses Zusammenwirken der einzelnen Funktionsbl\"ocke. Neben dem Block Kommunikation sind weitere Bl\"ocke vorhanden. Dazu geh\"ort f\"ur die gesamte Last\"ubergabe inklusive der Lastlagererfassung verantwortliche Lastaufnahme, das Energiemanagement, welches den Lade- und Allgemeinzustand der Batterien \"uberwacht, und der Block \"uberwachung/Sicherheitsschnittstelle, welcher zum Schutz der Personen und Sachgegenst\"ande dient. Der Funktionsblock Fahren und die damit verbundene Sensorik bzw. Aktorik koordinieren die Ablaufsteuerung der Funktionen des Orientierungssystems (Langenbach Maik, 2012, S. 33).
+Die administrative Ebene, die h\"aufig \"uber einen station\"aren Leitrechner realisiert wird, verwaltet die Transportauftr\"age der ganzen Materialflusssteuerung.
+Die operative Ebene, die auch als Fahrzeugsteuerung bezeichnet wird, erh\"alt ihre Informationen \"uber die Fahrzeugdisposition der administrativen Ebene.
+Der Funktionsblock Kommunikation leitet den stattgefundenen Datenaustausch zum Manager weiter.
+Dieser sorgt f\"ur die Koordination, indem er die Fahrauftr\"age in einzelne Befehle aufteilt, sowie f\"ur ein reibungsloses Zusammenwirken der einzelnen Funktionsbl\"ocke.
+Neben dem Block Kommunikation sind weitere Bl\"ocke vorhanden.
+Dazu geh\"ort f\"ur die gesamte Last\"ubergabe inklusive der Lastlagererfassung verantwortliche Lastaufnahme, das Energiemanagement, welches den Lade- und Allgemeinzustand der Batterien \"uberwacht, und der Block \"Uberwachung/Sicherheitsschnittstelle, welcher zum Schutz der Personen und Sachgegenst\"ande dient.
+Der Funktionsblock Fahren und die damit verbundene Sensorik bzw. Aktorik koordinieren die Ablaufsteuerung der Funktionen des Orientierungssystems (Langenbach Maik, 2012, S. 33).
 
 \subsection{Materialflusssysteme}
-Damit ein Produkt auf den Markt kommen kann, muss man ihn denken, ihn erstellen und dann ihn vermarken. Die Produkterstellung und -vermarktung sind Prozesse des Wirtschaftens. Vorprodukte oder Materialen werden von Beschaffungsm\"arkten in die Unternehmen gef\"uhrt und dort werden sie durch besondere Produktionsprozesse transformiert. Am Ende der Produktion, steht ein Endprodukt, der f\"ur den Konsum bereits ist. 
-Die Produktion und Logistik von G\"utern sind daher sehr wichtige Bereiche f\"ur den Unternehmenserfolg. Allerdings f\"uhren heute die unterschiedlichen Auspr\"agungen der Logistik z.B. in Produktions-, Handels-, oder Verkehrsunternehmen zu einer terminologischen Differenzierung der Logistik. Der Materialflussbegriff leitet sich einfach von dem logistische Konzept ab, in anderen W\"ortern das Materialflusssystem f\"uhrt in der Logistik zur\"uck. Die Abbildung 2. dient zur Erl\"auterung einer konventionellen Wertsch\"opfungskette. 
+Damit ein Produkt auf den Markt kommen kann, muss man es durchdenken, erstellen und dann vermarkten.
+Die Produkterstellung und -vermarktung sind Prozesse des Wirtschaftens.
+Vorprodukte oder Materialen werden von Beschaffungsm\"arkten in die Unternehmen gef\"uhrt und dort durch besondere Produktionsprozesse transformiert.
+Am Ende der Produktion steht ein Endprodukt, das f\"ur den Konsum bereits ist. 
+Die Produktion und Logistik von G\"utern sind daher sehr wichtige Bereiche f\"ur den Unternehmenserfolg.
+Allerdings f\"uhren heute die unterschiedlichen Auspr\"agungen der Logistik z.~B. in Produktions-, Handels- oder Verkehrsunternehmen zu einer terminologischen Differenzierung der Logistik.
+Der Materialflussbegriff leitet sich einfach von dem logistischen Konzept ab, in anderen Worten f\"uhrt das Materialflusssystem in die Logistik zur\"uck.
+Die Abbildung 2. dient zur Erl\"auterung einer konventionellen Wertsch\"opfungskette. 
 	\begin{figure}[h!]
 		\centering
 		\includegraphics[width=0.9\textwidth]{Wertschoepfungskette.jpg}
@@ -110,17 +144,35 @@ Die Produktion und Logistik von G\"utern sind daher sehr wichtige Bereiche f\"ur
 	\label{Wertschoepfungskette}
 \end{figure}
 
-Der Begriff Materialfluss bedeutet die Verkettung aller Prozesse bei der Beschaffung, Bearbeitung, Verarbeitung sowie bei der Distribution von G\"utern innerhalb festgelegter Bereiche. Deswegen l\"asst sich der Materialfluss in vier Stufen unterordnet: externer Transport, betriebsinterner Materialfluss, geb\"audeinterner Materialfluss und Materialfluss am Arbeitsplatz. Nach dem Verein Deutscher Ingenieur bzw. VDI-241 beinhaltet die Logistik f\"unf Hauptfunktionen. Diese Funktionen sind Bearbeiten, Pr\"ufen, Handhaben, F\"ordern, Lagern und Aufenthalten. Neben diesen Hauptfunktionen z\"ahlen auch Nebenfunktionen wie z.B. Montieren, Umschlagen, Kommissionieren, Palettieren und Verpacken (VDI 2411). Jedoch ist auf der Ebene des Materialflusssystems nur drei Funktionen zu ber\"ucksichtigen: F\"ordern, Lagern, Handhaben. Die anderen Funktionen setzen sich normalerweise aus den erl\"auterten Funktionen zusammen. Dieses Arbeitsteil wird in zwei Teile gegliedert. Im ersten Teil werden die drei Funktionen der Materialflusssysteme vorgestellt Im zweiten Teil wird eine Planung von Materialflusssystemen dargestellt.
+Der Begriff Materialfluss bedeutet die Verkettung aller Prozesse bei der Beschaffung, Bearbeitung, Verarbeitung sowie bei der Distribution von G\"utern innerhalb festgelegter Bereiche.
+Deswegen l\"asst sich der Materialfluss in vier Stufen unterordnen: externer Transport, betriebsinterner Materialfluss, geb\"audeinterner Materialfluss und Materialfluss am Arbeitsplatz.
+Nach dem Verein Deutscher Ingenieure bzw. VDI-241 beinhaltet die Logistik f\"unf Hauptfunktionen.
+Diese Funktionen sind Bearbeiten, Pr\"ufen, Handhaben, F\"ordern, Lagern und Aufenthalten.
+Neben diesen Hauptfunktionen z\"ahlen auch Nebenfunktionen wie z.~B. Montieren, Umschlagen, Kommissionieren, Palettieren und Verpacken (VDI 2411).
+Jedoch sind auf der Ebene des Materialflusssystems nur drei Funktionen zu ber\"ucksichtigen: F\"ordern, Lagern, Handhaben.
+Die anderen Funktionen setzen sich normalerweise aus den erl\"auterten Funktionen zusammen.
+Dieser Arbeitsteil wird in zwei Teile gegliedert.
+Im ersten Teil werden die drei Funktionen der Materialflusssysteme vorgestellt Im zweiten Teil wird eine Planung von Materialflusssystemen dargestellt.
 
 \paragraph{Funktionen von Materialflusssystemen}
 \begin{itemize}
 	\item \textbf{Funktion F\"ordern} \\
-	F\"ordern bedeutet Transportieren und ist eine der wichtigsten Aspekte innerhalb des Materialflusssystems. Nach der VDI 2411 ist F\"ordern das Fortbewegen von Arbeitsgegenst\"anden in einem System. „Die Fortbewegung oder Ortver\"anderung von G\"utern oder Personen mit technischen Mitteln wird allgemein als Transport bezeichnet. Findet diese Ortsver\"anderung in einem r\"aumlich begrenzten Gebiet wie beispielsweise innerhalb eines Betriebes oder Werkes statt, so wird dieser Vorgang durch den Begriff F\"ordern pr\"azisiert. Das F\"ordern bzw. die F\"ordertechnik umfasst also das Bewegen von G\"utern und Personen \"uber relativ kurze Entfernungen einschlie\"sslich der dazu notwendigen technischen organisatorischen und personellen Mittel“(Ten Hompel, Schmidt, Nagel, 2007, S. 119). 
-Das F\"ordermittel (technisches Transportmittel, zur Ortsver\"anderung von G\"utern oder Personen) und das F\"orderelement bilden das physikalische Bestandteil eines F\"ordervorgang. Der Ablauf und die Steuerung werden durch den F\"ordervorgang dargestellt. In Punkto F\"ordermittel kann auf verschiedenste Elemente der Materialflusstechnik zur\"uckgegriffen werden. Dies umfasst unter anderen Rollenbahnen, und FTS. Neben der M\"oglichkeit auf automatisierte F\"ordermittel zur\"uckzugreifen, kommen auch manuell mechanisierte bzw. rein manuelle Systeme zum Einsatz. In diesem Fall ist der Mensch oder der Bediener eines F\"ordermittels wesentlich f\"ur den Ablauf eines reibungslosen Materialflusses in Zusammenspiel mit den physikalischen Elementen sowie dem Prozessablauf verantwortlich. (Wulz, J, 2008, S. 8). Das Bild 4 gilt als Beispiel eines F\"ordersystems. 
+F\"ordern bedeutet Transportieren und ist einer der wichtigsten Aspekte innerhalb des Materialflusssystems.
+Nach der VDI 2411 ist F\"ordern das Fortbewegen von Arbeitsgegenst\"anden in einem System.
+„Die Fortbewegung oder Ortver\"anderung von G\"utern oder Personen mit technischen Mitteln wird allgemein als Transport bezeichnet.
+Findet diese Ortsver\"anderung in einem r\"aumlich begrenzten Gebiet wie beispielsweise innerhalb eines Betriebes oder Werkes statt, so wird dieser Vorgang durch den Begriff F\"ordern pr\"azisiert.
+Das F\"ordern bzw. die F\"ordertechnik umfasst also das Bewegen von G\"utern und Personen \"uber relativ kurze Entfernungen einschlie\ss lich der dazu notwendigen technischen organisatorischen und personellen Mittel “(Ten Hompel, Schmidt, Nagel, 2007, S. 119). 
+Das F\"ordermittel (technisches Transportmittel zur Ortsver\"anderung von G\"utern oder Personen) und das F\"orderelement bilden den physikalischen Bestandteil eines F\"ordervorgangs.
+Der Ablauf und die Steuerung werden durch den F\"ordervorgang dargestellt.
+In Punkto F\"ordermittel kann auf verschiedenste Elemente der Materialflusstechnik zur\"uckgegriffen werden.
+Dies umfasst unter anderen Rollenbahnen und FTS.
+Neben der M\"oglichkeit auf automatisierte F\"ordermittel zur\"uckzugreifen, kommen auch manuell mechanisierte bzw. rein manuelle Systeme zum Einsatz.
+In diesem Fall ist der Mensch oder der Bediener eines F\"ordermittels wesentlich f\"ur den Ablauf eines reibungslosen Materialflusses in Zusammenspiel mit den physikalischen Elementen sowie dem Prozessablauf verantwortlich. (Wulz, J, 2008, S. 8).
+Das Bild 4 gilt als Beispiel eines F\"ordersystems. 
 	\begin{figure}[h!]
 	\centering
   \includegraphics[width=0.7\textwidth]{Stetigfoerderer.jpg}
-	\caption{Beispiel eines Stetigf\"orderer (entnommen aus Ten Hompel, Schmidt, Nagel, 2007, S. 131)}
+	\caption{Beispiel eines Stetigf\"orderers (entnommen aus Ten Hompel, Schmidt, Nagel, 2007, S. 131)}
 	\label{Stetigfoerderer}
 \end{figure}
 
