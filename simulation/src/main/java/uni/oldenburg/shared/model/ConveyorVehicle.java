@@ -40,18 +40,26 @@ public class ConveyorVehicle extends Conveyor {
 		
 		switch(this.getDirection()) {
 			case DIRECTION_UP:
+				context.setFillStyle(CssColor.make(0, 50, 75));
+				context.fillRect(getWidth() / 4, 0, getWidth() / 2, getHeight());
 				drawEntry(context, CONVEYOR_COLOR_INPUT, 0, 0, this.getWidth(), ENTRY_BORDER_SIZE);
 				drawEntry(context, CONVEYOR_COLOR_OUTPUT , 0, this.getHeight() - ENTRY_BORDER_SIZE, this.getWidth(), ENTRY_BORDER_SIZE);
 				break;
 			case DIRECTION_LEFT:
+				context.setFillStyle(CssColor.make(0, 50, 75));
+				context.fillRect(0, getHeight() / 4, getWidth(), getHeight() / 2);
 				drawEntry(context, CONVEYOR_COLOR_INPUT, this.getWidth() - ENTRY_BORDER_SIZE, 0, ENTRY_BORDER_SIZE, this.getWidth());
 				drawEntry(context, CONVEYOR_COLOR_OUTPUT , 0, 0, ENTRY_BORDER_SIZE, this.getWidth());
 				break;
 			case DIRECTION_DOWN:
+				context.setFillStyle(CssColor.make(0, 50, 75));
+				context.fillRect(getWidth() / 4, 0, getWidth() / 2, getHeight());
 				drawEntry(context, CONVEYOR_COLOR_INPUT, 0, this.getHeight() - ENTRY_BORDER_SIZE, this.getWidth(), ENTRY_BORDER_SIZE);				
 				drawEntry(context, CONVEYOR_COLOR_OUTPUT , 0, 0, this.getWidth(), ENTRY_BORDER_SIZE);
 				break;
 			case DIRECTION_RIGHT:
+				context.setFillStyle(CssColor.make(0, 50, 75));
+				context.fillRect(0, getHeight() / 4, getWidth(), getHeight() / 2);
 				drawEntry(context, CONVEYOR_COLOR_INPUT, 0, 0, ENTRY_BORDER_SIZE, this.getWidth());				
 				drawEntry(context, CONVEYOR_COLOR_OUTPUT , this.getWidth() - ENTRY_BORDER_SIZE, 0, ENTRY_BORDER_SIZE, this.getWidth());
 				break;
