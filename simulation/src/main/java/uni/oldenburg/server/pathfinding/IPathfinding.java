@@ -24,5 +24,6 @@ public interface IPathfinding {
 	void setAvoidRotations(boolean value);
 	
 	void init (int columnCount, int rowCount, List<GridItem> lstGridItem);
-	PathMessageType findPath(Point newStartPoint, Point newStopPoint, List<List<PathPoint> > lstPathPoints);
+	List<List<PathPoint> > findPath(Point newStartPoint, Point newStopPoint);
+	PathMessageType getError();
 }

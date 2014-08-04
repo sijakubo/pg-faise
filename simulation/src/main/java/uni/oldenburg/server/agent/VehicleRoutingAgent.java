@@ -50,7 +50,7 @@ public class VehicleRoutingAgent extends Agent {
 	
 	private Logger logger = Logger.getLogger(VehicleRoutingAgent.class);
     //Speichert die Punkte für das Pathfinding
-	private List<List<PathPoint>> lstPathPoints = null;
+	private List<List<PathPoint>> lstPathPoints = new ArrayList<List<PathPoint>>(); 
 
 	/**
      * @author Matthias
@@ -76,8 +76,8 @@ public class VehicleRoutingAgent extends Agent {
 		//Alle Conveyor durchlaufen
 		for(Conveyor myConveyor : mySzenario.getConveyorList()) {
 			if (!(myConveyor instanceof ConveyorVehicle)) { //Es wird geprüft, ob Conveyor Fahrzeug ist.
-				int x = myConveyor.getX() / Conveyor.RASTER_SIZE;
-				int y = myConveyor.getY() / Conveyor.RASTER_SIZE;
+				int x = myConveyor.getX();
+				int y = myConveyor.getY();
 				
 				logger.log(Level.INFO, "x/y: " + x + " / " + y + " -> " + Pathfinding.getIndex(x, y, myColumnCount));
 				//Jeder Conveyor, der kein Fahrzeug ist, wird im entsprechenden Griditem als Wand deklariert und somit als Hinderniss gekennzeichnet.
@@ -85,6 +85,9 @@ public class VehicleRoutingAgent extends Agent {
 				myItem.setItemType(GridItemType.WallItem);
 			}
 		}
+		
+		Pathfinding.drawGrid(myColumnCount, myRowCount, lstGridItem);
+		
 		//Initialisierung mit PathfindingSingle
 		myPF = new PathfindingSingle(myColumnCount, myRowCount, lstGridItem);
 		
@@ -176,12 +179,12 @@ public class VehicleRoutingAgent extends Agent {
 				}
 				
 				int toSourceRampEstimation = CalculateEstimation(curPoint, srcRampPoint);
-				int toDestinationRampEstimation = CalculateEstimation(srcRampPoint, dstRampPoint);
+				//int toDestinationRampEstimation = CalculateEstimation(srcRampPoint, dstRampPoint);
 				
-				sumEstimation = toSourceRampEstimation + toDestinationRampEstimation;
+				sumEstimation = toSourceRampEstimation; //+ toDestinationRampEstimation;
 				
 
-				if (toSourceRampEstimation < 0 || toDestinationRampEstimation < 0)
+				if (toSourceRampEstimation < 0);// || toDestinationRampEstimation < 0)
 					sumEstimation = -1;
 			}
 			else {
@@ -248,13 +251,17 @@ public class VehicleRoutingAgent extends Agent {
 	private int CalculateEstimation(Point startPoint, Point stopPoint) {
 		List<List<PathPoint>> lstPathPointsTmp = null;//Liste mit Listen von Pathfinding Punkten. Berücksichtigt, dass ein theorethisch mehrere Weg berechnen kann.
 				
-		PathMessageType pmtReturn = myPF.findPath(startPoint, stopPoint, lstPathPointsTmp);
+		lstPathPointsTmp = myPF.findPath(startPoint, stopPoint);
+
+		if (lstPathPointsTmp == null)
+			System.out.println("2");
 		
+		if (lstPathPointsTmp == null)
+			if (myPF.getError() != PathMessageType.PathFound)
+				return -1;
+			
 		lstPathPoints.add(lstPathPointsTmp.get(0));		
 	
-		
-		if (pmtReturn != PathMessageType.PathFound)//Wenn kein Pfad gefunden wurde, ist die Estimation -1.
-			return -1;
 		
 		int sumEstimation = 0;//Variable speichert die Summe der Estimations-> 
 		
@@ -264,7 +271,7 @@ public class VehicleRoutingAgent extends Agent {
 			sumEstimation += tmpPathPoint.getEstimationValue();//Estimations für die einzelnen Kacheln werden zusammengezählt.
 		}
 		
-		logger.log(Level.INFO, "Est: " + sumEstimation);
+		logger.log(Level.INFO, "Est: " + sumEstimation + " : " + myPF.getError().toString());
 		
 		return sumEstimation;
 	}

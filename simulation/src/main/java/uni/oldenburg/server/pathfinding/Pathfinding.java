@@ -51,6 +51,8 @@ public abstract class Pathfinding implements IPathfinding {
 	protected boolean bDriveDiagonal = false;
 	protected boolean bAvoidRotations = false;
 	
+	protected int myMinValue = 0;
+	
 	public int getColumnCount() {
 		return myColumnCount;
 	}
@@ -94,7 +96,46 @@ public abstract class Pathfinding implements IPathfinding {
 		this.lstGridItem = lstGridItem;
 	}
 
-	public abstract PathMessageType findPath(Point newStartPoint, Point newStopPoint, List<List<PathPoint>> lstPathPoints);
+	public abstract List<List<PathPoint>> findPath(Point newStartPoint, Point newStopPoint);
+	
+	public static void drawGrid(int myColumnCount, int myRowCount, List<GridItem> lstGridItem) {
+		for (int y = 0; y < myRowCount; ++y) {
+			for (int x = 0; x < myColumnCount; ++x) {
+				switch (lstGridItem.get(Pathfinding.getIndex2(x, y, myColumnCount)).getItemType()) {
+					case WallItem:
+					case DefaultItem:
+					case PathItem:
+					case StartItem:
+					case StopItem:
+						System.out.print("[" + lstGridItem.get(Pathfinding.getIndex2(x, y, myColumnCount)).getGridValue() + "]");
+						break;
+					default:
+						break;
+				}
+				
+				/*switch (lstGridItem.get(Pathfinding.getIndex2(x, y, myColumnCount)).getItemType()) {
+					case WallItem:
+						System.out.print("[x]");
+						break;
+					case DefaultItem:
+						System.out.print("[ ]");
+						break;
+					case PathItem:
+						System.out.print("[.]");
+						break;
+					case StartItem:
+						System.out.print("[a]");
+						break;
+					case StopItem:
+						System.out.print("[e]");
+						break;
+					default:
+						break;
+				}*/
+			}
+			System.out.println("");
+		}
+	}
 	
 	protected Point getNeighborPoint(Point curPoint, Direction newDirection) {
 		Point tmpPoint = null;
@@ -139,6 +180,14 @@ public abstract class Pathfinding implements IPathfinding {
 	
 	public static int getIndex(int x, int y, int myColumnCount) {
 		return (y / Conveyor.RASTER_SIZE) * myColumnCount + (x / Conveyor.RASTER_SIZE);
+	}
+	
+	public static int getIndex2(int x, int y, int myColumnCount) {
+		return (y) * myColumnCount + (x);
+	}
+	
+	public static int getIndex2(Point newPoint, int myColumnCount){
+		return getIndex2(newPoint.getX(), newPoint.getY(), myColumnCount);
 	}
 	
 	public static int getIndex(Point newPoint, int myColumnCount){
@@ -255,34 +304,39 @@ public abstract class Pathfinding implements IPathfinding {
 
 	}
 	
-	protected int saveBestPoint(PathPoint curPathPoint, Direction newDirection, int minValue,List<PathPoint> lstPossiblePoints){
+	protected List<PathPoint> saveBestPoint(PathPoint curPathPoint, Direction newDirection, int minValue, List<PathPoint> lstPossiblePoints){
 		Point neighborPoint = getNeighborPoint(curPathPoint.getPoint(), newDirection);
 		int newValue = getGridValue(neighborPoint);	
 		
+		myMinValue = minValue;
 		
 		switch(newDirection){
 		case TopLeft:
-			 if (isWall(curPathPoint.getPoint(), Direction.Top)) return minValue;
-			 if (isWall(curPathPoint.getPoint(), Direction.Left)) return minValue;
+			 if (isWall(curPathPoint.getPoint(), Direction.Top)) return lstPossiblePoints;
+			 if (isWall(curPathPoint.getPoint(), Direction.Left)) return lstPossiblePoints;
 			break;
 		case TopRight:
-			if (isWall(curPathPoint.getPoint(), Direction.Top)) return minValue;
-			if (isWall(curPathPoint.getPoint(), Direction.Right)) return minValue;
+			if (isWall(curPathPoint.getPoint(), Direction.Top)) return lstPossiblePoints;
+			if (isWall(curPathPoint.getPoint(), Direction.Right)) return lstPossiblePoints;
 			break;
 		case BottomLeft:
-			if (isWall(curPathPoint.getPoint(), Direction.Bottom)) return minValue;
-			if (isWall(curPathPoint.getPoint(), Direction.Left)) return minValue;
+			if (isWall(curPathPoint.getPoint(), Direction.Bottom)) return lstPossiblePoints;
+			if (isWall(curPathPoint.getPoint(), Direction.Left)) return lstPossiblePoints;
 			break;
 		case BottomRight:
-			if (isWall(curPathPoint.getPoint(), Direction.Bottom)) return minValue;
-			if (isWall(curPathPoint.getPoint(), Direction.Right)) return minValue;
+			if (isWall(curPathPoint.getPoint(), Direction.Bottom)) return lstPossiblePoints;
+			if (isWall(curPathPoint.getPoint(), Direction.Right)) return lstPossiblePoints;
 			 break;
 		default:
 			break;
 		
 		}
 		
-		if (newValue <= curPathPoint.getStepValue() && newValue <= minValue){
+		System.out.println("c: " + curPathPoint.  + "n: " + newValue + " s: " + curPathPoint.getStepValue() + " m: " + minValue);
+		
+		if (/*newValue <= curPathPoint.getStepValue() &&*/ newValue <= minValue) {
+			System.out.println("better value found");
+			
 			if (bDriveDiagonal){
 				List<PathPoint> lstDeleteableValues= new ArrayList<PathPoint>();
 				
@@ -313,9 +367,10 @@ public abstract class Pathfinding implements IPathfinding {
 			lstPossiblePoints.add(myPathPoint);
 			
 			minValue = newValue;
+			myMinValue = minValue;
 		}
 		
-		return minValue;
+		return lstPossiblePoints;
 	}
 
 	

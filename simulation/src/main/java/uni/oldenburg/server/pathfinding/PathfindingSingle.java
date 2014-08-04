@@ -14,6 +14,8 @@ import uni.oldenburg.shared.model.Point;
 public class PathfindingSingle extends Pathfinding {
 	List<List<PathPoint>> lstPathPoints = new ArrayList<List<PathPoint>>();
 	
+	PathMessageType returnValue = PathMessageType.Running;
+	
 	public PathfindingSingle() {};
 	
 	public PathfindingSingle(int columnCount, int rowCount, List<GridItem> lstGridItem) {
@@ -22,12 +24,13 @@ public class PathfindingSingle extends Pathfinding {
 	
 	
 	@Override
-	public PathMessageType findPath(Point newStartPoint, Point newStopPoint, List<List<PathPoint>> lstPathPoints) {
+	public List<List<PathPoint>> findPath(Point newStartPoint, Point newStopPoint) {
 		List<PathPoint> lstSinglePathpoints = new ArrayList<PathPoint>();
-		PathMessageType returnValue = PathMessageType.Running;
+		
+		returnValue = PathMessageType.Running;
 		
 		if (bRunning)
-			return returnValue;
+			return null;
 		
 		if (lstPathPoints != null)
 			lstPathPoints.clear();
@@ -38,24 +41,34 @@ public class PathfindingSingle extends Pathfinding {
 		myStartPoint = newStartPoint;
 		myStopPoint = newStopPoint;
 		
-		if(myStartPoint.getX() < 0 || myStartPoint.getY() < 0)
-			return PathMessageType.PathError;
-		
-		if(myStopPoint.getX() < 0 || myStopPoint.getY() < 0)
-			return PathMessageType.PathError;		
-		
-		if (lstGridItem == null)
-			return PathMessageType.NotInitialized;
+		if(myStartPoint.getX() < 0 || myStartPoint.getY() < 0) {
+			returnValue = PathMessageType.PathError;
+			return null;
+		}
+			
+		if(myStopPoint.getX() < 0 || myStopPoint.getY() < 0) {
+			returnValue = PathMessageType.PathError;
+			return null;
+		}
+			
+		if (lstGridItem == null) {
+			returnValue = PathMessageType.NotInitialized;
+			return null;
+		}
 		
 		lstGridItem.get((getIndex(myStartPoint, myColumnCount))).setItemType(GridItemType.StartItem);
         lstGridItem.get((getIndex(myStopPoint, myColumnCount))).setItemType(GridItemType.StopItem);
 		
-        if(myStartPoint.getX() == myStopPoint.getX() && myStartPoint.getY() == myStopPoint.getY())
-        	return PathMessageType.StartEndPointsEqual;
-        
+        if(myStartPoint.getX() == myStopPoint.getX() && myStartPoint.getY() == myStopPoint.getY()) {
+        	returnValue = PathMessageType.StartEndPointsEqual;
+        	return null;
+        }
+        	
         bRunning = true;
         
         ComputeBlocksValues();
+        
+        drawGrid(myColumnCount, myRowCount, lstGridItem);
         
         PathPoint curPathPoint= new PathPoint();
         curPathPoint.setPoint(new Point(myStopPoint.getX(), myStopPoint.getY()));
@@ -73,17 +86,19 @@ public class PathfindingSingle extends Pathfinding {
         while(curPathPoint.getPoint().getX() != myStartPoint.getX() || curPathPoint.getPoint().getY() != myStartPoint.getY()){
         	curPathPoint.setStepValue(lstGridItem.get(getIndex(curPathPoint.getPoint().getX(), curPathPoint.getPoint().getY(), myColumnCount)).getGridValue());
             int minValue = curPathPoint.getStepValue();
+            
+            myMinValue = minValue;
 
-            minValue = saveBestPoint(curPathPoint, Direction.Left, minValue, lstPossiblePoints);
-            minValue = saveBestPoint(curPathPoint, Direction.Top, minValue, lstPossiblePoints);
-            minValue = saveBestPoint(curPathPoint, Direction.Right, minValue, lstPossiblePoints);
-            minValue = saveBestPoint(curPathPoint, Direction.Bottom, minValue, lstPossiblePoints);
+            lstPossiblePoints = saveBestPoint(curPathPoint, Direction.Left, minValue, lstPossiblePoints);
+            lstPossiblePoints = saveBestPoint(curPathPoint, Direction.Top, myMinValue, lstPossiblePoints);
+            lstPossiblePoints = saveBestPoint(curPathPoint, Direction.Right, myMinValue, lstPossiblePoints);
+            lstPossiblePoints = saveBestPoint(curPathPoint, Direction.Bottom, myMinValue, lstPossiblePoints);
     	            
             if(bDriveDiagonal){
-            	minValue = saveBestPoint(curPathPoint, Direction.TopLeft, minValue, lstPossiblePoints);
-            	minValue = saveBestPoint(curPathPoint, Direction.TopRight, minValue, lstPossiblePoints);
-            	minValue = saveBestPoint(curPathPoint, Direction.BottomLeft, minValue, lstPossiblePoints);
-            	minValue = saveBestPoint(curPathPoint, Direction.BottomRight, minValue, lstPossiblePoints);
+            	lstPossiblePoints = saveBestPoint(curPathPoint, Direction.TopLeft, myMinValue, lstPossiblePoints);
+            	lstPossiblePoints = saveBestPoint(curPathPoint, Direction.TopRight, myMinValue, lstPossiblePoints);
+            	lstPossiblePoints = saveBestPoint(curPathPoint, Direction.BottomLeft, myMinValue, lstPossiblePoints);
+            	lstPossiblePoints = saveBestPoint(curPathPoint, Direction.BottomRight, myMinValue, lstPossiblePoints);
             }
             
             if (lstPossiblePoints.size() > 0){
@@ -113,6 +128,8 @@ public class PathfindingSingle extends Pathfinding {
                 }
                 
         		lstGridItem.get(getIndex(curPathPoint.getPoint(), myColumnCount)).setItemType(GridItemType.PathItem);
+        		
+        		drawGrid(myColumnCount, myRowCount, lstGridItem);
             }
             else {
             	lstSinglePathpoints.clear();
@@ -123,7 +140,7 @@ public class PathfindingSingle extends Pathfinding {
             		bRunning = false;
             		bDriveDiagonal = false;
             		lstPathPoints.clear();
-            		returnValue = findPath(myStartPoint, myStopPoint, lstPathPoints);
+            		lstPathPoints = findPath(myStartPoint, myStopPoint);
             		bDriveDiagonal = true;
             		
             	} else{
@@ -137,10 +154,12 @@ public class PathfindingSingle extends Pathfinding {
         
     	this.lstPathPoints.add(lstSinglePathpoints);
     	
-    	lstPathPoints = this.lstPathPoints;
-    	
     	bRunning = false;
         
+		return this.lstPathPoints;
+	}
+
+	public PathMessageType getError() {
 		return returnValue;
 	}
 }
