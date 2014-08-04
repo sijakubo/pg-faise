@@ -4,7 +4,12 @@ import java.util.List;
 
 import uni.oldenburg.server.pathfinding.Pathfinding.PathMessageType;
 import uni.oldenburg.shared.model.Point;
-
+/**
+ * Interface für das Pathfinding. Alle Klassen, die einen Pathfinding-Algorithmus implementieren, müssen die Methoden des Interfaces 
+ * implementieren. 
+ * 
+ * @author Matthias
+ */	
 public interface IPathfinding {
 	boolean isRunning();
 	int getColumnCount();

@@ -6,7 +6,11 @@ import java.util.List;
 import uni.oldenburg.server.pathfinding.GridItem.GridItemType;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.Point;
-
+/**
+ * Pathfinding implementiert IPathfinding. Stellt Basisfunktionalitäten für den implementieren Pathfindingalgorithmus bereit.
+ * 
+ * @author Matthias
+ */	
 public abstract class Pathfinding implements IPathfinding {
 	public enum PathMessageType {
 		PathFound,

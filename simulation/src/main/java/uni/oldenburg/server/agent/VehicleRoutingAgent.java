@@ -45,11 +45,11 @@ public class VehicleRoutingAgent extends Agent {
 	private Point dstRampPoint = null;
 	
 	private boolean auctionInProgress = false;
-	
+	//Interface für das Pathfinding
 	private IPathfinding myPF = null;
 	
 	private Logger logger = Logger.getLogger(VehicleRoutingAgent.class);
-
+    //Speichert die Punkte für das Pathfinding
 	private List<List<PathPoint>> lstPathPoints = null;
 
 	/**
@@ -65,7 +65,7 @@ public class VehicleRoutingAgent extends Agent {
 		
 		int myColumnCount = MainFrameView.canvasWidth / Conveyor.RASTER_SIZE;
 		int myRowCount = MainFrameView.canvasHeight / Conveyor.RASTER_SIZE;
-		
+		//Erzeugt für jede Kachel ein Griditem und speichert es in der Liste 
 		List<GridItem> lstGridItem = new ArrayList<GridItem>();
 		
 		for (int i = 0; i < myColumnCount * myRowCount; ++i) {
@@ -73,19 +73,19 @@ public class VehicleRoutingAgent extends Agent {
 		}
 		
 		logger.log(Level.INFO, "w/h: " + myColumnCount + " / " + myRowCount);
-		
+		//Alle Conveyor durchlaufen
 		for(Conveyor myConveyor : mySzenario.getConveyorList()) {
-			if (!(myConveyor instanceof ConveyorVehicle)) {
+			if (!(myConveyor instanceof ConveyorVehicle)) { //Es wird geprüft, ob Conveyor Fahrzeug ist.
 				int x = myConveyor.getX() / Conveyor.RASTER_SIZE;
 				int y = myConveyor.getY() / Conveyor.RASTER_SIZE;
 				
 				logger.log(Level.INFO, "x/y: " + x + " / " + y + " -> " + Pathfinding.getIndex(x, y, myColumnCount));
-				
+				//Jeder Conveyor, der kein Fahrzeug ist, wird im entsprechenden Griditem als Wand deklariert und somit als Hinderniss gekennzeichnet.
 				GridItem myItem = lstGridItem.get(Pathfinding.getIndex(x, y, myColumnCount));
 				myItem.setItemType(GridItemType.WallItem);
 			}
 		}
-		
+		//Initialisierung mit PathfindingSingle
 		myPF = new PathfindingSingle(myColumnCount, myRowCount, lstGridItem);
 		
 		addBehaviour(new EstimationRequest(MessageType.ESTIMATION_REQUEST));
@@ -104,18 +104,17 @@ public class VehicleRoutingAgent extends Agent {
 	}
 	
 	/**
-	 * Got message:
+	 * Bekommt Nachricht von:
 	 *		RampRoutingAgent::Auction
 	 *		VehiclePlattformAgent::GetCurrentPosition		 		
-	 * Send message:
+	 * Sendet Nachricht an:
 	 * 		VehiclePlattformAgent::GetCurrentPosition
 	 * 		RampRoutingAgent::Auction
 	 * 
-	 * handles estimation requests
+	 * Verarbeitet Estimation Anfragen.
 	 * 
      * @author Matthias
      */
-
 	private class EstimationRequest extends CyclicReceiverBehaviour {
 		protected EstimationRequest(int msgType) {
 			super(MessageTemplate.MatchPerformative(msgType));
@@ -241,23 +240,28 @@ public class VehicleRoutingAgent extends Agent {
 	}
 	
 	@SuppressWarnings("null")
+	/**
+	 * Berechnet mithilfe des Pathfindingalgorithmus einen Pfad und die daraus resultierende Estimation
+	 * 
+     * @author Matthias
+     */
 	private int CalculateEstimation(Point startPoint, Point stopPoint) {
-		List<List<PathPoint>> lstPathPointsTmp = null;
+		List<List<PathPoint>> lstPathPointsTmp = null;//Liste mit Listen von Pathfinding Punkten. Berücksichtigt, dass ein theorethisch mehrere Weg berechnen kann.
 				
 		PathMessageType pmtReturn = myPF.findPath(startPoint, stopPoint, lstPathPointsTmp);
 		
 		lstPathPoints.add(lstPathPointsTmp.get(0));		
 	
 		
-		if (pmtReturn != PathMessageType.PathFound)
+		if (pmtReturn != PathMessageType.PathFound)//Wenn kein Pfad gefunden wurde, ist die Estimation -1.
 			return -1;
 		
-		int sumEstimation = 0;
+		int sumEstimation = 0;//Variable speichert die Summe der Estimations-> 
 		
-		List<PathPoint> lstPoints = lstPathPointsTmp.get(0);
+		List<PathPoint> lstPoints = lstPathPointsTmp.get(0);//Liste von Punkten wird geliefert, die der Pathfinding Algorithmus gefunden hat.
 		
 		for(PathPoint tmpPathPoint : lstPoints) {
-			sumEstimation += tmpPathPoint.getEstimationValue();
+			sumEstimation += tmpPathPoint.getEstimationValue();//Estimations für die einzelnen Kacheln werden zusammengezählt.
 		}
 		
 		logger.log(Level.INFO, "Est: " + sumEstimation);

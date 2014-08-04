@@ -6,7 +6,11 @@ import java.util.List;
 
 import uni.oldenburg.server.pathfinding.GridItem.GridItemType;
 import uni.oldenburg.shared.model.Point;
-
+/**
+ * Implementiert das eigentliche Pathfinding.
+ * 
+ * @author Matthias
+ */	
 public class PathfindingSingle extends Pathfinding {
 	List<List<PathPoint>> lstPathPoints = new ArrayList<List<PathPoint>>();
 	

@@ -1,10 +1,13 @@
 package uni.oldenburg.server.pathfinding;
-
+/**
+ * Klasse repräsentiert eine Kachel auf der Karte.
+ * @author Matthias
+ */	
 public class GridItem {
-	int gridSize;
-	GridItemType type;
-	int myGridValue;
-	int myStepValue;
+	int gridSize;//Größe der Kachel
+	GridItemType type;//Typ der Kachel (Mauer, leere Kachel etc. siehe Enum)
+	int myGridValue;//Wert der hochgezählt wird, wenn bei der Vorwärtsberechnung ein Pfad gesucht wird.
+	int myStepValue;//Entfernung zur nächsten Kachel
 	
 	public enum GridItemType {
 		DefaultItem,
@@ -42,7 +45,7 @@ public class GridItem {
 	public void setItemType(GridItemType newType) {
 		setItemType(newType, false);
 	}
-	
+	//Methode 
 	public void setItemType(GridItemType newType, boolean reseting) {
 		if (!reseting) {
 			if (newType == GridItemType.WallItem && getItemType() == GridItemType.WallItem) {
