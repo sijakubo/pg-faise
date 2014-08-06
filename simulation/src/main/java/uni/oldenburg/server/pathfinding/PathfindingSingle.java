@@ -67,7 +67,7 @@ public class PathfindingSingle extends Pathfinding {
         bRunning = true;
         
         ComputeBlocksValues();
-        
+    
         drawGrid(myColumnCount, myRowCount, lstGridItem);
         
         PathPoint curPathPoint= new PathPoint();
@@ -89,20 +89,20 @@ public class PathfindingSingle extends Pathfinding {
             
             myMinValue = minValue;
 
-            lstPossiblePoints = saveBestPoint(curPathPoint, Direction.Left, minValue, lstPossiblePoints);
-            lstPossiblePoints = saveBestPoint(curPathPoint, Direction.Top, myMinValue, lstPossiblePoints);
-            lstPossiblePoints = saveBestPoint(curPathPoint, Direction.Right, myMinValue, lstPossiblePoints);
-            lstPossiblePoints = saveBestPoint(curPathPoint, Direction.Bottom, myMinValue, lstPossiblePoints);
+            lstPossiblePoints = saveBestPoint(curPathPoint, Direction.Left, lstPossiblePoints);
+            lstPossiblePoints = saveBestPoint(curPathPoint, Direction.Top, lstPossiblePoints);
+            lstPossiblePoints = saveBestPoint(curPathPoint, Direction.Right, lstPossiblePoints);
+            lstPossiblePoints = saveBestPoint(curPathPoint, Direction.Bottom, lstPossiblePoints);
     	            
             if(bDriveDiagonal){
-            	lstPossiblePoints = saveBestPoint(curPathPoint, Direction.TopLeft, myMinValue, lstPossiblePoints);
-            	lstPossiblePoints = saveBestPoint(curPathPoint, Direction.TopRight, myMinValue, lstPossiblePoints);
-            	lstPossiblePoints = saveBestPoint(curPathPoint, Direction.BottomLeft, myMinValue, lstPossiblePoints);
-            	lstPossiblePoints = saveBestPoint(curPathPoint, Direction.BottomRight, myMinValue, lstPossiblePoints);
+            	lstPossiblePoints = saveBestPoint(curPathPoint, Direction.TopLeft, lstPossiblePoints);
+            	lstPossiblePoints = saveBestPoint(curPathPoint, Direction.TopRight, lstPossiblePoints);
+            	lstPossiblePoints = saveBestPoint(curPathPoint, Direction.BottomLeft, lstPossiblePoints);
+            	lstPossiblePoints = saveBestPoint(curPathPoint, Direction.BottomRight, lstPossiblePoints);
             }
             
             if (lstPossiblePoints.size() > 0){
-            	int randomIndex = (int)Math.round((float)lstPossiblePoints.size());
+            	int randomIndex = (int)(Math.random() * 100) % lstPossiblePoints.size();
             	PathPoint lessRotatingPathPoint = null;
             	
             	if(bAvoidRotations){
@@ -129,7 +129,7 @@ public class PathfindingSingle extends Pathfinding {
                 
         		lstGridItem.get(getIndex(curPathPoint.getPoint(), myColumnCount)).setItemType(GridItemType.PathItem);
         		
-        		drawGrid(myColumnCount, myRowCount, lstGridItem);
+        		//drawGrid(myColumnCount, myRowCount, lstGridItem);
             }
             else {
             	lstSinglePathpoints.clear();

@@ -142,28 +142,28 @@ public abstract class Pathfinding implements IPathfinding {
 		
 		switch (newDirection){
 		case Left:
-			tmpPoint = new Point (curPoint.getX() - 1, curPoint.getY());
+			tmpPoint = new Point (curPoint.getX() - Conveyor.RASTER_SIZE, curPoint.getY());
 			break;
 		case Top:
-			tmpPoint = new Point (curPoint.getX(), curPoint.getY() - 1);
+			tmpPoint = new Point (curPoint.getX(), curPoint.getY() - Conveyor.RASTER_SIZE);
 			break;
 		case Right:
-			tmpPoint = new Point (curPoint.getX() + 1, curPoint.getY());
+			tmpPoint = new Point (curPoint.getX() + Conveyor.RASTER_SIZE, curPoint.getY());
 			break;
 		case Bottom:
-			tmpPoint = new Point (curPoint.getX(), curPoint.getY() + 1);
+			tmpPoint = new Point (curPoint.getX(), curPoint.getY() + Conveyor.RASTER_SIZE);
 			break;
 		case TopLeft:
-			tmpPoint = new Point (curPoint.getX() - 1, curPoint.getY() - 1);
+			tmpPoint = new Point (curPoint.getX() - Conveyor.RASTER_SIZE, curPoint.getY() - Conveyor.RASTER_SIZE);
 			break;
 		case TopRight:
-			tmpPoint = new Point (curPoint.getX() + 1, curPoint.getY() - 1);
+			tmpPoint = new Point (curPoint.getX() + Conveyor.RASTER_SIZE, curPoint.getY() - Conveyor.RASTER_SIZE);
 			break;
 		case BottomLeft:
-			tmpPoint = new Point (curPoint.getX() - 1, curPoint.getY() + 1);
+			tmpPoint = new Point (curPoint.getX() - Conveyor.RASTER_SIZE, curPoint.getY() + Conveyor.RASTER_SIZE);
 			break;
 		case BottomRight:
-			tmpPoint = new Point (curPoint.getX() + 1, curPoint.getY() + 1);
+			tmpPoint = new Point (curPoint.getX() + Conveyor.RASTER_SIZE, curPoint.getY() + Conveyor.RASTER_SIZE);
 			break;		
 		
 		}
@@ -172,7 +172,7 @@ public abstract class Pathfinding implements IPathfinding {
 	}
 	
 	protected boolean inArea(Point newPoint) {
-		if (newPoint.getX() >= 0 && newPoint.getY() >= 0 && newPoint.getX() < myColumnCount && newPoint.getY() < myRowCount)
+		if (newPoint.getX() >= 0 && newPoint.getY() >= 0 && newPoint.getX() < (myColumnCount * Conveyor.RASTER_SIZE) && newPoint.getY() < (myRowCount * Conveyor.RASTER_SIZE))
 			return true;
 		
 		return false;
@@ -215,12 +215,15 @@ public abstract class Pathfinding implements IPathfinding {
 		Point neighborPoint = getNeighborPoint(curPoint, newDirection);
 		int nextStepValue = 10;
 		
+		//System.out.println("c: " + curPoint.toString());
+		//System.out.println("d: " + neighborPoint.toString());
+		
 		if (!inArea(neighborPoint))
 			return GridValueReturnType.DoesNotExists;
 		
 		GridItem nextItem = lstGridItem.get(getIndex(neighborPoint.getX(), neighborPoint.getY(), myColumnCount));
 		
-		if (nextItem.getItemType() != GridItemType.WallItem){
+		if (nextItem.getItemType() != GridItemType.WallItem) {
 			if (newDirection == Direction.TopLeft ||
 				newDirection == Direction.TopRight ||
 				newDirection == Direction.BottomLeft ||
@@ -269,11 +272,12 @@ public abstract class Pathfinding implements IPathfinding {
 			
 			GridItem myItem = lstGridItem.get(getIndex(curPoint.getX(), curPoint.getY(), myColumnCount));
 			
+			//System.out.println(myItem.myGridValue);
+			
 			if (myItem.myGridValue >= 0) {
 				for (Direction myDirection : lstDirectionBase) {
 					setValueOfSurroundingBlock(myItem, curPoint, myDirection, lstBlocksWithNewValue);
 				}
-			
 			
 				if(bDriveDiagonal){
 					setValueOfSurroundingBlock(myItem, curPoint, Direction.TopLeft, lstBlocksWithNewValue);
@@ -304,11 +308,9 @@ public abstract class Pathfinding implements IPathfinding {
 
 	}
 	
-	protected List<PathPoint> saveBestPoint(PathPoint curPathPoint, Direction newDirection, int minValue, List<PathPoint> lstPossiblePoints){
+	protected List<PathPoint> saveBestPoint(PathPoint curPathPoint, Direction newDirection, List<PathPoint> lstPossiblePoints){
 		Point neighborPoint = getNeighborPoint(curPathPoint.getPoint(), newDirection);
 		int newValue = getGridValue(neighborPoint);	
-		
-		myMinValue = minValue;
 		
 		switch(newDirection){
 		case TopLeft:
@@ -329,13 +331,10 @@ public abstract class Pathfinding implements IPathfinding {
 			 break;
 		default:
 			break;
-		
 		}
 		
-		System.out.println("c: " + curPathPoint.  + "n: " + newValue + " s: " + curPathPoint.getStepValue() + " m: " + minValue);
-		
-		if (/*newValue <= curPathPoint.getStepValue() &&*/ newValue <= minValue) {
-			System.out.println("better value found");
+		if (/*newValue <= curPathPoint.getStepValue() &&*/ newValue <= myMinValue) {
+			//System.out.println("better value found");
 			
 			if (bDriveDiagonal){
 				List<PathPoint> lstDeleteableValues= new ArrayList<PathPoint>();
@@ -366,8 +365,7 @@ public abstract class Pathfinding implements IPathfinding {
 			
 			lstPossiblePoints.add(myPathPoint);
 			
-			minValue = newValue;
-			myMinValue = minValue;
+			myMinValue = newValue;
 		}
 		
 		return lstPossiblePoints;

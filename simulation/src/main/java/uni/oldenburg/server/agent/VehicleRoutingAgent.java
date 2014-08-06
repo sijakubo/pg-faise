@@ -179,12 +179,11 @@ public class VehicleRoutingAgent extends Agent {
 				}
 				
 				int toSourceRampEstimation = CalculateEstimation(curPoint, srcRampPoint);
-				//int toDestinationRampEstimation = CalculateEstimation(srcRampPoint, dstRampPoint);
+				int toDestinationRampEstimation = CalculateEstimation(srcRampPoint, dstRampPoint);
 				
-				sumEstimation = toSourceRampEstimation; //+ toDestinationRampEstimation;
+				sumEstimation = toSourceRampEstimation + toDestinationRampEstimation;
 				
-
-				if (toSourceRampEstimation < 0);// || toDestinationRampEstimation < 0)
+				if ((toSourceRampEstimation < 0) || (toDestinationRampEstimation < 0))
 					sumEstimation = -1;
 			}
 			else {
@@ -254,12 +253,14 @@ public class VehicleRoutingAgent extends Agent {
 		lstPathPointsTmp = myPF.findPath(startPoint, stopPoint);
 
 		if (lstPathPointsTmp == null)
-			System.out.println("2");
+			if (myPF.getError() != PathMessageType.PathFound) {
+				lstPathPoints.clear();
+				return -1;		
+			}
+				
+		if(lstPathPoints.size() > 2)
+			lstPathPoints.clear();
 		
-		if (lstPathPointsTmp == null)
-			if (myPF.getError() != PathMessageType.PathFound)
-				return -1;
-			
 		lstPathPoints.add(lstPathPointsTmp.get(0));		
 	
 		
