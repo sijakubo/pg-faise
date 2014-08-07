@@ -12,7 +12,7 @@ import uni.oldenburg.shared.model.Point;
  * @author Matthias
  */	
 public abstract class Pathfinding implements IPathfinding {
-	public enum PathMessageType {
+	public enum PathMessageType {//Enum dient dazu den Status und eventuelle Fehler des Pathfindings zu kodieren
 		PathFound,
 		PathBlocked,
 		PathError,

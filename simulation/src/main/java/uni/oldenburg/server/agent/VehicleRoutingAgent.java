@@ -268,7 +268,7 @@ public class VehicleRoutingAgent extends Agent {
      * @author Matthias
      */
 	private int CalculateEstimation(Point startPoint, Point stopPoint) {
-		List<List<PathPoint>> lstPathPointsTmp = null;//Liste mit Listen von Pathfinding Punkten. Berücksichtigt, dass ein theorethisch mehrere Weg berechnen kann.
+		List<List<PathPoint>> lstPathPointsTmp = null;//Liste mit Listen von Pathfinding Punkten. Berücksichtigt, dass der Alogrithmus theorethisch mehrere Wege berechnen kann.
 				
 		lstPathPointsTmp = myPF.findPath(startPoint, stopPoint);
 

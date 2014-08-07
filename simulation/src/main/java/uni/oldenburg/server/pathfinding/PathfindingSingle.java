@@ -12,7 +12,7 @@ import uni.oldenburg.shared.model.Point;
  * @author Matthias
  */	
 public class PathfindingSingle extends Pathfinding {
-	List<List<PathPoint>> lstPathPoints = new ArrayList<List<PathPoint>>();
+	List<List<PathPoint>> lstPathPoints = new ArrayList<List<PathPoint>>();//Speichert gefundene Pfade
 	
 	PathMessageType returnValue = PathMessageType.Running;
 	
@@ -23,17 +23,21 @@ public class PathfindingSingle extends Pathfinding {
 	};
 	
 	
-	@Override
+	/**
+	 * Findet einen Pfad für einen gegebenen Start- und Endpunkt
+	 * 
+	 * @author Matthias
+	 */	
 	public List<List<PathPoint>> findPath(Point newStartPoint, Point newStopPoint) {
-		List<PathPoint> lstSinglePathpoints = new ArrayList<PathPoint>();
+		List<PathPoint> lstSinglePathpoints = new ArrayList<PathPoint>();//Speichert die gefundenen Punkte für einen möglichen Pfad
 		
-		returnValue = PathMessageType.Running;
+		returnValue = PathMessageType.Running;//Pathfinding wird gestartet und deshalb wird der Message Type auf running gesetzt
 		
-		if (bRunning)
+		if (bRunning)//Wenn der Pathfinding Algorithmus läuft, soll null zurückgegeben werden. 
 			return null;
 		
 		if (lstPathPoints != null)
-			lstPathPoints.clear();
+			lstPathPoints.clear();//Alte Punkte werden rausgenommen
 		else {
 			lstPathPoints = new ArrayList<List<PathPoint>>();
 		}
@@ -42,16 +46,16 @@ public class PathfindingSingle extends Pathfinding {
 		myStopPoint = newStopPoint;
 		
 		if(myStartPoint.getX() < 0 || myStartPoint.getY() < 0) {
-			returnValue = PathMessageType.PathError;
-			return null;
+			returnValue = PathMessageType.PathError;//Falls negative Punkte übergeben wurden, wird der Messagetype auf PathError gesetzt, weil			                                        
+			return null;                           //die Punkte sonst außerhalb der Karte sind
 		}
 			
 		if(myStopPoint.getX() < 0 || myStopPoint.getY() < 0) {
-			returnValue = PathMessageType.PathError;
-			return null;
+			returnValue = PathMessageType.PathError;//Falls negative Punkte übergeben wurden, wird der Messagetype auf PathError gesetzt, weil			                                        
+			return null;                           //die Punkte sonst außerhalb der Karte sind
 		}
 			
-		if (lstGridItem == null) {
+		if (lstGridItem == null) {//Wenn keine Karte existiert, wird abgebrochen.
 			returnValue = PathMessageType.NotInitialized;
 			return null;
 		}
