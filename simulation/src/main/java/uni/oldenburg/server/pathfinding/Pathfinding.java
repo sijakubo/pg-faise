@@ -101,7 +101,7 @@ public abstract class Pathfinding implements IPathfinding {
 	public static void drawGrid(int myColumnCount, int myRowCount, List<GridItem> lstGridItem) {
 		for (int y = 0; y < myRowCount; ++y) {
 			for (int x = 0; x < myColumnCount; ++x) {
-				switch (lstGridItem.get(Pathfinding.getIndex2(x, y, myColumnCount)).getItemType()) {
+				/*switch (lstGridItem.get(Pathfinding.getIndex2(x, y, myColumnCount)).getItemType()) {
 					case WallItem:
 					case DefaultItem:
 					case PathItem:
@@ -111,9 +111,9 @@ public abstract class Pathfinding implements IPathfinding {
 						break;
 					default:
 						break;
-				}
+				}*/
 				
-				/*switch (lstGridItem.get(Pathfinding.getIndex2(x, y, myColumnCount)).getItemType()) {
+				switch (lstGridItem.get(Pathfinding.getIndex2(x, y, myColumnCount)).getItemType()) {
 					case WallItem:
 						System.out.print("[x]");
 						break;
@@ -131,7 +131,7 @@ public abstract class Pathfinding implements IPathfinding {
 						break;
 					default:
 						break;
-				}*/
+				}
 			}
 			System.out.println("");
 		}

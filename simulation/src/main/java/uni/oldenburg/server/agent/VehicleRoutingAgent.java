@@ -23,11 +23,13 @@ import uni.oldenburg.server.pathfinding.IPathfinding;
 import uni.oldenburg.server.pathfinding.PathPoint;
 import uni.oldenburg.server.pathfinding.Pathfinding;
 import uni.oldenburg.server.pathfinding.GridItem.GridItemType;
+import uni.oldenburg.server.pathfinding.Pathfinding.Direction;
 import uni.oldenburg.server.pathfinding.Pathfinding.PathMessageType;
 import uni.oldenburg.server.pathfinding.PathfindingSingle;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.ConveyorVehicle;
+import uni.oldenburg.shared.model.ConveyorWall;
 import uni.oldenburg.shared.model.Point;
 import uni.oldenburg.shared.model.Szenario;
 
@@ -79,10 +81,28 @@ public class VehicleRoutingAgent extends Agent {
 				int x = myConveyor.getX();
 				int y = myConveyor.getY();
 				
-				logger.log(Level.INFO, "x/y: " + x + " / " + y + " -> " + Pathfinding.getIndex(x, y, myColumnCount));
+				//logger.log(Level.INFO, "x/y: " + x + " / " + y + " -> " + Pathfinding.getIndex(x, y, myColumnCount));
 				//Jeder Conveyor, der kein Fahrzeug ist, wird im entsprechenden Griditem als Wand deklariert und somit als Hinderniss gekennzeichnet.
-				GridItem myItem = lstGridItem.get(Pathfinding.getIndex(x, y, myColumnCount));
-				myItem.setItemType(GridItemType.WallItem);
+				if (myConveyor instanceof ConveyorWall) {
+					GridItem myItem = lstGridItem.get(Pathfinding.getIndex(x, y, myColumnCount));
+					myItem.setItemType(GridItemType.WallItem);		
+				}
+				else if (myConveyor instanceof ConveyorRamp) {
+
+					if (((ConveyorRamp)myConveyor).isVertical()) {
+						for (int i = 0; i < ((ConveyorRamp)myConveyor).getNumberOfBlocks(); ++i) {
+	
+							GridItem myItem = lstGridItem.get(Pathfinding.getIndex(x, y + i * Conveyor.RASTER_SIZE, myColumnCount));
+							myItem.setItemType(GridItemType.WallItem);	
+						}	
+					}
+					else {
+						for (int i = 0; i < ((ConveyorRamp)myConveyor).getNumberOfBlocks(); ++i) {
+							GridItem myItem = lstGridItem.get(Pathfinding.getIndex(x + i * Conveyor.RASTER_SIZE, y, myColumnCount));
+							myItem.setItemType(GridItemType.WallItem);	
+						}	
+					}
+				}
 			}
 		}
 		
