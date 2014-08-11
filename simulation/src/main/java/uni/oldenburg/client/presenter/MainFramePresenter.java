@@ -138,7 +138,7 @@ public class MainFramePresenter extends Presenter {
 		handleEvents();
 		
 		if (Debugging.isDebugging) {			
-			this.loadSzenario("Test05");
+			this.loadSzenario("Test01");
 			this.lstJobs.addRandomJobs(100);
 		}
 	}

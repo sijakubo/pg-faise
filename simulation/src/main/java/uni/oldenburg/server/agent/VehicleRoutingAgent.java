@@ -50,7 +50,7 @@ public class VehicleRoutingAgent extends Agent {
 	
 	private Logger logger = Logger.getLogger(VehicleRoutingAgent.class);
 
-	private List<List<PathPoint>> lstPathPoints = null;
+	private List<List<PathPoint>> lstPathPoints = new ArrayList<List<PathPoint>>();
 
 	/**
      * @author Matthias
@@ -78,8 +78,6 @@ public class VehicleRoutingAgent extends Agent {
 			if (!(myConveyor instanceof ConveyorVehicle)) {
 				int x = myConveyor.getX() / Conveyor.RASTER_SIZE;
 				int y = myConveyor.getY() / Conveyor.RASTER_SIZE;
-				
-				logger.log(Level.INFO, "x/y: " + x + " / " + y + " -> " + Pathfinding.getIndex(x, y, myColumnCount));
 				
 				GridItem myItem = lstGridItem.get(Pathfinding.getIndex(x, y, myColumnCount));
 				myItem.setItemType(GridItemType.WallItem);
@@ -122,7 +120,7 @@ public class VehicleRoutingAgent extends Agent {
 		}
 
 		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-			int sumEstimation = 1;
+			int sumEstimation = -1;
 			boolean hasPendingJob = false;
 			
 			ACLMessage msgGetPendingJobStatus = new ACLMessage(MessageType.GET_PENDING_JOB_STATUS);
@@ -189,6 +187,8 @@ public class VehicleRoutingAgent extends Agent {
 				hasPendingJob = true;
 			}
 			
+			System.out.println("sum: " + sumEstimation);
+			
 			// send estimation response
 			ACLMessage msgEstimationResponse = new ACLMessage(MessageType.ESTIMATION_RESPONSE);
 			msgEstimationResponse.addUserDefinedParameter("estimation", "" + sumEstimation);
@@ -240,19 +240,28 @@ public class VehicleRoutingAgent extends Agent {
 		}
 	}
 	
-	@SuppressWarnings("null")
 	private int CalculateEstimation(Point startPoint, Point stopPoint) {
 		List<List<PathPoint>> lstPathPointsTmp = null;
+		
+		//System.out.println("bla");
 				
-		PathMessageType pmtReturn = myPF.findPath(startPoint, stopPoint, lstPathPointsTmp);
+		lstPathPointsTmp = myPF.findPath(startPoint, stopPoint);
+		
+		//System.out.println("Status: " + myPF.getStatus());
+		
+		if (myPF.getStatus() != PathMessageType.PathFound) {
+			System.out.println("CE-Error: " + myPF.getStatus());
+			return -1;	
+		}
+		
+		if(lstPathPoints.size() > 2)
+			lstPathPoints.clear();
 		
 		lstPathPoints.add(lstPathPointsTmp.get(0));		
-	
-		
-		if (pmtReturn != PathMessageType.PathFound)
-			return -1;
 		
 		int sumEstimation = 0;
+		
+		//System.out.println("sumsum");
 		
 		List<PathPoint> lstPoints = lstPathPointsTmp.get(0);
 		

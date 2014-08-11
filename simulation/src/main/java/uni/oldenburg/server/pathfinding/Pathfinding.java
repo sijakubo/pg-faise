@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uni.oldenburg.server.pathfinding.GridItem.GridItemType;
-import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.Point;
 
 public abstract class Pathfinding implements IPathfinding {
@@ -90,7 +89,47 @@ public abstract class Pathfinding implements IPathfinding {
 		this.lstGridItem = lstGridItem;
 	}
 
-	public abstract PathMessageType findPath(Point newStartPoint, Point newStopPoint, List<List<PathPoint>> lstPathPoints);
+	public abstract List<List<PathPoint>> findPath(Point newStartPoint, Point newStopPoint);
+	
+	public static void drawGrid(int myColumnCount, int myRowCount, List<GridItem> lstGridItem) {
+		for (int y = 0; y < myRowCount; ++y) {
+			for (int x = 0; x < myColumnCount; ++x) {
+				/*switch (lstGridItem.get(Pathfinding.getIndex2(x, y, myColumnCount)).getItemType()) {
+					case WallItem:
+					case DefaultItem:
+					case PathItem:
+					case StartItem:
+					case StopItem:
+						System.out.print("[" + lstGridItem.get(Pathfinding.getIndex2(x, y, myColumnCount)).getGridValue() + "]");
+						break;
+					default:
+						break;
+				}*/
+				
+				switch (lstGridItem.get(Pathfinding.getIndex(x, y, myColumnCount)).getItemType()) {
+					case WallItem:
+						System.out.print("[x]");
+						break;
+					case DefaultItem:
+						System.out.print("[ ]");
+						break;
+					case PathItem:
+						System.out.print("[.]");
+						break;
+					case StartItem:
+						System.out.print("[a]");
+						break;
+					case StopItem:
+						System.out.print("[e]");
+						break;
+					default:
+						break;
+				}
+			}
+			System.out.println("");
+		}
+	}
+	
 	
 	protected Point getNeighborPoint(Point curPoint, Direction newDirection) {
 		Point tmpPoint = null;
@@ -134,7 +173,7 @@ public abstract class Pathfinding implements IPathfinding {
 	}
 	
 	public static int getIndex(int x, int y, int myColumnCount) {
-		return (y / Conveyor.RASTER_SIZE) * myColumnCount + (x / Conveyor.RASTER_SIZE);
+		return y * myColumnCount + x;
 	}
 	
 	public static int getIndex(Point newPoint, int myColumnCount){
