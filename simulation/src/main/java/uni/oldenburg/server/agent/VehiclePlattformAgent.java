@@ -1,6 +1,7 @@
 package uni.oldenburg.server.agent;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -9,10 +10,8 @@ import uni.oldenburg.Debugging;
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
-import uni.oldenburg.shared.model.Conveyor;
-import uni.oldenburg.shared.model.ConveyorRamp;
+import uni.oldenburg.server.pathfinding.PathPoint;
 import uni.oldenburg.shared.model.ConveyorVehicle;
-import uni.oldenburg.shared.model.Point;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -28,6 +27,8 @@ public class VehiclePlattformAgent extends Agent {
 	private Szenario mySzenario;
 	
 	private Logger logger = Logger.getLogger(VehiclePlattformAgent.class);
+	
+	private List<List<PathPoint>> lstPathPoints = null;
 	
 	/**
      * @author Matthias
@@ -97,12 +98,13 @@ public class VehiclePlattformAgent extends Agent {
      */
 	private class DrivePath extends CyclicBehaviour {
 		private int step = 0;
-		private Point srcPoint = null;
-		private Point dstPoint = null;
+		//private Point srcPoint = null;
+		//private Point dstPoint = null;
 		
 		int srcRampID = 0;
 		int dstRampID = 0;
 		
+		@SuppressWarnings("unchecked")
 		public void action() {
 			// start driving
 			if (step == 0) {
@@ -112,8 +114,18 @@ public class VehiclePlattformAgent extends Agent {
 					srcRampID = Integer.parseInt(msgResponse.getUserDefinedParameter("srcRampID"));
 					dstRampID = Integer.parseInt(msgResponse.getUserDefinedParameter("dstRampID"));
 					
+					System.out.println("get path!!!");
+					
+					try {
+						lstPathPoints = ((List<List<PathPoint>>)msgResponse.getContentObject());
+					} catch (UnreadableException e) {
+						e.printStackTrace();
+					}
+					
+					System.out.println("Path: " + lstPathPoints.size());
+					
 					// get entry/exit positions of ramps
-					for(Conveyor tmpConveyor: mySzenario.getConveyorList()) {
+					/*for(Conveyor tmpConveyor: mySzenario.getConveyorList()) {
 						if (tmpConveyor instanceof ConveyorRamp) {
 							ConveyorRamp tmpRampConveyor = (ConveyorRamp)tmpConveyor;
 							
@@ -124,7 +136,7 @@ public class VehiclePlattformAgent extends Agent {
 								dstPoint = tmpRampConveyor.getEntryPosition();
 							}
 						}
-					}
+					}*/
 					
 					step = 1;
 				}
@@ -132,9 +144,14 @@ public class VehiclePlattformAgent extends Agent {
 					block();
 			}
 			else if (step == 1) {
-				// go to source ramp							
-				myConveyor.setPosition(srcPoint.getX(), srcPoint.getY(), true);
+				// go to source ramp
+				List<PathPoint> lstToSource = lstPathPoints.get(0);
 				
+				for(PathPoint myPoint : lstToSource) {
+					myConveyor.setPosition(myPoint.getPoint().getX(), myPoint.getPoint().getY(), true);	
+				}
+				
+				lstToSource.clear();
 				
 				// take package from source ramp to this vehicle				
 				ACLMessage msgTransferFromSource = new ACLMessage(MessageType.TRANSFER_PACKAGE);
@@ -148,8 +165,15 @@ public class VehiclePlattformAgent extends Agent {
 				
 				
 				// go to destination ramp						
-				myConveyor.setPosition(dstPoint.getX(), dstPoint.getY(), true);
+				List<PathPoint> lstToDest = lstPathPoints.get(1);
 				
+				lstToDest.remove(0);
+				
+				for(PathPoint myPoint : lstToDest) {
+					myConveyor.setPosition(myPoint.getPoint().getX(), myPoint.getPoint().getY(), true);	
+				}
+				
+				lstToDest.clear();
 				
 				// give package to destination ramp				
 				ACLMessage msgTransferToDestination = new ACLMessage(MessageType.TRANSFER_PACKAGE);
@@ -160,6 +184,8 @@ public class VehiclePlattformAgent extends Agent {
 				myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.TRANSFER_PACKAGE_COMPLETED));
 				
 				//logger.log(Level.INFO, "Transfer 02: complete");
+				
+				lstPathPoints.clear();
 				
 				
 				// allow new drive request

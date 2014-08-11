@@ -1,6 +1,7 @@
 package uni.oldenburg.shared.model;
 
-import jade.util.leap.Serializable;
+import java.io.Serializable;
+
 @SuppressWarnings("serial")
 public class Point implements Serializable {
 	private int x = 0;

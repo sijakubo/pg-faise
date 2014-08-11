@@ -23,13 +23,11 @@ import uni.oldenburg.server.pathfinding.IPathfinding;
 import uni.oldenburg.server.pathfinding.PathPoint;
 import uni.oldenburg.server.pathfinding.Pathfinding;
 import uni.oldenburg.server.pathfinding.GridItem.GridItemType;
-import uni.oldenburg.server.pathfinding.Pathfinding.Direction;
 import uni.oldenburg.server.pathfinding.Pathfinding.PathMessageType;
 import uni.oldenburg.server.pathfinding.PathfindingSingle;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.ConveyorVehicle;
-import uni.oldenburg.shared.model.ConveyorWall;
 import uni.oldenburg.shared.model.Point;
 import uni.oldenburg.shared.model.Szenario;
 
@@ -47,12 +45,12 @@ public class VehicleRoutingAgent extends Agent {
 	private Point dstRampPoint = null;
 	
 	private boolean auctionInProgress = false;
-	//Interface für das Pathfinding
+	
 	private IPathfinding myPF = null;
 	
 	private Logger logger = Logger.getLogger(VehicleRoutingAgent.class);
-    //Speichert die Punkte für das Pathfinding
-	private List<List<PathPoint>> lstPathPoints = new ArrayList<List<PathPoint>>(); 
+
+	private List<List<PathPoint>> lstPathPoints = new ArrayList<List<PathPoint>>();
 
 	/**
      * @author Matthias
@@ -67,7 +65,7 @@ public class VehicleRoutingAgent extends Agent {
 		
 		int myColumnCount = MainFrameView.canvasWidth / Conveyor.RASTER_SIZE;
 		int myRowCount = MainFrameView.canvasHeight / Conveyor.RASTER_SIZE;
-		//Erzeugt für jede Kachel ein Griditem und speichert es in der Liste 
+		
 		List<GridItem> lstGridItem = new ArrayList<GridItem>();
 		
 		for (int i = 0; i < myColumnCount * myRowCount; ++i) {
@@ -75,40 +73,17 @@ public class VehicleRoutingAgent extends Agent {
 		}
 		
 		logger.log(Level.INFO, "w/h: " + myColumnCount + " / " + myRowCount);
-		//Alle Conveyor durchlaufen
+		
 		for(Conveyor myConveyor : mySzenario.getConveyorList()) {
-			if (!(myConveyor instanceof ConveyorVehicle)) { //Es wird geprüft, ob Conveyor Fahrzeug ist.
-				int x = myConveyor.getX();
-				int y = myConveyor.getY();
+			if (!(myConveyor instanceof ConveyorVehicle)) {
+				int x = myConveyor.getX() / Conveyor.RASTER_SIZE;
+				int y = myConveyor.getY() / Conveyor.RASTER_SIZE;
 				
-				//logger.log(Level.INFO, "x/y: " + x + " / " + y + " -> " + Pathfinding.getIndex(x, y, myColumnCount));
-				//Jeder Conveyor, der kein Fahrzeug ist, wird im entsprechenden Griditem als Wand deklariert und somit als Hinderniss gekennzeichnet.
-				if (myConveyor instanceof ConveyorWall) {
-					GridItem myItem = lstGridItem.get(Pathfinding.getIndex(x, y, myColumnCount));
-					myItem.setItemType(GridItemType.WallItem);		
-				}
-				else if (myConveyor instanceof ConveyorRamp) {
-
-					if (((ConveyorRamp)myConveyor).isVertical()) {
-						for (int i = 0; i < ((ConveyorRamp)myConveyor).getNumberOfBlocks(); ++i) {
-	
-							GridItem myItem = lstGridItem.get(Pathfinding.getIndex(x, y + i * Conveyor.RASTER_SIZE, myColumnCount));
-							myItem.setItemType(GridItemType.WallItem);	
-						}	
-					}
-					else {
-						for (int i = 0; i < ((ConveyorRamp)myConveyor).getNumberOfBlocks(); ++i) {
-							GridItem myItem = lstGridItem.get(Pathfinding.getIndex(x + i * Conveyor.RASTER_SIZE, y, myColumnCount));
-							myItem.setItemType(GridItemType.WallItem);	
-						}	
-					}
-				}
+				GridItem myItem = lstGridItem.get(Pathfinding.getIndex(x, y, myColumnCount));
+				myItem.setItemType(GridItemType.WallItem);
 			}
 		}
 		
-		Pathfinding.drawGrid(myColumnCount, myRowCount, lstGridItem);
-		
-		//Initialisierung mit PathfindingSingle
 		myPF = new PathfindingSingle(myColumnCount, myRowCount, lstGridItem);
 		
 		addBehaviour(new EstimationRequest(MessageType.ESTIMATION_REQUEST));
@@ -127,24 +102,25 @@ public class VehicleRoutingAgent extends Agent {
 	}
 	
 	/**
-	 * Bekommt Nachricht von:
+	 * Got message:
 	 *		RampRoutingAgent::Auction
 	 *		VehiclePlattformAgent::GetCurrentPosition		 		
-	 * Sendet Nachricht an:
+	 * Send message:
 	 * 		VehiclePlattformAgent::GetCurrentPosition
 	 * 		RampRoutingAgent::Auction
 	 * 
-	 * Verarbeitet Estimation Anfragen.
+	 * handles estimation requests
 	 * 
      * @author Matthias
      */
+
 	private class EstimationRequest extends CyclicReceiverBehaviour {
 		protected EstimationRequest(int msgType) {
 			super(MessageTemplate.MatchPerformative(msgType));
 		}
 
 		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-			int sumEstimation = 1;
+			int sumEstimation = -1;
 			boolean hasPendingJob = false;
 			
 			ACLMessage msgGetPendingJobStatus = new ACLMessage(MessageType.GET_PENDING_JOB_STATUS);
@@ -203,12 +179,15 @@ public class VehicleRoutingAgent extends Agent {
 				
 				sumEstimation = toSourceRampEstimation + toDestinationRampEstimation;
 				
-				if ((toSourceRampEstimation < 0) || (toDestinationRampEstimation < 0))
+
+				if (toSourceRampEstimation < 0 || toDestinationRampEstimation < 0)
 					sumEstimation = -1;
 			}
 			else {
 				hasPendingJob = true;
 			}
+			
+			System.out.println("sum: " + sumEstimation);
 			
 			// send estimation response
 			ACLMessage msgEstimationResponse = new ACLMessage(MessageType.ESTIMATION_RESPONSE);
@@ -261,38 +240,36 @@ public class VehicleRoutingAgent extends Agent {
 		}
 	}
 	
-	@SuppressWarnings("null")
-	/**
-	 * Berechnet mithilfe des Pathfindingalgorithmus einen Pfad und die daraus resultierende Estimation
-	 * 
-     * @author Matthias
-     */
 	private int CalculateEstimation(Point startPoint, Point stopPoint) {
-		List<List<PathPoint>> lstPathPointsTmp = null;//Liste mit Listen von Pathfinding Punkten. Berücksichtigt, dass der Alogrithmus theorethisch mehrere Wege berechnen kann.
+		List<List<PathPoint>> lstPathPointsTmp = null;
+		
+		//System.out.println("bla");
 				
 		lstPathPointsTmp = myPF.findPath(startPoint, stopPoint);
-
-		if (lstPathPointsTmp == null)
-			if (myPF.getError() != PathMessageType.PathFound) {
-				lstPathPoints.clear();
-				return -1;		
-			}
-				
+		
+		//System.out.println("Status: " + myPF.getStatus());
+		
+		if (myPF.getStatus() != PathMessageType.PathFound) {
+			System.out.println("CE-Error: " + myPF.getStatus());
+			return -1;	
+		}
+		
 		if(lstPathPoints.size() > 2)
 			lstPathPoints.clear();
 		
 		lstPathPoints.add(lstPathPointsTmp.get(0));		
-	
 		
-		int sumEstimation = 0;//Variable speichert die Summe der Estimations-> 
+		int sumEstimation = 0;
 		
-		List<PathPoint> lstPoints = lstPathPointsTmp.get(0);//Liste von Punkten wird geliefert, die der Pathfinding Algorithmus gefunden hat.
+		//System.out.println("sumsum");
+		
+		List<PathPoint> lstPoints = lstPathPointsTmp.get(0);
 		
 		for(PathPoint tmpPathPoint : lstPoints) {
-			sumEstimation += tmpPathPoint.getEstimationValue();//Estimations für die einzelnen Kacheln werden zusammengezählt.
+			sumEstimation += tmpPathPoint.getEstimationValue();
 		}
 		
-		logger.log(Level.INFO, "Est: " + sumEstimation + " : " + myPF.getError().toString());
+		logger.log(Level.INFO, "Est: " + sumEstimation);
 		
 		return sumEstimation;
 	}
