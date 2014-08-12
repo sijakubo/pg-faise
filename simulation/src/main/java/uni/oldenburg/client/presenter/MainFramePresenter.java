@@ -138,7 +138,7 @@ public class MainFramePresenter extends Presenter {
 		handleEvents();
 		
 		if (Debugging.isDebugging) {			
-			this.loadSzenario("Test01");
+			this.loadSzenario("Test04");
 			this.lstJobs.addRandomJobs(100);
 		}
 	}
@@ -1172,7 +1172,7 @@ public class MainFramePresenter extends Presenter {
 			}
 		};
 		
-		tmrJobStarter.scheduleRepeating(1000);
+		tmrJobStarter.scheduleRepeating(3000);
 		tmrJobStarter.run();
 	}
 	

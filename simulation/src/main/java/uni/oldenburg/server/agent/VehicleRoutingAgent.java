@@ -219,6 +219,8 @@ public class VehicleRoutingAgent extends Agent {
 		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
 			int vehicleWhoGotJobID = Integer.parseInt(msg.getUserDefinedParameter("vehicleID"));
 			
+			System.out.println("vehicleWhoGotJobID: " + vehicleWhoGotJobID);
+			
 			// am i the one who got the job?
 			if (myConveyor.getID() == vehicleWhoGotJobID) {	
 				// set pending incoming job status in own package-agent
@@ -269,7 +271,7 @@ public class VehicleRoutingAgent extends Agent {
 			sumEstimation += tmpPathPoint.getEstimationValue();
 		}
 		
-		logger.log(Level.INFO, "Est: " + sumEstimation);
+		logger.log(Level.INFO, "Est: " + sumEstimation + " ID: " + myConveyor.getID());
 		
 		return sumEstimation;
 	}

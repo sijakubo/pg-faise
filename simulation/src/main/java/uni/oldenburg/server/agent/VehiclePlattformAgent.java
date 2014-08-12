@@ -114,7 +114,7 @@ public class VehiclePlattformAgent extends Agent {
 					srcRampID = Integer.parseInt(msgResponse.getUserDefinedParameter("srcRampID"));
 					dstRampID = Integer.parseInt(msgResponse.getUserDefinedParameter("dstRampID"));
 					
-					System.out.println("get path!!!");
+					System.out.println("get path!!!" + " ID: " + myConveyor.getID());
 					
 					try {
 						lstPathPoints = ((List<List<PathPoint>>)msgResponse.getContentObject());

@@ -76,6 +76,8 @@ public class RampRoutingAgent extends Agent {
 		
 		public void action() {
 			// received auction start trigger -> request estimation requests
+			//System.out.println("step: " + step);
+			
 			if (step == 0) {
 				ACLMessage msgReceive = myAgent.receive(MessageTemplate.MatchPerformative(MessageType.AUCTION_START));
 				
@@ -100,13 +102,15 @@ public class RampRoutingAgent extends Agent {
 				ACLMessage msgReceive = myAgent.receive(MessageTemplate.MatchPerformative(MessageType.ESTIMATION_RESPONSE));
 				
 				if (msgReceive != null) {
-					/*logger.log(Level.INFO, 	"[Estimation response]" +
+					logger.log(Level.INFO, 	"[Estimation response]" +
 											" ID: " + msgReceive.getUserDefinedParameter("vehicleID") +
 											" Est: " + msgReceive.getUserDefinedParameter("estimation") +
-											" HasJob: " + msgReceive.getUserDefinedParameter("pendingJob"));*/
+											" HasJob: " + msgReceive.getUserDefinedParameter("pendingJob"));
 					
 					if (vehiclesAnswered < vehicleCount) {
 						++vehiclesAnswered;
+						
+						System.out.println("wait till all answered");
 						
 						// remember vehicles, who don't have a pending job
 						if (msgReceive.getUserDefinedParameter("pendingJob").equals("0")) {	
@@ -121,7 +125,12 @@ public class RampRoutingAgent extends Agent {
 						if (vehiclesAnswered == vehicleCount) {
 							step = 2;
 							vehiclesAnswered = 0;
+							
+							System.out.println("1: all answered");
 						}
+					}
+					else {
+						System.out.println("2: all answered");
 					}
 				}
 				else
@@ -132,6 +141,8 @@ public class RampRoutingAgent extends Agent {
 				int bestVehicleID = -1;
 				int bestVehicleEstimation = 0;
 				List<Integer> lstBestVehicles = new ArrayList<Integer>();
+				
+				System.out.println("choose vehicle");
 				
 				// find best estimation value from all vehicles who answered without a pending job
 				for(Integer myVehicleEstimation : mapVehicleEstimation.values()) {

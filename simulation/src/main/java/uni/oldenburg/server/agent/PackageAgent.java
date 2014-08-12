@@ -225,7 +225,7 @@ public class PackageAgent extends Agent {
 				case ConveyorRamp.RAMP_ENTRANCE:
 					// outgoing job already in progress? -> don't ask for now
 					if (hasPendingOutgoingJob) {
-						logger.log(Level.INFO, "[SendEnquirePackageRequest] CID: " + myConveyor.getID() + " has outgoing job" + " [IsRamp: " + (myConveyor instanceof ConveyorRamp) + "]");			
+						//logger.log(Level.INFO, "[SendEnquirePackageRequest] CID: " + myConveyor.getID() + " has outgoing job" + " [IsRamp: " + (myConveyor instanceof ConveyorRamp) + "]");			
 						return;
 					}
 					

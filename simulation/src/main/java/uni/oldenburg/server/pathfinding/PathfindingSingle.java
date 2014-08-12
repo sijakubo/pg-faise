@@ -40,8 +40,8 @@ public class PathfindingSingle extends Pathfinding {
 		myStartPoint = new Point(newStartPoint.getX() / Conveyor.RASTER_SIZE, newStartPoint.getY() / Conveyor.RASTER_SIZE);
 		myStopPoint = new Point(newStopPoint.getX() / Conveyor.RASTER_SIZE, newStopPoint.getY() / Conveyor.RASTER_SIZE);
 		
-		System.out.println("Start: " + myStartPoint.toString());
-		System.out.println("Stop : " + myStopPoint.toString());
+		//System.out.println("Start: " + myStartPoint.toString());
+		//System.out.println("Stop : " + myStopPoint.toString());
 		
 		if(myStartPoint.getX() < 0 || myStartPoint.getY() < 0) {
 			returnValue = PathMessageType.PathError;

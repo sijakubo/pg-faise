@@ -112,7 +112,7 @@ public class RampOrderAgent extends Agent {
 					switch(myConveyor.getRampType()) {
 						case ConveyorRamp.RAMP_ENTRANCE:
 							enquireRampsMsg = new ACLMessage(MessageType.ENQUIRE_RAMPS_WITHOUT_ENTRANCE);
-                     logger.log(Level.INFO, "[SendEnquirePackageRequestRelay] enquiring for package: " + packageID);
+							//logger.log(Level.INFO, "[SendEnquirePackageRequestRelay] enquiring for package: " + packageID);
 							break;
 						case ConveyorRamp.RAMP_EXIT:
 							enquireRampsMsg = new ACLMessage(MessageType.ENQUIRE_RAMPS_STORAGE);
@@ -175,7 +175,7 @@ public class RampOrderAgent extends Agent {
 					}
 					else {
 						if (new Date().getTime() - timeoutStart > 3000) {
-							logger.log(Level.INFO, "[SendEnquirePackageRequestRelay] CID: " + myConveyor.getID() + " step=1 -> TIMEOUT!!!");
+							//logger.log(Level.INFO, "[SendEnquirePackageRequestRelay] CID: " + myConveyor.getID() + " step=1 -> TIMEOUT!!!");
 							
 							for (int id : lstConveyorRamps) {
 								logger.log(Level.INFO, "Conveyor " + id + " answered!");
@@ -214,11 +214,11 @@ public class RampOrderAgent extends Agent {
 						myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.AUCTION_END));
 					}
 					else {
-						if (myConveyor.getRampType() == ConveyorRamp.RAMP_ENTRANCE)
-							logger.log(Level.INFO, "[SendEnquirePackageRequestRelay] CID: " + myConveyor.getID() + " - no free ramps found!");
+						//if (myConveyor.getRampType() == ConveyorRamp.RAMP_ENTRANCE)
+							//logger.log(Level.INFO, "[SendEnquirePackageRequestRelay] CID: " + myConveyor.getID() + " - no free ramps found!");
 						
-						if (myConveyor.getRampType() == ConveyorRamp.RAMP_EXIT)
-							logger.log(Level.INFO, "[SendEnquirePackageRequestRelay] CID: " + myConveyor.getID() + " - no package found in storage");
+						//if (myConveyor.getRampType() == ConveyorRamp.RAMP_EXIT)
+							//logger.log(Level.INFO, "[SendEnquirePackageRequestRelay] CID: " + myConveyor.getID() + " - no package found in storage");
 					}
 					
 					step = 0;
