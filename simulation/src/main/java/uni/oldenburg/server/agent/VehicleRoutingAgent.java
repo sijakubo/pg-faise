@@ -92,11 +92,14 @@ public class VehicleRoutingAgent extends Agent {
 		String nickname = AgentHelper.getUniqueNickname(VehicleRoutingAgent.NAME, myConveyor.getID(), mySzenario.getId());
 		AgentHelper.registerAgent(mySzenario.getId(), this, nickname);
 
+      sendBotCreatedToStatisticAgent();
+
 		if(Debugging.showAgentStartupMessages)
 			logger.log(Level.INFO, nickname + " started");
 	}
 
-	// destructor
+
+   // destructor
 	protected void takeDown() {
 		AgentHelper.unregister(this);
 	}
@@ -218,7 +221,9 @@ public class VehicleRoutingAgent extends Agent {
 
 		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
 			int vehicleWhoGotJobID = Integer.parseInt(msg.getUserDefinedParameter("vehicleID"));
-			
+
+         sendStartedWorkingToStatisticAgent();
+
 			System.out.println("vehicleWhoGotJobID: " + vehicleWhoGotJobID);
 			
 			// am i the one who got the job?
@@ -241,8 +246,8 @@ public class VehicleRoutingAgent extends Agent {
 			auctionInProgress = false;
 		}
 	}
-	
-	private int CalculateEstimation(Point startPoint, Point stopPoint) {
+
+   private int CalculateEstimation(Point startPoint, Point stopPoint) {
 		List<List<PathPoint>> lstPathPointsTmp = null;
 		
 		//System.out.println("bla");
@@ -275,4 +280,20 @@ public class VehicleRoutingAgent extends Agent {
 		
 		return sumEstimation;
 	}
+
+   /**
+    * @author sijakubo
+    */
+   private void sendStartedWorkingToStatisticAgent() {
+      ACLMessage msgBotWorking = new ACLMessage(MessageType.BOT_STARTED_WORKING);
+      msgBotWorking.addUserDefinedParameter(StatisticAgent.PARAM_TIMESTAMP, String.valueOf(System.currentTimeMillis()));
+      AgentHelper.addReceiver(msgBotWorking, this, StatisticAgent.AGENT_NAME, myConveyor.getID(), mySzenario.getId());
+      send(msgBotWorking);
+   }
+
+   private void sendBotCreatedToStatisticAgent() {
+      ACLMessage msgBotCreated = new ACLMessage(MessageType.BOT_CREATED);
+      AgentHelper.addReceiver(msgBotCreated, this, StatisticAgent.AGENT_NAME, myConveyor.getID(), mySzenario.getId());
+      send(msgBotCreated);
+   }
 }

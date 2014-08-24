@@ -151,6 +151,7 @@ public class PackageAgent extends Agent {
 			
 			if(myConveyor instanceof ConveyorRamp) {
 				EventHelper.addEvent(new JobCounterUpdateEvent(myConveyor.getID(), true));
+            sendPackageLeftSimulationBehaviour(myPackage);
 			}
 			
 			ACLMessage msgCompleted = new ACLMessage(MessageType.ADD_PACKAGE_COMPLETED);
@@ -159,7 +160,7 @@ public class PackageAgent extends Agent {
 		}
 	}
 
-	/**
+   /**
 	 * Got message:
 	 * 		RampPlattformAgent::IsPackageSpaceAvailableBehaviour
 	 * Send message:
@@ -438,4 +439,13 @@ public class PackageAgent extends Agent {
 			send(msgCompleted);
 		}
 	}
+
+   private void sendPackageLeftSimulationBehaviour(PackageData myPackage) {
+      ACLMessage msgPackageLeftSimulation = new ACLMessage(MessageType.PACKAGE_LEFT_SIMULATION);
+      msgPackageLeftSimulation.addUserDefinedParameter(StatisticAgent.PARAM_TIMESTAMP, String.valueOf(System.currentTimeMillis()));
+      msgPackageLeftSimulation.addUserDefinedParameter(StatisticAgent.PARAM_PACKAGE_ID, String.valueOf(myPackage.getPackageID()));
+      AgentHelper.addReceiver(msgPackageLeftSimulation, this, StatisticAgent.AGENT_NAME, myConveyor.getID(), mySzenario.getId());
+
+      send(msgPackageLeftSimulation);
+   }
 }

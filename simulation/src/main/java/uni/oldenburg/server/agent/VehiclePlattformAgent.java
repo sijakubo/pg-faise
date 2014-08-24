@@ -184,7 +184,9 @@ public class VehiclePlattformAgent extends Agent {
 				myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.TRANSFER_PACKAGE_COMPLETED));
 				
 				//logger.log(Level.INFO, "Transfer 02: complete");
-				
+
+            sendStoppedWorkingToStatisticAgent();
+
 				lstPathPoints.clear();
 				
 				
@@ -193,4 +195,14 @@ public class VehiclePlattformAgent extends Agent {
 			}
 		}
 	}
+
+   /**
+    * @author sijakubo
+    */
+   private void sendStoppedWorkingToStatisticAgent() {
+      ACLMessage msgBotStoppedWorking = new ACLMessage(MessageType.BOT_STOPPED_WORKING);
+      msgBotStoppedWorking.addUserDefinedParameter(StatisticAgent.PARAM_TIMESTAMP, String.valueOf(System.currentTimeMillis()));
+      AgentHelper.addReceiver(msgBotStoppedWorking, this, StatisticAgent.AGENT_NAME, myConveyor.getID(), mySzenario.getId());
+      send(msgBotStoppedWorking);
+   }
 }

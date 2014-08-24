@@ -1,7 +1,7 @@
 package uni.oldenburg.server.agent.message;
 
 /**
- * @author Christopher Matthias
+ * @author Christopher, Matthias, sijakubo
  */	
 public class MessageType {
 	public final static int REQUEST_RAMP_INFO 		   				= 0; // JobAgent -> RampPlattform
@@ -36,4 +36,13 @@ public class MessageType {
 	public final static int DRIVING_START							= 28;	
 	public final static int TRANSFER_PACKAGE						= 29;	
 	public final static int TRANSFER_PACKAGE_COMPLETED				= 30;
+
+
+   // Statistic Message Types
+   public final static int PACKAGE_ENTERED_SIMULATION			= 180;
+   public final static int PACKAGE_LEFT_SIMULATION				= 181;
+
+   public final static int BOT_CREATED						      = 182;
+   public final static int BOT_STARTED_WORKING			      = 183;
+   public final static int BOT_STOPPED_WORKING		         = 184;
 }

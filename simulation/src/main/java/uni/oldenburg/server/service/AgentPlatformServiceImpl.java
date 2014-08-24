@@ -21,13 +21,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import uni.oldenburg.client.service.AgentPlatformService;
-import uni.oldenburg.server.agent.JobAgent;
-import uni.oldenburg.server.agent.PackageAgent;
-import uni.oldenburg.server.agent.RampOrderAgent;
-import uni.oldenburg.server.agent.RampPlattformAgent;
-import uni.oldenburg.server.agent.RampRoutingAgent;
-import uni.oldenburg.server.agent.VehiclePlattformAgent;
-import uni.oldenburg.server.agent.VehicleRoutingAgent;
+import uni.oldenburg.server.agent.*;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Conveyor;
@@ -111,7 +105,8 @@ public class AgentPlatformServiceImpl extends RemoteServiceServlet implements Ag
 	   }
 	   
 	   addAgentToSimulation(0, szenario.getId(), argsJobAgent, JobAgent.NAME, new JobAgent());
-	   
+	   addAgentToSimulation(0, szenario.getId(), null, StatisticAgent.AGENT_NAME, new StatisticAgent());
+
 	   startAgents();
 	   
 	   return szenario.getId();
