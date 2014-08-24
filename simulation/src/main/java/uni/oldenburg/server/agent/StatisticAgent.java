@@ -8,6 +8,10 @@ import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.message.MessageType;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Agent to track different Scenarios (e.g. How long does it take from Entrace - Exit of a package) throughout
@@ -21,6 +25,9 @@ public class StatisticAgent extends Agent {
    public final static String PARAM_TIMESTAMP = "timestamp";
    public static final String PARAM_PACKAGE_ID = "packageId";
 
+   private Map<Integer, Long> packageEntrancetimestampsByPackageId;
+   private List<Long> packageProcessingTimes;
+
    @Override
    /**
     * @author sijakubo
@@ -32,10 +39,12 @@ public class StatisticAgent extends Agent {
       addBehaviour(new BotCreatedBehaviour(MessageType.BOT_CREATED));
       addBehaviour(new BotStartedWorkingBehaviour(MessageType.BOT_STARTED_WORKING));
       addBehaviour(new BotStoppedWorkingBehaviour(MessageType.BOT_STOPPED_WORKING));
+
+      packageEntrancetimestampsByPackageId = new HashMap<Integer, Long>();
+      packageProcessingTimes = new ArrayList<Long>();
    }
 
    /**
-    *
     * @author sijakubo
     */
    private class PackageEnteredSimulationBehaviour extends CyclicReceiverBehaviour {
@@ -50,7 +59,10 @@ public class StatisticAgent extends Agent {
        *    {@link uni.oldenburg.server.agent.StatisticAgent#PARAM_TIMESTAMP}
        */
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-
+         packageEntrancetimestampsByPackageId.put(
+               Integer.valueOf(msg.getUserDefinedParameter(PARAM_PACKAGE_ID)),
+               Long.valueOf(msg.getUserDefinedParameter(PARAM_TIMESTAMP))
+         );
       }
    }
 
@@ -69,7 +81,12 @@ public class StatisticAgent extends Agent {
        *    {@link uni.oldenburg.server.agent.StatisticAgent#PARAM_TIMESTAMP}
        */
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+         Long packageEntranceTime =
+               packageEntrancetimestampsByPackageId.get(Integer.valueOf(msg.getUserDefinedParameter(PARAM_PACKAGE_ID)));
+         Long packageLeftTime =
+               Long.valueOf(msg.getUserDefinedParameter(PARAM_TIMESTAMP));
 
+         packageProcessingTimes.add(packageLeftTime - packageEntranceTime);
       }
    }
 
@@ -87,7 +104,7 @@ public class StatisticAgent extends Agent {
        *    {@link uni.oldenburg.server.agent.StatisticAgent#PARAM_TIMESTAMP}
        */
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-
+         //TODO
       }
    }
 
@@ -105,7 +122,7 @@ public class StatisticAgent extends Agent {
        *    {@link uni.oldenburg.server.agent.StatisticAgent#PARAM_TIMESTAMP}
        */
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-
+         //TODO
       }
    }
 
@@ -123,7 +140,7 @@ public class StatisticAgent extends Agent {
        *    none
        */
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-
+         //TODO
       }
    }
 }
