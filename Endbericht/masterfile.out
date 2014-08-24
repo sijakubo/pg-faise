@@ -12,3 +12,10 @@
 \BOOKMARK [2][]{subsection.3.1}{3.1 Organisation der Teilgruppen \(Materialfluss, Fahrzeuge, Simulation\)}{section.3}% 12
 \BOOKMARK [2][]{subsection.3.2}{3.2 Rollenverteilung}{section.3}% 13
 \BOOKMARK [2][]{subsection.3.3}{3.3 Vorgehensmodell}{section.3}% 14
+\BOOKMARK [1][]{section.4}{4 Komponentenbeschreibung}{}% 15
+\BOOKMARK [2][]{subsection.4.1}{4.1 Mikrocontroller}{section.4}% 16
+\BOOKMARK [2][]{subsection.4.2}{4.2 Sensorik/ Aktorik}{section.4}% 17
+\BOOKMARK [2][]{subsection.4.3}{4.3 Contiki}{section.4}% 18
+\BOOKMARK [3][]{subsubsection.4.3.1}{4.3.1 Systemarchitektur}{subsection.4.3}% 19
+\BOOKMARK [3][]{subsubsection.4.3.2}{4.3.2 Events}{subsection.4.3}% 20
+\BOOKMARK [3][]{subsubsection.4.3.3}{4.3.3 Prozesse}{subsection.4.3}% 21

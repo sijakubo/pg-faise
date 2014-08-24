@@ -14,9 +14,9 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {2.2.2}Steuerungstechnik}{7}{subsubsection.2.2.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.3}Materialflusssysteme}{10}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.3}Materialflusssysteme}{9}{subsection.2.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{\nonumberline Funktionen von Materialflusssystemen}{11}{section*.13}
+\contentsline {paragraph}{\nonumberline Funktionen von Materialflusssystemen}{10}{section*.13}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.4}Fallbeispiele}{13}{subsection.2.4}
 \defcounter {refsection}{0}\relax 
@@ -31,3 +31,17 @@
 \contentsline {subsection}{\numberline {3.2}Rollenverteilung}{15}{subsection.3.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {3.3}Vorgehensmodell}{16}{subsection.3.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4}Komponentenbeschreibung}{19}{section.4}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.1}Mikrocontroller}{19}{subsection.4.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2}Sensorik/ Aktorik}{22}{subsection.4.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.3}Contiki}{23}{subsection.4.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {4.3.1}Systemarchitektur}{23}{subsubsection.4.3.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {4.3.2}Events}{24}{subsubsection.4.3.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {4.3.3}Prozesse}{24}{subsubsection.4.3.3}

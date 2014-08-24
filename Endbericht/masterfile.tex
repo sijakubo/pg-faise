@@ -9,10 +9,10 @@
 				DIV=calc,
 				final,		% Abgabe Version
 ]{scrartcl}
-
+%\usepackage{natbib}
 \usepackage{packages}
 \usepackage{layout}
-
+\usepackage{hyperref}
 \graphicspath{{image/}}
 \DeclareGraphicsExtensions{.png,.pdf}
 
@@ -81,6 +81,21 @@
 	\setfootsepline{0.5pt}
 	\setfootbotline{1pt}
 	\include{src/chapter3}
+	
+		% Chapter 4 Komponentenbeschreibung
+	\clearpage
+	\ohead[Komponentenbeschreibung]{Komponentenbeschreibung}
+	\chead[Uni Oldenburg]{Uni Oldenburg}
+	\ihead[PG FAISE]{PG FAISE}
+	\setheadtopline{1pt}
+	\setheadsepline{0.5pt}
+	\ofoot[Endbericht]{Endbericht}
+	\cfoot[\pagemark]{\pagemark}
+	\ifoot[30. September 2014]{30. September 2014}
+	\setfootsepline{0.5pt}
+	\setfootbotline{1pt}
+	\include{src/chapter4}
+	
 	
 	% Bibliography
 	\clearpage
