@@ -4,44 +4,82 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {1}Einleitung}{1}{section.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2}Stand der Technik}{2}{section.2}
+\contentsline {subsection}{\numberline {1.1}Motivation}{1}{subsection.1.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.1}Fahrerlose Transportsysteme}{2}{subsection.2.1}
+\contentsline {subsection}{\numberline {1.2}Zielsetzung}{2}{subsection.1.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2}Fahrerlose Transportfahrzeuge}{3}{subsection.2.2}
+\contentsline {subsection}{\numberline {1.3}Einsatzszenario}{2}{subsection.1.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {2.2.1}Orientierungssystem bzw. Navigation}{4}{subsubsection.2.2.1}
+\contentsline {subsection}{\numberline {1.4}Komponenten}{3}{subsection.1.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {2.2.2}Steuerungstechnik}{7}{subsubsection.2.2.2}
+\contentsline {section}{\numberline {2}Stand der Technik}{4}{section.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.3}Materialflusssysteme}{9}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.1}Fahrerlose Transportsysteme}{4}{subsection.2.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{\nonumberline Funktionen von Materialflusssystemen}{10}{section*.13}
+\contentsline {subsection}{\numberline {2.2}Fahrerlose Transportfahrzeuge}{5}{subsection.2.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.4}Fallbeispiele}{13}{subsection.2.4}
+\contentsline {subsubsection}{\numberline {2.2.1}Orientierungssystem bzw. Navigation}{6}{subsubsection.2.2.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {2.4.1}FTS in der Gl\"asernen Manufaktur Dresden (Volkswagen)}{13}{subsubsection.2.4.1}
+\contentsline {subsection}{\numberline {2.3}Fahrerlose Transportsysteme}{7}{subsection.2.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {2.4.2}FTS beim Automobilhersteller BMW im Werk Leipzig}{14}{subsubsection.2.4.2}
+\contentsline {subsection}{\numberline {2.4}Fahrerlose Transportfahrzeuge}{8}{subsection.2.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3}Projektorganisation}{15}{section.3}
+\contentsline {subsubsection}{\numberline {2.4.1}Orientierungssystem bzw. Navigation}{9}{subsubsection.2.4.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1}Organisation der Teilgruppen (Materialfluss, Fahrzeuge, Simulation)}{15}{subsection.3.1}
+\contentsline {subsubsection}{\numberline {2.4.2}Steuerungstechnik}{14}{subsubsection.2.4.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2}Rollenverteilung}{15}{subsection.3.2}
+\contentsline {subsection}{\numberline {2.5}Materialflusssysteme}{17}{subsection.2.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.3}Vorgehensmodell}{16}{subsection.3.3}
+\contentsline {subsection}{\numberline {2.6}Materialflusssysteme}{18}{subsection.2.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4}Komponentenbeschreibung}{19}{section.4}
+\contentsline {paragraph}{\nonumberline Funktionen von Materialflusssystemen}{19}{section*.13}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.1}Mikrocontroller}{19}{subsection.4.1}
+\contentsline {subsection}{\numberline {2.7}Fallbeispiele}{23}{subsection.2.7}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.2}Sensorik/ Aktorik}{22}{subsection.4.2}
+\contentsline {subsubsection}{\numberline {2.7.1}FTS in der Gl\"asernen Manufaktur Dresden (Volkswagen)}{23}{subsubsection.2.7.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.3}Contiki}{23}{subsection.4.3}
+\contentsline {subsubsection}{\numberline {2.7.2}FTS beim Automobilhersteller BMW im Werk Leipzig}{24}{subsubsection.2.7.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {4.3.1}Systemarchitektur}{23}{subsubsection.4.3.1}
+\contentsline {section}{\numberline {3}Projektorganisation}{26}{section.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {4.3.2}Events}{24}{subsubsection.4.3.2}
+\contentsline {subsection}{\numberline {3.1}Organisation der Teilgruppen (Materialfluss, Fahrzeuge, Simulation)}{26}{subsection.3.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {4.3.3}Prozesse}{24}{subsubsection.4.3.3}
+\contentsline {subsection}{\numberline {3.2}Rollenverteilung}{26}{subsection.3.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.3}Vorgehensmodell}{27}{subsection.3.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.4}Werkzeuge}{29}{subsection.3.4}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.4.1}Jira}{30}{subsubsection.3.4.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.4.2}Confluence}{30}{subsubsection.3.4.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4}Allgemeine Anforderungen}{31}{section.4}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.1}Ablaufszenario}{31}{subsection.4.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5}Teilbericht Simulation}{32}{section.5}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.1}Lastenheft}{32}{subsection.5.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.2}Grundlegende Designentscheidungen}{32}{subsection.5.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {5.2.1}Eigenentwicklung}{33}{subsubsection.5.2.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {5.2.2}Entwicklung einer Webanwendung}{33}{subsubsection.5.2.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {5.2.3}Umsetzung durch GWT}{34}{subsubsection.5.2.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6}Komponentenbeschreibung}{35}{section.6}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.1}Mikrocontroller}{35}{subsection.6.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.2}Sensorik/ Aktorik}{38}{subsection.6.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.3}Contiki}{39}{subsection.6.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.3.1}Systemarchitektur}{39}{subsubsection.6.3.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.3.2}Events}{40}{subsubsection.6.3.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.3.3}Prozesse}{40}{subsubsection.6.3.3}

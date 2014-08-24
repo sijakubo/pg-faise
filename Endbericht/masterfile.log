@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.30)  24 AUG 2014 20:39
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.30)  24 AUG 2014 21:18
 entering extended mode
 **masterfile.tex
 (C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\masterfile.tex
@@ -1299,8 +1299,13 @@ LaTeX Warning: Label `Systemarchitektur_FTS' multiply defined.
 
 LaTeX Warning: Label `Wertschoepfungskette' multiply defined.
 
-) (C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter3.aux)
-(C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter4.aux))
+) (C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter3.aux
+
+LaTeX Warning: Label `Vorgehensmodell_Prototyping' multiply defined.
+
+) (C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter4.aux)
+(C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter5.aux)
+(C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter6.aux))
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 32.
 LaTeX Font Info:    ... okay on input line 32.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 32.
@@ -1435,13 +1440,13 @@ Package biblatex Info: Reference segment=0 on input line 32.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
  (C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/title.tex
-<image/UniLogo.png, id=87, 1187.43625pt x 367.3725pt>
+<image/UniLogo.png, id=163, 1187.43625pt x 367.3725pt>
 File: image/UniLogo.png Graphic file (type png)
  <use image/UniLogo.png>
 Package pdftex.def Info: image/UniLogo.png used on input line 5.
 (pdftex.def)             Requested size: 310.0pt x 95.90698pt.
 
-<image/BUIENGLOGO.png, id=89, 348.30125pt x 72.27pt>
+<image/BUIENGLOGO.png, id=165, 348.30125pt x 72.27pt>
 File: image/BUIENGLOGO.png Graphic file (type png)
  <use image/BUIENGLOGO.png>
 Package pdftex.def Info: image/BUIENGLOGO.png used on input line 12.
@@ -1467,56 +1472,56 @@ LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
 (Font)              Font shape `T1/phv/b/n' tried instead on input line 14.
 
 (C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\masterfile.toc
-LaTeX Font Info:    Try loading font information for OT1+lmr on input line 9.
+LaTeX Font Info:    Try loading font information for OT1+lmr on input line 7.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\lm\ot1lmr.fd"
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OML+lmm on input line 9.
+LaTeX Font Info:    Try loading font information for OML+lmm on input line 7.
  ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\lm\omllmm.fd"
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for U+msa on input line 9.
+LaTeX Font Info:    Try loading font information for U+msa on input line 7.
  ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 9.
+LaTeX Font Info:    Try loading font information for U+msb on input line 7.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-))
+) [1
+
+
+
+
+
+])
 \tf@toc=\write5
- [1
-
-
-
-
-
-]
+ [2]
 (C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\masterfile.lof
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 27.
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 29.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\t1pcr.fd"
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 )
-Overfull \hbox (10.47902pt too wide) in paragraph at lines 27--27
+Overfull \hbox (10.47902pt too wide) in paragraph at lines 29--29
  [][] [][]\T1/ppl/m/n/10.95 Atmel 8 []$\T1/pcr/m/n/10.95 (http : / / www . ids . tu-[]bs . de / tl _ files / Lehre / Vor
 lesungen / 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 27--27
+Underfull \hbox (badness 10000) in paragraph at lines 29--29
  \T1/pcr/m/n/10.95 Simulation2 / Einfuehrung _ in _ die _ MC _ Programmierung _ Teil1 . 
  []
 
 
-Overfull \hbox (256.07349pt too wide) in paragraph at lines 29--29
+Overfull \hbox (256.07349pt too wide) in paragraph at lines 31--31
  [][] [][]\T1/ppl/m/n/10.95 Atmel 8 (http://www.ids.tu-bs.de/tl_files/Lehre/Vorlesungen/Simulation2/Einfuehrung_in_die_M
 C_Programmierung_Teil1.pdf)[] [][]  
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 31--31
+Underfull \hbox (badness 10000) in paragraph at lines 33--33
  \T1/pcr/m/n/10.95 http : / / www . up . edu . ps / ocw / upinar / moodledata / 872 / moddata / 
  []
 
@@ -1524,110 +1529,258 @@ Underfull \hbox (badness 10000) in paragraph at lines 31--31
 \tf@lof=\write6
  (C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\masterfile.lot)
 \tf@lot=\write7
-) [2
+) [3
 
 ]
-(C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter1.tex)pdfTeX warning
- (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
+(C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter1.tex
+LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 7.
+
+Underfull \hbox (badness 10000) in paragraph at lines 8--15
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 8--15
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 8--15
+
+ []
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.55 	\include{src/chapter1}
-                             [1
+l.15 
+      [1
 
 
 
 ]
-(C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter2.tex
-LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 5.
+Underfull \hbox (badness 10000) in paragraph at lines 17--23
+
+ []
 
 
-LaTeX Warning: Citation 'Guenther:2000' on page 2 undefined on input line 6.
+Underfull \hbox (badness 10000) in paragraph at lines 17--23
+
+ []
+
+) [2] [3] (C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter2.tex
+
+LaTeX Warning: Citation 'Guenther:2000' on page 4 undefined on input line 6.
 
 LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <10.95> not available
 (Font)              Font shape `T1/ppl/b/n' tried instead on input line 6.
 
-LaTeX Warning: Citation 'G\"unter:201' on page 2 undefined on input line 6.
+LaTeX Warning: Citation 'G\"unter:201' on page 4 undefined on input line 6.
 
-[2
+[4
 
 
 
 ]
 
-LaTeX Warning: Citation 'Verein:Deutscher:Ingenieure:2510' on page 3 undefined on input line 8.
+LaTeX Warning: Citation 'Verein:Deutscher:Ingenieure:2510' on page 5 undefined on input line 8.
 
-[3]
+[5]
 LaTeX Font Info:    Try loading font information for TS1+ppl on input line 14.
  ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ts1ppl.fd"
 File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
-)
-<image/Prinzipskizze_induktiven.jpg, id=205, 459.21562pt x 124.96687pt>
+) [6] [7] [8] [9]
+<image/Prinzipskizze_induktiven.jpg, id=338, 459.21562pt x 124.96687pt>
 File: image/Prinzipskizze_induktiven.jpg Graphic file (type jpg)
  <use image/Prinzipskizze_induktiven.jpg>
-Package pdftex.def Info: image/Prinzipskizze_induktiven.jpg used on input line 19.
+Package pdftex.def Info: image/Prinzipskizze_induktiven.jpg used on input line 46.
 (pdftex.def)             Requested size: 396.91325pt x 108.01859pt.
 
-[4] <image/Prinzipskizze_Koppelnavigation_rechts.jpg, id=213, 461.47406pt x 115.18031pt>
+<image/Prinzipskizze_Koppelnavigation_rechts.jpg, id=342, 461.47406pt x 115.18031pt>
 File: image/Prinzipskizze_Koppelnavigation_rechts.jpg Graphic file (type jpg)
 
 <use image/Prinzipskizze_Koppelnavigation_rechts.jpg>
-Package pdftex.def Info: image/Prinzipskizze_Koppelnavigation_rechts.jpg used on input line 26.
+Package pdftex.def Info: image/Prinzipskizze_Koppelnavigation_rechts.jpg used on input line 59.
 (pdftex.def)             Requested size: 396.91325pt x 99.06717pt.
-
-<image/Prinzipskizze_Koppelnavigation_links.jpg, id=216, 304.13625pt x 208.78pt>
+ [10 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Prinzipskizze_indukt
+iven.jpg>]
+<image/Prinzipskizze_Koppelnavigation_links.jpg, id=350, 304.13625pt x 208.78pt>
 File: image/Prinzipskizze_Koppelnavigation_links.jpg Graphic file (type jpg)
 
 <use image/Prinzipskizze_Koppelnavigation_links.jpg>
-Package pdftex.def Info: image/Prinzipskizze_Koppelnavigation_links.jpg used on input line 33.
+Package pdftex.def Info: image/Prinzipskizze_Koppelnavigation_links.jpg used on input line 78.
 (pdftex.def)             Requested size: 352.81552pt x 242.20406pt.
- [5 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Prinzipskizze_indukti
-ven.jpg> <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Prinzipskizze_Ko
-ppelnavigation_rechts.jpg>] [6 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/
-image/Prinzipskizze_Koppelnavigation_links.jpg>]
-<image/Prinzipskizze_zur_Navigation_mittels_GPS.jpg, id=226, 563.85657pt x 140.77594pt>
+ [11 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Prinzipskizze_Koppel
+navigation_rechts.jpg>] [12 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/ima
+ge/Prinzipskizze_Koppelnavigation_links.jpg>]
+<image/Prinzipskizze_zur_Navigation_mittels_GPS.jpg, id=360, 563.85657pt x 140.77594pt>
 File: image/Prinzipskizze_zur_Navigation_mittels_GPS.jpg Graphic file (type jpg)
 
 <use image/Prinzipskizze_zur_Navigation_mittels_GPS.jpg>
-Package pdftex.def Info: image/Prinzipskizze_zur_Navigation_mittels_GPS.jpg used on input line 46.
+Package pdftex.def Info: image/Prinzipskizze_zur_Navigation_mittels_GPS.jpg used on input line 98.
 (pdftex.def)             Requested size: 396.91325pt x 99.09666pt.
+ [13 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Prinzipskizze_zur_Na
+vigation_mittels_GPS.jpg>]
+<image/Systemarchitektur_FTS.jpg, id=365, 732.7375pt x 365.365pt>
+File: image/Systemarchitektur_FTS.jpg Graphic file (type jpg)
+ <use image/Systemarchitektur_FTS.jpg>
+Package pdftex.def Info: image/Systemarchitektur_FTS.jpg used on input line 135.
+(pdftex.def)             Requested size: 396.91325pt x 197.91298pt.
+ [14]
+File: image/Systemarchitektur_FTS.jpg Graphic file (type jpg)
 
-<image/Systemarchitektur_FTS.jpg, id=227, 732.7375pt x 365.365pt>
-File: image/Systemarchitektur_FTS.jpg Graphic file (type jpg)
- <use image/Systemarchitektur_FTS.jpg>
-Package pdftex.def Info: image/Systemarchitektur_FTS.jpg used on input line 60.
+<use image/Systemarchitektur_FTS.jpg>
+Package pdftex.def Info: image/Systemarchitektur_FTS.jpg used on input line 153.
 (pdftex.def)             Requested size: 396.91325pt x 197.91298pt.
- [7 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Prinzipskizze_zur_Nav
-igation_mittels_GPS.jpg>]
-File: image/Systemarchitektur_FTS.jpg Graphic file (type jpg)
- <use image/Systemarchitektur_FTS.jpg>
-Package pdftex.def Info: image/Systemarchitektur_FTS.jpg used on input line 69.
-(pdftex.def)             Requested size: 396.91325pt x 197.91298pt.
- [8 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Systemarchitektur_FTS
-.jpg>]
-<image/Wertschoepfungskette.jpg, id=238, 705.63625pt x 318.18875pt>
+ [15 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Systemarchitektur_FT
+S.jpg>] [16] [17]
+<image/Wertschoepfungskette.jpg, id=386, 705.63625pt x 318.18875pt>
 File: image/Wertschoepfungskette.jpg Graphic file (type jpg)
  <use image/Wertschoepfungskette.jpg>
-Package pdftex.def Info: image/Wertschoepfungskette.jpg used on input line 80.
+Package pdftex.def Info: image/Wertschoepfungskette.jpg used on input line 181.
 (pdftex.def)             Requested size: 396.91325pt x 178.97586pt.
- [9]
-<image/Stetigfoerderer.jpg, id=246, 411.5375pt x 270.00874pt>
+ [18 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Wertschoepfungskette
+.jpg>]
+<image/Stetigfoerderer.jpg, id=393, 411.5375pt x 270.00874pt>
 File: image/Stetigfoerderer.jpg Graphic file (type jpg)
  <use image/Stetigfoerderer.jpg>
-Package pdftex.def Info: image/Stetigfoerderer.jpg used on input line 94.
+Package pdftex.def Info: image/Stetigfoerderer.jpg used on input line 216.
 (pdftex.def)             Requested size: 308.71106pt x 202.54312pt.
- [10 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Wertschoepfungskette
-.jpg>] [11 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Stetigfoerdere
-r.jpg>] [12] [13]
+ [19]
 
-LaTeX Warning: Citation 'S.36' on page 14 undefined on input line 131.
+LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-) [14] (C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter3.tex
-[15
+[20] [21 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Stetigfoerderer.
+jpg>] [22] [23]
+
+! LaTeX Error: Something's wrong--perhaps a missing \item.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.288 \item D
+             irektanlieferung per LKW: Gro\"sse Teile mit geringer Komplexit...
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: Something's wrong--perhaps a missing \item.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.288 \item D
+             irektanlieferung per LKW: Gro\"sse Teile mit geringer Komplexit...
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: Something's wrong--perhaps a missing \item.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.288 \item D
+             irektanlieferung per LKW: Gro\"sse Teile mit geringer Komplexit...
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: Something's wrong--perhaps a missing \item.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.289 \item M
+             odulanlieferung per EHB8: Gro\"sse und komplexe Baugruppen (z. ...
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: Something's wrong--perhaps a missing \item.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.289 \item M
+             odulanlieferung per EHB8: Gro\"sse und komplexe Baugruppen (z. ...
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: Something's wrong--perhaps a missing \item.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.289 \item M
+             odulanlieferung per EHB8: Gro\"sse und komplexe Baugruppen (z. ...
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: Something's wrong--perhaps a missing \item.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.290 \item L
+             agerware per FTS: Die Mehrzahl der Teile wird in einem Versorgu...
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: Something's wrong--perhaps a missing \item.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.290 \item L
+             agerware per FTS: Die Mehrzahl der Teile wird in einem Versorgu...
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: Something's wrong--perhaps a missing \item.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.290 \item L
+             agerware per FTS: Die Mehrzahl der Teile wird in einem Versorgu...
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+LaTeX Warning: Citation 'S.36' on page 24 undefined on input line 290.
+
+
+! LaTeX Error: Something's wrong--perhaps a missing \item.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.290 ...t \cite{Guenther:2011,S.36}.\end{itemize}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+[24]) [25] (C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter3.tex
+[26
 
 
 
-] <image/Projektorganisation_Scrum.png, id=282, 974.13937pt x 271.0125pt>
+] <image/Projektorganisation_Scrum.png, id=437, 974.13937pt x 271.0125pt>
 File: image/Projektorganisation_Scrum.png Graphic file (type png)
  <use image/Projektorganisation_Scrum.png>
 Package pdftex.def Info: image/Projektorganisation_Scrum.png used on input line 55.
@@ -1636,17 +1789,38 @@ Package pdftex.def Info: image/Projektorganisation_Scrum.png used on input line 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[16] <image/Vorgehensmodell_Prototyping.png, id=288, 859.71187pt x 493.845pt>
+[27] <image/Vorgehensmodell_Prototyping.png, id=443, 859.71187pt x 493.845pt>
 File: image/Vorgehensmodell_Prototyping.png Graphic file (type png)
 
 <use image/Vorgehensmodell_Prototyping.png>
 Package pdftex.def Info: image/Vorgehensmodell_Prototyping.png used on input line 68.
 (pdftex.def)             Requested size: 396.91325pt x 228.00035pt.
- [17 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Projektorganisation_
-Scrum.png>]) [18 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Vorgehen
-smodell_Prototyping.png>]
-(C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter4.tex
-<image/Aubau_eines_Mikrocontrollers.png, id=301, 446.41782pt x 352.31625pt>
+ [28 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Projektorganisation_
+Scrum.png>] <image/logoAtlassian.png, id=449, 810.02625pt x 250.9375pt>
+File: image/logoAtlassian.png Graphic file (type png)
+
+<use image/logoAtlassian.png>
+Package pdftex.def Info: image/logoAtlassian.png used on input line 83.
+(pdftex.def)             Requested size: 220.50887pt x 68.30922pt.
+ [29 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Vorgehensmodell_Prot
+otyping.png> <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/logoAtlassia
+n.png>]) [30]
+(C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter4.tex) [31
+
+
+
+]
+(C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter5.tex [32
+
+
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 16--19
+
+ []
+
+[33]) [34] (C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter6.tex
+<image/Aubau_eines_Mikrocontrollers.png, id=491, 446.41782pt x 352.31625pt>
 File: image/Aubau_eines_Mikrocontrollers.png Graphic file (type png)
 
 <use image/Aubau_eines_Mikrocontrollers.png>
@@ -1664,12 +1838,65 @@ you forgot something else, as in `\hbox{$x}'. In such cases
 the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
-[19
+[35
 
 
 
  <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Aubau_eines_Mikrocontrol
-lers.png>] <image/Atmel8.png, id=311, 337.26pt x 283.81032pt>
+lers.png>]
+
+! Package inputenc Error: Keyboard character used is undefined
+(inputenc)                in inputencoding `utf8'.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.22           \item SRAM–
+                           Datenspeicher (Static Random-Access Memory)
+You need to provide a definition with \DeclareInputText 
+or \DeclareInputMath before using this key.
+
+
+! Package inputenc Error: Keyboard character used is undefined
+(inputenc)                in inputencoding `utf8'.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.23 					\item Flash ROM–
+                           Programmspeicher (Read Only Memory)
+You need to provide a definition with \DeclareInputText 
+or \DeclareInputMath before using this key.
+
+
+! Package inputenc Error: Keyboard character used is undefined
+(inputenc)                in inputencoding `utf8'.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.24 					\item EEPR OM–
+                         Festspeicher (Electrically Erasable Programmable Re...
+You need to provide a definition with \DeclareInputText 
+or \DeclareInputMath before using this key.
+
+
+! Package inputenc Error: Keyboard character used is undefined
+(inputenc)                in inputencoding `utf8'.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.43 \item Freescale (fr¨
+                         uher Motorola) (68HC08 bzw. 68HCS08)
+You need to provide a definition with \DeclareInputText 
+or \DeclareInputMath before using this key.
+
+<image/Atmel8.png, id=501, 337.26pt x 283.81032pt>
 File: image/Atmel8.png Graphic file (type png)
  <use image/Atmel8.png>
 Package pdftex.def Info: image/Atmel8.png used on input line 49.
@@ -1684,7 +1911,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 50--50
 \T1/pcr/m/n/10.95 Simulation2 / Einfuehrung _ in _ die _ MC _ Programmierung _ Teil1 .
  []
 
-<image/LegendeAtmel8.png, id=314, 382.42876pt x 79.79813pt>
+<image/LegendeAtmel8.png, id=504, 382.42876pt x 79.79813pt>
 File: image/LegendeAtmel8.png Graphic file (type png)
  <use image/LegendeAtmel8.png>
 Package pdftex.def Info: image/LegendeAtmel8.png used on input line 55.
@@ -1729,13 +1956,13 @@ Overfull \hbox (269.40967pt too wide) in paragraph at lines 56--56
 Programmierung_Teil1.pdf)| 
  []
 
-[20]
+[36]
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[21 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Atmel8.png>] [22 <C:/
+[37 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Atmel8.png>] [38 <C:/
 Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/LegendeAtmel8.png>]
-<image/Systemarchitektur_Contiki.png, id=331, 310.91156pt x 183.68625pt>
+<image/Systemarchitektur_Contiki.png, id=520, 310.91156pt x 183.68625pt>
 File: image/Systemarchitektur_Contiki.png Graphic file (type png)
  <use image/Systemarchitektur_Contiki.png>
 Package pdftex.def Info: image/Systemarchitektur_Contiki.png used on input line 93.
@@ -1755,7 +1982,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 94--94
 []$\T1/pcr/m/n/10.95 (Quelle : http : / / www . up . edu . ps / ocw / upinar / moodledata / 872 /
  []
 
-[23 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Systemarchitektur_Con
+[39 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Systemarchitektur_Con
 tiki.png>]
 ! You can't use a prefix with `end-group character }'.
 <to be read again> 
@@ -1772,7 +1999,7 @@ l.109 ...ert der Aufrufer und setzt seine Ausf\"\"
 You've closed more groups than you opened.
 Such booboos are generally harmless, so keep going.
 
-<image/Beispielprozess.png, id=342, 378.66469pt x 258.21469pt>
+<image/Beispielprozess.png, id=532, 378.66469pt x 258.21469pt>
 File: image/Beispielprozess.png Graphic file (type png)
  <use image/Beispielprozess.png>
 Package pdftex.def Info: image/Beispielprozess.png used on input line 116.
@@ -1781,18 +2008,19 @@ Package pdftex.def Info: image/Beispielprozess.png used on input line 116.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[24]) [25 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Beispielprozess
+[40]) [41 <C:/Users/chancelle/Desktop/chancelle_docs/pg-faise/faise/endBericht/pg-faise/Endbericht/image/Beispielprozess
 .png>]
-Overfull \hbox (15.22435pt too wide) in paragraph at lines 111--111
+Overfull \hbox (15.22435pt too wide) in paragraph at lines 140--140
 \T1/pcr/m/n/10.95 Vorlesungen / Simulation2 / Einfuehrung \ _in \ _die \ _MC \ _Programmierung \
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 112.
-[26
+[42
 
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 112.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 141.
+ [43]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 141.
  (C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\masterfile.aux
 (C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/title.aux)
 (C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/abstract.aux)
@@ -1800,11 +2028,13 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 112.
 (C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter1.aux)
 (C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter2.aux)
 (C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter3.aux)
-(C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter4.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 112.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 112.
+(C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter4.aux)
+(C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter5.aux)
+(C:\Users\chancelle\Desktop\chancelle_docs\pg-faise\faise\endBericht\pg-faise\Endbericht\src/chapter6.aux))
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 141.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 141.
 Package rerunfilecheck Info: File `masterfile.out' has not changed.
-(rerunfilecheck)             Checksum: 5D73B4BA4310C598D47FCA16B1F10EFD;1630.
+(rerunfilecheck)             Checksum: 51FF844E59CF59C6D7E6B520C7693565;3045.
 
 
 LaTeX Warning: There were undefined references.
@@ -1818,24 +2048,24 @@ Package biblatex Warning: Please (re)run BibTeX on the file(s):
 (biblatex)                and rerun LaTeX afterwards.
 
 Package logreq Info: Writing requests to 'masterfile.run.xml'.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 112.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 141.
  ) 
 Here is how much of TeX's memory you used:
- 19431 strings out of 493921
- 307199 string characters out of 3144864
- 539374 words of memory out of 3000000
- 22250 multiletter control sequences out of 15000+200000
+ 19532 strings out of 493921
+ 309702 string characters out of 3144864
+ 546074 words of memory out of 3000000
+ 22287 multiletter control sequences out of 15000+200000
  47952 words of font info for 75 fonts, out of 3000000 for 9000
  845 hyphenation exceptions out of 8191
- 54i,11n,57p,2332b,2336s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 54i,11n,57p,2377b,2336s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files (x86)/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/
 courier/ucrr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Program Files (x86)/MiKTeX
  2.9/fonts/type1/urw/palatino/uplb8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/palatino/uplr8a.pfb><C:/Prog
 ram Files (x86)/MiKTeX 2.9/fonts/type1/urw/palatino/uplr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/palati
 no/uplri8a.pfb>
-Output written on masterfile.pdf (29 pages, 608372 bytes).
+Output written on masterfile.pdf (47 pages, 681793 bytes).
 PDF statistics:
- 414 PDF objects out of 1000 (max. 8388607)
- 86 named destinations out of 1000 (max. 500000)
- 249 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 621 PDF objects out of 1000 (max. 8388607)
+ 135 named destinations out of 1000 (max. 500000)
+ 406 words of extra memory for PDF output out of 10000 (max. 10000000)
 

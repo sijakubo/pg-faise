@@ -57,6 +57,25 @@
   \field{year}{2000}
 \endentry
 
+\entry{stf}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Heinrich}{H.}%
+     {M.}{M.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Vieweg + Teubner Verlag}%
+  }
+  \strng{namehash}{HM1}
+  \strng{fullhash}{HM1}
+  \field{sortinit}{H}
+  \field{title}{Transport- und Lagerlogistik: Planung, Struktur, Steuerung und
+  Kosten von Systemen der Intralogistik}
+  \field{year}{2009}
+\endentry
+
 \entry{Ten:2008}{book}{}
   \name{author}{2}{}{%
     {{}%
@@ -141,6 +160,25 @@
   \field{year}{2006}
 \endentry
 
+\entry{plstg}{report}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Owen}{O.}%
+     {J.}{J.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{OJ1}
+  \strng{fullhash}{OJ1}
+  \field{sortinit}{O}
+  \field{title}{{How to Use Player/Stage 2nd Edition}}
+  \list{institution}{1}{%
+    {Player Community}%
+  }
+  \field{type}{techreport}
+  \field{year}{2010}
+\endentry
+
 \entry{Stich:Bruckner:2002}{book}{}
   \name{author}{1}{}{%
     {{}%
@@ -220,6 +258,24 @@
   \field{year}{2011}
 \endentry
 
+\entry{fts}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Ulrich}{U.}%
+     {G.}{G.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Vieweg + Teubner Verlag}%
+  }
+  \strng{namehash}{UG2}
+  \strng{fullhash}{UG2}
+  \field{sortinit}{U}
+  \field{title}{Fahrerlose Transportsysteme}
+  \field{year}{2011}
+\endentry
+
 \entry{Viktor:Seib:2014:Online}{online}{}
   \name{author}{1}{}{%
     {{}%
@@ -294,6 +350,39 @@
   \endverb
   \field{year}{2013}
   \warn{\item Invalid format of field 'urldate'}
+\endentry
+
+\entry{gwt}{misc}{}
+  \name{author}{1}{}{%
+    {{}%
+     {www.gwtproject.org}{w.}%
+     {}{}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{w1}
+  \strng{fullhash}{w1}
+  \field{sortinit}{W}
+  \field{howpublished}{\url{http://www.gwtproject.org/}}
+  \field{title}{{GWT}}
+  \field{year}{2014}
+\endentry
+
+\entry{ieft}{misc}{}
+  \name{author}{1}{}{%
+    {{}%
+     {www.transportlogistic.de}{w.}%
+     {}{}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{w2}
+  \strng{fullhash}{w2}
+  \field{sortinit}{W}
+  \field{howpublished}{\url{http://www.transportlogistic.de/link/de/26917546}}
+  \field{title}{{Intralogistik \& modulare, flexible Systeme für effiziente,
+  transparente und zukunftsfähige Prozesse}}
+  \field{year}{2014}
 \endentry
 
 \lossort
