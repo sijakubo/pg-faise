@@ -202,6 +202,7 @@ public class VehiclePlattformAgent extends Agent {
    private void sendStoppedWorkingToStatisticAgent() {
       ACLMessage msgBotStoppedWorking = new ACLMessage(MessageType.BOT_STOPPED_WORKING);
       msgBotStoppedWorking.addUserDefinedParameter(StatisticAgent.PARAM_TIMESTAMP, String.valueOf(System.currentTimeMillis()));
+      msgBotStoppedWorking.addUserDefinedParameter(StatisticAgent.PARAM_CONVEYOR_ID, String.valueOf(myConveyor.getID()));
       AgentHelper.addReceiver(msgBotStoppedWorking, this, StatisticAgent.AGENT_NAME, myConveyor.getID(), mySzenario.getId());
       send(msgBotStoppedWorking);
    }

@@ -24,9 +24,16 @@ public class StatisticAgent extends Agent {
 
    public final static String PARAM_TIMESTAMP = "timestamp";
    public static final String PARAM_PACKAGE_ID = "packageId";
+   public static final String PARAM_CONVEYOR_ID = "conveyorId";
 
-   private Map<Integer, Long> packageEntrancetimestampsByPackageId;
-   private List<Long> packageProcessingTimes;
+   //Durchlaufzeit
+   private Map<Integer, Long> packageEntrancetimestampsByPackageId = new HashMap<Integer, Long>();
+   private List<Long> packageProcessingTimes = new ArrayList<Long>();
+
+   //Auslastung Bots
+   private Map<Integer, Long> lastContactTimestampByConveyorId = new HashMap<Integer, Long>();
+   private Long timeBotsWaited;
+   private Long timeBotsWorked;
 
    @Override
    /**
@@ -39,9 +46,6 @@ public class StatisticAgent extends Agent {
       addBehaviour(new BotCreatedBehaviour(MessageType.BOT_CREATED));
       addBehaviour(new BotStartedWorkingBehaviour(MessageType.BOT_STARTED_WORKING));
       addBehaviour(new BotStoppedWorkingBehaviour(MessageType.BOT_STOPPED_WORKING));
-
-      packageEntrancetimestampsByPackageId = new HashMap<Integer, Long>();
-      packageProcessingTimes = new ArrayList<Long>();
    }
 
    /**
@@ -93,18 +97,22 @@ public class StatisticAgent extends Agent {
    /**
     * @author sijakubo
     */
-   private class BotStoppedWorkingBehaviour extends CyclicReceiverBehaviour {
-      protected BotStoppedWorkingBehaviour(int messageType) {
+   private class BotCreatedBehaviour extends CyclicReceiverBehaviour {
+      protected BotCreatedBehaviour(int messageType) {
          super(MessageTemplate.MatchPerformative(messageType));
       }
 
       @Override
       /**
        * Expected params:
+       *    {@link uni.oldenburg.server.agent.StatisticAgent#PARAM_CONVEYOR_ID}
        *    {@link uni.oldenburg.server.agent.StatisticAgent#PARAM_TIMESTAMP}
        */
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-         //TODO
+         lastContactTimestampByConveyorId.put(
+               Integer.valueOf(msg.getUserDefinedParameter(PARAM_CONVEYOR_ID)),
+               Long.valueOf(msg.getUserDefinedParameter(PARAM_TIMESTAMP))
+         );
       }
    }
 
@@ -119,28 +127,40 @@ public class StatisticAgent extends Agent {
       @Override
       /**
        * Expected params:
+       *    {@link uni.oldenburg.server.agent.StatisticAgent#PARAM_CONVEYOR_ID}
        *    {@link uni.oldenburg.server.agent.StatisticAgent#PARAM_TIMESTAMP}
        */
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-         //TODO
+         Integer conveyorId = Integer.valueOf(msg.getUserDefinedParameter(PARAM_CONVEYOR_ID));
+         Long currentTimestamp = Long.valueOf(msg.getUserDefinedParameter(PARAM_TIMESTAMP));
+
+         Long lastContactTimestamp = lastContactTimestampByConveyorId.remove(conveyorId);
+         timeBotsWaited = timeBotsWaited + (currentTimestamp - lastContactTimestamp);
+         lastContactTimestampByConveyorId.put(conveyorId, currentTimestamp);
       }
    }
 
    /**
     * @author sijakubo
     */
-   private class BotCreatedBehaviour extends CyclicReceiverBehaviour {
-      protected BotCreatedBehaviour(int messageType) {
+   private class BotStoppedWorkingBehaviour extends CyclicReceiverBehaviour {
+      protected BotStoppedWorkingBehaviour(int messageType) {
          super(MessageTemplate.MatchPerformative(messageType));
       }
 
       @Override
       /**
        * Expected params:
-       *    none
+       *    {@link uni.oldenburg.server.agent.StatisticAgent#PARAM_CONVEYOR_ID}
+       *    {@link uni.oldenburg.server.agent.StatisticAgent#PARAM_TIMESTAMP}
        */
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-         //TODO
+         Integer conveyorId = Integer.valueOf(msg.getUserDefinedParameter(PARAM_CONVEYOR_ID));
+         Long currentTimestamp = Long.valueOf(msg.getUserDefinedParameter(PARAM_TIMESTAMP));
+
+         Long lastContactTimestamp = lastContactTimestampByConveyorId.remove(conveyorId);
+         timeBotsWorked = timeBotsWorked + (currentTimestamp - lastContactTimestamp);
+         lastContactTimestampByConveyorId.put(conveyorId, currentTimestamp);
       }
    }
 }

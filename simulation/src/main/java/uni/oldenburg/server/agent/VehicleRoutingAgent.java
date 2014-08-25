@@ -287,12 +287,15 @@ public class VehicleRoutingAgent extends Agent {
    private void sendStartedWorkingToStatisticAgent() {
       ACLMessage msgBotWorking = new ACLMessage(MessageType.BOT_STARTED_WORKING);
       msgBotWorking.addUserDefinedParameter(StatisticAgent.PARAM_TIMESTAMP, String.valueOf(System.currentTimeMillis()));
+      msgBotWorking.addUserDefinedParameter(StatisticAgent.PARAM_CONVEYOR_ID, String.valueOf(myConveyor.getID()));
       AgentHelper.addReceiver(msgBotWorking, this, StatisticAgent.AGENT_NAME, myConveyor.getID(), mySzenario.getId());
       send(msgBotWorking);
    }
 
    private void sendBotCreatedToStatisticAgent() {
       ACLMessage msgBotCreated = new ACLMessage(MessageType.BOT_CREATED);
+      msgBotCreated.addUserDefinedParameter(StatisticAgent.PARAM_TIMESTAMP, String.valueOf(System.currentTimeMillis()));
+      msgBotCreated.addUserDefinedParameter(StatisticAgent.PARAM_CONVEYOR_ID, String.valueOf(myConveyor.getID()));
       AgentHelper.addReceiver(msgBotCreated, this, StatisticAgent.AGENT_NAME, myConveyor.getID(), mySzenario.getId());
       send(msgBotCreated);
    }
