@@ -5,7 +5,7 @@ CPU, SRAM und Flash-Speicher f\"ur den Programmcode. Weiterhin bieten MCs analog
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.9\textwidth]{Aubau_eines_Mikrocontrollers.png}
-	\caption{schematischer Aufbau eines Mikrocontrollers \cite{habil:Ostermeye:2014:Online}}}
+	\caption{schematischer Aufbau eines Mikrocontrollers \cite{habil:Ostermeye:2014:Online}}
 	\label{Aufbau eines Mikrocontrollers}
 \end{figure}
 
@@ -19,9 +19,9 @@ CPU, SRAM und Flash-Speicher f\"ur den Programmcode. Weiterhin bieten MCs analog
 \end{itemize}
 \item Speicher
 \begin{itemize}
-          \item SRAMñ Datenspeicher (Static Random-Access Memory)
-					\item Flash ROMñ Programmspeicher (Read Only Memory)
-					\item EEPR OMñ Festspeicher (Electrically Erasable Programmable Read-Only Memory)
+          \item SRAM Datenspeicher (Static Random-Access Memory)
+					\item Flash ROM Programmspeicher (Read Only Memory)
+					\item EEPROM Festspeicher (Electrically Erasable Programmable Read-Only Memory)
 \end{itemize}
 \item Peripheriekomponenten
     \begin{itemize}
@@ -31,7 +31,7 @@ CPU, SRAM und Flash-Speicher f\"ur den Programmcode. Weiterhin bieten MCs analog
 					\item Interrupts (Programmunterbrechungsroutinen)
 					\item USART, I2C/TWI und SPI (Kommunikationsschnittstellen)
 					\item Watch-Dog (Absicherung gegen Systemfehler)
-					\item ISP (Schnittstelle zum \"{u}bertragen des kompilierten Programms)
+					\item ISP (Schnittstelle zum \"{U}bertragen des kompilierten Programms)
 	\end{itemize}
 \end{itemize}
 Mikrocontroller sind im heutigen Leben weit verbreitet und es gibt eine viele Anzahl von Herstellern, die mikrocontroller anbieten. Im folgenden werden einige Hersteller mit ihren MC-Familien beispielhaft aufgef\"urt:
@@ -40,7 +40,7 @@ Mikrocontroller sind im heutigen Leben weit verbreitet und es gibt eine viele An
 \item Renesas (H8)
 \item Zilog (Z8)
 \item Microchip (Pic)
-\item Freescale (fr®uher Motorola) (68HC08 bzw. 68HCS08)
+\item Freescale (fr\"uher Motorola) (68HC08 bzw. 68HCS08)
 \item Atmel (AVR, 8051-Serie)
 \end{itemize}
 F\"ur das Projekt FAISE wurde das Atmel-Serie eingesetzt. Es sind Mikrocontroller mit erweiterten Peripherien und Funktionen, die auf der 8-Bit-AVR-Architektur basieren. Bei AVR handelt es sich um einen RISC-Kern, der an der Universit\"at von Trondheim in Norwegen entwickelt und von Atmel aufgekauft wurde. Die CPU besitzt 32 allgemeine 8-Bit Register (general purpose registers) und ist in der Lage in einem einzigen Taktzyklus Daten aus zwei beliebigen Registern in die ALU zu laden, diese zu verarbeiten und das Ergebnis in einem beliebigen Register zu speichern \cite{Viktor:Seib:2014:Online}. Die Konfiguration eines Atmega 8 der Firma Atmel sieht so aus:
@@ -53,7 +53,7 @@ F\"ur das Projekt FAISE wurde das Atmel-Serie eingesetzt. Es sind Mikrocontrolle
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.9\textwidth]{LegendeAtmel8.png}
-	\caption{Atmel 8 \URL{(http://www.ids.tu-bs.de/tl\_files/Lehre/Vorlesungen/Simulation2/Einfuehrung\_in\_die\_MC\_Programmierung\_Teil1.pdf)}}
+	\caption{Atmel 8 \url{(http://www.ids.tu-bs.de/tl\_files/Lehre/Vorlesungen/Simulation2/Einfuehrung\_in\_die\_MC\_Programmierung\_Teil1.pdf)}}
 	\label{Legende Atmel8}
 \end{figure}
 \begin{itemize}
@@ -105,8 +105,7 @@ Asynchrone Events sind eine Form der Deferred Procedure Call: asynchrone Events 
 \begin{itemize}
 \item Synchronen Events
 \end{itemize}
-Synchrone Events gleichen einem Funktionsaufruf. Die werden ohne Umweg \"uber die Warteschlange direkt an den Empf
-\"anger-Prozess zugestellt \cite[S. 7]{Walter:2010}.  Mit der Funktion process\_post\_synch(\&example\_process, EVENT\_ID, msg) wird gezielt ein Prozess aufgerufen (ein Broadcast ist nicht m\"oglich). W\"ahrend der aufgerufene Prozess aktiv ist, blockiert der Aufrufer und setzt seine Ausf\"\"{u}hrung erst fort, wenn der aufgerufene Prozess die Kontrolle wieder abgibt.
+Synchrone Events gleichen einem Funktionsaufruf. Die werden ohne Umweg \"uber die Warteschlange direkt an den Empf\"anger-Prozess zugestellt \cite[S. 7]{Walter:2010}.  Mit der Funktion process\_post\_synch(\&example\_process, EVENT\_ID, msg) wird gezielt ein Prozess aufgerufen (ein Broadcast ist nicht m\"oglich). W\"ahrend der aufgerufene Prozess aktiv ist, blockiert der Aufrufer und setzt seine Ausf√ºhrung erst fort, wenn der aufgerufene Prozess die Kontrolle wieder abgibt.
 
 \subsubsection{Prozesse}
 Prozesse in Contiki implementieren ein Konzept namens Protothreads. Dies erlaubt es Prozessen, ohne den Overhead und die langen Prozesswechselzeiten von normalen Threads auszukommen. Gleichzeitig k\"onnen trotzdem andere Prozesse ausgef\"uhrt werden, falls ein Prozess auf ein Event (Timer, Nachricht von anderem Prozess...) warten muss. F\"ur die Entwicklung mit Prozessen ist wichtig, dass nicht-statische Variablen nicht zwischen zwei Aufraufen erhalten bleiben. Der relevante Status eines Prozesses sollte daher mithilfe von statischen Variablen abgelegt werden (siehe Variable i im folgenden Beispiel:
