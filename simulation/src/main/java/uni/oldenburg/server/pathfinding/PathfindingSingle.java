@@ -68,6 +68,8 @@ public class PathfindingSingle extends Pathfinding {
         
         ComputeBlocksValues();
         
+        System.out.println("1");
+        
         PathPoint curPathPoint= new PathPoint();
         curPathPoint.setPoint(new Point(myStopPoint.getX(), myStopPoint.getY()));
         
@@ -80,6 +82,8 @@ public class PathfindingSingle extends Pathfinding {
         lstSinglePathpoints.add(stopPathPoint);
         
         returnValue = PathMessageType.PathFound;
+        
+        System.out.println("2");
         
         while(curPathPoint.getPoint().getX() != myStartPoint.getX() || curPathPoint.getPoint().getY() != myStartPoint.getY()){
         	curPathPoint.setStepValue(lstGridItem.get(getIndex(curPathPoint.getPoint().getX(), curPathPoint.getPoint().getY(), myColumnCount)).getGridValue());
@@ -97,7 +101,7 @@ public class PathfindingSingle extends Pathfinding {
             	minValue = saveBestPoint(curPathPoint, Direction.BottomRight, minValue, lstPossiblePoints);
             }
             
-            //System.out.println("PossibleSize: " + lstPossiblePoints.size());
+            System.out.println("PossibleSize: " + lstPossiblePoints.size());
             
             if (lstPossiblePoints.size() > 0){
             	int randomIndex = (int)(Math.random() * 100) % lstPossiblePoints.size();
@@ -136,6 +140,8 @@ public class PathfindingSingle extends Pathfinding {
             	
             	returnValue = PathMessageType.PathBlocked;
             	
+            	break;
+            	
             	/*if(bDriveDiagonal){
             		bRunning = false;
             		bDriveDiagonal = false;
@@ -149,6 +155,8 @@ public class PathfindingSingle extends Pathfinding {
             	break;*/            
             }
         }
+        
+        System.out.println("10");
         
         Collections.reverse(lstSinglePathpoints);
         

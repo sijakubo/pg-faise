@@ -138,8 +138,6 @@ public class VehicleRoutingAgent extends Agent {
 			if (auctionInProgress == false && hasPendingJob == false) {
 				auctionInProgress = true;
 				
-				System.out.println("get position");
-				
 				// request current position
 				ACLMessage msgPositionRequest = new ACLMessage(MessageType.GET_CURRENT_POSITION);
 				AgentHelper.addReceiver(msgPositionRequest, myAgent, VehiclePlattformAgent.NAME, myConveyor.getID(), mySzenario.getId());
@@ -151,15 +149,11 @@ public class VehicleRoutingAgent extends Agent {
 				int cur_y = Integer.parseInt(msgPositionResponse.getUserDefinedParameter("pos_y"));
 				Point curPoint = new Point(cur_x, cur_y);
 				
-				System.out.println("position: " + curPoint.toString());
-				
 				srcRampID = Integer.parseInt(msg.getUserDefinedParameter("srcRampID"));
 				dstRampID = Integer.parseInt(msg.getUserDefinedParameter("dstRampID"));
 				
-				System.out.println("1");
-				
 				// get entry/exit positions of ramps
-				for(Conveyor tmpConveyor : mySzenario.getConveyorList()) {
+				for(Conveyor tmpConveyor: mySzenario.getConveyorList()) {
 					if (tmpConveyor instanceof ConveyorRamp) {
 						ConveyorRamp tmpRampConveyor = (ConveyorRamp)tmpConveyor;
 						
@@ -171,9 +165,6 @@ public class VehicleRoutingAgent extends Agent {
 						}
 					}
 				}
-				
-				System.out.println("2");
-				
 				// calculate estimations
 				if (lstPathPoints != null) {
 					for (List<PathPoint> lstPoints : lstPathPoints) {
@@ -185,14 +176,11 @@ public class VehicleRoutingAgent extends Agent {
 						
 				}
 				
-				System.out.println("3");
-				
 				int toSourceRampEstimation = CalculateEstimation(curPoint, srcRampPoint);
 				int toDestinationRampEstimation = CalculateEstimation(srcRampPoint, dstRampPoint);
 				
 				sumEstimation = toSourceRampEstimation + toDestinationRampEstimation;
 				
-				System.out.println("4");
 
 				if (toSourceRampEstimation < 0 || toDestinationRampEstimation < 0)
 					sumEstimation = -1;
@@ -259,11 +247,9 @@ public class VehicleRoutingAgent extends Agent {
 	private int CalculateEstimation(Point startPoint, Point stopPoint) {
 		List<List<PathPoint>> lstPathPointsTmp = null;
 		
-		System.out.println("5");
+		//System.out.println("bla");
 				
 		lstPathPointsTmp = myPF.findPath(startPoint, stopPoint);
-		
-		System.out.println("6");
 		
 		//System.out.println("Status: " + myPF.getStatus());
 		
