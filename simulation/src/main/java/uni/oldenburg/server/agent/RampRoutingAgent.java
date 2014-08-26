@@ -1,6 +1,7 @@
 package uni.oldenburg.server.agent;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +75,8 @@ public class RampRoutingAgent extends Agent {
 		int srcRampID = 0;
 		int dstRampID = 0;
 		
+		long timeoutStart = new Date().getTime();
+		
 		public void action() {
 			// received auction start trigger -> request estimation requests
 			//System.out.println("step: " + step);
@@ -82,6 +85,8 @@ public class RampRoutingAgent extends Agent {
 				ACLMessage msgReceive = myAgent.receive(MessageTemplate.MatchPerformative(MessageType.AUCTION_START));
 				
 				if (msgReceive != null) {
+					mapVehicleEstimation.clear();
+					
 					srcRampID = Integer.parseInt(msgReceive.getUserDefinedParameter("srcRampID"));
 					dstRampID = Integer.parseInt(msgReceive.getUserDefinedParameter("dstRampID"));
 					
@@ -91,6 +96,8 @@ public class RampRoutingAgent extends Agent {
 					msgEstimationRequest.addUserDefinedParameter("dstRampID", "" + dstRampID);
 					AgentHelper.addReceivers(msgEstimationRequest, myAgent, mySzenario.getId());
 					send(msgEstimationRequest);
+					
+					timeoutStart = new Date().getTime();
 					
 					step = 1;
 				}
@@ -102,7 +109,7 @@ public class RampRoutingAgent extends Agent {
 				ACLMessage msgReceive = myAgent.receive(MessageTemplate.MatchPerformative(MessageType.ESTIMATION_RESPONSE));
 				
 				if (msgReceive != null) {
-					logger.log(Level.INFO, 	"[Estimation response]" +
+					System.out.println("[Estimation response]" +
 											" ID: " + msgReceive.getUserDefinedParameter("vehicleID") +
 											" Est: " + msgReceive.getUserDefinedParameter("estimation") +
 											" HasJob: " + msgReceive.getUserDefinedParameter("pendingJob"));
@@ -133,8 +140,13 @@ public class RampRoutingAgent extends Agent {
 						System.out.println("2: all answered");
 					}
 				}
-				else
-					block();
+				else {
+					if (new Date().getTime() - timeoutStart > 3000) {		
+						step = 2;
+						vehiclesAnswered = 0;
+						System.out.println("3: pretend all answered");
+					}
+				}
 			}
 			// choose vehicle with best estimation
 			else if (step == 2) {				
@@ -158,6 +170,8 @@ public class RampRoutingAgent extends Agent {
 					}
 				}
 				
+				System.out.println("lstBestVehicleSize: " + lstBestVehicles.size());
+				
 				// choose a random vehicle with the best estimation
 				if (lstBestVehicles.size() > 0) {			
 					int randomIndex = (int)(Math.random() * 100) % lstBestVehicles.size();
@@ -180,6 +194,8 @@ public class RampRoutingAgent extends Agent {
 					}
 				}
 				
+				System.out.println("Assign Job to Vehicle");
+				
 				// send message to all "VehicleRoutingAgents" about who got the job
 				ACLMessage msgAssignJob = new ACLMessage(MessageType.ASSIGN_JOB_TO_VEHICLE);
 				msgAssignJob.addUserDefinedParameter("vehicleID", "" + bestVehicleID);
@@ -187,6 +203,8 @@ public class RampRoutingAgent extends Agent {
 				msgAssignJob.addUserDefinedParameter("dstRampID", "" + dstRampID);
 				AgentHelper.addReceivers(msgAssignJob, myAgent, mySzenario.getId());
 				send(msgAssignJob);
+				
+				System.out.println("Action end");
 				
 				// auction has ended and "hopefully" a vehicle has been found
 				ACLMessage msgAuctionEnd = new ACLMessage(MessageType.AUCTION_END);
