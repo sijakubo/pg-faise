@@ -196,7 +196,7 @@ public class RampOrderAgent extends Agent {
 						
 						int selectedConveyorID = lstConveyorRamps.get(randomIndex);
 						
-						setSelectedIdAndPendingStatus(myAgent, selectedConveyorID);
+						//setSelectedIdAndPendingStatus(myAgent, selectedConveyorID);
 						
 						// initialize auction
 						ACLMessage msgAuctionStart = new ACLMessage(MessageType.AUCTION_START);
