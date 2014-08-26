@@ -132,6 +132,10 @@ public class PathfindingSingle extends Pathfinding {
             	
             	resetValues();
             	
+            	lstPathPoints.clear();
+            	
+            	returnValue = PathMessageType.PathBlocked;
+            	
             	/*if(bDriveDiagonal){
             		bRunning = false;
             		bDriveDiagonal = false;
