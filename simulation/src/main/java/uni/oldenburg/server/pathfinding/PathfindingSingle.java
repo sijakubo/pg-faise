@@ -58,6 +58,8 @@ public class PathfindingSingle extends Pathfinding {
 			return null;
 		}
 		
+        resetValues();		
+		
 		lstGridItem.get((getIndex(myStartPoint, myColumnCount))).setItemType(GridItemType.StartItem);
         lstGridItem.get((getIndex(myStopPoint, myColumnCount))).setItemType(GridItemType.StopItem);
 		
@@ -101,7 +103,7 @@ public class PathfindingSingle extends Pathfinding {
             	minValue = saveBestPoint(curPathPoint, Direction.BottomRight, minValue, lstPossiblePoints);
             }
             
-            System.out.println("PossibleSize: " + lstPossiblePoints.size());
+            //System.out.println("PossibleSize: " + lstPossiblePoints.size());
             
             if (lstPossiblePoints.size() > 0){
             	int randomIndex = (int)(Math.random() * 100) % lstPossiblePoints.size();
