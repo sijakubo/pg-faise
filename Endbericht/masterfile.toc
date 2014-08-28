@@ -74,7 +74,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {5.3.1}Gesamtarchitektur}{35}{subsubsection.5.3.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.3.2}Konzeption der Benutzeroberfl\IeC {\"a}che}{35}{subsubsection.5.3.2}
+\contentsline {subsubsection}{\numberline {5.3.2}Konzeption der Benutzeroberfl\IeC {\"a}che}{36}{subsubsection.5.3.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {5.3.3}Generierung von Auftr\IeC {\"a}gen}{36}{subsubsection.5.3.3}
 \defcounter {refsection}{0}\relax 

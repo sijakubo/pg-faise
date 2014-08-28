@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.6.30)  28 AUG 2014 15:48
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.6.30)  28 AUG 2014 19:03
 entering extended mode
 **masterfile.tex
 (C:\Users\Administrator\git\pg-faise\Endbericht\masterfile.tex
@@ -1769,16 +1769,16 @@ File: image/grobarchitektur.jpg Graphic file (type jpg)
 <use image/grobarchitektur.jpg>
 Package pdftex.def Info: image/grobarchitektur.jpg used on input line 38.
 (pdftex.def)             Requested size: 352.81552pt x 198.68407pt.
-
-<image/Mockup.png, id=523, 1007.765pt x 554.07pt>
+ [35 <C:/Users/Administrator/git/pg-faise/Endbericht/image/grobarchitektur.jpg>
+]
+<image/Mockup.png, id=528, 1007.765pt x 554.07pt>
 File: image/Mockup.png Graphic file (type png)
  <use image/Mockup.png>
-Package pdftex.def Info: image/Mockup.png used on input line 46.
+Package pdftex.def Info: image/Mockup.png used on input line 47.
 (pdftex.def)             Requested size: 352.81552pt x 193.97813pt.
-
-[35 <C:/Users/Administrator/git/pg-faise/Endbericht/image/grobarchitektur.jpg>]
-) [36 <C:/Users/Administrator/git/pg-faise/Endbericht/image/Mockup.png (PNG cop
-y)>] [37] (C:\Users\Administrator\git\pg-faise\Endbericht\src/chapter6.tex
+)
+[36 <C:/Users/Administrator/git/pg-faise/Endbericht/image/Mockup.png (PNG copy)
+>] [37] (C:\Users\Administrator\git\pg-faise\Endbericht\src/chapter6.tex
 <image/Aubau_eines_Mikrocontrollers.png, id=540, 446.41782pt x 352.31625pt>
 File: image/Aubau_eines_Mikrocontrollers.png Graphic file (type png)
 
@@ -1925,7 +1925,7 @@ TeX 2.9/fonts/type1/urw/palatino/uplb8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/
 fonts/type1/urw/palatino/uplr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/ty
 pe1/urw/palatino/uplr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/
 palatino/uplri8a.pfb>
-Output written on masterfile.pdf (51 pages, 743262 bytes).
+Output written on masterfile.pdf (51 pages, 743270 bytes).
 PDF statistics:
  682 PDF objects out of 1000 (max. 8388607)
  146 named destinations out of 1000 (max. 500000)
