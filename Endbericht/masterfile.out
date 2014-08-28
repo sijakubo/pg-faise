@@ -33,10 +33,12 @@
 \BOOKMARK [3][]{subsubsection.5.2.3}{5.2.3 Umsetzung durch GWT}{subsection.5.2}% 33
 \BOOKMARK [2][]{subsection.5.3}{5.3 Konzeption der Systemkomponenten}{section.5}% 34
 \BOOKMARK [3][]{subsubsection.5.3.1}{5.3.1 Gesamtarchitektur}{subsection.5.3}% 35
-\BOOKMARK [1][]{section.6}{6 Komponentenbeschreibung}{}% 36
-\BOOKMARK [2][]{subsection.6.1}{6.1 Mikrocontroller}{section.6}% 37
-\BOOKMARK [2][]{subsection.6.2}{6.2 Sensorik/ Aktorik}{section.6}% 38
-\BOOKMARK [2][]{subsection.6.3}{6.3 Contiki}{section.6}% 39
-\BOOKMARK [3][]{subsubsection.6.3.1}{6.3.1 Systemarchitektur}{subsection.6.3}% 40
-\BOOKMARK [3][]{subsubsection.6.3.2}{6.3.2 Events}{subsection.6.3}% 41
-\BOOKMARK [3][]{subsubsection.6.3.3}{6.3.3 Prozesse}{subsection.6.3}% 42
+\BOOKMARK [3][]{subsubsection.5.3.2}{5.3.2 Konzeption der Benutzeroberfl\344che}{subsection.5.3}% 36
+\BOOKMARK [3][]{subsubsection.5.3.3}{5.3.3 Generierung von Auftr\344gen}{subsection.5.3}% 37
+\BOOKMARK [1][]{section.6}{6 Komponentenbeschreibung}{}% 38
+\BOOKMARK [2][]{subsection.6.1}{6.1 Mikrocontroller}{section.6}% 39
+\BOOKMARK [2][]{subsection.6.2}{6.2 Sensorik/ Aktorik}{section.6}% 40
+\BOOKMARK [2][]{subsection.6.3}{6.3 Contiki}{section.6}% 41
+\BOOKMARK [3][]{subsubsection.6.3.1}{6.3.1 Systemarchitektur}{subsection.6.3}% 42
+\BOOKMARK [3][]{subsubsection.6.3.2}{6.3.2 Events}{subsection.6.3}% 43
+\BOOKMARK [3][]{subsubsection.6.3.3}{6.3.3 Prozesse}{subsection.6.3}% 44

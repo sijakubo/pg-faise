@@ -39,4 +39,13 @@ Der Webserver beinhaltet die Logik des Systems. Auf dem Client soll die Visualis
 		\caption{Gesamtarchitektur}
 	\label{Gesamtarchitektur}
 \end{figure} 
-
+\subsubsection{Konzeption der Benutzeroberfläche}
+Die Benutzeroberfläche soll einem Nutzer die Möglichkeit bieten auf sämtliche Funktionalitäten, die für die Durchführung eines Simulationsdurchlaufs relevant sind, zuzugreifen. Abbildung \ref{GUI} zeigt den schematischen Aufbau der Gui anhand eines Mockups. Die Menüleiste beinhaltet drei Menu Items, Simulation, Auftragsliste und Statistiken. Über die Items Simulation und Auftragsliste, sollen erstellte Szenarien und Auftragslisten geladen und gespeichert werden können. Außerdem soll eine Simulation gestartet werden können. Das Statistik Item erlaubt den Zugriff auf Statistiken, die für einen Durchlauf generiert wurden. Links unter der Menüleiste befindet sich die Auftragsliste, über die Aufträge generiert und angezeigt werden können. Darunter befindet sich der Bereich, der für die Modellierung eines Szenarios relevant ist. Es sollen Rampen, Fahrzeuge und Wände als Modellelemente auswählbar sein und in der Zeichenfläche platziert werden können. Die Zeichenfläche selber befindet sich rechts unter der Menüleiste. Dort werden die Aktionen der Akteure, wie z.B. Aufladen eines Pakets, visualisiert. Das unterste Element enthält eine Debug Konsole in der serverseitige Aktionen dargestellt werden können, die nicht in der Zeichenfläche dargestellt werden sollen. 
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.8\textwidth]{Mockup.png}        
+		\caption{Schematischer Aufbau der Benutzeroberfläche}
+	\label{GUI}
+\end{figure}
+\subsubsection{Generierung von Aufträgen}
+Die Simulationssoftware soll ein Umschlagslager simulieren. Das bedeutet, dass Pakete in das Lager geliefert, zwischengelagert und an den Ausgangsrampen wieder abgeholt werden, wenn ein bestimmtes Paket angefragt wird (Vgl.\ref{Einsatzszenario}). Das bedeutet, dass eine Unterscheidung getroffen werden muss zwischen einem physischen Paket und einer Nachfrage nach einem bestimmten Paket, die ein Ausgang stellt. Deshalb soll zwischen eingehenden und ausgehenden Aufträgen unterschieden werden. Es soll möglich sein eine festgelegte Anzahl an Aufträgen zufällig über die Gui zu generieren. Außerdem muss sichergestellt werden, dass die Menge an generierten eingehenden und ausgehenden Aufträgen in einem bestimmten Verhältnis zueinander stehen, um zu verhindern, dass nur eingehende oder nur ausgehende Aufträge generiert werden. 
