@@ -78,16 +78,20 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {5.3.3}Generierung von Auftr\IeC {\"a}gen}{36}{subsubsection.5.3.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {6}Komponentenbeschreibung}{38}{section.6}
+\contentsline {subsubsection}{\numberline {5.3.4}Anforderungen an ein Multiagenten-Framework}{37}{subsubsection.5.3.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {6.1}Mikrocontroller}{38}{subsection.6.1}
+\contentsline {subsubsection}{\numberline {5.3.5}Ben\IeC {\"o}tigte Agententypen}{37}{subsubsection.5.3.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {6.2}Sensorik/ Aktorik}{41}{subsection.6.2}
+\contentsline {section}{\numberline {6}Komponentenbeschreibung}{39}{section.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {6.3}Contiki}{42}{subsection.6.3}
+\contentsline {subsection}{\numberline {6.1}Mikrocontroller}{39}{subsection.6.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {6.3.1}Systemarchitektur}{42}{subsubsection.6.3.1}
+\contentsline {subsection}{\numberline {6.2}Sensorik/ Aktorik}{42}{subsection.6.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {6.3.2}Events}{42}{subsubsection.6.3.2}
+\contentsline {subsection}{\numberline {6.3}Contiki}{43}{subsection.6.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {6.3.3}Prozesse}{43}{subsubsection.6.3.3}
+\contentsline {subsubsection}{\numberline {6.3.1}Systemarchitektur}{43}{subsubsection.6.3.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.3.2}Events}{43}{subsubsection.6.3.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.3.3}Prozesse}{44}{subsubsection.6.3.3}
