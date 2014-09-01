@@ -31,7 +31,7 @@ In diesem Abschnitt wird die Konzeption der Gesamtarchitektur als auch der einze
 \subsubsection{Gesamtarchitektur}label{GA} 
 Wie in Kapitel \ref{sec:Entwicklung einer Webanwendung} beschrieben, soll die Software als Webanwendung realisiert werden. Eine Webanwendung erfordert eine Client-Server Architektur. Abbildung \ref{Gesamtarchitektur} beschreibt die wesentlichen Komponenten des Systems und wie diese sich auf die Client- und Serverseite verteilen. Basis der Anwendung ist der Webserver, der die Basiskomponenten des Systems hosted: Zum einen stellt er die Laufzeitumgebung für Webanwendung und Datenbank bereit. Die Datenbank wird benötigt, um Daten, wie beispielsweise erstellte Szenarien, persistent zu speichern. Aus der Webanwendung heraus, kann auf die Datenbank lesend und schreibend zugegriffen werden. In die Webanwendung soll ein Multiagentensystem (MAS) eingebettet werden. Ein MAS ist ein Netzwerk aus Softwareagenten. Softwareagenten sind Softwareeinheiten, die in in der Lage sind Aufgaben selbstständig durchzuführen (Vgl.\cite{mas}). Mithilfe des MAS kann ein Lager simuliert werden, in dem der Warenfluss durch vollständig autonome Akteure durchgeführt wird. 
 \\\\
-Der Webserver beinhaltet die Logik des Systems. Auf dem Client soll die Visualisierung erfolgen. Das System soll von einem Webbrowser aus aufrufbar sein, in dem die Ergebnisse der serverseitigen Prozesse dargestellt werden. Mehrere Nutzer sollen das System gleichzeitig nutzen können, ohne Login und Registrierung.
+Der Webserver beinhaltet die Logik des Systems. Auf dem Client soll die Visualisierung erfolgen und der Nutzer soll das Starten einer Simulation initiieren können. Das System soll von einem Webbrowser aus aufrufbar sein, in dem die Ergebnisse der serverseitigen Prozesse dargestellt werden. Mehrere Nutzer sollen das System gleichzeitig nutzen können, ohne Login und Registrierung.
 
 \begin{figure}[h!]
 	\centering
@@ -61,4 +61,37 @@ Sowohl Rampen als auch Fahrzeuge müssen verschiedene Aktionen durchführen. Daz
 \item Plattformagent: Durchführung physischer Aktionen (Fahren, Aufladen von Paketen etc.)
 \end{itemize}
 \subsubsection{Kommunikation zwischen den Agenten}
-Die zu entwickelnde Software soll die in Abschnitt \ref{AL} beschriebenen Abläufe umsetzen. Die Aufgaben der verschiedenen Akteure müssen auf die Agenten abgebildet werden. 
+Die zu entwickelnde Software soll die in Abschnitt \ref{AL} beschriebenen Abläufe umsetzen. Die Aufgaben der verschiedenen Akteure müssen auf die Agenten verteilt werden. Die entworfenen Kommunikationsschritte der Agenten sollen für den Fall dass ein Eingang Ausgänge und Zwischenlager fragt, beschrieben werden, um die Aufgaben der einzelnen Agenten genauer abzugrenzen. Im Rahmen der Implementierung können sich noch Änderungen ergeben, die technisch notwendig sind. 
+\begin{enumerate}
+\item Trifft ein Paket ein, verlangt der Paketagent vom Orderagent eine Destination für das entsprechende Paket.
+\item Der Orderagent einer Eingangsrampe fragt die Orderagenten der Ausgangs- und Zwischenrampen.
+\item Die Orderagenten prüfen im Abgleich mit ihren Paketagenten, ob Platz frei ist (Zwischenrampe) oder die Paket-ID benötigt wird (Ausgang). Anschließend antworten sie dem Orderagenten am Eingang.  
+\item Wurde ein Ziel für das Paket gefunden, soll der Orderagent den Start einer Auktion initiieren, indem er den Routingagenten benachrichtigt. 
+\item Der Routingagent verlangt eine Aufwändsschätzung von allen Routingagenten der Fahrzeuge.
+\item Der Routingagent eines Fahrzeugs berechnet eine Aufwandsschätzung anhand seiner Position und antwortet dem Routingagenten der Rampe. Fährt der Volksbot oder nimmt an einer anderen Auktion teil, so wird -1 als Aufwandsschätzung zurückgeschickt.
+\item Der Routingagent einer Rampe, wählt, sofern vorhanden, den Bot aus, der den geringsten Aufwand benötigt, um ein Paket abzuholen und weist ihm den Auftrag zu.
+\item Der Plattformagent fährt zu der jeweiligen Eingangsrampe und lädt das Paket auf. Dies geschieht durch einen Nachrichtenaustausch mit dem jeweiligen Plattformagenten der Rampe, der die Paketdaten übergibt. Das Fahren zur Zielrampe und das Abladen des Pakets erfolgt analog. 
+\end{enumerate}
+\subsubsection{Konzeption des Pathfindings}
+\subsubsection{Konzeption der Statistiken}
+\subsubsection{Interaktion der Komponenten}
+Durch das Zusammenspiel der Komponenten der verschiedenen Systemkomponenten soll eine Simulation durchgeführt werden können. Die Aufträge müssen entsprechend ihrer Zeiten an den Server geschickt werden. Dies soll clientseitig durch einen Timer durchgeführt werden, um das MAS zu entlasten. Abbildung \ref{Int} zeigt den Ablauf und die Komponenten, die für das Starten einer Simulation erforderlich sind: 
+\begin{enumerate}
+\item Ein potenzieller Nutzer startet eine Simulation über die Benutzeroberfläche
+\item Der Server wird durch die GUI informiert, dass die Simulation gestartet werden soll.
+\item Der Server startet das Multiagentensystem.
+\item Der Server meldet dem Client den Start des MAS.
+\item Der Client weiß nun, dass die Agenten bereit sind, Aufträge entgegenzunehmen und startet den Timer für die Jobliste.
+\item Die Aufträge werden gemäß ihrer Startzeit an den Server geschickt.
+\item Der Server leitet die Aufträge an das MAS weiter
+\item Die Daten über sichtbare Zustandsveränderungen werden an den Client geschickt und dort in der GUI visualisiert.
+\end{enumerate}
+
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.8\textwidth]{Interaktion.jpg}        
+		\caption{Interaktion der Systemkomponenten}
+	\label{Int}
+\end{figure}
+\subsection{Implementierung der Systemkomponenten}
+In diesem Abschnitt soll die Implementierung, der zuvor konzipierten Systemkomponenten beschrieben werden. Zum einen soll die Auswahl von Technologien und Frameworks zur Umsetzung beschrieben und falls notwendig begründet sowie die Funktionalität des Systems auf technischer Ebene dargestellt werden.
