@@ -20,90 +20,82 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {2.2.1}Orientierungssystem bzw. Navigation}{6}{subsubsection.2.2.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.3}Fahrerlose Transportsysteme}{7}{subsection.2.3}
+\contentsline {subsubsection}{\numberline {2.2.2}Steuerungstechnik}{9}{subsubsection.2.2.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.4}Fahrerlose Transportfahrzeuge}{8}{subsection.2.4}
+\contentsline {subsection}{\numberline {2.3}Materialflusssysteme}{12}{subsection.2.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {2.4.1}Orientierungssystem bzw. Navigation}{9}{subsubsection.2.4.1}
+\contentsline {paragraph}{Funktionen von Materialflusssystemen}{13}{section*.13}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {2.4.2}Steuerungstechnik}{14}{subsubsection.2.4.2}
+\contentsline {subsection}{\numberline {2.4}Fallbeispiele}{15}{subsection.2.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.5}Materialflusssysteme}{17}{subsection.2.5}
+\contentsline {subsubsection}{\numberline {2.4.1}FTS in der Gl\"asernen Manufaktur Dresden (Volkswagen)}{15}{subsubsection.2.4.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.6}Materialflusssysteme}{18}{subsection.2.6}
+\contentsline {subsubsection}{\numberline {2.4.2}FTS beim Automobilhersteller BMW im Werk Leipzig}{16}{subsubsection.2.4.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{\nonumberline Funktionen von Materialflusssystemen}{19}{section*.13}
+\contentsline {section}{\numberline {3}Projektorganisation}{17}{section.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.7}Fallbeispiele}{23}{subsection.2.7}
+\contentsline {subsection}{\numberline {3.1}Organisation der Teilgruppen (Materialfluss, Fahrzeuge, Simulation)}{17}{subsection.3.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {2.7.1}FTS in der Gl\"asernen Manufaktur Dresden (Volkswagen)}{23}{subsubsection.2.7.1}
+\contentsline {subsection}{\numberline {3.2}Rollenverteilung}{17}{subsection.3.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {2.7.2}FTS beim Automobilhersteller BMW im Werk Leipzig}{24}{subsubsection.2.7.2}
+\contentsline {subsection}{\numberline {3.3}Vorgehensmodell}{18}{subsection.3.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3}Projektorganisation}{26}{section.3}
+\contentsline {subsection}{\numberline {3.4}Werkzeuge}{20}{subsection.3.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1}Organisation der Teilgruppen (Materialfluss, Fahrzeuge, Simulation)}{26}{subsection.3.1}
+\contentsline {subsubsection}{\numberline {3.4.1}Jira}{21}{subsubsection.3.4.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2}Rollenverteilung}{26}{subsection.3.2}
+\contentsline {subsubsection}{\numberline {3.4.2}Confluence}{21}{subsubsection.3.4.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.3}Vorgehensmodell}{27}{subsection.3.3}
+\contentsline {section}{\numberline {4}Allgemeine Anforderungen}{22}{section.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.4}Werkzeuge}{29}{subsection.3.4}
+\contentsline {subsection}{\numberline {4.1}Ablaufszenario}{22}{subsection.4.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {3.4.1}Jira}{30}{subsubsection.3.4.1}
+\contentsline {section}{\numberline {5}Teilbericht Simulation}{23}{section.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {3.4.2}Confluence}{30}{subsubsection.3.4.2}
+\contentsline {subsection}{\numberline {5.1}Lastenheft}{23}{subsection.5.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4}Allgemeine Anforderungen}{31}{section.4}
+\contentsline {subsection}{\numberline {5.2}Grundlegende Designentscheidungen}{23}{subsection.5.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.1}Ablaufszenario}{31}{subsection.4.1}
+\contentsline {subsubsection}{\numberline {5.2.1}Eigenentwicklung}{24}{subsubsection.5.2.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5}Teilbericht Simulation}{32}{section.5}
+\contentsline {subsubsection}{\numberline {5.2.2}Entwicklung einer Webanwendung}{24}{subsubsection.5.2.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.1}Lastenheft}{32}{subsection.5.1}
+\contentsline {subsubsection}{\numberline {5.2.3}Umsetzung durch GWT}{25}{subsubsection.5.2.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.2}Grundlegende Designentscheidungen}{32}{subsection.5.2}
+\contentsline {subsection}{\numberline {5.3}Konzeption der Systemkomponenten}{25}{subsection.5.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.2.1}Eigenentwicklung}{33}{subsubsection.5.2.1}
+\contentsline {subsubsection}{\numberline {5.3.1}Gesamtarchitektur}{26}{subsubsection.5.3.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.2.2}Entwicklung einer Webanwendung}{33}{subsubsection.5.2.2}
+\contentsline {subsubsection}{\numberline {5.3.2}Konzeption der Benutzeroberfl\IeC {\"a}che}{27}{subsubsection.5.3.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.2.3}Umsetzung durch GWT}{34}{subsubsection.5.2.3}
+\contentsline {subsubsection}{\numberline {5.3.3}Generierung von Auftr\IeC {\"a}gen}{27}{subsubsection.5.3.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.3}Konzeption der Systemkomponenten}{34}{subsection.5.3}
+\contentsline {subsubsection}{\numberline {5.3.4}Anforderungen an ein Multiagenten-Framework}{28}{subsubsection.5.3.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.3.1}Gesamtarchitektur}{35}{subsubsection.5.3.1}
+\contentsline {subsubsection}{\numberline {5.3.5}Ben\IeC {\"o}tigte Agententypen}{28}{subsubsection.5.3.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.3.2}Konzeption der Benutzeroberfl\IeC {\"a}che}{36}{subsubsection.5.3.2}
+\contentsline {subsubsection}{\numberline {5.3.6}Kommunikation zwischen den Agenten}{29}{subsubsection.5.3.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.3.3}Generierung von Auftr\IeC {\"a}gen}{36}{subsubsection.5.3.3}
+\contentsline {subsubsection}{\numberline {5.3.7}Konzeption des Pathfindings}{30}{subsubsection.5.3.7}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.3.4}Anforderungen an ein Multiagenten-Framework}{37}{subsubsection.5.3.4}
+\contentsline {subsubsection}{\numberline {5.3.8}Konzeption der Statistiken}{30}{subsubsection.5.3.8}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.3.5}Ben\IeC {\"o}tigte Agententypen}{37}{subsubsection.5.3.5}
+\contentsline {subsubsection}{\numberline {5.3.9}Interaktion der Komponenten}{30}{subsubsection.5.3.9}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.3.6}Kommunikation zwischen den Agenten}{38}{subsubsection.5.3.6}
+\contentsline {subsection}{\numberline {5.4}Implementierung der Systemkomponenten}{31}{subsection.5.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.3.7}Konzeption des Pathfindings}{39}{subsubsection.5.3.7}
+\contentsline {subsection}{\numberline {5.5}Implementierte Gesamtarchitektur}{31}{subsection.5.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.3.8}Konzeption der Statistiken}{39}{subsubsection.5.3.8}
+\contentsline {section}{\numberline {6}Komponentenbeschreibung}{33}{section.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {5.3.9}Interaktion der Komponenten}{39}{subsubsection.5.3.9}
+\contentsline {subsection}{\numberline {6.1}Mikrocontroller}{33}{subsection.6.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.4}Implementierung der Systemkomponenten}{40}{subsection.5.4}
+\contentsline {subsection}{\numberline {6.2}Sensorik/ Aktorik}{36}{subsection.6.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.5}Implementierte Gesamtarchitektur}{40}{subsection.5.5}
+\contentsline {subsection}{\numberline {6.3}Contiki}{37}{subsection.6.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {6}Komponentenbeschreibung}{42}{section.6}
+\contentsline {subsubsection}{\numberline {6.3.1}Systemarchitektur}{37}{subsubsection.6.3.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {6.1}Mikrocontroller}{42}{subsection.6.1}
+\contentsline {subsubsection}{\numberline {6.3.2}Events}{37}{subsubsection.6.3.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {6.2}Sensorik/ Aktorik}{45}{subsection.6.2}
-\defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {6.3}Contiki}{46}{subsection.6.3}
-\defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {6.3.1}Systemarchitektur}{46}{subsubsection.6.3.1}
-\defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {6.3.2}Events}{46}{subsubsection.6.3.2}
-\defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {6.3.3}Prozesse}{47}{subsubsection.6.3.3}
+\contentsline {subsubsection}{\numberline {6.3.3}Prozesse}{38}{subsubsection.6.3.3}
