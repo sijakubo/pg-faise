@@ -23,7 +23,7 @@ Die Software soll als Webanwendung implementiert werden. Gegenüber einer Deskto
 \item Die Software muss nicht lokal installiert werden und kann direkt genutzt werden.
 \item Werden Änderungen an der Software vorgenommen, sind diese direkt verfügbar, da Updates über den Webserver eingespeist werden. Die Software ist somit immer auf dem aktuellsten Stand. 
 \end{itemize}
-\subsubsection{Umsetzung durch GWT}
+\subsubsection{Umsetzung durch GWT}\label{GWT} 
 Die Entwicklung der Webanwendung sollte mithilfe eines Frameworks erfolgen, das es erlaubt den Code sowohl für die Client- als auch für die Serverseite in einer Programmiersprache zu entwickeln. Außerdem sollte das Framework Schnittstellen bieten, um asynchrone Kommunikation und Push-Dienste zu nutzen ohne sich um die exakten Details kümmern zu müssen. Ausgewählt wurde das Google Web Toolkit (GWT). GWT ist ein von Google entwickeltes Framework zur Erstellung von Webanwendungen. Der Java Code für den Client wird von dem GWT Compiler in den entsprechenden Javascript- und HTML-Code übersetzt. Somit kann die Entwicklung sowohl für Client als auch für den Server auf Basis von Java erfolgen. Zudem entfällt die Anpassung des Javascript-Codes für die verschiedenen Browser, da GWT beim Kompilieren automatisch für jeden Browser eine lauffähige Version erzeugt. Weiterhin besitzt GWT  eine RCP-Schnittstelle für die asynchrone Kommunikation zwischen Client und Server und lässt sich um Komponenten erweitern, um Daten vom Server zum Client zu pushen (Vgl.\cite{gwt}). Somit erfüllt GWT sämtliche an ein Framework gestellte Anforderungen. Weitere Alternativen wurden nicht in Betracht gezogen, da drei von fünf Mitgliedern der Teilgruppe Simulation bereits positive Erfahrungen mit GWT gemacht haben und die anderen Mitglieder somit schnell einarbeiten konnten. 
 \subsection{Konzeption der Systemkomponenten}
 In diesem Abschnitt wird die Konzeption der Gesamtarchitektur als auch der einzelnen Systemkomponenten beschrieben , die im Rahmen der Sprints erarbeitet wurde. Die Konzeption beinhaltet zum einen die Anforderungen als auch die daraus abgeleiteten Implementierungsvorgaben.
@@ -93,5 +93,14 @@ Durch das Zusammenspiel der Komponenten der verschiedenen Systemkomponenten soll
 		\caption{Interaktion der Systemkomponenten}
 	\label{Int}
 \end{figure}
+\newpage
 \subsection{Implementierung der Systemkomponenten}
 In diesem Abschnitt soll die Implementierung, der zuvor konzipierten Systemkomponenten beschrieben werden. Zum einen soll die Auswahl von Technologien und Frameworks zur Umsetzung beschrieben und falls notwendig begründet sowie die Funktionalität des Systems auf technischer Ebene dargestellt werden.
+\subsection{Implementierte Gesamtarchitektur}
+Abbildung \ref{GAI} zeigt die konkrete Gesamtarchitektur des Systems, die durch die Auswahl von Umsetzungstechnologien entstanden ist. Die Webanwendung soll, wie bereits in Abschnitt \ref{GWT} beschrieben, durch das GWT Framework implementiert werden. Der Code für Server und Client, der für Visualisierung, Client-Server Kommunikation u.ä., benötigt wird, wird durch GWT-Bilbiotheken bereitgestellt. Eingebettet in die GWT-Klassen wird das Multiagentensystem, das mithilfe des Java Agent Development Framework (JADE) implementiert wurde. Als Datenbankmanagementsystem wurde PostgreSQL ausgewählt. Die Applikation wird durch einen Jetty Server gehostet, der die Java Laufzeitumgebung und das GWT Software Development Kit ebenfalls bereitstellt.  
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.8\textwidth]{architekturSimu.jpg}        
+		\caption{Implementierte Gesamtarchitektur}
+	\label{GAI}
+\end{figure}
