@@ -133,7 +133,7 @@ public abstract class Conveyor implements Serializable {
 		
 		if (onServer) {
 			EventHelper.WaitForMS(DelayTimes.DRIVE_TO_DELAY);
-			EventHelper.addEvent(new PositionChangedEvent(x * Conveyor.RASTER_SIZE, y * Conveyor.RASTER_SIZE, this.getID()));
+			EventHelper.addEvent(new PositionChangedEvent(x, y, this.getID()));
 		}
 	}
 
