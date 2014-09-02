@@ -104,6 +104,8 @@ public class PackageAgent extends Agent {
 		}
 
 		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+			System.out.println("INC: " + hasPendingIncomingJob + " OUT: " + hasPendingOutgoingJob);
+			
 			ACLMessage msgGetPendingJobStatus = new ACLMessage(MessageType.GET_PENDING_JOB_STATUS);
 			msgGetPendingJobStatus.addUserDefinedParameter("pendingJob", (hasPendingIncomingJob || hasPendingOutgoingJob) ? "1" : "0");
 			msgGetPendingJobStatus.addReceiver(msg.getSender());
@@ -225,7 +227,7 @@ public class PackageAgent extends Agent {
 				case ConveyorRamp.RAMP_ENTRANCE:
 					// outgoing job already in progress? -> don't ask for now
 					if (hasPendingOutgoingJob) {
-						logger.log(Level.INFO, "[SendEnquirePackageRequest] CID: " + myConveyor.getID() + " has outgoing job" + " [IsRamp: " + (myConveyor instanceof ConveyorRamp) + "]");			
+						//logger.log(Level.INFO, "[SendEnquirePackageRequest] CID: " + myConveyor.getID() + " has outgoing job" + " [IsRamp: " + (myConveyor instanceof ConveyorRamp) + "]");			
 						return;
 					}
 					

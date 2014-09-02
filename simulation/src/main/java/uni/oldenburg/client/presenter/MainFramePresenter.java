@@ -138,7 +138,7 @@ public class MainFramePresenter extends Presenter {
 		handleEvents();
 		
 		if (Debugging.isDebugging) {			
-			this.loadSzenario("Test05");
+			this.loadSzenario("Test04");
 			this.lstJobs.addRandomJobs(100);
 		}
 	}
@@ -869,20 +869,26 @@ public class MainFramePresenter extends Presenter {
 		 //Iterate through the list
 		 int exit=0;
 		 int entry=0;
-		 int storage=0;
-		 for(int i=0;i<list.size();i++){
+		 
+		 for(int i=0; i<list.size(); i++) {
 			 Conveyor dummy=list.get(i);
-			 if(dummy instanceof ConveyorRamp){
-				 if(((ConveyorRamp) dummy).getRampType()==ConveyorRamp.RAMP_ENTRANCE){
-					 entry++;
-				 }else if(((ConveyorRamp) dummy).getRampType()==ConveyorRamp.RAMP_EXIT){
-					  exit++;
-				 }else storage++;
+			 
+			 if(dummy instanceof ConveyorRamp) {
+				 switch(((ConveyorRamp) dummy).getRampType()) {
+				 	case ConveyorRamp.RAMP_ENTRANCE:
+				 		++entry;
+				 		break;
+				 	case ConveyorRamp.RAMP_EXIT:
+				 		++exit;
+				 		break;
+				 }
 			 }
 		 }
-		 if(exit==0||entry==0||storage==0){
+		 
+		 if(exit==0 || entry==0)
 			 return false;
-		 }else return true;
+		 
+		 return true;
 	}
 
 	/**
@@ -1158,7 +1164,7 @@ public class MainFramePresenter extends Presenter {
 			}
 		};
 		
-		tmrJobStarter.scheduleRepeating(1000);
+		tmrJobStarter.scheduleRepeating(3000);
 		tmrJobStarter.run();
 	}
 	

@@ -1,6 +1,9 @@
 package uni.oldenburg.shared.model;
 
-public class Point {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class Point implements Serializable {
 	private int x = 0;
 	private int y = 0;
 	
