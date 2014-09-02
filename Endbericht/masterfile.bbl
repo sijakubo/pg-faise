@@ -1,5 +1,5 @@
 % $ biblatex auxiliary file $
-% $ biblatex version 1.7 $
+% $ biblatex version 2.4 $
 % Do not modify the above lines!
 %
 % This is an auxiliary file used by the 'biblatex' package.
@@ -15,6 +15,32 @@
       \aftergroup\endinput}
   {}
 \endgroup
+
+\entry{jade}{misc}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Bellifemine}{B.}%
+     {F.}{F.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Caire}{C.}%
+     {G.}{G.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {et.al}{e.}%
+     {}{}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{BFCGe1}
+  \strng{fullhash}{BFCGe1}
+  \field{sortinit}{B}
+  \field{howpublished}{\url{http://jade.tilab.com/}}
+  \field{title}{{JAVA Agent DEvelopment Framework}}
+  \field{year}{2014}
+\endentry
 
 \entry{habil:Ostermeye:2014:Online}{online}{}
   \name{author}{1}{}{%
