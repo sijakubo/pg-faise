@@ -95,12 +95,73 @@ Durch das Zusammenspiel der Komponenten der verschiedenen Systemkomponenten soll
 \end{figure}
 \newpage
 \subsection{Implementierung der Systemkomponenten}
-In diesem Abschnitt soll die Implementierung, der zuvor konzipierten Systemkomponenten beschrieben werden. Zum einen soll die Auswahl von Technologien und Frameworks zur Umsetzung beschrieben und falls notwendig begründet sowie die Funktionalität des Systems auf technischer Ebene dargestellt werden.
-\subsection{Implementierte Gesamtarchitektur}
-Abbildung \ref{GAI} zeigt die konkrete Gesamtarchitektur des Systems, die durch die Auswahl von Umsetzungstechnologien entstanden ist. Die Webanwendung soll, wie bereits in Abschnitt \ref{GWT} beschrieben, durch das GWT Framework implementiert werden. Der Code für Server und Client, der für Visualisierung, Client-Server Kommunikation u.ä., benötigt wird, wird durch GWT-Bilbiotheken bereitgestellt. Eingebettet in die GWT-Klassen wird das Multiagentensystem, das mithilfe des Java Agent Development Framework (JADE) implementiert wurde. Als Datenbankmanagementsystem wurde PostgreSQL ausgewählt. Die Applikation wird durch einen Jetty Server gehostet, der die Java Laufzeitumgebung und das GWT Software Development Kit ebenfalls bereitstellt.  
+In diesem Abschnitt soll die Implementierung, der zuvor konzipierten Systemkomponenten beschrieben werden. Zum einen soll die Auswahl von Technologien und Frameworks zur Umsetzung beschrieben sowie die Funktionalität des Systems auf technischer Ebene dargestellt werden.
+\subsubsection{Implementierte Gesamtarchitektur}
+Abbildung \ref{GAI} zeigt die konkrete Gesamtarchitektur des Systems, die durch die Auswahl von Umsetzungstechnologien entstanden ist. Die Webanwendung soll, wie bereits in Abschnitt \ref{GWT} beschrieben, durch das GWT Framework implementiert werden. Der Code für Server und Client, der für Visualisierung, Client-Server Kommunikation u.ä., benötigt wird, wird durch GWT-Bilbiotheken bereitgestellt. Eingebettet in die GWT-Klassen wird das Multiagentensystem, das mithilfe des Java Agent Development Framework (JADE)\footnote{\cite{jade}} implementiert wurde. Als Datenbankmanagementsystem wurde PostgreSQL ausgewählt. Die Applikation wird durch einen Jetty Server gehostet, der die Java Laufzeitumgebung und das GWT Software Development Kit ebenfalls bereitstellt.  
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.8\textwidth]{architekturSimu.jpg}        
 		\caption{Implementierte Gesamtarchitektur}
 	\label{GAI}
 \end{figure}
+\subsubsection{Benutzeroberfläche}
+\subsubsection{Generierung von Aufträgen}
+\subsubsection{Auswahl eines Multiagenten-Frameworks}
+Das Java Agent Development Framework wurde genutzt, um ein Netzwerk aus verschiedenen Agenten zu implementieren. Jade erlaubt das Erstellen von verschiedenen Agenten. Agenten werden als Java-Klasse implementiert, die von der vordefinierten Klasse Agent erbt. Die Aktionen, die ein Agent ausführen soll, werden durch Behaviours implementiert, die ebenfalls Klassen sind. Um die Anzahl an Klassen zu reduzieren, wurden die Behaviours als interne Klassen in die Agenten eingefügt. Jade ermöglicht die Kommunikation zwischen den Agenten durch ein vordefiniertes Nachrichtensystem. Nachrichten können sowohl gezielt an einen Agenten adressiert oder an alle Agenten verschickt werden. Die Agenten können in Echtzeit miteinander kommunizieren und mehrere Agenten können parallel Aktionen ausführen, da jeder Agent in einem eigenen Thread läuft (Vgl.\cite{jadetwo}). 
+\subsubsection{Implementierte Agententypen}
+Implementiert wurden sieben verschiedene Agententypen. Jede Rampe besitzt einen Paket-, Order-, Routing- und Plattformagenten. Ein Fahrzeug besitzt einen Paket-, Routing- und Plattformagenten. Die Routing- und Plattformagenten wurden für Fahrzeuge und Rampen durch unterschiedliche Agenten implementiert, um die Anzahl an Behaviours pro Agent zu reduzieren und den Code übersichtlicher zu gestalten und unnötigen Speicherverbrauch zu vermeiden. Damit ein Agent weiß, welchem Szenario und welchem Akteur er zugeordnet ist, werden Szenario und Conveyor als Referenz übergeben \footnote{Der genaue Ablauf der Initialisierung wird in Abschnitt \ref{Interaktion der Komponenten} beschrieben}. Neben den genannten Agenten, war es notwendig einen Jobagent zu implementieren, der die Übergabe eines Pakets, die im phyischen System durch einen Menschen geschieht, zu simulieren. Außerdem werden ausgehende Aufträge durch den Jobagent an die Ausgangsrampen übermittelt.
+\subsubsection{Kommunikation zwischen den Agenten}
+In den nachfolgenden Abschnitten soll die Kommunikation zwischen den Agenten, die implementiert wurde, anhand von Sequenzdiagrammen beschrieben werden. Dabei werden folgende Anwendungsszenarien durchlaufen:
+\begin{itemize}
+\item Jobzuweisung an Ein- und Ausgänge.
+\end{itemize}
+
+\paragraph{Jobzuweisung an Ein- und Ausgänge}
+Abbildung \ref{Job} zeigt die Jobzuweisung an die Ein- und Ausgangsrampen durch den Jobagent. Bevor die Jobzuweisung beginnt, wird die Simulation durch den Client gestartet. Neben dem Jobagent, den Plattformagenten der Rampen und dem Paketagenten ist das Servlet AgentPlattformServiceImpl an der Kommunikation beteiligt. Auf die Aspekte der Client-Server Kommunikation wird in Abschnitt  \ref{Interaktion der Komponenten} genauer eingegangen. Das Diagramm zeigt folgenden Ablauf:
+\begin{itemize}
+\item Die Simulation wird aus dem Browser heraus gestartet und das Servlet wird benachrichtigt.
+\item Das Servlet startet die Agentenplattform und initialisiert die Agenten, einschließlich dem Jobagent. 
+\item Der Jobagent startet einmalig eine Anfrage an die Plattformagenten der Rampen, um die IDs und die Anzahl der Ein- und Ausgänge zu erfragen, die für die Jobzuweisung nötig sind. 
+\item Die Plattformagenten senden ihren Rampentyp an den Jobagent.
+\item Der Jobagent besitzt zwei List in denen er die IDs, der Ein- und Ausgänge speichert. Anhand des empfangenen Rampentyps, speichert er die ID des Senders in der entsprechenden Liste. Anschließend wird der Client benachrichtigt, dass die Simulation gestartet wurde.
+\item Der Client startet den Jobtimer und sendet die Aufträge entsprechend ihrer zeitlichen Reihenfolge an das Servlet.
+\item Das Servlet leitet die Aufträge an den Jobagent weiter.
+\item Der Jobagent empfängt den Auftrag und sendet eine Nachricht an sich selbst.
+\item Je nach Art des Auftrags, werden entweder die Eingangs- oder Ausgangsrampen gefragt, ob der Auftrag entgegengenommen werden kann.
+\item Die Plattformagenten senden eine Nachricht an ihre Paketagenten, um zu prüfen, ob der Auftrag aufgenommen werden kann. Der Plattformagent wartet auf die Antwort des Paketagenten.
+\item Der Paketagent prüft, ob der Auftrag entgegengenommen werden kann und antwortet dem Plattformagent.
+\item Der Plattformagent verarbeitet die Anfrage und antwortet dem Jobagent. Läuft der Plattformagent auf einer Ausgangsrampe, so wird automatisch geantwortet, dass Platz verfügbar ist, da ausgehende Aufträge nur IDs repräsentieren, die der Ausgang anfragt. Ein Ausgang kann unbegrenzt IDs anfragen.
+\item Der Jobagent wählt unter den Rampen, die einen Auftrag entgegennehmen können, zufällig eine aus und sendet die Auftragsdaten an den Plattformagenten.
+\item Der Plattformagent initialisiert mit den Auftragsdaten die Paketdaten und schickt diese an den Paketagenten. Zu beachten ist, dass die Klasse PackageDate sowohl eingehende als auch ausgehende Aufträge repräsentiert.
+\item Der Paketagent fügt das Paket einer Liste hinzu.
+\end{itemize}   
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{Jobagent.png}        
+		\caption{Jobzuweisung an Ein- und Ausgänge}
+	\label{Job}
+\end{figure}
+\newpage
+\paragraph{Eingang fragt Ausgang und Zwischenlager}
+Pakete die am Eingang eintreffen, werden weitergeleitet. Besteht ein Bedarf am Ausgang, so soll das Paket zum Ausgang befördert werden. Ansonsten wird es ins Zwischenlager gebracht. Abbildung \ref{Eingang fragt} zeigt den Nachrichtenaustausch der Agenten, der zur Zielfindung nötig ist:
+\begin{itemize}
+\item Der Paketagent stellt mithilfe einer Tickerbehaviour zyklisch Anfragen an seinen Orderagenten, um ein Ziel für das vorderste Paket zu bekommen. Bevor der Orderagent benachrichtigt wird, prüft der Paketagent mithilfe der Variable OutgoingJobFlag, ob für das Paket bereits ein Ziel gefunden wurde. Falls nicht, sendet er die Anfrage an den Orderagenten.  
+\item Der Orderagent sendet eine Nachricht an alle Orderagenten der Ausgangs- und Zwischenrampen.
+\item Der jeweilige Orderagent fragt seinen Paketagenten, ob bereits ein Paket erwartet wird. Dies ist nötigt, damit sich nicht mehrere Bots vor einer Rampe blockieren.
+\item Der Paketagent prüft anhand der Variable IncomingJobFlag, ob ein Paket erwartet wird und antwortet seinem Orderagenten.
+\item Sofern kein Paket erwartet wird, fährt der Orderagent fort und stellt eine erneute Anfrage an seinen Paketagenten, um zu fragen, ob das entsprechende Paket benötigt wird (Ausgang) oder ob Platz frei ist (Zwischenlager).
+\item Der jeweilige Orderagent antwortet dem Eingang, ob das Paket entgegengenommen werden kann oder nicht.
+\item Der Orderagent des Eingangs speichert die IDs der Rampen, die ein Paket aufnehmen können, wählt unter diesen zufällig eine aus und übermittelt die Daten für Start- und Zielrampe an den Routingagent, damit dieser die Auktion starten kann. Der Orderagent wartet bis die Auktion beendet ist. 
+\end{itemize} 
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{EingangAusgang.png}        
+		\caption{Eingang fragt Ausgang und Zwischenlager}
+	\label{Eingang fragt}
+\end{figure}
+\subsubsection{Implementierung des Pathfindings}
+dgfasgfsd
+\subsubsection{Implementierung der Statistiken}
+agfddgfa
+\subsubsection{Interaktion der Komponenten} label{Interaktion der Komponenten}
+gafgdafgd 
