@@ -145,12 +145,10 @@
 }
 
 
+=======
+﻿@Book{stf,author="Heinrich, M.",title="Transport- und Lagerlogistik: Planung, Struktur, Steuerung und Kosten von Systemen der Intralogistik",
 
-@Book{stf,
-author="Heinrich, M.",
-title="Transport- und Lagerlogistik: Planung, Struktur, Steuerung und Kosten von Systemen der Intralogistik",
-publisher="Vieweg + Teubner Verlag",
-year=2009
+publisher="Vieweg + Teubner Verlag",year=2009
 }
 
 @Misc{jade,

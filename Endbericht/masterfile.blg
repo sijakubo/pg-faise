@@ -1,4 +1,5 @@
-This is BibTeX, Version 0.99dThe top-level auxiliary file: masterfile.aux
+This is BibTeX, Version 0.99c (TeX Live 2009/Debian)
+The top-level auxiliary file: masterfile.aux
 The style file: biblatex.bst
 A level-1 auxiliary file: src/title.aux
 A level-1 auxiliary file: src/abstract.aux
@@ -9,6 +10,7 @@ A level-1 auxiliary file: src/chapter3.aux
 A level-1 auxiliary file: src/chapter4.aux
 A level-1 auxiliary file: src/chapter5.aux
 A level-1 auxiliary file: src/chapter6.aux
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Database file #1: masterfile-blx.bib
 Database file #2: src/literatur.bib
 I was expecting a `,' or a `}'---line 75 of file src/literatur.bib
@@ -17,5 +19,47 @@ I was expecting a `,' or a `}'---line 75 of file src/literatur.bib
 (Error may have been on previous line)
 I'm skipping whatever remains of this entry
 Warning--I didn't find a database entry for "jadetwo"
-Biblatex version: 2.9
+Biblatex version: 1.7
+Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
+You've used 13 entries,
+            6019 wiz_defined-function locations,
+            1194 strings with 9770 characters,
+and the built_in function-call counts, 40726 in all, are:
+= -- 1470
+> -- 2200
+< -- 443
++ -- 1263
+- -- 1275
+* -- 2133
+:= -- 3208
+add.period$ -- 0
+call.type$ -- 13
+change.case$ -- 194
+chr.to.int$ -- 106
+cite$ -- 24
+duplicate$ -- 4236
+empty$ -- 3967
+format.name$ -- 635
+if$ -- 8523
+int.to.chr$ -- 0
+int.to.str$ -- 33
+missing$ -- 0
+newline$ -- 249
+num.names$ -- 600
+pop$ -- 3917
+preamble$ -- 1
+purify$ -- 210
+quote$ -- 0
+skip$ -- 2336
+stack$ -- 0
+substring$ -- 1004
+swap$ -- 1289
+text.length$ -- 353
+text.prefix$ -- 12
+top$ -- 1
+type$ -- 481
+warning$ -- 0
+while$ -- 315
+width$ -- 0
+write$ -- 235
 (There was 1 error message)

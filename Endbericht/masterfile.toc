@@ -24,7 +24,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.3}Materialflusssysteme}{12}{subsection.2.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{\nonumberline Funktionen von Materialflusssystemen}{13}{section*.13}
+\contentsline {paragraph}{Funktionen von Materialflusssystemen}{13}{section*.13}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.4}Fallbeispiele}{15}{subsection.2.4}
 \defcounter {refsection}{0}\relax 
@@ -96,9 +96,9 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {5.4.6}Kommunikation zwischen den Agenten}{33}{subsubsection.5.4.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{\nonumberline Jobzuweisung an Ein- und Ausg\IeC {\"a}nge}{33}{section*.22}
+\contentsline {paragraph}{Jobzuweisung an Ein- und Ausg\IeC {\"a}nge}{33}{section*.22}
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{\nonumberline Eingang fragt Ausgang und Zwischenlager}{35}{section*.24}
+\contentsline {paragraph}{Eingang fragt Ausgang und Zwischenlager}{35}{section*.24}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {5.4.7}Implementierung des Pathfindings}{36}{subsubsection.5.4.7}
 \defcounter {refsection}{0}\relax 
