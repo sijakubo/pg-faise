@@ -81,6 +81,27 @@
   \field{year}{2006}
 \endentry
 
+\entry{Guenther;Krueger:2000}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {G\"{u}nther}{G.}%
+     {}{}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Logistik Management, Heft 1}%
+  }
+  \strng{namehash}{G1}
+  \strng{fullhash}{G1}
+  \field{sortinit}{G}
+  \field{title}{Einsatzplanung Fahrerloser Transportsysteme}
+  \list{location}{1}{%
+    {Berlin}%
+  }
+  \field{year}{2000}
+\endentry
+
 \entry{stf}{book}{}
   \name{author}{1}{}{%
     {{}%
@@ -98,6 +119,154 @@
   \field{title}{Transport- und Lagerlogistik: Planung, Struktur, Steuerung und
   Kosten von Systemen der Intralogistik}
   \field{year}{2009}
+\endentry
+
+\entry{Ten:2008}{book}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Hompel}{H.}%
+     {Ten}{T.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Heidenblut}{H.}%
+     {}{}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Springer, 2. Auflage}%
+  }
+  \strng{namehash}{HTH1}
+  \strng{fullhash}{HTH1}
+  \field{sortinit}{H}
+  \field{title}{Taschenlexikon Logistik - Abk\"{u}rzungen, Definitionen und
+  Erl\"{a}uterungen der wichtigsten Begriffe aus Materialfluss und Logistik}
+  \list{location}{1}{%
+    {Berlin}%
+  }
+  \field{year}{2008}
+\endentry
+
+\entry{VDI:1978}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Ingenieure}{I.}%
+     {Verein~Deutscher}{V.~D.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {VDI- Richtlinien}%
+  }
+  \strng{namehash}{IVD1}
+  \strng{fullhash}{IVD1}
+  \field{sortinit}{I}
+  \field{title}{Begriffe und Erl\"{a}uterungen im F\"{o}rderwesen, VDI 2411}
+  \list{location}{1}{%
+    {Berlin}%
+  }
+  \field{year}{1978}
+\endentry
+
+\entry{VDI:92}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Ingenieure}{I.}%
+     {Verein~Deutscher}{V.~D.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Beuth Verlag}%
+  }
+  \strng{namehash}{IVD1}
+  \strng{fullhash}{IVD1}
+  \field{sortinit}{I}
+  \field{title}{Fahrerlose Transportsysteme, VDI 2510}
+  \list{location}{1}{%
+    {D\"{u}sseldorf}%
+  }
+  \field{year}{1992}
+\endentry
+
+\entry{VDI:1994}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Ingenieure}{I.}%
+     {Verein~Deutscher}{V.~D.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Beuth Verlag}%
+  }
+  \strng{namehash}{IVD1}
+  \strng{fullhash}{IVD1}
+  \field{sortinit}{I}
+  \field{title}{Kompatibilit\"{a}t von Fahrerlosen Transportsystemen (FTS)
+  –Energieversorgung und Ladetechnik, VDI 4451}
+  \list{location}{1}{%
+    {D\"{u}sseldorf}%
+  }
+  \field{year}{1994}
+\endentry
+
+\entry{Wulz:Johannes:2008}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Johannes}{J.}%
+     {Wulz}{W.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{JW1}
+  \strng{fullhash}{JW1}
+  \field{sortinit}{J}
+  \field{title}{Menschintegrierte Simulation in der Logistik mit Hilfe der
+  Virtuellen Realit\"{a}t}
+  \field{year}{2008}
+\endentry
+
+\entry{Langenbach:2012}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Maik}{M.}%
+     {Langenbach}{L.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{ML1}
+  \strng{fullhash}{ML1}
+  \field{sortinit}{M}
+  \field{title}{Beitrag zur Systemfindung von Shuttle-Lagersystemen mit
+  horizontaler Bedienebene}
+  \list{location}{1}{%
+    {Dortmund}%
+  }
+  \field{year}{2012}
+\endentry
+
+\entry{Martin:2006}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Martin}{M.}%
+     {H.}{H.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Springer, 6. Auflage}%
+  }
+  \strng{namehash}{MH1}
+  \strng{fullhash}{MH1}
+  \field{sortinit}{M}
+  \field{title}{Transport und Lagerlogistik – Planung, Struktur, Steuerung
+  und Kosten von Systemen der Intralogistik}
+  \list{location}{1}{%
+    {Wiesbaden}%
+  }
+  \field{year}{2006}
 \endentry
 
 \entry{plstg}{report}{}
@@ -119,6 +288,67 @@
   \field{year}{2010}
 \endentry
 
+\entry{Stich:Bruckner:2002}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Stich}{S.}%
+     {A.}{A.}%
+     {}{}%
+     {V.;~Bruckner}{V.~B.}}%
+  }
+  \strng{namehash}{SVBA1}
+  \strng{fullhash}{SVBA1}
+  \field{sortinit}{S}
+  \field{title}{Industrielle Logistik}
+  \list{location}{1}{%
+    {Mainz, Aachen, 7. Auflage}%
+  }
+  \field{year}{2002}
+\endentry
+
+\entry{Werner:2014:Online}{online}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Swoboda}{S.}%
+     {Werner}{W.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{SW1}
+  \strng{fullhash}{SW1}
+  \field{sortinit}{S}
+  \field{title}{Lasernavigation sorgt f\"{u}r flexiblere
+  Einsatzm\"{o}glichkeiten}
+  \verb{url}
+  \verb http://www.industrieanzeiger.de/home/-/article/12503/29025343/Sp%C3%A4t
+  \verb ere-Kurskorrektur-macht-kaum-Probleme/art\_co\_INSTANCE\_0000/maximized
+  \verb /
+  \endverb
+  \field{year}{2014}
+  \warn{\item Invalid format of field 'urldate'}
+\endentry
+
+\entry{Guenther:2011}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Ullrich}{U.}%
+     {G\"unter}{G.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Vieweg+Teubner Verlag}%
+  }
+  \strng{namehash}{UG1}
+  \strng{fullhash}{UG1}
+  \field{sortinit}{U}
+  \field{title}{Fahrerlose Transportsysteme}
+  \list{location}{1}{%
+    {Wiesbaden}%
+  }
+  \field{year}{2011}
+\endentry
+
 \entry{fts}{book}{}
   \name{author}{1}{}{%
     {{}%
@@ -130,8 +360,8 @@
   \list{publisher}{1}{%
     {Vieweg + Teubner Verlag}%
   }
-  \strng{namehash}{UG1}
-  \strng{fullhash}{UG1}
+  \strng{namehash}{UG2}
+  \strng{fullhash}{UG2}
   \field{sortinit}{U}
   \field{title}{Fahrerlose Transportsysteme}
   \field{year}{2011}

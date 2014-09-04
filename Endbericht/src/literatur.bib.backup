@@ -92,11 +92,11 @@
        title = {Sensorknoten: Betrieb, Netze und Anwendungen},
        address = {M\"{u}nchen}
      }
-     @book{GH10,
+     @book{Walter:2010,
        author = {Günthner, W. A. (Hrsg.) ; ten Hompel, M. (Hrsg.)},
-       year = {2010 (VDI-Buch)},
-       title = {Internet der Dinge in der Intralogistik},
-       address = {Berlin : Springer}
+       year = {2010},
+       title = {Sensorknoten: Betrieb, Netze und Anwendungen},
+       address = {M\"{u}nchen}
      }
 		
 @online{Wikibooks:2014:Online,

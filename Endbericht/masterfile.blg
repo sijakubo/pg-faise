@@ -21,45 +21,45 @@ I'm skipping whatever remains of this entry
 Warning--I didn't find a database entry for "jadetwo"
 Biblatex version: 1.7
 Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
-You've used 13 entries,
+You've used 24 entries,
             6019 wiz_defined-function locations,
-            1194 strings with 9770 characters,
-and the built_in function-call counts, 40726 in all, are:
-= -- 1470
-> -- 2200
-< -- 443
-+ -- 1263
-- -- 1275
-* -- 2133
-:= -- 3208
+            1255 strings with 11302 characters,
+and the built_in function-call counts, 78017 in all, are:
+= -- 3280
+> -- 3605
+< -- 930
++ -- 1891
+- -- 1799
+* -- 4053
+:= -- 5366
 add.period$ -- 0
-call.type$ -- 13
-change.case$ -- 194
-chr.to.int$ -- 106
-cite$ -- 24
-duplicate$ -- 4236
-empty$ -- 3967
-format.name$ -- 635
-if$ -- 8523
+call.type$ -- 24
+change.case$ -- 517
+chr.to.int$ -- 124
+cite$ -- 46
+duplicate$ -- 8377
+empty$ -- 7720
+format.name$ -- 1218
+if$ -- 17088
 int.to.chr$ -- 0
-int.to.str$ -- 33
+int.to.str$ -- 77
 missing$ -- 0
-newline$ -- 249
-num.names$ -- 600
-pop$ -- 3917
+newline$ -- 473
+num.names$ -- 1325
+pop$ -- 7402
 preamble$ -- 1
-purify$ -- 210
+purify$ -- 546
 quote$ -- 0
-skip$ -- 2336
+skip$ -- 4775
 stack$ -- 0
-substring$ -- 1004
-swap$ -- 1289
-text.length$ -- 353
-text.prefix$ -- 12
+substring$ -- 2311
+swap$ -- 2539
+text.length$ -- 630
+text.prefix$ -- 23
 top$ -- 1
-type$ -- 481
+type$ -- 899
 warning$ -- 0
-while$ -- 315
+while$ -- 529
 width$ -- 0
-write$ -- 235
+write$ -- 448
 (There was 1 error message)

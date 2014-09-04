@@ -2,14 +2,14 @@
 Die Fahrerlosen Transportsysteme und die Materialflusssysteme sind Prozesse der Logistik. In den vergangenen Jahren 
 hat die Verbreitung Fahrerloser Transportsysteme (FTS) stark zugenommen. Beim Einsatz von FTS stellen sich vielfältige 
 Konfigurierungs- und Planungsprobleme, so auch die Einsatzplanung f\"ur die einzelnen Fahrerlosen Transportfahrzeuge. 
-\cite[vgl.][S. 2]{Guenther;Krueger:2000}. Der innerbetriebliche Materialfluss von Industrieunternehmen bietet 
+\cite[S. 2]{Guenther;Krueger:2000}(vgl. Günther; Krüger; Schrecker; 2000, S. 2). Der innerbetriebliche Materialfluss von Industrieunternehmen bietet 
 fahrerlosen Transportsystemen (FTS) zahlreiche Einsatzgebiete: Sie verketten Produktionsprozesse, verknüpfen 
 Fertigungsstationen oder ganze Betriebsbereiche und beschicken Montageplätze. Darüber hinaus dienen sie als 
 mobile Werkbank oder versorgen und entsorgen Lager unterschiedlicher Art. Um die Systemvorteile von Fahrerlosen 
 Transportsystemen und Materialflusssystemen zu optimieren, braucht man ein ma\ss gerechtes Wissen auf Ihr spezifisches 
 Anlagekonzept abzustimmen. Wichtige Kriterien sind allerdings z.~B. die Einbindung der Fahrerlosen Transportsysteme in 
 den gesamtbetrieblichen Materialfluss, die Anpassung an die vorhandenen Steuerungshierarchien und die optimale Auslegung 
-der Technik in Bezug auf Fahrzeugbauart, Lastaufnahmemittel, Energiekonzept, Kommunikation und Leitsystem \cite[vgl.][S. 2]{Werner:2014:Online}.
+der Technik in Bezug auf Fahrzeugbauart, Lastaufnahmemittel, Energiekonzept, Kommunikation und Leitsystem \cite[S. 2]{Werner:2014:Online}(vgl. Werner Swoboda, Industrie Anzeiger). 
 Ziele von Fahrerlosen Transportsystemen und Materialflusssystemen sind Kostensenkung durch Personaleinsparung, 
 Verringerung von Transportsch\"aden, hohe Zuverl\"assigkeit in Vorg\"angen und bessere Materialflussplanung.
 Dieses Kapitel wird in drei Teile gegliedert. Der erste Teil wird die Fahrerlosen Transportsysteme bzw die 
@@ -23,12 +23,12 @@ Fahrerlosen Transportfahrzeugen (FTF), einer Leitsteuerung, Einrichtung zur Stan
 Lagererfassung, Einrichtungen zur Daten\"ubertragung sowie Infrastruktur und peripheren Einrichtungen"'. 
 In seinem Buch Transport und Lagerlogistik fasst Martin die Definition von VDI 2510 eines FTS zusammen.
 Er beschreibt ein FTS als mit FTF ausgestattete rechnergesteuerte Materialflussanlagen zum automatischen 
-Transport von G\"utern im innerbetrieblichen Materialfluss\cite[vgl.][S. 262f]{Martin:2006}. Bei FTS handelt 
+Transport von G\"utern im innerbetrieblichen Materialfluss\cite[S. 262f]{Martin:2006}(vgl. Martin H, 2006, S.262f). Bei FTS handelt 
 es sich um flurgebundene F\"ordersysteme mit automatisch gef\"uhrten FTF. Die einzelnen FTF bef\"ordern 
 Ladungstr\"ager zwischen zwei oder mehrere Stationen innerhalb eines Gebietes. Die Fahrzeugsteuerung erfolgt 
 automatisch und rechnergest\"utzt. Der Einsatzbereich von FTS ist generell \"uberwiegend innerbetrieblich 
 ausgerichtet. In diesen Rahmen \"ubernehmen FTS sowohl reine F\"orderaufgaben, wie Verkettung von Fertigungs- 
-und Montageeinrichtungen als auch Aufgaben der Lagerbedienung und Kommissionierung\cite[vgl.][S. 3]{Guenther;Krueger:2000}. 
+und Montageeinrichtungen als auch Aufgaben der Lagerbedienung und Kommissionierung\cite[S. 3]{Guenther;Krueger:2000} vgl. G\"unther; Kr\"uger; Schrecker; 2000, S. 3). 
 Das FTS ist eine Technik, die im Vergleich gegen\"uber Stetigf\"ordersystemen eine hohe Anpassungsf\"ahigkeit an die 
 sich \"andernden Marktsituationen zum Vorteil hat. Daher konzentrieren die Forschungs- und Entwicklungsaktivit\"aten 
 sich heutzutage auf die sog. „Zellul\"aren F\"ordersysteme“, in welchen stetige F\"orderanlagen zur Verkn\"upfung von 
@@ -37,7 +37,7 @@ Die Haupteinsatzgebiete des FTS liegen nun in der Intralogistik. Also bei der Or
 der Durchf\"uhrung und der Optimierung des innerbetrieblichen Waren- und Materialflusses und Logistik, 
 der Informationsstr\"ome sowie des Warenumschlags in Industrie, Handel und \"offentlichen Einrichtungen. 
 Z.~B. Automobil- und Zulieferindustrie, Papiererzeugung und –verarbeitung, Elektroindustrie, Getr\"anke-, 
-Lebensmittelindustrie, Baustoffe, Stahlindustrie, Kliniklogistik\cite[vgl.][S. 13]{Guenther:2011}. FTS bestehen 
+Lebensmittelindustrie, Baustoffe, Stahlindustrie, Kliniklogistik\cite[S. 13]{Guenther:2011}(G\"unter Ullrich, 2011 S. 13). FTS bestehen 
 im Wesentlichen aus drei Systemkomponenten: Die Fahrerlosen Transportfahrzeuge, das Orientierungssystem, das Steuerungssystem. 
 
 \subsection{Fahrerlose Transportfahrzeuge}
@@ -54,7 +54,7 @@ FTF intelligent miteinander arbeiten. Die Fahrzeuge sollen sich ohne eine eigene
 untereinander verst\"andigen, Strategien entwickeln und gemeinsam Arbeiten ausf\"uhren. Die Forschungsgebiete 
 hei\"ssen Agentensysteme und Schwarmtheorie. Die Mini-FTF k\"onnen nur intralogistische Aufgaben ausf\"uhren. 
 Dennoch sind viele unkonventionelle Einsatzf\"alle denkbar. Die Kommissionierung (eine ausf\"uhrliche 
-Begriffserkl\"arung wird im Teil Materialfluss gegeben) ist die verbreitetste Anwendungsm\"oglichkeit von Mini-FTF\cite[vgl.][S. 105]{Guenther:2011}.
+Begriffserkl\"arung wird im Teil Materialfluss gegeben) ist die verbreitetste Anwendungsm\"oglichkeit von Mini-FTF \cite[S. 105]{Guenther:2011}(G\"unter Ullrich, 2011 S. 105).
 Als Zusammenfassung kann man sagen, dass die Fahrzeugsteuerung die Systemsicherheit, das Energiemanagement, 
 das Lastaufnahmemittel und die Lenkung eines FTF gew\"ahrleistet. Ein FTF kann ohne Energie nicht funktionieren. 
 Damit ein FTF seine Aufgabe erf\"ullen kann, ist eine Energieversorgung notwendig. Die FTF können durch Akkus oder 
@@ -79,14 +79,14 @@ Die Steuerung von fahrerlosen Transportfahrzeugen, deren Grundfunktionen und der
 VDI-Richtlinien [VDI92], [VDI94], [VDI04] vorgestellt. F\"ur das Konstrukt der fahrerlosen Transportsysteme 
 werden verschiedene Ans\"atze verfolgt, die abh\"angig vom System verschiedene Konstruktionsbem\"uhungen auf 
 das Fahrzeug oder auf der Strecke erfordern. Es gibt mehrere Navigationsverfahren: die physische Leitlinie, 
-die Orientierung durch Magnetmarken, das Global Positioning System (GPS) und die Lasernavigation\cite[vgl.][S. 112]{Guenther:2011}.
+die Orientierung durch Magnetmarken, das Global Positioning System (GPS) und die Lasernavigation\cite[S. 112]{Guenther:2011} (vgl. G\"unter Ullrich, 2011 S. 112).
 \begin{itemize}
 \item \textbf{Die physische Leitlinie:}  Fahrerlose Transportsysteme, die auf physischen Leitlinien navigieren bzw. 
 fahren, benutzen Einrichtungen am oder im Fu\ss boden. Die verschiedenen Varianten sind:
 \item \textbf{Orientierung durch optische Leitspur:} Bei dieser Methode wird ein Farbstrich mit deutlichem Farbkontrast 
 zum umgebenden Boden entweder lackiert oder mit einem speziellen Gewebeband aufgebracht.
 Eine geeignete Kamerasensorik unter dem Fahrzeug nutzt Kantendetektions-Algorithmen und errechnet so die Ansteuerungssignale 
-f\"ur den Lenkmotor\cite[vgl.][S. 112]{Guenther:2011}.
+f\"ur den Lenkmotor\cite[S. 112]{Guenther:2011} (G\"unter Ullrich, 2011 S. 112).
 Optische Verfahren dienen durch eine st\"andige Kurskorrektur dazu, eine hohe Fahrgenauigkeit zu erreichen. 
 \item \textbf{Orientierung durch induktive Leitspur:} Diese Methode der Navigation fahrerloser Transportfahrzeuge 
 ist profitabel aufgrund der permanenten Kurskorrektur und au\ss erdem besonders zuverl\"assig und fahrzeugseitig 
@@ -99,10 +99,9 @@ Jedoch sind Systeme mit Leitdrahtsteuerung nicht flexibel und in der Konstruktio
 	\caption{Prinzipskizze zur induktiven und optischen Spurf\"uhrung (Quelle: G\"unter Ullrich, 2011 S. 79)}
 	\label{Prinzipskizze_induktiven}
 \end{figure}  
-	\item \textbf{Orientierung durch Magnetmarken:} Eine weitere M\"oglichkeit der Steuerung ist die Abtastung von
-	Magnetstreifen oder magnetischen Markierungen auf der Straßenoberfl\"ache.
+	\item \textbf{Orientierung durch Magnetmarken:} Eine weitere M\"oglichkeit der Steuerung ist die Abtastung von Magnetstreifen oder magnetischen Markierungen auf der Straßenoberfl\"ache.
 Dabei bedarf es zur Berechnung der Leitlinie entweder der Koppelnavigation, oder der Peilung von in regelm\"a\ss igen Abst\"anden in den Boden eingelassenen Marken.
-Diese Marken k\"onnen rein passive Dauermagnete oder aber quasi-aktive Transponder sein \cite[vgl.][S. 80]{Guenther:2011}.
+Diese Marken k\"onnen rein passive Dauermagnete oder aber quasi-aktive Transponder sein (G\"unter Ullrich, 2011 S. 80).
 Das Bild \ref{Prinzipskizze_Koppelnavigation_rechts} ist eine Repr\"asentation der Navigation durch Magnetstreifen.
 	\begin{figure}[h!]
 		\centering
@@ -120,7 +119,7 @@ Ein Aspekt, der f\"ur das Laser-gef\"uhrte FTS spricht, ist die Wirtschaftlichke
 Und dies trotz der Alternativen Elektro-, Low-Cost- sowie induktiv gef\"uhrten FTS.
 Letztere lassen sich so einrichten, dass sie auch auf leitdrahtlosen, rein rechnergef\"uhrten Teilstrecken verkehren k\"onnen.
 Keinerlei kostenintensive Bodeninstallation ben\"otigt dagegen das \"uber Lasersensor gesteuerte, v\"ollig frei navigierende Laser-FTS.
-Die Fahrzeuge orientieren sich lediglich an im Raum verteilten Reflektoren und mit Hilfe der Kombination von Winkel- und Distanzmessung\cite[S. 2]{Werner:2014:Online}.
+Die Fahrzeuge orientieren sich lediglich an im Raum verteilten Reflektoren und mit Hilfe der Kombination von Winkel- und Distanzmessung\cite[S. 2]{Werner:2014:Online}(Werner Swoboda, Industrie Anzeiger). 
 Das Bild \ref{Prinzipskizze_Koppelnavigation_links} ist eine Visualisierung der Lasernavigation.
 	\begin{figure}[h!]
 		\centering
@@ -132,7 +131,7 @@ Das Bild \ref{Prinzipskizze_Koppelnavigation_links} ist eine Visualisierung der 
 	\item \textbf{Orientierung durch GPS:} Seine Anwendung im Bereich der Fahrzeugsteuerung wird in Form des DGPS eingesetzt.
 DGPS bedeutet differential GPS und meint die Verwendung eines zus\"atzlichen GPS-Empf\"angers, der nicht auf dem FTF, sondern station\"ar fest installiert ist.
 Mit Hilfe dieses ortsfesten GPS-Empf\"angers wird der sich zeitlich \"andernde Fehler ermittelt, der dem GPS-System eigen ist.
-Mit Hilfe dieser Kenntnis k\"onnen zeitgleich die fahrenden GPS-Empf\"anger auf den FTF exakte Positionen ermitteln\cite[S. 112]{Guenther:2011}.
+Mit Hilfe dieser Kenntnis k\"onnen zeitgleich die fahrenden GPS-Empf\"anger auf den FTF exakte Positionen ermitteln\cite[S. 112]{Guenther:2011}(Quelle: G\"unter Ullrich, 2011 S. 27).
 Diese Navigationstechnik benötigt einen freie Sichtkegel von 15 Grad nach oben (siehe Bild 4), um zuverl\"assig arbeiten zu k\"onnen.
 Die Schritte zur Erlangung der erforderlichen Fahr- und Positioniergenauigkeit sind:
 	\begin{itemize}

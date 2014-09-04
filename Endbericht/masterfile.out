@@ -47,10 +47,10 @@
 \BOOKMARK [3][]{subsubsection.5.4.7}{5.4.7 Implementierung des Pathfindings}{subsection.5.4}
 \BOOKMARK [3][]{subsubsection.5.4.8}{5.4.8 Implementierung der Statistiken}{subsection.5.4}
 \BOOKMARK [3][]{subsubsection.5.4.9}{5.4.9 Interaktion der Komponenten}{subsection.5.4}
-\BOOKMARK [1][]{section.6}{6 Komponentenbeschreibung}{}
-\BOOKMARK [2][]{subsection.6.1}{6.1 Mikrocontroller}{section.6}
-\BOOKMARK [2][]{subsection.6.2}{6.2 Sensorik/ Aktorik}{section.6}
-\BOOKMARK [2][]{subsection.6.3}{6.3 Contiki}{section.6}
-\BOOKMARK [3][]{subsubsection.6.3.1}{6.3.1 Systemarchitektur}{subsection.6.3}
-\BOOKMARK [3][]{subsubsection.6.3.2}{6.3.2 Events}{subsection.6.3}
-\BOOKMARK [3][]{subsubsection.6.3.3}{6.3.3 Prozesse}{subsection.6.3}
+\BOOKMARK [1][]{section.6}{6 Teilbericht Materialfluss}{}
+\BOOKMARK [2][]{subsection.6.1}{6.1 Lastenheft}{section.6}
+\BOOKMARK [2][]{subsection.6.2}{6.2 Komponentenbeschreibung}{section.6}
+\BOOKMARK [3][]{subsubsection.6.2.1}{6.2.1 Mikrocontroller}{subsection.6.2}
+\BOOKMARK [3][]{subsubsection.6.2.2}{6.2.2 Sensorik/ Aktorik}{subsection.6.2}
+\BOOKMARK [3][]{subsubsection.6.2.3}{6.2.3 Contiki}{subsection.6.2}
+\BOOKMARK [2][]{subsection.6.3}{6.3 Gesamtarchitektur}{section.6}

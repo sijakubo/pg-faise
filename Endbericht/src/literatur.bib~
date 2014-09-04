@@ -47,7 +47,7 @@
        publisher = {Beuth Verlag},
        address = {D\"{u}sseldorf}
      }
-		@book{Verein:Deutscher:Ingenieure:2411,
+		@book{VDI:1978,
        author = {Verein Deutscher Ingenieure},
        year = {1978},
        title = {Begriffe und Erl\"{a}uterungen im F\"{o}rderwesen, VDI 2411},
@@ -91,6 +91,12 @@
        year = {2010},
        title = {Sensorknoten: Betrieb, Netze und Anwendungen},
        address = {M\"{u}nchen}
+     }
+     @book{Günthner:ten Hompel:2010,
+       author = {Günthner, W. A. (Hrsg.) ; ten Hompel, M. (Hrsg.)},
+       year = {2010 (VDI-Buch)},
+       title = {Internet der Dinge in der Intralogistik},
+       address = {Berlin : Springer}
      }
 		
 @online{Wikibooks:2014:Online,
@@ -145,10 +151,12 @@
 }
 
 
-=======
-﻿@Book{stf,author="Heinrich, M.",title="Transport- und Lagerlogistik: Planung, Struktur, Steuerung und Kosten von Systemen der Intralogistik",
 
-publisher="Vieweg + Teubner Verlag",year=2009
+@Book{stf,
+author="Heinrich, M.",
+title="Transport- und Lagerlogistik: Planung, Struktur, Steuerung und Kosten von Systemen der Intralogistik",
+publisher="Vieweg + Teubner Verlag",
+year=2009
 }
 
 @Misc{jade,

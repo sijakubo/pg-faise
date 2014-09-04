@@ -3,28 +3,18 @@ Das Ziel der Materialfgruppe ist das dezentrale Management der Fördereinheiten 
 \subsection{Lastenheft}
 Aus einem neutzwerk drathlosen Sensorknoten müssen die Rampen auf mikrocontrollerebene miteiander kommunizieren können und die Fördereinheiten steuern.
 Die Steuerung und Überwachung muss dezentral ablaufen. Zur Umsetzung der dezentralen Steuerung werden Softwareagenten eingesetzt. Bei
-Software-Agenten handelt es sich um Prozesse, die lose gekoppelt und leicht austauschbar sind \cite[S. 31-37]{GH10}.
+Software-Agenten handelt es sich um Prozesse, die lose gekoppelt und leicht austauschbar sind\cite[S. 31-37]{Günthner:ten Hompel:2010}.
 Die Fähigkeit von Agenten, miteinander zu kommunizieren und zu interagieren, ermöglicht das Erstellen eines
 Multiagentensystems. Die Mikrocontrollern dienen als Agentenplattform und bei der Entwicklung muss auf
 Leistungsressourcen (CPU, Kommunikationsbandbreite, Speicher) geachtet werden.
-\paragraph{Produktfunktionen}
 \begin{enumerate}
- \item \textbf{Aktorik/sensorik}: Die Rampen verfügen über Magnetstreifen zum Vereinzeln der Kisten und Lichtschranken 
- zum Erkennen von ein- bzw. ausgehenden Kisten. An den ATMega128 Mikrocontroller der Rampen werden die Lichtschranken und Magnetstifte angeschlossen.
- \item \textbf{Echtzeitsteuerung}: An den ATMega128 Mikrocontroller der Rampen werden die Lichtschranken und Magnetstifte angeschlossen. Der Controller führt die
- Befehle für die rampe aus. 
- \item \textbf{Kommunikation}:Die Micaz-Module kommunizieren drahtlos mit anderen Rampen und Volksbot
- \item \textbf{Synchronisation}: Die Simulation wird über ein Micaz-Modul an die drahtlose Kommunikation angebunden. Die Synchronisation der Zustand erfolgt
-  mittels vorhandenem Ice Interface.
- \item \textbf{Disposition}:Die Controller kennen den Belegungszustand der Rampe und generieren entsprechend Aufträge, die sie an die Fahrzeuge vergeben. 
- Das ganze soll nach dem FIFO-Verfahren ablaufen.
- \item \textbf{Übergabe}: Wenn eine Ein- oder Auslagerung an einer Rampe ausgeführt werden soll, so übernimmt der Controller der Rampe die Kontrolle
- über die Fördereinheit des Fahrzeugs und sorgt dafür, dass das Paket verladen wird
- \item \textbf{Kooperation}: Einsatz Kooperativer Lösungsstrategien für die Materialflusssteuerung. Überwachung und Steuerung mittels Multi-Agentensystem
+ \item \textbf{Aktorik/sensorik}
+ \item \textbf{Echtzeitsteuerung}:
 \end{enumerate}
 
+
+
 \subsection{Komponentenbeschreibung}
-\subsubsection{Rampe}
 \subsubsection{Mikrocontroller}
 Ein Mikrocontroller ist ein kleiner Computer auf einem einzelnen Halbleiter-Chip. Dazu geh\"ort ein Prozessor,
 der Programme ausf\"uhren kann, Arbeits- und Programmspeicher sowie Schnittstellen, die eine Kommunikation mit 
@@ -194,4 +184,3 @@ Prozesse k\"onnen \"uber Events (siehe Events) oder Polling-Anfragen kommunizier
 k\"onnen genutzt werden, um den angerufenen Prozess so schnell wie m\"oglich auszuf\"uhren. Sie
 sind besonders bei der Abarbeitung von Hardware-Interrupts wichtig, da Interrupts-Handler keine Events, sondern nur
 Polling-Anfragen absetzten d\"urfen \cite[S. 7]{Walter:2010}.
-\subsection{Gesamtarchitektur}
