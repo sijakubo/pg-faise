@@ -7,11 +7,20 @@
 	width: 100%;
 }
 
+.conveyor_panel {
+	border: 1px solid black;
+}
+
 .conveyor_label {
 	margin-top: 10px;
 	width: 100%;
 	font-size: 12pt;
 	text-align: center;
+}
+
+.jobtable {
+	border: 1px solid black;
+	min-width: 300px;
 }
 
 /** Example rules used by the template application (remove for your app) */
