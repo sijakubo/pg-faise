@@ -1,5 +1,5 @@
 % $ biblatex auxiliary file $
-% $ biblatex version 1.7 $
+% $ biblatex version 2.4 $
 % Do not modify the above lines!
 %
 % This is an auxiliary file used by the 'biblatex' package.
@@ -81,6 +81,24 @@
   \field{year}{2006}
 \endentry
 
+\entry{GH10}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Günthner}{G.}%
+     {M.~(Hrsg.)}{M.~H.}%
+     {}{}%
+     {W.~A. (Hrsg.) ; ten~Hompel}{W.~A. H. . t.~H.}}%
+  }
+  \strng{namehash}{GWAHtHMH1}
+  \strng{fullhash}{GWAHtHMH1}
+  \field{sortinit}{G}
+  \field{title}{Internet der Dinge in der Intralogistik}
+  \list{location}{1}{%
+    {Berlin : Springer}%
+  }
+  \field{year}{2010 (VDI-Buch)}
+\endentry
+
 \entry{Guenther;Krueger:2000}{book}{}
   \name{author}{1}{}{%
     {{}%
@@ -146,6 +164,22 @@
     {Berlin}%
   }
   \field{year}{2008}
+\endentry
+
+\entry{gwteventservice}{misc}{}
+  \name{author}{1}{}{%
+    {{}%
+     {https://code.google.com/p/gwteventservice/}{h.}%
+     {}{}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{h1}
+  \strng{fullhash}{h1}
+  \field{sortinit}{H}
+  \field{howpublished}{\url{https://code.google.com/p/gwteventservice/}}
+  \field{title}{{gwteventservice}}
+  \field{year}{2014}
 \endentry
 
 \entry{VDI:1978}{book}{}
@@ -456,6 +490,22 @@
   \field{sortinit}{W}
   \field{howpublished}{\url{http://www.gwtproject.org/}}
   \field{title}{{GWT}}
+  \field{year}{2014}
+\endentry
+
+\entry{gwtrpc}{misc}{}
+  \name{author}{1}{}{%
+    {{}%
+     {www.gwtproject.org}{w.}%
+     {}{}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{w1}
+  \strng{fullhash}{w1}
+  \field{sortinit}{W}
+  \field{howpublished}{\url{http://www.gwtproject.org/doc/latest/tutorial/RPC.html}}
+  \field{title}{{What is GWT RPC?}}
   \field{year}{2014}
 \endentry
 
