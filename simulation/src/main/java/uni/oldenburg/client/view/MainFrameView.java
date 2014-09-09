@@ -1,5 +1,6 @@
 package uni.oldenburg.client.view;
 
+import com.google.gwt.user.client.ui.*;
 import uni.oldenburg.client.presenter.MainFramePresenter;
 import uni.oldenburg.shared.model.Job;
 
@@ -9,21 +10,12 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HasText;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MenuBar;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class MainFrameView extends Composite implements MainFramePresenter.IDisplay {
 	private MenuBar			menuBar;
 	private MenuBar			simMenuBar;
 	private MenuBar			jobMenuBar;
+   private MenuBar         statisticMenuBar;
 	
 	private CellTable<Job>	ctJobTable = new CellTable<Job>();
 	private Button			btnAddJobs;
@@ -41,12 +33,14 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	private TextArea 		txtDebug;
 	
 	private Canvas			canvas;
-	
+
+   private StatisticModalPanel statisticModalPanel;
+
 	public static final int canvasWidth  = 800;
 	public static final int canvasHeight = 480;
 	
 	private static int logLineCount = 0;
-	
+
 	public MainFrameView() {
 		VerticalPanel   vpMainFrame = new VerticalPanel();
 		HorizontalPanel hpSubFrame = new HorizontalPanel();
@@ -64,7 +58,10 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		
 		jobMenuBar = new MenuBar(true);
 		jobMenuBar.setAnimationEnabled(true);
-		
+
+      statisticMenuBar = new MenuBar(true);
+      statisticMenuBar.setAnimationEnabled(true);
+
 		//menu bar
 		
 		menuBar = new MenuBar();
@@ -146,7 +143,9 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		txtDebug = new TextArea();
 		txtDebug.setWidth("100%");
 		txtDebug.setHeight("100px");
-		
+
+      statisticModalPanel = new StatisticModalPanel();
+
 		vpMainFrame.add(menuBar);
 		vpMainFrame.add(hpSubFrame);
 		vpMainFrame.add(txtDebug);
@@ -190,7 +189,11 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		return this.jobMenuBar;
 	}
 
-	public HasClickHandlers getConveyorWallButton() {
+   public MenuBar getStatisticMenuBar() {
+      return this.statisticMenuBar;
+   }
+
+   public HasClickHandlers getConveyorWallButton() {
 		return this.btnConveyorWall;
 	}
 
@@ -205,4 +208,8 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	public Panel getConveyorPanel() {
 		return vpConveyor;
 	}
+
+   public StatisticModalPanel getStatisticModalPanel() {
+      return statisticModalPanel;
+   }
 }

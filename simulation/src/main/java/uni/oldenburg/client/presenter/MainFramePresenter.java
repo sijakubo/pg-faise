@@ -13,13 +13,7 @@ import uni.oldenburg.client.service.AgentPlatformServiceAsync;
 import uni.oldenburg.client.service.ServiceAsync;
 import uni.oldenburg.client.service.SimulationServiceAsync;
 import uni.oldenburg.client.util.EmptyAsyncCallback;
-import uni.oldenburg.client.view.DialogBoxJoblistSelection;
-import uni.oldenburg.client.view.DialogBoxOverwrite;
-import uni.oldenburg.client.view.DialogBoxOverwriteJoblist;
-import uni.oldenburg.client.view.DialogBoxSaveAs;
-import uni.oldenburg.client.view.DialogBoxSaveAsJoblist;
-import uni.oldenburg.client.view.DialogBoxScenarioSelection;
-import uni.oldenburg.client.view.MainFrameView;
+import uni.oldenburg.client.view.*;
 import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorRamp;
 import uni.oldenburg.shared.model.ConveyorVehicle;
@@ -28,15 +22,7 @@ import uni.oldenburg.shared.model.Job;
 import uni.oldenburg.shared.model.JobList;
 import uni.oldenburg.shared.model.Szenario;
 import uni.oldenburg.shared.model.SzenarioInfo;
-import uni.oldenburg.shared.model.event.JobAssignedEvent;
-import uni.oldenburg.shared.model.event.JobCounterUpdateEvent;
-import uni.oldenburg.shared.model.event.JobStatusUpdatedEvent;
-import uni.oldenburg.shared.model.event.JobUnassignableEvent;
-import uni.oldenburg.shared.model.event.PackageAddedEvent;
-import uni.oldenburg.shared.model.event.PackageRemovedEvent;
-import uni.oldenburg.shared.model.event.PositionChangedEvent;
-import uni.oldenburg.shared.model.event.SimStartedEvent;
-import uni.oldenburg.shared.model.event.SimStoppedEvent;
+import uni.oldenburg.shared.model.event.*;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
@@ -79,6 +65,8 @@ import de.novanic.eventservice.client.event.RemoteEventService;
 import de.novanic.eventservice.client.event.RemoteEventServiceFactory;
 import de.novanic.eventservice.client.event.domain.DomainFactory;
 import de.novanic.eventservice.client.event.listener.RemoteEventListener;
+import uni.oldenburg.shared.model.statistic.BotWorkloadDataModel;
+
 /**
  * Der Mainframepresenter ist dafuer da das Hauptfenster zu initialisieren und alle Aktionen durchzuführen, die durch
  * das Drücken eines Gui-Elements initialisiert werden.
@@ -117,16 +105,19 @@ public class MainFramePresenter extends Presenter {
 		HasClickHandlers getConveyorWallButton();
 		
 		Panel 	getConveyorPanel();
+      StatisticModalPanel getStatisticModalPanel();
 		
 		HasText	getJobCount();
 
 		MenuBar getMenuBar();
 		MenuBar getSimulationMenuBar();
 		MenuBar getJobMenuBar();
+      MenuBar getStatisticMenuBar();
+
 		Canvas 	getCanvas();
-		
-		void log(String log);		
-	}
+
+		void log(String log);
+    }
 
 	public MainFramePresenter(SimulationServiceAsync rpcService, HandlerManager eventBus, IDisplay view) {
 		super(rpcService, eventBus);
@@ -840,7 +831,7 @@ public class MainFramePresenter extends Presenter {
 		mapJobMenuItems.get("Laden").setEnabled(!hasSimulationStarted());
 		mapJobMenuItems.get("Speichern").setEnabled(!hasSimulationStarted());
 		mapJobMenuItems.get("Speichern unter...").setEnabled(!hasSimulationStarted());
-		
+
 		display.getConveyorPanel().setVisible(!hasSimulationStarted());
 		
 		MainFramePresenter.this.dropableConveyor = null;
@@ -1012,11 +1003,19 @@ public class MainFramePresenter extends Presenter {
 			}
 		}));
 
-		// menu bar
+      menuName = "Statistik anzeigen";
+      this.display.getStatisticMenuBar().addItem(menuName, new Command() {
+         public void execute() {
+            display.getStatisticModalPanel().show();
+         }
+      });
 
+		// menu bar
 		this.display.getMenuBar().addItem("Simulation", this.display.getSimulationMenuBar());
 		this.display.getMenuBar().addSeparator();
 		this.display.getMenuBar().addItem("Auftragsliste", this.display.getJobMenuBar());
+      this.display.getMenuBar().addSeparator();
+		this.display.getMenuBar().addItem("Statistik", this.display.getStatisticMenuBar());
 	}
 
 	public Szenario getActualSzenario() {
@@ -1143,7 +1142,15 @@ public class MainFramePresenter extends Presenter {
 					
 					loadSzenario(currentSzenario);
 				}
-			}
+
+            if (anEvent instanceof BotWorkloadChangedEvent) {
+               BotWorkloadDataModel dataModelBotWaited = ((BotWorkloadChangedEvent) anEvent).getBotWaitedDataModel();
+               BotWorkloadDataModel dataModelBotWorked = ((BotWorkloadChangedEvent) anEvent).getBotWorkedDataModel();
+               display.getStatisticModalPanel()
+                     .newBotWorkloadDataReceived(dataModelBotWaited, dataModelBotWorked);
+               return;
+            }
+         }
 		});
 	}
 	

@@ -25,6 +25,9 @@
    <source path='shared'/>
 
    <inherits name="com.google.gwt.logging.Logging"/>
+   <inherits name='com.sencha.gxt.ui.GXT' />
+   <inherits name='com.sencha.gxt.chart.Chart' />
+
    <set-property name="gwt.logging.logLevel" value="INFO"/>
    <set-property name="gwt.logging.enabled" value="TRUE"/>
    <set-property name="gwt.logging.simpleRemoteHandler" value="ENABLED"/>

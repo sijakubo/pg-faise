@@ -226,8 +226,6 @@ public class VehicleRoutingAgent extends Agent {
 		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
 			int vehicleWhoGotJobID = Integer.parseInt(msg.getUserDefinedParameter("vehicleID"));
 
-         sendStartedWorkingToStatisticAgent();
-
 			System.out.println("vehicleWhoGotJobID: " + vehicleWhoGotJobID);
 			
 			// am i the one who got the job?
@@ -245,7 +243,9 @@ public class VehicleRoutingAgent extends Agent {
 				
 				AgentHelper.addReceiver(msgSendPaths, myAgent, VehiclePlattformAgent.NAME, myConveyor.getID(), mySzenario.getId());
 				send(msgSendPaths);
-			}
+
+            sendBotStartedWorkingToStatisticAgent(myAgent);
+         }
 			
 			auctionInProgress = false;
 		}
@@ -305,20 +305,24 @@ public class VehicleRoutingAgent extends Agent {
 
    /**
     * @author sijakubo
+    * @param myAgent
     */
-   private void sendStartedWorkingToStatisticAgent() {
+   private void sendBotStartedWorkingToStatisticAgent(Agent myAgent) {
       ACLMessage msgBotWorking = new ACLMessage(MessageType.BOT_STARTED_WORKING);
       msgBotWorking.addUserDefinedParameter(StatisticAgent.PARAM_TIMESTAMP, String.valueOf(System.currentTimeMillis()));
       msgBotWorking.addUserDefinedParameter(StatisticAgent.PARAM_CONVEYOR_ID, String.valueOf(myConveyor.getID()));
-      AgentHelper.addReceiver(msgBotWorking, this, StatisticAgent.AGENT_NAME, myConveyor.getID(), mySzenario.getId());
+      AgentHelper.addReceiver(msgBotWorking, myAgent, StatisticAgent.AGENT_NAME, -1, mySzenario.getId());
       send(msgBotWorking);
    }
 
+   /**
+    * @author sijakubo
+    */
    private void sendBotCreatedToStatisticAgent() {
       ACLMessage msgBotCreated = new ACLMessage(MessageType.BOT_CREATED);
       msgBotCreated.addUserDefinedParameter(StatisticAgent.PARAM_TIMESTAMP, String.valueOf(System.currentTimeMillis()));
       msgBotCreated.addUserDefinedParameter(StatisticAgent.PARAM_CONVEYOR_ID, String.valueOf(myConveyor.getID()));
-      AgentHelper.addReceiver(msgBotCreated, this, StatisticAgent.AGENT_NAME, myConveyor.getID(), mySzenario.getId());
+      AgentHelper.addReceiver(msgBotCreated, this, StatisticAgent.AGENT_NAME, -1, mySzenario.getId());
       send(msgBotCreated);
    }
 }

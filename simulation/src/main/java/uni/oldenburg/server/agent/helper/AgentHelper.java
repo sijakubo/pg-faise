@@ -16,10 +16,10 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 
-public class AgentHelper {	
+public class AgentHelper {
 	/**
 	 * register agent for global identification
-	 * 
+	 *
 	 * @author Matthias
 	 *
 	 */
@@ -30,17 +30,17 @@ public class AgentHelper {
 		sd.setType("FAISE-" + szenarioID);
 		sd.setName(serviceName);
 		dfd.addServices(sd);
-		
+
 		try {
 			DFService.register(myAgent, dfd);
 		} catch (FIPAException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * unregister agent as global identifier
-	 * 
+	 *
 	 * @author Matthias
 	 */
 	public static void unregister(Agent myAgent) {
@@ -50,96 +50,102 @@ public class AgentHelper {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * retrieve list of all currently registered agents
-	 * 
+	 *
 	 * @author Matthias
 	 *
 	 */
 	public static List<AID> getAgentList(int szenarioID, Agent myAgent) {
 		List<AID> lstAgentName = new ArrayList<AID>();
-		
+
 		DFAgentDescription dfd = new DFAgentDescription();
 		ServiceDescription sd = new ServiceDescription();
 		sd.setType("FAISE-" + szenarioID);
 		dfd.addServices(sd);
-		
+
 		try {
 			DFAgentDescription[] result = DFService.search(myAgent, dfd);
 
 			for (int i = 0; i < result.length; i++) {
 				lstAgentName.add(result[i].getName());
 			}
-			
+
 		} catch (FIPAException e) {
 			e.printStackTrace();
 		}
-		
-		return lstAgentName;		
+
+		return lstAgentName;
 	}
-	
+
 	/**
 	 * add receiver with specific agent name / address
-	 * 
-     * @author Matthias
+	 *
+     * @author Matthias sijakubo
      */
 	public static void addReceiver(ACLMessage msg, Agent myAgent, String targetAgentName, int conveyorID, int szenarioID) {
 		List<AID> lstAID = getAgentList(szenarioID, myAgent);
-		
+
 		String nickname = AgentHelper.getUniqueNickname(targetAgentName, conveyorID, szenarioID);
-		
+
+      boolean aidFound = false;
 		for (AID myAID : lstAID) {
 			if (myAID.toString().contains(nickname)) {
 				msg.addReceiver(myAID);
+            aidFound = true;
 			}
 		}
+
+      if (!aidFound) {
+         throw new IllegalArgumentException("Unable to find AID for targetAgentName: " + targetAgentName);
+      }
 	}
-	
+
 	/**
 	 * set list of AIDs as receivers
-	 * 
+	 *
 	 * @author Matthias
 	 */
 	public static void addReceivers(ACLMessage msg, List<AID> lstAID) {
-		for (AID myAID : lstAID) {	
+		for (AID myAID : lstAID) {
 			msg.addReceiver(myAID);
 		}
 	}
 
 	/**
 	 * set all agents in current szenario as receivers
-	 * 
+	 *
 	 * @author Matthias
 	 */
 	public static void addReceivers(ACLMessage msg, Agent myAgent, int szenarioID) {
 		List<AID> lstAID = getAgentList(szenarioID, myAgent);
-		
+
 		AgentHelper.addReceivers(msg, lstAID);
 	}
-	
+
 	/**
 	 * compute unique name for agents
-	 * 
+	 *
 	 * @author Matthias
 	 *
-	 */	
+	 */
 	public static String getUniqueNickname(String nickname, int conveyorID, int szenarioID) {
 		return szenarioID + "-" + conveyorID + "-" + nickname;
 	}
-	
+
 	/**
 	 * retrieve infos (ramp type counts) about the current szenario
-	 * 
+	 *
 	 * @author Matthias
 	 */
 	public static SzenarioInfo getSimulationConveyorCounts(Szenario mySzenario) {
 		SzenarioInfo myInfo = new SzenarioInfo();
-		
+
 		for(Conveyor myConveyor : mySzenario.getConveyorList()) {
 			if (myConveyor instanceof ConveyorRamp) {
 				ConveyorRamp myRampConveyor = (ConveyorRamp)myConveyor;
-				
+
 				switch(myRampConveyor.getRampType()) {
 					case ConveyorRamp.RAMP_ENTRANCE:
 						++myInfo.EntryRampCount;
@@ -156,7 +162,7 @@ public class AgentHelper {
 				++myInfo.VehicleCount;
 			}
 		}
-		
+
 		return myInfo;
 	}
 }

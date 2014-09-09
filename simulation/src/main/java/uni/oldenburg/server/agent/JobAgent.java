@@ -308,7 +308,7 @@ public class JobAgent extends Agent {
       ACLMessage msgPackageEntered = new ACLMessage(MessageType.PACKAGE_ENTERED_SIMULATION);
       msgPackageEntered.addUserDefinedParameter(StatisticAgent.PARAM_TIMESTAMP, String.valueOf(System.currentTimeMillis()));
       msgPackageEntered.addUserDefinedParameter(StatisticAgent.PARAM_PACKAGE_ID, String.valueOf(incomingJob.getPackageId()));
-      AgentHelper.addReceiver(msgPackageEntered, this, StatisticAgent.AGENT_NAME, 0, szenario.getId());
+      AgentHelper.addReceiver(msgPackageEntered, this, StatisticAgent.AGENT_NAME, -1, szenario.getId());
       send(msgPackageEntered);
    }
 }

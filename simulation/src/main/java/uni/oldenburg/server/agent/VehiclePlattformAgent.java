@@ -181,12 +181,13 @@ public class VehiclePlattformAgent extends Agent {
 				msgTransferToDestination.addUserDefinedParameter("dstConveyorID", "" + dstRampID);				
 				AgentHelper.addReceiver(msgTransferToDestination, myAgent, PackageAgent.NAME, myConveyor.getID(), mySzenario.getId());
 				send(msgTransferToDestination);
-				
-				myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.TRANSFER_PACKAGE_COMPLETED));
-				
+
+            myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.TRANSFER_PACKAGE_COMPLETED));
+
+            sendStoppedWorkingToStatisticAgent(myAgent);
+
 				//logger.log(Level.INFO, "Transfer 02: complete");
 
-            sendStoppedWorkingToStatisticAgent();
 
 				lstPathPoints.clear();
 				
@@ -199,12 +200,13 @@ public class VehiclePlattformAgent extends Agent {
 
    /**
     * @author sijakubo
+    * @param myAgent
     */
-   private void sendStoppedWorkingToStatisticAgent() {
+   private void sendStoppedWorkingToStatisticAgent(Agent myAgent) {
       ACLMessage msgBotStoppedWorking = new ACLMessage(MessageType.BOT_STOPPED_WORKING);
       msgBotStoppedWorking.addUserDefinedParameter(StatisticAgent.PARAM_TIMESTAMP, String.valueOf(System.currentTimeMillis()));
       msgBotStoppedWorking.addUserDefinedParameter(StatisticAgent.PARAM_CONVEYOR_ID, String.valueOf(myConveyor.getID()));
-      AgentHelper.addReceiver(msgBotStoppedWorking, this, StatisticAgent.AGENT_NAME, myConveyor.getID(), mySzenario.getId());
+      AgentHelper.addReceiver(msgBotStoppedWorking, myAgent, StatisticAgent.AGENT_NAME, -1, mySzenario.getId());
       send(msgBotStoppedWorking);
    }
 }

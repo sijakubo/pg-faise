@@ -153,7 +153,10 @@ public class PackageAgent extends Agent {
 			
 			if(myConveyor instanceof ConveyorRamp) {
 				EventHelper.addEvent(new JobCounterUpdateEvent(myConveyor.getID(), true));
-            sendPackageLeftSimulationBehaviour(myPackage);
+
+            if (myPackage.getType() == Job.INCOMING) {
+               sendPackageLeftSimulationBehaviour(myPackage);
+            }
 			}
 			
 			ACLMessage msgCompleted = new ACLMessage(MessageType.ADD_PACKAGE_COMPLETED);
@@ -446,7 +449,7 @@ public class PackageAgent extends Agent {
       ACLMessage msgPackageLeftSimulation = new ACLMessage(MessageType.PACKAGE_LEFT_SIMULATION);
       msgPackageLeftSimulation.addUserDefinedParameter(StatisticAgent.PARAM_TIMESTAMP, String.valueOf(System.currentTimeMillis()));
       msgPackageLeftSimulation.addUserDefinedParameter(StatisticAgent.PARAM_PACKAGE_ID, String.valueOf(myPackage.getPackageID()));
-      AgentHelper.addReceiver(msgPackageLeftSimulation, this, StatisticAgent.AGENT_NAME, myConveyor.getID(), mySzenario.getId());
+      AgentHelper.addReceiver(msgPackageLeftSimulation, this, StatisticAgent.AGENT_NAME, -1, mySzenario.getId());
 
       send(msgPackageLeftSimulation);
    }

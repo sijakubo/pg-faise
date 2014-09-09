@@ -105,7 +105,7 @@ public class AgentPlatformServiceImpl extends RemoteServiceServlet implements Ag
 	   }
 	   
 	   addAgentToSimulation(0, szenario.getId(), argsJobAgent, JobAgent.NAME, new JobAgent());
-	   addAgentToSimulation(0, szenario.getId(), null, StatisticAgent.AGENT_NAME, new StatisticAgent());
+	   addAgentToSimulation(-1, szenario.getId(), argsJobAgent, StatisticAgent.AGENT_NAME, new StatisticAgent());
 
 	   startAgents();
 	   
