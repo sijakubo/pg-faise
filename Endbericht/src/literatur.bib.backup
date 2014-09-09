@@ -1,4 +1,4 @@
-﻿@book{Guenther;Krueger:2000,
+﻿@book{Guenther:Krueger:2000,
        author = {G\"{u}nther},
        year = {2000},
        title = {Einsatzplanung Fahrerloser Transportsysteme},
@@ -54,7 +54,7 @@
        publisher = {VDI- Richtlinien},
        address = {Berlin}
      }
-		@book{Verein:Deutscher:Ingenieure:2860,
+		@book{VDI:1990,
        author = {Verein Deutscher Ingenieure},
        year = {1990},
        title = {Montage- und Handhabungstechnik; Handhabungsfunktionen, Handhabungseinrichtungen; Begriffe, Definitionen, Symbole, VDI 2860},
@@ -92,13 +92,24 @@
        title = {Sensorknoten: Betrieb, Netze und Anwendungen},
        address = {M\"{u}nchen}
      }
-     @book{Walter:2010,
+	@book{GH:2010,
        author = {Günthner, W. A. (Hrsg.) ; ten Hompel, M. (Hrsg.)},
        year = {2010},
-       title = {Sensorknoten: Betrieb, Netze und Anwendungen},
-       address = {M\"{u}nchen}
-     }
-		
+       title = {Internet der Dinge in der Intralogistik},
+       address = {Berlin : Springer, (VDI-Buch)}
+     }	
+       @book{BZW:1998,
+       author = {Brenner, W.; Zarnekow, R.; Wittig, H.},
+       year = {1998},
+       title = {Intelligente Softwareagenten: Grundlagen und Anwendungen.},
+       address = {Berlin : Springer}
+     }	
+@book{Stasch:Hahn,
+       author = {Arne Stasch, Axel Hahn}
+       title = {Towards a Multi-agent Platform for Cyber-Physical Systems Based
+on Low-Power Microcontroller for Automated Intralogistics},
+       address = {OFFIS Institute for Information Technology, Oldenburg}
+     }	
 @online{Wikibooks:2014:Online,
   author = {Wikibooks, Die freie Bibliothek},
   title = {{Mikrocontroller} Einleitung und Grundlagen},

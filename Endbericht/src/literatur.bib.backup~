@@ -1,4 +1,4 @@
-﻿@book{Guenther;Krueger:2000,
+﻿@book{Guenther:Krueger:2000,
        author = {G\"{u}nther},
        year = {2000},
        title = {Einsatzplanung Fahrerloser Transportsysteme},
@@ -54,7 +54,7 @@
        publisher = {VDI- Richtlinien},
        address = {Berlin}
      }
-		@book{Verein:Deutscher:Ingenieure:2860,
+		@book{VDI:1990,
        author = {Verein Deutscher Ingenieure},
        year = {1990},
        title = {Montage- und Handhabungstechnik; Handhabungsfunktionen, Handhabungseinrichtungen; Begriffe, Definitionen, Symbole, VDI 2860},
@@ -92,23 +92,17 @@
        title = {Sensorknoten: Betrieb, Netze und Anwendungen},
        address = {M\"{u}nchen}
      }
-     @book{GH:2010,
+	@book{GH:2010,
        author = {Günthner, W. A. (Hrsg.) ; ten Hompel, M. (Hrsg.)},
-       year = {2010 (VDI-Buch)},
+       year = {2010},
        title = {Internet der Dinge in der Intralogistik},
-       address = {Berlin : Springer}
-     }
-	@book{BZW:1998,
+       address = {Berlin : Springer, (VDI-Buch)}
+     }	
+       @book{BZW:1998,
        author = {Brenner, W.; Zarnekow, R.; Wittig, H.},
        year = {1998},
-       title = {Intelligente Softwareagenten: Grundlagen und Anwendungen},
+       title = {Intelligente Softwareagenten: Grundlagen und Anwendungen.},
        address = {Berlin : Springer}
-     }	
-       @book{Stasch:Hahn,
-       author = {Arne Stasch, Axel Hahn},
-       title = {Towards a Multi-agent Platform for Cyber-Physical Systems Based
-on Low-Power Microcontroller for Automated Intralogistics},
-       address = {OFFIS Institute for Information Technology, Oldenburg}
      }	
 @online{Wikibooks:2014:Online,
   author = {Wikibooks, Die freie Bibliothek},
@@ -213,20 +207,6 @@ publisher="Vieweg + Teubner Verlag",year=2011
   year=2014
 }
 
-@Misc{gwteventservice,
-  author="https://code.google.com/p/gwteventservice/",
-  title="{gwteventservice}",
-  howpublished ={\url{https://code.google.com/p/gwteventservice/}},
-  year=2014
-}
-
-
-@Misc{gwtrpc,
-  author="www.gwtproject.org",
-  title="{What is GWT RPC?}",
-  howpublished ={\url{http://www.gwtproject.org/doc/latest/tutorial/RPC.html}},
-  year=2014
-}
 @Book{mas,author="Ghanbari , S.",title="Multiagentensysteme zur Analyse und Verbesserung von vernetztem, kooperativem Lernen",
 
 publisher="Waxmann Verlag",year=2006

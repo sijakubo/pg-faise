@@ -2,9 +2,8 @@
 Das Ziel der Materialfgruppe ist das dezentrale Management der Fördereinheiten auf der Rampen und auf dem Volksbots.
 \subsection{Lastenheft}
 Aus einem neutzwerk drathlosen Sensorknoten müssen die Rampen auf mikrocontrollerebene miteiander kommunizieren können und die Fördereinheiten steuern.
-Die Steuerung und Überwachung muss dezentral ablaufen. Zur Umsetzung der dezentralen Steuerung werden Softwareagenten eingesetzt. Bei
-Software-Agenten handelt es sich um Prozesse, die lose gekoppelt und leicht austauschbar sind \cite[vgl.][S. 31-37]{GH10}.
-Die Mikrocontrollern dienen als Agentenplattform und bei der Entwicklung muss auf Leistungsressourcen (CPU, Kommunikationsbandbreite, Speicher) geachtet werden.
+Die Steuerung und Überwachung muss dezentral durch softwareagenten ablaufen. Die Mikrocontrollern dienen als Agentenplattform und bei der Entwicklung muss 
+auf Leistungsressourcen (CPU, Kommunikationsbandbreite, Speicher) geachtet werden.
 \paragraph{Produktfunktionen}
 \begin{enumerate}
  \item \textbf{Aktorik/sensorik}: Die Rampen verfügen über Magnetstreifen zum Vereinzeln der Pakete und Lichtschranken 
@@ -198,22 +197,61 @@ k\"onnen genutzt werden, um den angerufenen Prozess so schnell wie m\"oglich aus
 sind besonders bei der Abarbeitung von Hardware-Interrupts wichtig, da Interrupts-Handler keine Events, sondern nur
 Polling-Anfragen absetzten d\"urfen \cite[vgl.][S. 7]{Walter:2010}.
 \subsection{Gesamtarchitektur}
-Zur Umsetzung der dezentralen Steuerung wurde Softwareagenten eingesetzt. Es existieren verschiedene Definitionen eines Agenten, von denen
+Zur Umsetzung der dezentralen Steuerung werden Softwareagenten eingesetzt. Bei Software-Agenten handelt es sich um Prozesse, die lose gekoppelt 
+und leicht austauschbar sind \cite[vgl.][S. 31-37]{GH:2010}. Es existieren verschiedene Definitionen eines Agenten, von denen
 sich keine als Standard etablieren konnte. Die hier verwendete Definition stammt von
 Brenner, Zarnekow und Wittig. Sie definieren einen Agenten als „ ... ein Softwareprogramm,
 das für einen Benutzer bestimmte Aufgaben erledigen kann und dabei einen Grad an
 Intelligenz besitzt, der es befähigt, seine Aufgaben in Teilen autonom durchzuführen und mit
-seiner Umwelt auf sinnvolle Art und Weise zu interagieren“\cite{BZW98}. Die Fähigkeit von Agenten, miteinander zu kommunizieren 
-und zu interagieren, ermöglicht das Erstellen eines Multiagentensystems.\\
-Die Systemarchitektur der Materialfgruppe lehnt sich an der AUTOSAR Softwarearchitektur. Die nächste Abbildung zeigt den 
-Aufbau der Softwarearchitektur: Bild
+seiner Umwelt auf sinnvolle Art und Weise zu interagieren“\cite{BZW:1998}. Die Fähigkeit von Agenten, miteinander zu kommunizieren 
+und zu interagieren, ermöglicht das Erstellen eines Multiagentensystems (MAS). Ein wesentlicher Vorteil von MAS 
+bzw. von verteilten Steuerungssystemen ist die Fähigkeit, dynamisch auf Veränderungen zu reagieren. Ein Beispiel für eine solche Veränderung ist der
+Ausfall einer Steuerungseinheit bzw. eines Agenten. Der Ausfall einer Einheit hat nicht unbedingt zur Folge, dass das gesamte System ausfällt. 
+Die restlichen Einheiten können sich eigenständig auf eine solche Veränderung einstellen und diese beim weiteren Ablauf
+berücksichtigen\cite[S. 13]{Roidl:2012}. Diese Eigenschaft bringt eine ganze Reihe von Vorteilen für ein dezentral
+gesteuertes Materialflusssystem mit sich.\\
+Die Systemarchitektur der Materialfgruppe lehnt sich an der AUTOSAR Softwarearchitektur. 
+Die nächste Abbildung zeigt den Aufbau der Softwarearchitektur:Bild
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.9\textwidth]{ArchitekturMicazRampe.png}
+	\caption{schematischer Aufbau eines Mikrocontrollers \cite{Stasch:Hahn}}
+	\label{Aufbau eines Mikrocontrollers}
+\end{figure}
 \subsubsection{Hardware Level}
 Auf der Hardwareebene werden die Treiber für die Steuerung der Lichtschranke und Bolzen implementiert. Die Treiber bekommen ein
-allgemeines Interface bekommen für die Agenten RTE.
+allgemeines Interface für die Agenten RTE.
 \subsubsection{BackgroundLevel}
 Auf dieser Ebene werden der Agenten RTE alle Funktionalitäten zur Verfügung gestellt. Das RTOS stellt Infrastruktur wie z.B. Task Management, 
 Timing, Events usw. Die Driver Ebene kümmert sich auf um die Schnittstellen/Pins des Controllers wie z.B. Protokolle angeschlossener
-Devices . 
-
+Devices\cite[S. 26]{Stasch:Hahn}. Die aufgabe des service ist es, Funktionen für spezielle Anwendungen zur Verfügung zu stellen.
+Darüber kommen die Interfaces, diese sind nötig damit bestimmte Funktionen immer gleich der Agenten RTE zur Verfügung gestellt werden 
+auch wenn der Service anders ist oder wenn ein Service verschiedene Interfaces bedienen soll\cite[S. 26]{Stasch:Hahn}.
 \subsubsection{Agent Level}
+Auf diesem Level werden die Verschiedene Agenten implementiert. Die Agenten RTE soll den Agenten ihnen alle benötigten Schnittstellen zur
+Verfügung stellen. Sie soll die Agenten aktivieren und deaktivieren können und die Kommunikation zwischen den Agenten managen
+(Messages innerhalb und außerhalb der Plattform trennen)\cite[S. 26]{Stasch:Hahn}. 
+\paragraph{Plattformagent}
+Jeder Plattformagent ist für die Steuerung von der verantwortlichen Rampe zuständig.
+Der Plattform Agent kümmert sich um die Annahme und Abgabe der Pakete mit den Volksbots. Er
+hat die alleinige Zugriffsrechte auf die Lichtschranken und ausfahrbaren Stifte. Er überwacht auch die reale Position 
+der Pakete und damit auch deren Reihenfolge.
+\paragraph{Orderagent}
+Der Orderagent spielt die Rolle der alten Materialflussrechner im Materialflusssystem. Seine aufgabe liegt bei der Bearbeitung der aufträge
+wo und wann die ware zu sein hat. Sie befinden sich auf jeder Plattform und können den Paketen ihre Destination (Zielmodul)mit Prioritäten (z.B.
+eine Ausgangszuweisung zu einem näheren Zeitpunkt hat höhere Priorität als eine Spätere und diese ist höher als eine Zwischeneinlagerung usw.) 
+und ihre Agent ID zuweisen\cite[S. 30]{Stasch:Hahn}. 
+\paragraph{Paketagent}
+Der Paket Agent repräsentiert die physische Fördereinheit. Beim Eintritt im System kümmert sich der Paketagent um 
+eine destination und schon bei vorhandener Destination gibt er dem Routingagent sein ziel mit Priorität zur weiteren Planung durch.
+Er aktualisiert regelmäßg seinen Status und gibt neue Routinganfragen wenn sich seine Destination ändert.
+Wenn das physische Paket das Modul wechselt, wandert der paketagent auch von der jeweiligen Plattform zur nächsten. 
+Da jeder Paket Agent gleich ist wird der Plattformwechsel realisiert, in dem seine Parameter weitergegeben
+werden, ein neuer Paket Agent auf der nächsten Plattform aktiviert wird und auf der vorigen Plattform deaktiviert\cite[S. 31]{Stasch:Hahn}.
+\paragraph{Routingagent}
+Der Routingagent kümmern sich um die Wegplanung der Agenten im Materialfluss. Der Weg bestimmt die Hops über welche Module das Paket geleitet wird.
+Das Ziel der Paket-Agents ist es, an ihrem Ziel in der effizientesten Art und Weise durch die Wahl optimaler Routen 
+mit minimalen Abständen und kürzesten Fahrzeiten anzukommen. Das heisst, dass Die Planungsanfragen
+von Paketagent kommen und bei erfolgter Planung oder neu Planung werden die betroffenen Paket Agenten informiert. Für die Planung der 
+Route wurde ein Routingalgorithmus entwickelt und implementiert.
 
