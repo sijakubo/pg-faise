@@ -38,14 +38,27 @@ public class Szenario implements Serializable {
 		this.created_by_user = DUMMY_USER_ID;
 	}
 	
+	/**
+	 * Adds a conveyor to the scenario.
+	 * @param newConveyor the conveyor to be added
+	 */
 	public void addConveyor(Conveyor newConveyor) {
 		lstConveyor.add(newConveyor);
 	}
 	
+	/**
+	 * Removes a conveyor from the scenario.
+	 * @param conveyor the conveyor to be removed
+	 */
 	public void removeConveyor(Conveyor conveyor) {
 		lstConveyor.remove(conveyor);
 	}
 	
+	/**
+	 * Returns the corresponding conveyor-object to a given ID
+	 * @param id the ID
+	 * @return the conveyor-object
+	 */
 	public Conveyor getConveyorById(int id){
 		for(int i=0;i<lstConveyor.size();i++){
 			Conveyor c=lstConveyor.get(i);

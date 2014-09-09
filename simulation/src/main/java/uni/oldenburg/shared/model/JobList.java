@@ -29,6 +29,10 @@ public class JobList implements Serializable {
 		Collections.sort(lstJobs);
 	}
 	
+	/**
+	 * Generates some random jobs.
+	 * @param numberOfJobs the number of new jobs
+	 */
 	public void addRandomJobs(int numberOfJobs) {
 		if(lstJobs.size() == 0) {
 			Job.idCounterPacket = 0;

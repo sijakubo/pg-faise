@@ -21,6 +21,12 @@ public class Job implements Serializable, Comparable<Job> {
     
     public Job() {}
     
+    /**
+     * Creates a job.
+     * @param timestamp the timestamp
+     * @param destinationId the destination-ID
+     * @param jobList the job-list
+     */
     public Job(int timestamp, int destinationId, JobList jobList) {
       	this.timestamp = timestamp;
       	this.destinationId = destinationId;
@@ -36,7 +42,13 @@ public class Job implements Serializable, Comparable<Job> {
 		}      	
     }
     
-    // used internally for cloning the job
+    /**
+     * Only used internally to clone a Job.
+     * @param timestamp the timestamp
+     * @param destinationId the destination
+     * @param type the type
+     * @param packageId the package-ID
+     */
     private Job(int timestamp, int destinationId, int type, int packageId) {
     	this.destinationId = destinationId;
     	this.timestamp = timestamp;
@@ -44,6 +56,11 @@ public class Job implements Serializable, Comparable<Job> {
     	this.type = type;
     }
     
+    /**
+     * Tries to register a job as outgoing.
+     * @param lstJob
+     * @return true if a usable package-ID was found
+     */
     private boolean createOutgoing(JobList lstJob) {
     	boolean foundUseablePackageID = false;
     	final int iCounterMax = 10;    	
@@ -71,6 +88,9 @@ public class Job implements Serializable, Comparable<Job> {
     	return foundUseablePackageID;
     }
     
+    /**
+     * Sets variables, declaring this job as incoming.
+     */
     private void createIncoming() {
     	this.destinationId = 0;
     	this.type = Job.INCOMING;
@@ -93,7 +113,9 @@ public class Job implements Serializable, Comparable<Job> {
     	return timestamp;
     }
 
-    // used for sorting
+    /**
+     * Compares two jobs. (Used for comparing.)
+     */
     public int compareTo(Job job) {
 		if (this.packageId < job.packageId)
             return -1;
@@ -104,7 +126,11 @@ public class Job implements Serializable, Comparable<Job> {
         return 1;
 	}
     
-    // clone data, but overwrite timestamp
+    /**
+     * Clones a job, but changes the timestamp.
+     * @param newTimestamp the new timestamp
+     * @return the cloned job
+     */
     public Job clone(int newTimestamp) {
 		return new Job(newTimestamp, destinationId, type, packageId);
     }
