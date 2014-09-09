@@ -101,6 +101,7 @@ public class RampOrderAgent extends Agent {
 		
 		public void action() {
 			//logger.log(Level.INFO, "[SendEnquirePackageRequestRelay] CID: " + myConveyor.getID() + " step: " + step);
+			//logger.log(Level.INFO, "...................................");
 			
 			if (step == 0) {
 				ACLMessage msgEnquire = myAgent.receive(MessageTemplate.MatchPerformative(MessageType.ENQUIRE_RAMPS_RELAY));
@@ -184,7 +185,7 @@ public class RampOrderAgent extends Agent {
 							rampsResponded = maxRampToRespond;
 						}
 						
-						block();
+						//block();
 					}
 				}
 				else {
@@ -195,7 +196,7 @@ public class RampOrderAgent extends Agent {
 						
 						int selectedConveyorID = lstConveyorRamps.get(randomIndex);
 						
-						setSelectedIdAndPendingStatus(myAgent, selectedConveyorID);
+						//setSelectedIdAndPendingStatus(myAgent, selectedConveyorID);
 						
 						// initialize auction
 						ACLMessage msgAuctionStart = new ACLMessage(MessageType.AUCTION_START);

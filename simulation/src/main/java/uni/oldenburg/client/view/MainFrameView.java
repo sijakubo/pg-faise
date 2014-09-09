@@ -21,12 +21,12 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class MainFrameView extends Composite implements MainFramePresenter.IDisplay {
-   private MenuBar			menuBar;
+	private MenuBar			menuBar;
 	private MenuBar			simMenuBar;
 	private MenuBar			jobMenuBar;
 	
 	private CellTable<Job>	ctJobTable = new CellTable<Job>();
-	private Button			   btnAddJobs;
+	private Button			btnAddJobs;
 	private Button         	btnStrategies;
 	
 	// conveyor menu
@@ -72,6 +72,7 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		//--- left panel ---
 
 		//table
+		ctJobTable.setStyleName("jobtable");
 		
 		ctJobTable.setPageSize(10);
 	    vpLeftFrame.add(ctJobTable);

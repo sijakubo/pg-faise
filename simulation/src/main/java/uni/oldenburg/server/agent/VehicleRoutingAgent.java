@@ -48,6 +48,10 @@ public class VehicleRoutingAgent extends Agent {
 	
 	private IPathfinding myPF = null;
 	
+	private List<GridItem> lstGridItem = new ArrayList<GridItem>();
+	private int myColumnCount;
+	private int myRowCount;
+	
 	private Logger logger = Logger.getLogger(VehicleRoutingAgent.class);
 
 	private List<List<PathPoint>> lstPathPoints = new ArrayList<List<PathPoint>>();
@@ -63,16 +67,12 @@ public class VehicleRoutingAgent extends Agent {
 			myConveyor = (ConveyorVehicle) args[1];
 		}
 		
-		int myColumnCount = MainFrameView.canvasWidth / Conveyor.RASTER_SIZE;
-		int myRowCount = MainFrameView.canvasHeight / Conveyor.RASTER_SIZE;
-		
-		List<GridItem> lstGridItem = new ArrayList<GridItem>();
+		myColumnCount = MainFrameView.canvasWidth / Conveyor.RASTER_SIZE;
+		myRowCount = MainFrameView.canvasHeight / Conveyor.RASTER_SIZE;
 		
 		for (int i = 0; i < myColumnCount * myRowCount; ++i) {
 			lstGridItem.add(new GridItem(1));
 		}
-		
-		logger.log(Level.INFO, "w/h: " + myColumnCount + " / " + myRowCount);
 		
 		for(Conveyor myConveyor : mySzenario.getConveyorList()) {
 			if (!(myConveyor instanceof ConveyorVehicle)) {
@@ -84,7 +84,9 @@ public class VehicleRoutingAgent extends Agent {
 			}
 		}
 		
-		myPF = new PathfindingSingle(myColumnCount, myRowCount, lstGridItem);
+		logger.log(Level.INFO, "w/h: " + myColumnCount + " / " + myRowCount);
+		
+		//myPF = new PathfindingSingle(myColumnCount, myRowCount, lstGridItem);
 		
 		addBehaviour(new EstimationRequest(MessageType.ESTIMATION_REQUEST));
 		addBehaviour(new AssignJob(MessageType.ASSIGN_JOB_TO_VEHICLE));
@@ -133,9 +135,11 @@ public class VehicleRoutingAgent extends Agent {
 			ACLMessage msgPendingJobStatus = myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.GET_PENDING_JOB_STATUS));
 			hasPendingJob = msgPendingJobStatus.getUserDefinedParameter("pendingJob").equals("1") ? true : false;
 			
-			if (hasPendingJob)
-				logger.log(Level.INFO, "Vehicle: " + myConveyor.getID() + " - has pending job");
+			//if (hasPendingJob)
+				//logger.log(Level.INFO, "Vehicle: " + myConveyor.getID() + " - has pending job: " + hasPendingJob);
 			
+			System.out.println("AuctionInProgress: " + auctionInProgress + " - hasPendingJob: " + hasPendingJob + " CID: " + myConveyor.getID());
+				
 			if (auctionInProgress == false && hasPendingJob == false) {
 				auctionInProgress = true;
 				
@@ -190,7 +194,7 @@ public class VehicleRoutingAgent extends Agent {
 				hasPendingJob = true;
 			}
 			
-			System.out.println("sum: " + sumEstimation);
+			System.out.println("sum: " + sumEstimation + " CID: " + myConveyor.getID());
 			
 			// send estimation response
 			ACLMessage msgEstimationResponse = new ACLMessage(MessageType.ESTIMATION_RESPONSE);
@@ -251,6 +255,24 @@ public class VehicleRoutingAgent extends Agent {
 		List<List<PathPoint>> lstPathPointsTmp = null;
 		
 		//System.out.println("bla");
+		
+		//lstGridItem.clear();
+		
+		/*for (int i = 0; i < myColumnCount * myRowCount; ++i) {
+			lstGridItem.add(new GridItem(1));
+		}
+		
+		for(Conveyor myConveyor : mySzenario.getConveyorList()) {
+			if (!(myConveyor instanceof ConveyorVehicle)) {
+				int x = myConveyor.getX() / Conveyor.RASTER_SIZE;
+				int y = myConveyor.getY() / Conveyor.RASTER_SIZE;
+				
+				GridItem myItem = lstGridItem.get(Pathfinding.getIndex(x, y, myColumnCount));
+				myItem.setItemType(GridItemType.WallItem);
+			}
+		}*/
+		
+		myPF = new PathfindingSingle(myColumnCount, myRowCount, lstGridItem);
 				
 		lstPathPointsTmp = myPF.findPath(startPoint, stopPoint);
 		

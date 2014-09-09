@@ -58,6 +58,8 @@ public class PathfindingSingle extends Pathfinding {
 			return null;
 		}
 		
+        resetValues();		
+		
 		lstGridItem.get((getIndex(myStartPoint, myColumnCount))).setItemType(GridItemType.StartItem);
         lstGridItem.get((getIndex(myStopPoint, myColumnCount))).setItemType(GridItemType.StopItem);
 		
@@ -67,6 +69,8 @@ public class PathfindingSingle extends Pathfinding {
         bRunning = true;
         
         ComputeBlocksValues();
+        
+        System.out.println("1");
         
         PathPoint curPathPoint= new PathPoint();
         curPathPoint.setPoint(new Point(myStopPoint.getX(), myStopPoint.getY()));
@@ -80,6 +84,8 @@ public class PathfindingSingle extends Pathfinding {
         lstSinglePathpoints.add(stopPathPoint);
         
         returnValue = PathMessageType.PathFound;
+        
+        System.out.println("2");
         
         while(curPathPoint.getPoint().getX() != myStartPoint.getX() || curPathPoint.getPoint().getY() != myStartPoint.getY()){
         	curPathPoint.setStepValue(lstGridItem.get(getIndex(curPathPoint.getPoint().getX(), curPathPoint.getPoint().getY(), myColumnCount)).getGridValue());
@@ -136,6 +142,8 @@ public class PathfindingSingle extends Pathfinding {
             	
             	returnValue = PathMessageType.PathBlocked;
             	
+            	break;
+            	
             	/*if(bDriveDiagonal){
             		bRunning = false;
             		bDriveDiagonal = false;
@@ -149,6 +157,8 @@ public class PathfindingSingle extends Pathfinding {
             	break;*/            
             }
         }
+        
+        System.out.println("10");
         
         Collections.reverse(lstSinglePathpoints);
         

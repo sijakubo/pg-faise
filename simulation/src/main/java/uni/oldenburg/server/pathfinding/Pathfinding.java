@@ -229,10 +229,19 @@ public abstract class Pathfinding implements IPathfinding {
 		return GridValueReturnType.Unchanged;
 	}
 	
-	protected void resetValues(){
-		for (GridItem myItem : lstGridItem){
-			myItem.setItemType(myItem.getItemType(), true);
+	protected void resetValues() {
+		for (GridItem myItem : lstGridItem) {
+			if (!myItem.getItemType().equals(GridItemType.WallItem)) {
+				myItem.setItemType(GridItemType.DefaultItem);
+			}
+			else {
+				myItem.setItemType(GridItemType.WallItem);
+			}
 		}
+		
+		/*for (GridItem myItem : lstGridItem){
+			myItem.setItemType(myItem.getItemType(), true);
+		}*/
 		
 	}
 	
@@ -246,8 +255,6 @@ public abstract class Pathfinding implements IPathfinding {
 		lstDirectionBase.add(Direction.Bottom);
 		
 		lstBlocksWithNewValue.add(new Point(myStartPoint.getX(), myStartPoint.getY()));
-		
-		resetValues();
 		
 		while (lstBlocksWithNewValue.size() > 0){
 			Point curPoint = lstBlocksWithNewValue.get(0);

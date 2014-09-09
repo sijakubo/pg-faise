@@ -47,11 +47,11 @@ public class GridItem {
 	}
 	//Methode setzt den Item Type des Griditems
 	public void setItemType(GridItemType newType, boolean reseting) {
-		if (!reseting) {
+		/*if (!reseting) {
 			if (newType == GridItemType.WallItem && getItemType() == GridItemType.WallItem) {
 				newType = GridItemType.DefaultItem;
 			}
-		}
+		}*/
 		
 		type = newType;
 		

@@ -104,6 +104,8 @@ public class PackageAgent extends Agent {
 		}
 
 		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
+			System.out.println("INC: " + hasPendingIncomingJob + " OUT: " + hasPendingOutgoingJob);
+			
 			ACLMessage msgGetPendingJobStatus = new ACLMessage(MessageType.GET_PENDING_JOB_STATUS);
 			msgGetPendingJobStatus.addUserDefinedParameter("pendingJob", (hasPendingIncomingJob || hasPendingOutgoingJob) ? "1" : "0");
 			msgGetPendingJobStatus.addReceiver(msg.getSender());

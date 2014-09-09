@@ -11,6 +11,7 @@ import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.server.pathfinding.PathPoint;
+import uni.oldenburg.shared.model.Conveyor;
 import uni.oldenburg.shared.model.ConveyorVehicle;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -148,7 +149,7 @@ public class VehiclePlattformAgent extends Agent {
 				List<PathPoint> lstToSource = lstPathPoints.get(0);
 				
 				for(PathPoint myPoint : lstToSource) {
-					myConveyor.setPosition(myPoint.getPoint().getX(), myPoint.getPoint().getY(), true);	
+					myConveyor.setPosition(myPoint.getPoint().getX() * Conveyor.RASTER_SIZE, myPoint.getPoint().getY() * Conveyor.RASTER_SIZE, true);	
 				}
 				
 				lstToSource.clear();
@@ -170,7 +171,7 @@ public class VehiclePlattformAgent extends Agent {
 				lstToDest.remove(0);
 				
 				for(PathPoint myPoint : lstToDest) {
-					myConveyor.setPosition(myPoint.getPoint().getX(), myPoint.getPoint().getY(), true);	
+					myConveyor.setPosition(myPoint.getPoint().getX() * Conveyor.RASTER_SIZE, myPoint.getPoint().getY() * Conveyor.RASTER_SIZE, true);	
 				}
 				
 				lstToDest.clear();
