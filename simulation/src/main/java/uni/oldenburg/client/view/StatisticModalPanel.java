@@ -17,6 +17,7 @@ import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.HideEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
+
 import uni.oldenburg.shared.model.statistic.BotWorkloadDataModel;
 
 
@@ -43,7 +44,8 @@ public class StatisticModalPanel implements IsWidget {
       window.add(botWorkloadChart);
    }
 
-   private Chart<BotWorkloadDataModel> createPackageProcessingTimeChart() {
+   @SuppressWarnings("unused")
+private Chart<BotWorkloadDataModel> createPackageProcessingTimeChart() {
       return null;
    }
 

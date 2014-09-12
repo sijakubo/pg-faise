@@ -129,7 +129,7 @@ public class MainFramePresenter extends Presenter {
 		handleEvents();
 		
 		if (Debugging.isDebugging) {			
-			this.loadSzenario("Test04");
+			this.loadSzenario("Test06");
 			this.lstJobs.addRandomJobs(100);
 		}
 	}
@@ -615,7 +615,7 @@ public class MainFramePresenter extends Presenter {
 	 * 
 	 * @author Matthias
 	 */
-	public void loadSzenario(String name) {
+	public void loadSzenario(String name) {		
 		((SimulationServiceAsync) rpcService).loadSzenario(name,
 				new AsyncCallback<Szenario>() {
 					public void onFailure(Throwable arg0) {

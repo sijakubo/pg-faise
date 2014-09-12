@@ -36,6 +36,7 @@ public class Szenario implements Serializable {
 		this.title = title;
 		this.time_created = time_created;
 		this.created_by_user = DUMMY_USER_ID;
+		//Conveyor.resetCounter();
 	}
 	
 	public void addConveyor(Conveyor newConveyor) {

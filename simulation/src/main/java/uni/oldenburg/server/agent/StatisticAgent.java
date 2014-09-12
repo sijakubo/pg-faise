@@ -4,7 +4,9 @@ import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
+
 import org.apache.log4j.Logger;
+
 import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
@@ -25,6 +27,7 @@ import java.util.Map;
  *
  * @author sijakubo
  */
+@SuppressWarnings("serial")
 public class StatisticAgent extends Agent {
    public final static String AGENT_NAME = "StatisticAgent";
 

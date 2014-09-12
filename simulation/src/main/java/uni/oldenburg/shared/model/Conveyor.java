@@ -73,6 +73,10 @@ public abstract class Conveyor implements Serializable {
 		setSize(width, height);
 	}
     
+    public static void resetCounter() {
+    	Conveyor.ID_Counter = 0;
+    }
+    
 	public boolean hasIncomingJob() {
 		return hasIncomingJob;
 	}

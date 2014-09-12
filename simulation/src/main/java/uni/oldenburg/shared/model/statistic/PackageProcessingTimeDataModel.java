@@ -5,6 +5,7 @@ import java.io.Serializable;
 /**
  * @author sijakubo
  */
+@SuppressWarnings("serial")
 public class PackageProcessingTimeDataModel implements Serializable {
    private int id;
    private String state;
