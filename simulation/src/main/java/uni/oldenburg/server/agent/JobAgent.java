@@ -242,15 +242,15 @@ public class JobAgent extends Agent {
 		}
 
 		public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-         boolean isIncomingJob = lstRampIncoming.contains(msg.getSender());
+	         boolean isIncomingJob = lstRampIncoming.contains(msg.getSender());
+	
+	         if (isIncomingJob) {
+	            selectedList = lstRampIncoming;
+	         } else {
+	            selectedList = lstRampOutgoing;
+	         }
 
-         if (isIncomingJob) {
-            selectedList = lstRampIncoming;
-         } else {
-            selectedList = lstRampOutgoing;
-         }
-
-         rampCount = selectedList.size();
+         	rampCount = selectedList.size();
 			++rampsResponded;
 
 			pendingJob = (Job)msg.getContentObject();

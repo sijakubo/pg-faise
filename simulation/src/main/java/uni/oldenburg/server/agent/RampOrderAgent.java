@@ -212,7 +212,10 @@ public class RampOrderAgent extends Agent {
 						send(msgAuctionStart);
 						
 						// wait till auction is finished
-						myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.AUCTION_END));
+						ACLMessage msgResponse = myAgent.blockingReceive(MessageTemplate.MatchPerformative(MessageType.AUCTION_END));
+						
+						if (msgResponse.getUserDefinedParameter("vehicle_found").equals("1"))
+							setSelectedIdAndPendingStatus(myAgent, selectedConveyorID);
 					}
 					else {
 						//if (myConveyor.getRampType() == ConveyorRamp.RAMP_ENTRANCE)

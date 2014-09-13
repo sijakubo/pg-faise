@@ -254,25 +254,9 @@ public class VehicleRoutingAgent extends Agent {
    private int CalculateEstimation(Point startPoint, Point stopPoint) {
 		List<List<PathPoint>> lstPathPointsTmp = null;
 		
-		//System.out.println("bla");
-		
-		//lstGridItem.clear();
-		
-		/*for (int i = 0; i < myColumnCount * myRowCount; ++i) {
-			lstGridItem.add(new GridItem(1));
-		}
-		
-		for(Conveyor myConveyor : mySzenario.getConveyorList()) {
-			if (!(myConveyor instanceof ConveyorVehicle)) {
-				int x = myConveyor.getX() / Conveyor.RASTER_SIZE;
-				int y = myConveyor.getY() / Conveyor.RASTER_SIZE;
-				
-				GridItem myItem = lstGridItem.get(Pathfinding.getIndex(x, y, myColumnCount));
-				myItem.setItemType(GridItemType.WallItem);
-			}
-		}*/
-		
 		myPF = new PathfindingSingle(myColumnCount, myRowCount, lstGridItem);
+		//myPF.setAvoidRotations(true);
+		myPF.setDriveDiagonal(true);
 				
 		lstPathPointsTmp = myPF.findPath(startPoint, stopPoint);
 		
@@ -289,8 +273,6 @@ public class VehicleRoutingAgent extends Agent {
 		lstPathPoints.add(lstPathPointsTmp.get(0));		
 		
 		int sumEstimation = 0;
-		
-		//System.out.println("sumsum");
 		
 		List<PathPoint> lstPoints = lstPathPointsTmp.get(0);
 		

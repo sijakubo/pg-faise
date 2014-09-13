@@ -189,6 +189,8 @@ public class RampPlattformAgent extends Agent {
 					
 					String target = msg.getUserDefinedParameter("RampAID");
 					
+					//System.out.println("Target: " + target + " me: " + myAgent.getAID().toString());
+					
 					// reserve/add space in ramp if target matches 
 					if (target.compareTo(myAgent.getAID().toString()) == 0) {
 						ACLMessage msgAddPackage = new ACLMessage(MessageType.ADD_PACKAGE);

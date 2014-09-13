@@ -15,9 +15,9 @@ import uni.oldenburg.client.view.MainFrameView;
 @SuppressWarnings("serial")
 public class Szenario implements Serializable {
 	public static final String TABLE_NAME = "szenario";
-   public static final String DUMMY_USER_ID = "dummyUser";
+	public static final String DUMMY_USER_ID = "dummyUser";
 
-   private int id;
+   	private int id;
 	private String title;
 	private String time_created;
 	private String created_by_user;
@@ -36,7 +36,7 @@ public class Szenario implements Serializable {
 		this.title = title;
 		this.time_created = time_created;
 		this.created_by_user = DUMMY_USER_ID;
-		//Conveyor.resetCounter();
+		Conveyor.resetCounter();
 	}
 	
 	public void addConveyor(Conveyor newConveyor) {
