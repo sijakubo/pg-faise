@@ -22,6 +22,9 @@ public class ConveyorWall extends Conveyor {
 		super(x, y, Conveyor.getRastersize(), Conveyor.getRastersize());
 	}
 
+	/**
+	 * paints the wall on a canvas
+	 */
 	@Override
 	protected Canvas createCanvas(Canvas canvas) {
 		Context2d context = canvas.getContext2d();
@@ -33,6 +36,9 @@ public class ConveyorWall extends Conveyor {
 		return canvas;
 	}
 
+	/**
+	 * returns the type of this conveyor ("Wand")
+	 */
 	@Override
 	public String getType() {
 		return ConveyorWall.CONVEYOR_TYPE;

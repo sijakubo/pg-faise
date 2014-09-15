@@ -325,6 +325,9 @@ public class PackageAgent extends Agent {
 		}
 	}
 	
+	/**
+	 * sets the destination of this package
+	 */
 	private class SetDestination extends CyclicReceiverBehaviour {
 		protected SetDestination(int msgType) {
 			super(MessageTemplate.MatchPerformative(msgType));
@@ -350,6 +353,9 @@ public class PackageAgent extends Agent {
 		}		
 	}
 	
+	/**
+	 * sets the flag, which indicates an incoming job
+	 */
 	private class SetIncomingJobFlag extends CyclicReceiverBehaviour {
 		protected SetIncomingJobFlag(int msgType) {
 			super(MessageTemplate.MatchPerformative(msgType));
@@ -366,6 +372,9 @@ public class PackageAgent extends Agent {
 		}
 	}
 	
+	/**
+	 * responds to messages, asking whether this package has a pending incoming job
+	 */
 	private class GetIncomingJobStatus extends CyclicReceiverBehaviour {
 		protected GetIncomingJobStatus(int msgType) {
 			super(MessageTemplate.MatchPerformative(msgType));
@@ -379,6 +388,9 @@ public class PackageAgent extends Agent {
 		}		
 	}
 	
+	/**
+	 * responds to messages, asking whether this package has a pending outgoing job
+	 */
 	private class GetOutgoingJobStatus extends CyclicReceiverBehaviour {
 		protected GetOutgoingJobStatus(int msgType) {
 			super(MessageTemplate.MatchPerformative(msgType));
