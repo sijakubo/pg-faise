@@ -94,19 +94,19 @@ public abstract class Pathfinding implements IPathfinding {
 	public static void drawGrid(int myColumnCount, int myRowCount, List<GridItem> lstGridItem) {
 		for (int y = 0; y < myRowCount; ++y) {
 			for (int x = 0; x < myColumnCount; ++x) {
-				/*switch (lstGridItem.get(Pathfinding.getIndex2(x, y, myColumnCount)).getItemType()) {
+				switch (lstGridItem.get(Pathfinding.getIndex(x, y, myColumnCount)).getItemType()) {
 					case WallItem:
 					case DefaultItem:
 					case PathItem:
 					case StartItem:
 					case StopItem:
-						System.out.print("[" + lstGridItem.get(Pathfinding.getIndex2(x, y, myColumnCount)).getGridValue() + "]");
+						System.out.print("[" + lstGridItem.get(Pathfinding.getIndex(x, y, myColumnCount)).getGridValue() + "]");
 						break;
 					default:
 						break;
-				}*/
+				}
 				
-				switch (lstGridItem.get(Pathfinding.getIndex(x, y, myColumnCount)).getItemType()) {
+				/*switch (lstGridItem.get(Pathfinding.getIndex(x, y, myColumnCount)).getItemType()) {
 					case WallItem:
 						System.out.print("[x]");
 						break;
@@ -124,7 +124,7 @@ public abstract class Pathfinding implements IPathfinding {
 						break;
 					default:
 						break;
-				}
+				}*/
 			}
 			System.out.println("");
 		}
@@ -205,6 +205,9 @@ public abstract class Pathfinding implements IPathfinding {
 			return GridValueReturnType.DoesNotExists;
 		
 		GridItem nextItem = lstGridItem.get(getIndex(neighborPoint.getX(), neighborPoint.getY(), myColumnCount));
+		
+		System.out.println("isWall: " + (nextItem.getItemType() == GridItemType.WallItem));
+		//System.out.println("isNotWall: " + (nextItem.getItemType() != GridItemType.WallItem));
 		
 		if (nextItem.getItemType() != GridItemType.WallItem){
 			if (newDirection == Direction.TopLeft ||
@@ -324,12 +327,12 @@ public abstract class Pathfinding implements IPathfinding {
 		
 		}
 		
-		if (newValue <= curPathPoint.getStepValue() && newValue <= minValue){
+		if (newValue <= curPathPoint.getStepValue() && newValue <= minValue) {
 			if (bDriveDiagonal){
-				List<PathPoint> lstDeleteableValues= new ArrayList<PathPoint>();
+				List<PathPoint> lstDeleteableValues = new ArrayList<PathPoint>();
 				
 				for (PathPoint myPoint : lstPossiblePoints){
-					if (getGridValue(myPoint.getPoint()) > newValue){
+					if (getGridValue(myPoint.getPoint()) > newValue) {
 						lstDeleteableValues.add(myPoint);
 					}
 				}

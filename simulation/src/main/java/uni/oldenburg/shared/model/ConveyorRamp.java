@@ -20,7 +20,7 @@ public class ConveyorRamp extends Conveyor {
 	public final static int RAMP_EXIT = 2;
 	
 	private boolean bVertical = true;
-	private int numBlocks = 4;
+	public int numBlocks = 4;
 	private int rampType = RAMP_STOREAGE;
 	
 	private int jobCounter = 0;

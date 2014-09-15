@@ -70,7 +70,7 @@ public class PathfindingSingle extends Pathfinding {
         
         ComputeBlocksValues();
         
-        System.out.println("1");
+        Pathfinding.drawGrid(myColumnCount, myRowCount, lstGridItem);
         
         PathPoint curPathPoint= new PathPoint();
         curPathPoint.setPoint(new Point(myStopPoint.getX(), myStopPoint.getY()));
@@ -85,7 +85,6 @@ public class PathfindingSingle extends Pathfinding {
         
         returnValue = PathMessageType.PathFound;
         
-        System.out.println("2");
         
         while(curPathPoint.getPoint().getX() != myStartPoint.getX() || curPathPoint.getPoint().getY() != myStartPoint.getY()){
         	curPathPoint.setStepValue(lstGridItem.get(getIndex(curPathPoint.getPoint().getX(), curPathPoint.getPoint().getY(), myColumnCount)).getGridValue());

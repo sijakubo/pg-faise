@@ -79,10 +79,27 @@ public class VehicleRoutingAgent extends Agent {
 				int x = myConveyor.getX() / Conveyor.RASTER_SIZE;
 				int y = myConveyor.getY() / Conveyor.RASTER_SIZE;
 				
-				GridItem myItem = lstGridItem.get(Pathfinding.getIndex(x, y, myColumnCount));
-				myItem.setItemType(GridItemType.WallItem);
+				//GridItem myItem = lstGridItem.get(Pathfinding.getIndex(x, y, myColumnCount));
+				//myItem.setItemType(GridItemType.WallItem);
+				
+				if (myConveyor instanceof ConveyorRamp) {
+					ConveyorRamp myRamp = ((ConveyorRamp)myConveyor);
+					
+					for(int i = 0; i < myRamp.numBlocks; ++i) {
+						if (myRamp.isVertical()) {
+							GridItem mySubItem = lstGridItem.get(Pathfinding.getIndex(x, y + i, myColumnCount));
+							mySubItem.setItemType(GridItemType.WallItem);			
+						}
+						else {
+							GridItem mySubItem = lstGridItem.get(Pathfinding.getIndex(x + i, y, myColumnCount));
+							mySubItem.setItemType(GridItemType.WallItem);
+						}
+					}
+				}
 			}
 		}
+		
+		//Pathfinding.drawGrid(myColumnCount, myRowCount, lstGridItem);
 		
 		logger.log(Level.INFO, "w/h: " + myColumnCount + " / " + myRowCount);
 		
@@ -256,9 +273,15 @@ public class VehicleRoutingAgent extends Agent {
 		
 		myPF = new PathfindingSingle(myColumnCount, myRowCount, lstGridItem);
 		//myPF.setAvoidRotations(true);
-		myPF.setDriveDiagonal(true);
+		//myPF.setDriveDiagonal(true);
+		
+		
+		//Pathfinding.drawGrid(myColumnCount, myRowCount, lstGridItem);
 				
 		lstPathPointsTmp = myPF.findPath(startPoint, stopPoint);
+
+		
+		//Pathfinding.drawGrid(myColumnCount, myRowCount, lstGridItem);
 		
 		//System.out.println("Status: " + myPF.getStatus());
 		
