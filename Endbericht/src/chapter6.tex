@@ -24,7 +24,13 @@ auf Leistungsressourcen (CPU, Kommunikationsbandbreite, Speicher) geachtet werde
 \subsubsection{Rampe}
 Eine rampe dient zur Aufnahme und Ausgabe von paketen. Es kann bis zu 4 paketen aufnehmen. Es gibt eine Eingangsseite und eine
 Ausgangsseite. Die Pakete bewegen sich nur in eine Richtung. Jeder Slot wird mit einer Lichtschranke überwacht und ausfahrbare 
-Bolzen vereinzeln die Pakete. Ein Micaz Controller ist die Agentenplattform. Bild
+Bolzen vereinzeln die Pakete. Ein Micaz Controller ist die Agentenplattform. 
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.9\textwidth]{SkizzeRampe.png}
+	\caption{Skizze einer Rampe\cite{Stasch:Hahn}}
+	\label{SkizzeRampe}
+\end{figure}
 
 \subsubsection{Mikrocontroller}
 Ein Mikrocontroller ist ein kleiner Computer auf einem einzelnen Halbleiter-Chip. Dazu geh\"ort ein Prozessor,
@@ -210,8 +216,18 @@ Ausfall einer Steuerungseinheit bzw. eines Agenten. Der Ausfall einer Einheit ha
 Die restlichen Einheiten können sich eigenständig auf eine solche Veränderung einstellen und diese beim weiteren Ablauf
 berücksichtigen\cite[S. 13]{Roidl:2012}. Diese Eigenschaft bringt eine ganze Reihe von Vorteilen für ein dezentral
 gesteuertes Materialflusssystem mit sich.\\
-Die Systemarchitektur der Materialfgruppe lehnt sich an der AUTOSAR Softwarearchitektur. 
-Die nächste Abbildung zeigt den Aufbau der Softwarearchitektur:
+Die Modellierung von agentenbasierten Systemen für industrielle Bereiche wird durch die
+Entwicklung von Standards festgelegt. Diese beschreiben Modelle für die Architektur
+sowie die Kommunikation zwischen Agenten. Die FIPA (Foundation of Intelligent Physical Agents) ist das Standardisierungsorgan
+für Agentensysteme.  Seit der Gründung 1996 in der Schweiz wurden verschiedene
+Standardisierungen veröffentlicht, so zum Beispiel auch die Agentenkommunikati-
+on (Agent Communication), die als FIPA/ACL (Agent Communication Language, ACL) bekannt geworden ist. Jeder Agent ist mit einem eindeutigen
+Identifikationsnamen (Agent Identifier oder AID) versehen und wird im Agent Management System verwaltet\cite[S. 24]{Roidl:2012}.
+Ein Verzeichnisdienst kann optional vom Directory Facilitator gestellt
+werden. Die Komponenten sind über das Message Transport System (MTS) verbunden,
+sodass alle Komponenten untereinander kommunizieren können\cite[S. 24]{Roidl:2012}. \\
+Als Referenzmodell zur Verwaltung von Softwareagenten wurde die Softwarearchitektur der Materialflussgruppe Laut der  FIPA Standards aufgebaut. 
+Die nächste Abbildung zeigt den Aufbau der Softwarearchitektur und lehnt sich auch an der AUTOSAR Softwarearchitektur. :
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.9\textwidth]{ArchitekturMicazRampe.png}

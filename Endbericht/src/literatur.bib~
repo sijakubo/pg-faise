@@ -110,6 +110,12 @@
 on Low-Power Microcontroller for Automated Intralogistics},
        address = {OFFIS Institute for Information Technology, Oldenburg}
      }	
+       @book{Roidl:2012,
+       author = {Moritz Roidl},
+       year = {2012},
+       title = {Agentifizierung der Intralogistik},
+       address = {Dortmund}
+     }	
 @online{Wikibooks:2014:Online,
   author = {Wikibooks, Die freie Bibliothek},
   title = {{Mikrocontroller} Einleitung und Grundlagen},

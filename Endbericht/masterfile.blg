@@ -1,4 +1,5 @@
-This is BibTeX, Version 0.99dThe top-level auxiliary file: masterfile.aux
+This is BibTeX, Version 0.99c (TeX Live 2009/Debian)
+The top-level auxiliary file: masterfile.aux
 The style file: biblatex.bst
 A level-1 auxiliary file: src/title.aux
 A level-1 auxiliary file: src/abstract.aux
@@ -7,8 +8,9 @@ A level-1 auxiliary file: src/chapter1.aux
 A level-1 auxiliary file: src/chapter2.aux
 A level-1 auxiliary file: src/chapter3.aux
 A level-1 auxiliary file: src/chapter4.aux
-A level-1 auxiliary file: src/chapter5.aux
 A level-1 auxiliary file: src/chapter6.aux
+A level-1 auxiliary file: src/chapter7.aux
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Database file #1: masterfile-blx.bib
 Database file #2: src/literatur.bib
 I was expecting a `,' or a `}'---line 75 of file src/literatur.bib
@@ -16,6 +18,143 @@ I was expecting a `,' or a `}'---line 75 of file src/literatur.bib
  :        address = {M\"{u}nchen}
 (Error may have been on previous line)
 I'm skipping whatever remains of this entry
-Warning--I didn't find a database entry for "jadetwo"
-Biblatex version: 2.9
-(There was 1 error message)
+Biblatex version: 1.7
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2500 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2500 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2500 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2500 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2500 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2500 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2500 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2500 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2500 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2500 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2500 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2500 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2504 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2504 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2504 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2510 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2510 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2510 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2514 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2514 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2514 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2514 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2514 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2514 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2518 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2518 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2518 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2524 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2524 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2524 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2528 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2528 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2528 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2528 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2528 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2528 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2582 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2582 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2582 of file biblatex.bst
+Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2645 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2645 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2645 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2645 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2645 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2645 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2645 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2645 of file biblatex.bst
+Too many commas in name 1 of "Brenner, W.; Zarnekow, R.; Wittig, H." for entry BZW:1998
+while executing---line 2645 of file biblatex.bst
+You've used 24 entries,
+            6019 wiz_defined-function locations,
+            1258 strings with 11482 characters,
+and the built_in function-call counts, 79328 in all, are:
+= -- 3515
+> -- 3596
+< -- 982
++ -- 1921
+- -- 1759
+* -- 3921
+:= -- 5357
+add.period$ -- 0
+call.type$ -- 24
+change.case$ -- 580
+chr.to.int$ -- 124
+cite$ -- 46
+duplicate$ -- 8506
+empty$ -- 7815
+format.name$ -- 1172
+if$ -- 17466
+int.to.chr$ -- 0
+int.to.str$ -- 77
+missing$ -- 0
+newline$ -- 465
+num.names$ -- 1387
+pop$ -- 7383
+preamble$ -- 1
+purify$ -- 605
+quote$ -- 0
+skip$ -- 4922
+stack$ -- 0
+substring$ -- 2624
+swap$ -- 2569
+text.length$ -- 618
+text.prefix$ -- 23
+top$ -- 1
+type$ -- 900
+warning$ -- 0
+while$ -- 529
+width$ -- 0
+write$ -- 440
+(There were 49 error messages)

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2014.8.27)  15 SEP 2014 10:01
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2014.8.27)  16 SEP 2014 20:25
 entering extended mode
  %&-line parsing enabled.
 **masterfile.tex
@@ -1249,7 +1249,7 @@ LaTeX Warning: Label `Wertschoepfungskette' multiply defined.
 
 LaTeX Warning: Label `Vorgehensmodell_Prototyping' multiply defined.
 
-) (./src/chapter4.aux) (./src/chapter5.aux) (./src/chapter6.aux))
+) (./src/chapter4.aux) (./src/chapter6.aux) (./src/chapter7.aux))
 \openout1 = `masterfile.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 32.
@@ -1360,9 +1360,6 @@ Package biblatex Warning: Data encoding is 'utf8'.
 \openout3 = `masterfile-blx.bib'.
 
 Package biblatex Info: Trying to load bibliographic data...
-
-Package biblatex Warning: File 'masterfile.bbl' created by wrong version.
-
 Package biblatex Info: ... file 'masterfile.bbl' found.
 (./masterfile.bbl
 
@@ -1397,10 +1394,10 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 \openout2 = `src/title.aux'.
 
- (./src/title.tex <image/UniLogo.png, id=243, 1187.43625pt x 367.3725pt>
+ (./src/title.tex <image/UniLogo.png, id=171, 1187.43625pt x 367.3725pt>
 File: image/UniLogo.png Graphic file (type png)
 
-<use image/UniLogo.png> <image/BUIENGLOGO.png, id=245, 348.30125pt x 72.27pt>
+<use image/UniLogo.png> <image/BUIENGLOGO.png, id=173, 348.30125pt x 72.27pt>
 File: image/BUIENGLOGO.png Graphic file (type png)
 
 <use image/BUIENGLOGO.png>
@@ -1462,53 +1459,50 @@ Class scrartcl Info: You've told me to use the font selection of the element
 Class scrartcl Info: You've told me to use the font selection of the element
 (scrartcl)           `sectioning' that is an alias of element `disposition'
 (scrartcl)            on input line 53.
+Class scrartcl Info: You've told me to use the font selection of the element
+(scrartcl)           `sectioning' that is an alias of element `disposition'
+(scrartcl)            on input line 91.
  [1
 
 
 
 
 
-]
-Class scrartcl Info: You've told me to use the font selection of the element
-(scrartcl)           `sectioning' that is an alias of element `disposition'
-(scrartcl)            on input line 123.
-)
+])
 \tf@toc=\write5
 \openout5 = `masterfile.toc'.
 
  [2]
 (./masterfile.lof
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 59.
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 29.
  (/usr/share/texmf-texlive/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 )
-Overfull \hbox (10.47902pt too wide) in paragraph at lines 59--59
+Overfull \hbox (10.47902pt too wide) in paragraph at lines 29--29
  [][] [][]\T1/ppl/m/n/10.95 Atmel 8 []$\T1/pcr/m/n/10.95 (http : / / www . ids 
 . tu-[]bs . de / tl _ files / Lehre / Vorlesungen / 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 59--59
+Underfull \hbox (badness 10000) in paragraph at lines 29--29
  \T1/pcr/m/n/10.95 Simulation2 / Einfuehrung _ in _ die _ MC _ Programmierung _
  Teil1 . 
  []
 
 
-Overfull \hbox (10.47902pt too wide) in paragraph at lines 61--61
+Overfull \hbox (10.47902pt too wide) in paragraph at lines 31--31
  [][] [][]\T1/ppl/m/n/10.95 Atmel 8 []$\T1/pcr/m/n/10.95 (http : / / www . ids 
 . tu-[]bs . de / tl _ files / Lehre / Vorlesungen / 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 61--61
+Underfull \hbox (badness 10000) in paragraph at lines 31--31
  \T1/pcr/m/n/10.95 Simulation2 / Einfuehrung _ in _ die _ MC _ Programmierung _
  Teil1 . 
  []
 
-[3
 
-]
-Underfull \hbox (badness 10000) in paragraph at lines 63--63
+Underfull \hbox (badness 10000) in paragraph at lines 33--33
  \T1/pcr/m/n/10.95 http : / / www . up . edu . ps / ocw / upinar / moodledata /
  872 / moddata / 
  []
@@ -1521,7 +1515,9 @@ Underfull \hbox (badness 10000) in paragraph at lines 63--63
 \tf@lot=\write7
 \openout7 = `masterfile.lot'.
 
-) [4]
+) [3
+
+]
 \openout2 = `src/chapter1.aux'.
 
  (./src/chapter1.tex
@@ -1577,26 +1573,26 @@ File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
 LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <10.95> not available
 (Font)              Font shape `T1/ppl/b/n' tried instead on input line 84.
  [6]
-<image/Prinzipskizze_induktiven.jpg, id=466, 459.21562pt x 124.96687pt>
+<image/Prinzipskizze_induktiven.jpg, id=346, 459.21562pt x 124.96687pt>
 File: image/Prinzipskizze_induktiven.jpg Graphic file (type jpg)
 
 <use image/Prinzipskizze_induktiven.jpg>
-<image/Prinzipskizze_Koppelnavigation_rechts.jpg, id=469, 461.47406pt x 115.180
+<image/Prinzipskizze_Koppelnavigation_rechts.jpg, id=349, 461.47406pt x 115.180
 31pt>
 File: image/Prinzipskizze_Koppelnavigation_rechts.jpg Graphic file (type jpg)
  <use image/Prinzipskizze_Koppelnavigation_rechts.jpg>
-<image/Prinzipskizze_Koppelnavigation_links.jpg, id=472, 304.13625pt x 208.78pt
+<image/Prinzipskizze_Koppelnavigation_links.jpg, id=352, 304.13625pt x 208.78pt
 >
 File: image/Prinzipskizze_Koppelnavigation_links.jpg Graphic file (type jpg)
  <use image/Prinzipskizze_Koppelnavigation_links.jpg> [7 <./image/Prinzipskizze
 _induktiven.jpg> <./image/Prinzipskizze_Koppelnavigation_rechts.jpg>] [8 <./ima
 ge/Prinzipskizze_Koppelnavigation_links.jpg>]
-<image/Prinzipskizze_zur_Navigation_mittels_GPS.jpg, id=483, 563.85657pt x 140.
+<image/Prinzipskizze_zur_Navigation_mittels_GPS.jpg, id=362, 563.85657pt x 140.
 77594pt>
 File: image/Prinzipskizze_zur_Navigation_mittels_GPS.jpg Graphic file (type jpg
 )
  <use image/Prinzipskizze_zur_Navigation_mittels_GPS.jpg>
-<image/Systemarchitektur_FTS.jpg, id=485, 732.7375pt x 365.365pt>
+<image/Systemarchitektur_FTS.jpg, id=364, 732.7375pt x 365.365pt>
 File: image/Systemarchitektur_FTS.jpg Graphic file (type jpg)
 
 <use image/Systemarchitektur_FTS.jpg> [9 <./image/Prinzipskizze_zur_Navigation_
@@ -1604,11 +1600,11 @@ mittels_GPS.jpg>]
 File: image/Systemarchitektur_FTS.jpg Graphic file (type jpg)
  <use image/Systemarchitektur_FTS.jpg> [10 <./image/Systemarchitektur_FTS.jpg>]
 
-<image/Wertschoepfungskette.jpg, id=497, 705.63625pt x 318.18875pt>
+<image/Wertschoepfungskette.jpg, id=377, 705.63625pt x 318.18875pt>
 File: image/Wertschoepfungskette.jpg Graphic file (type jpg)
 
 <use image/Wertschoepfungskette.jpg> [11]
-<image/Stetigfoerderer.jpg, id=506, 411.5375pt x 270.00874pt>
+<image/Stetigfoerderer.jpg, id=386, 411.5375pt x 270.00874pt>
 File: image/Stetigfoerderer.jpg Graphic file (type jpg)
 
 <use image/Stetigfoerderer.jpg> [12 <./image/Wertschoepfungskette.jpg>]
@@ -1620,18 +1616,18 @@ File: image/Stetigfoerderer.jpg Graphic file (type jpg)
 
 
 ]
-<image/Projektorganisation_Scrum.png, id=544, 974.13937pt x 271.0125pt>
+<image/Projektorganisation_Scrum.png, id=424, 974.13937pt x 271.0125pt>
 File: image/Projektorganisation_Scrum.png Graphic file (type png)
 
 <use image/Projektorganisation_Scrum.png>
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[18] <image/Vorgehensmodell_Prototyping.png, id=549, 859.71187pt x 493.845pt>
+[18] <image/Vorgehensmodell_Prototyping.png, id=429, 859.71187pt x 493.845pt>
 File: image/Vorgehensmodell_Prototyping.png Graphic file (type png)
 
 <use image/Vorgehensmodell_Prototyping.png> [19 <./image/Projektorganisation_Sc
-rum.png>] <image/logoAtlassian.png, id=555, 810.02625pt x 250.9375pt>
+rum.png>] <image/logoAtlassian.png, id=435, 810.02625pt x 250.9375pt>
 File: image/logoAtlassian.png Graphic file (type png)
 
 <use image/logoAtlassian.png> [20 <./image/Vorgehensmodell_Prototyping.png> <./
@@ -1651,34 +1647,76 @@ image/logoAtlassian.png>]) [21]
 
 
 ]
+
+LaTeX Warning: Citation 'plstg' on page 24 undefined on input line 16.
+
+
+LaTeX Warning: Citation 'plstg' on page 24 undefined on input line 18.
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 16--19
 
  []
 
-[24] [25]
+[24]
+
+LaTeX Warning: Citation 'gwt' on page 25 undefined on input line 27.
+
+[25]
+
+LaTeX Warning: Reference `sec:Entwicklung einer Webanwendung' on page 26 undefi
+ned on input line 32.
+
+
+LaTeX Warning: Reference `Gesamtarchitektur' on page 26 undefined on input line
+ 32.
+
+
+LaTeX Warning: Citation 'mas' on page 26 undefined on input line 32.
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 32--35
 
  []
 
-<image/grobarchitektur.jpg, id=598, 778.91pt x 438.63875pt>
+<image/grobarchitektur.jpg, id=470, 778.91pt x 438.63875pt>
 File: image/grobarchitektur.jpg Graphic file (type jpg)
 
 <use image/grobarchitektur.jpg> [26 <./image/grobarchitektur.jpg>]
-<image/Mockup.png, id=606, 1007.765pt x 554.07pt>
+
+LaTeX Warning: Reference `GUI' on page 27 undefined on input line 44.
+
+<image/Mockup.png, id=476, 1007.765pt x 554.07pt>
 File: image/Mockup.png Graphic file (type png)
  <use image/Mockup.png>
 [27 <./image/Mockup.png (PNG copy)>]
 
 LaTeX Warning: Reference `GA' on page 28 undefined on input line 54.
 
-[28] [29] <image/Interaktion.jpg, id=630, 914.41624pt x 635.37375pt>
+[28]
+
+LaTeX Warning: Reference `Int' on page 29 undefined on input line 78.
+
+[29] <image/Interaktion.jpg, id=503, 914.41624pt x 635.37375pt>
 File: image/Interaktion.jpg Graphic file (type jpg)
 
 <use image/Interaktion.jpg>
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[30] <image/architekturSimu.jpg, id=647, 760.8425pt x 438.63875pt>
+[30]
+
+LaTeX Warning: Reference `GAI' on page 31 undefined on input line 100.
+
+
+LaTeX Warning: Reference `GWT' on page 31 undefined on input line 100.
+
+
+LaTeX Warning: Citation 'jade' on page 31 undefined on input line 100.
+
+LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <9> not available
+(Font)              Font shape `T1/ppl/b/n' tried instead on input line 100.
+<image/architekturSimu.jpg, id=520, 760.8425pt x 438.63875pt>
 File: image/architekturSimu.jpg Graphic file (type jpg)
 
 <use image/architekturSimu.jpg>
@@ -1688,8 +1726,20 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 LaTeX Warning: Citation 'jadetwo' on page 31 undefined on input line 110.
 
-[31 <./image/Interaktion.jpg>] [32 <./image/architekturSimu.jpg>] [33]
-<image/Jobagent.png, id=669, 831.85782pt x 406.51875pt>
+[31 <./image/Interaktion.jpg>]
+
+LaTeX Warning: Reference `Interaktion der Komponenten' on page 32 undefined on 
+input line 112.
+
+[32 <./image/architekturSimu.jpg>]
+
+LaTeX Warning: Reference `Job' on page 33 undefined on input line 120.
+
+
+LaTeX Warning: Reference `Interaktion der Komponenten' on page 33 undefined on 
+input line 120.
+
+[33] <image/Jobagent.png, id=545, 831.85782pt x 406.51875pt>
 File: image/Jobagent.png Graphic file (type png)
 
 <use image/Jobagent.png>
@@ -1700,8 +1750,13 @@ Overfull \hbox (44.10031pt too wide) in paragraph at lines 140--141
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[34] [35 <./image/Jobagent.png>]
-<image/EingangAusgang.png, id=681, 828.09375pt x 408.77719pt>
+[34]
+
+LaTeX Warning: Reference `Eingang fragt' on page 35 undefined on input line 146
+.
+
+[35 <./image/Jobagent.png>]
+<image/EingangAusgang.png, id=556, 828.09375pt x 408.77719pt>
 File: image/EingangAusgang.png Graphic file (type png)
 
 <use image/EingangAusgang.png>
@@ -1709,12 +1764,19 @@ Overfull \hbox (44.11646pt too wide) in paragraph at lines 158--159
  [][] 
  []
 
+
+LaTeX Warning: Reference `Ausgang fragt' on page 36 undefined on input line 163
+.
+
 [36 <./image/EingangAusgang.png>]
 File: image/EingangAusgang.png Graphic file (type png)
  <use image/EingangAusgang.png>
 Overfull \hbox (44.11646pt too wide) in paragraph at lines 175--176
  [][] 
  []
+
+
+LaTeX Warning: Reference `Auktion' on page 37 undefined on input line 180.
 
 [37]
 
@@ -1741,6 +1803,9 @@ Overfull \hbox (44.23859pt too wide) in paragraph at lines 196--197
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
+
+LaTeX Warning: Reference `Fahren' on page 38 undefined on input line 201.
+
 [38]
 
 LaTeX Warning: File `Fahren.png' not found on input line 216.
@@ -1766,7 +1831,17 @@ Overfull \hbox (44.23859pt too wide) in paragraph at lines 216--217
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
+
+LaTeX Warning: Reference `Interaktion der Komponenten' on page 39 undefined on 
+input line 225.
+
 [39]
+
+LaTeX Warning: Reference `RPCS' on page 40 undefined on input line 227.
+
+
+LaTeX Warning: Citation 'gwtrpc' on page 40 undefined on input line 227.
+
 
 LaTeX Warning: File `RPCS.png' not found on input line 232.
 
@@ -1817,6 +1892,12 @@ Overfull \hbox (44.23859pt too wide) in paragraph at lines 240--241
 
 [41]
 
+LaTeX Warning: Reference `Jobagent' on page 42 undefined on input line 245.
+
+
+LaTeX Warning: Reference `jobtim' on page 42 undefined on input line 245.
+
+
 LaTeX Warning: File `Jobtimer.png' not found on input line 248.
 
 
@@ -1836,6 +1917,9 @@ If that doesn't work, type  X <return>  to quit.
 Overfull \hbox (44.23859pt too wide) in paragraph at lines 248--249
  [][] 
  []
+
+
+LaTeX Warning: Reference `jobtimserv' on page 42 undefined on input line 253.
 
 
 LaTeX Warning: File `addJob.png' not found on input line 256.
@@ -1868,6 +1952,21 @@ Underfull \hbox (badness 10000) in paragraph at lines 245--260
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
+LaTeX Warning: Citation 'gwteventservice' on page 43 undefined on input line 26
+1.
+
+
+LaTeX Warning: Reference `addEvent' on page 43 undefined on input line 261.
+
+
+LaTeX Warning: Citation 'gwteventservice' on page 43 undefined on input line 26
+1.
+
+
+LaTeX Warning: Citation 'gwteventservice' on page 43 undefined on input line 26
+3.
+
+
 LaTeX Warning: File `addEvent.png' not found on input line 266.
 
 
@@ -1887,6 +1986,14 @@ If that doesn't work, type  X <return>  to quit.
 Overfull \hbox (44.23859pt too wide) in paragraph at lines 266--267
  [][] 
  []
+
+
+LaTeX Warning: Reference `addEventClient' on page 43 undefined on input line 27
+1.
+
+
+LaTeX Warning: Citation 'gwteventservice' on page 43 undefined on input line 27
+1.
 
 
 LaTeX Warning: File `Vis.png' not found on input line 274.
@@ -1910,12 +2017,12 @@ Overfull \hbox (44.23859pt too wide) in paragraph at lines 274--275
  []
 
 )
-Underfull \hbox (badness 10000) in paragraph at lines 261--113
+Underfull \hbox (badness 10000) in paragraph at lines 261--111
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 261--113
+Underfull \hbox (badness 10000) in paragraph at lines 261--111
 
  []
 
@@ -1935,7 +2042,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
 ]
-<image/Aubau_eines_Mikrocontrollers.png, id=767, 446.41782pt x 352.31625pt>
+<image/Aubau_eines_Mikrocontrollers.png, id=637, 446.41782pt x 352.31625pt>
 File: image/Aubau_eines_Mikrocontrollers.png Graphic file (type png)
 
 <use image/Aubau_eines_Mikrocontrollers.png>
@@ -1943,7 +2050,7 @@ File: image/Aubau_eines_Mikrocontrollers.png Graphic file (type png)
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [48] [49 <./image/Aubau_eines_Mikrocontrollers.png (PNG copy)>]
-<image/Atmel8.png, id=781, 337.26pt x 283.81032pt>
+<image/Atmel8.png, id=655, 337.26pt x 283.81032pt>
 File: image/Atmel8.png Graphic file (type png)
  <use image/Atmel8.png>
 Underfull \hbox (badness 10000) in paragraph at lines 87--87
@@ -1957,7 +2064,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 87--87
 Teil1 .
  []
 
-<image/LegendeAtmel8.png, id=784, 382.42876pt x 79.79813pt>
+<image/LegendeAtmel8.png, id=658, 382.42876pt x 79.79813pt>
 File: image/LegendeAtmel8.png Graphic file (type png)
 
 <use image/LegendeAtmel8.png>
@@ -1975,7 +2082,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 93--93
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [50 <./image/Atmel8.png (PNG copy)>] [51 <./image/LegendeAtmel8.png (PNG copy)>
-] <image/Systemarchitektur_Contiki.png, id=801, 310.91156pt x 183.68625pt>
+] <image/Systemarchitektur_Contiki.png, id=678, 310.91156pt x 183.68625pt>
 File: image/Systemarchitektur_Contiki.png Graphic file (type png)
 
 <use image/Systemarchitektur_Contiki.png>
@@ -1999,7 +2106,7 @@ moodledata / 872 /
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[52] <image/Beispielprozess.png, id=814, 378.66469pt x 258.21469pt>
+[52] <image/Beispielprozess.png, id=692, 378.66469pt x 258.21469pt>
 File: image/Beispielprozess.png Graphic file (type png)
 
 <use image/Beispielprozess.png>
@@ -2008,26 +2115,10 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [53 <./image/Systemarchitektur_Contiki.png (PNG copy)>] [54 <./image/Beispielpr
 ozess.png (PNG copy)>]
-
-LaTeX Warning: Citation 'GH:2010' on page 55 undefined on input line 201.
-
-
-LaTeX Warning: Citation 'BZW:1998' on page 55 undefined on input line 206.
-
-
-LaTeX Warning: Citation 'Roidl:2012' on page 55 undefined on input line 211.
-
-<image/ArchitekturMicazRampe.png, id=827, 1037.8775pt x 620.3175pt>
+<image/ArchitekturMicazRampe.png, id=709, 1037.8775pt x 620.3175pt>
 File: image/ArchitekturMicazRampe.png Graphic file (type png)
 
 <use image/ArchitekturMicazRampe.png>
-
-LaTeX Warning: Citation 'Stasch:Hahn' on page 55 undefined on input line 218.
-
-
-LaTeX Warning: Citation 'Stasch:Hahn' on page 55 undefined on input line 218.
-
-
 Overfull \hbox (6.47452pt too wide) in paragraph at lines 200--221
 \T1/ppl/m/n/10.95 Zur Um-set-zung der de-zen-tra-len Steue-rung wer-den Soft-wa
 -re-agen-ten ein-ge-setzt. Bei Software-
@@ -2036,36 +2127,64 @@ Overfull \hbox (6.47452pt too wide) in paragraph at lines 200--221
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
+[55] [56 <./image/ArchitekturMicazRampe.png>]) [57]
+\openout2 = `src/chapter7.aux'.
 
-LaTeX Warning: Citation 'Stasch:Hahn' on page 55 undefined on input line 227.
+ (./src/chapter7.tex
 
-
-LaTeX Warning: Citation 'Stasch:Hahn' on page 55 undefined on input line 229.
-
-[55]
-
-LaTeX Warning: Citation 'Stasch:Hahn' on page 56 undefined on input line 233.
-
-
-LaTeX Warning: Citation 'Stasch:Hahn' on page 56 undefined on input line 243.
-
-[56 <./image/ArchitekturMicazRampe.png>]
-
-LaTeX Warning: Citation 'Stasch:Hahn' on page 57 undefined on input line 250.
-
-) [57]
-Overfull \hbox (15.22435pt too wide) in paragraph at lines 140--140
-\T1/pcr/m/n/10.95 Vorlesungen / Simulation2 / Einfuehrung \ _in \ _die \ _MC \ 
-_Programmierung \
- []
+LaTeX Warning: Citation 'ROS:2014:Online' on page 58 undefined on input line 24
+.
 
 [58
 
 
-] [59] (./masterfile.aux (./src/title.aux) (./src/abstract.aux)
+
+] [59]
+Overfull \hbox (39.4105pt too wide) in paragraph at lines 74--76
+[]\T1/ppl/m/n/10.95 Z. B.: wird die Da-tei ro-bot_srvs/srv/SetJointCmd.srv als 
+Ser-vice ro-bot_srvs/SetJointCmd
+ []
+
+[60] [61]) [62] [63
+
+
+]
+Overfull \hbox (18.6335pt too wide) in paragraph at lines 153--153
+\T1/pcr/m/n/10.95 macht -[] kaum -[] Probleme / art \ _co \ _INSTANCE \ _0000 /
+ maximized/$[]\T1/ppl/m/n/10.95 . 
+ []
+
+
+Overfull \hbox (5.79218pt too wide) in paragraph at lines 153--153
+[]\T1/ppl/m/n/10.95 Günter Ull-rich. \T1/ppl/m/it/10.95 Fah-rer-lo-se Trans-por
+t-sys-te-me\T1/ppl/m/n/10.95 . Wies-ba-den: View-eg+Teubner
+ []
+
+
+Overfull \hbox (27.59776pt too wide) in paragraph at lines 153--153
+\T1/ppl/m/it/10.95 gen\T1/ppl/m/n/10.95 . 1999. \T1/ppl/m/sc/10.95 url\T1/ppl/m
+/n/10.95 : []$\T1/pcr/m/n/10.95 http : / / de . wikibooks . org / wiki / Mikroc
+ontroller /
+ []
+
+[64]
+
+! LaTeX Error: \begin{itemize} on input line 140 ended by \end{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.154 \end{document}
+                    
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+(./masterfile.aux (./src/title.aux) (./src/abstract.aux)
 (./src/tableofcontents.aux) (./src/chapter1.aux) (./src/chapter2.aux)
 (./src/chapter3.aux) (./src/chapter4.aux) (./src/chapter5.aux)
-(./src/chapter6.aux))
+(./src/chapter6.aux) (./src/chapter7.aux))
 
 LaTeX Warning: There were undefined references.
 
@@ -2080,24 +2199,51 @@ Package biblatex Warning: Please (re)run BibTeX on the file(s):
 Package logreq Info: Writing requests to 'masterfile.run.xml'.
 \openout1 = `masterfile.run.xml'.
 
- ) 
+ )
+(\end occurred inside a group at level 3)
+
+### semi simple group (level 3) entered at line 140 (\begingroup)
+### semi simple group (level 2) entered at line 106 (\begingroup)
+### semi simple group (level 1) entered at line 98 (\begingroup)
+### bottom level 
 Here is how much of TeX's memory you used:
- 17643 strings out of 493848
- 269458 string characters out of 1152823
- 472614 words of memory out of 3000000
- 20228 multiletter control sequences out of 15000+50000
- 64455 words of font info for 103 fonts, out of 3000000 for 9000
+ 17652 strings out of 493848
+ 269552 string characters out of 1152823
+ 469965 words of memory out of 3000000
+ 20213 multiletter control sequences out of 15000+50000
+ 65904 words of font info for 105 fonts, out of 3000000 for 9000
  718 hyphenation exceptions out of 8191
- 51i,11n,49p,1458b,2286s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-texli
-ve/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw
-/helvetic/uhvb8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/palatino/uplb8a.
-pfb></usr/share/texmf-texlive/fonts/type1/urw/palatino/uplr8a.pfb></usr/share/t
-exmf-texlive/fonts/type1/urw/palatino/uplr8a.pfb></usr/share/texmf-texlive/font
-s/type1/urw/palatino/uplri8a.pfb>
-Output written on masterfile.pdf (64 pages, 987970 bytes).
+ 51i,11n,49p,1458b,2289s stack positions out of 5000i,500n,10000p,200000b,50000s
+pdfTeX warning (dest): name{subsubsection.6.1.6} has been refer
+enced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsubsection.6.1.5} has been referenced but does n
+ot exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsubsection.6.1.4} has been referenced but does n
+ot exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsubsection.6.1.3} has been referenced but does n
+ot exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsubsection.6.1.2} has been referenced but does n
+ot exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsubsection.6.1.1} has been referenced but does n
+ot exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsubsection.5.2.4} has been referenced but does n
+ot exist, replaced by a fixed one
+
+{/usr/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-texlive
+/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/h
+elvetic/uhvb8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/palatino/uplb8a.pf
+b></usr/share/texmf-texlive/fonts/type1/urw/palatino/uplr8a.pfb></usr/share/tex
+mf-texlive/fonts/type1/urw/palatino/uplr8a.pfb></usr/share/texmf-texlive/fonts/
+type1/urw/palatino/uplri8a.pfb>
+Output written on masterfile.pdf (68 pages, 981327 bytes).
 PDF statistics:
- 953 PDF objects out of 1000 (max. 8388607)
- 237 named destinations out of 1000 (max. 500000)
- 601 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 876 PDF objects out of 1000 (max. 8388607)
+ 255 named destinations out of 1000 (max. 500000)
+ 457 words of extra memory for PDF output out of 10000 (max. 10000000)
 
