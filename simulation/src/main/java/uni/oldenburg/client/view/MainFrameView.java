@@ -12,7 +12,8 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.SimplePager;
 
 public class MainFrameView extends Composite implements MainFramePresenter.IDisplay {
-	private MenuBar			menuBar;
+
+   private MenuBar			menuBar;
 	private MenuBar			simMenuBar;
 	private MenuBar			jobMenuBar;
    private MenuBar         statisticMenuBar;
@@ -34,7 +35,8 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 	
 	private Canvas			canvas;
 
-   private StatisticModalPanel statisticModalPanel;
+   private StatisticPackageProcessingModalPanel statisticPackageProcessingModalPanel;
+   private StatisticBotWorkloadModalPanel statisticBotWorkloadModalPanel;
 
 	public static final int canvasWidth  = 800;
 	public static final int canvasHeight = 480;
@@ -144,7 +146,8 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		txtDebug.setWidth("100%");
 		txtDebug.setHeight("100px");
 
-      statisticModalPanel = new StatisticModalPanel();
+      statisticPackageProcessingModalPanel = new StatisticPackageProcessingModalPanel();
+      statisticBotWorkloadModalPanel = new StatisticBotWorkloadModalPanel();
 
 		vpMainFrame.add(menuBar);
 		vpMainFrame.add(hpSubFrame);
@@ -209,7 +212,11 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		return vpConveyor;
 	}
 
-   public StatisticModalPanel getStatisticModalPanel() {
-      return statisticModalPanel;
+   public StatisticPackageProcessingModalPanel getStatisticPackageProcessingModalPanel() {
+      return statisticPackageProcessingModalPanel;
+   }
+
+   public StatisticBotWorkloadModalPanel getStatisticBotWorkloadModalPanel() {
+      return statisticBotWorkloadModalPanel;
    }
 }

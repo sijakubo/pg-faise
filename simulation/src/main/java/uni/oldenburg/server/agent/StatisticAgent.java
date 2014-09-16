@@ -11,14 +11,14 @@ import uni.oldenburg.server.agent.behaviour.CyclicReceiverBehaviour;
 import uni.oldenburg.server.agent.helper.AgentHelper;
 import uni.oldenburg.server.agent.message.MessageType;
 import uni.oldenburg.shared.model.Szenario;
-import uni.oldenburg.shared.model.event.BotWorkloadChangedEvent;
 import uni.oldenburg.shared.model.event.EventHelper;
+import uni.oldenburg.shared.model.event.StatisticBotWorkloadChangedEvent;
+import uni.oldenburg.shared.model.event.StatisticPackageProcessingTimeChangedEvent;
 import uni.oldenburg.shared.model.statistic.BotWorkloadDataModel;
+import uni.oldenburg.shared.model.statistic.PackageProcessingTimeDataModel;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,8 +38,7 @@ public class StatisticAgent extends Agent {
    private Logger logger = Logger.getLogger(StatisticAgent.class);
 
    //Durchlaufzeit
-   private Map<Integer, Long> packageEntrancetimestampsByPackageId = new HashMap<Integer, Long>();
-   private List<Long> packageProcessingTimes = new ArrayList<Long>();
+   private Map<Integer, Long> packageEntranceTimestampsByPackageId = new HashMap<Integer, Long>();
 
    //Auslastung Bots
    private Map<Integer, Long> lastContactTimestampByConveyorId = new HashMap<Integer, Long>();
@@ -80,7 +79,7 @@ public class StatisticAgent extends Agent {
        *    {@link uni.oldenburg.server.agent.StatisticAgent#PARAM_TIMESTAMP}
        */
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
-         packageEntrancetimestampsByPackageId.put(
+         packageEntranceTimestampsByPackageId.put(
                Integer.valueOf(msg.getUserDefinedParameter(PARAM_PACKAGE_ID)),
                Long.valueOf(msg.getUserDefinedParameter(PARAM_TIMESTAMP))
          );
@@ -103,9 +102,17 @@ public class StatisticAgent extends Agent {
        */
       public void onMessage(ACLMessage msg) throws UnreadableException, IOException {
          Long packageEntranceTime =
-               packageEntrancetimestampsByPackageId.get(Integer.valueOf(msg.getUserDefinedParameter(PARAM_PACKAGE_ID)));
-         Long packageLeftTime = Long.valueOf(msg.getUserDefinedParameter(PARAM_TIMESTAMP));
-         packageProcessingTimes.add(packageLeftTime - packageEntranceTime);
+               packageEntranceTimestampsByPackageId.get(Integer.valueOf(msg.getUserDefinedParameter(PARAM_PACKAGE_ID)));
+         Long packageLeftTime =
+               Long.valueOf(msg.getUserDefinedParameter(PARAM_TIMESTAMP));
+
+         long newProcessingTimeInMilliseconds = packageLeftTime - packageEntranceTime;
+
+         EventHelper.addEvent(new StatisticPackageProcessingTimeChangedEvent(
+               new PackageProcessingTimeDataModel(newProcessingTimeInMilliseconds / 1000)
+         ));
+
+         logger.info("New ProcessingTime " + (newProcessingTimeInMilliseconds / 1000) + "s");
       }
    }
 
@@ -153,11 +160,9 @@ public class StatisticAgent extends Agent {
          timeBotsWaited = timeBotsWaited + (currentTimestamp - lastContactTimestamp);
          lastContactTimestampByConveyorId.put(conveyorId, currentTimestamp);
 
-         EventHelper.addEvent(new BotWorkloadChangedEvent(
+         EventHelper.addEvent(new StatisticBotWorkloadChangedEvent(
                new BotWorkloadDataModel(1, "Wartend", timeBotsWaited),
                new BotWorkloadDataModel(2, "Arbeitend", timeBotsWorked)));
-
-         logger.info("Bot started working " + timeBotsWorked + " / " + timeBotsWaited);
       }
    }
 
@@ -183,11 +188,9 @@ public class StatisticAgent extends Agent {
          timeBotsWorked = timeBotsWorked + (currentTimestamp - lastContactTimestamp);
          lastContactTimestampByConveyorId.put(conveyorId, currentTimestamp);
 
-         EventHelper.addEvent(new BotWorkloadChangedEvent(
+         EventHelper.addEvent(new StatisticBotWorkloadChangedEvent(
                new BotWorkloadDataModel(1, "Wartend", timeBotsWaited),
                new BotWorkloadDataModel(2, "Arbeitend", timeBotsWorked)));
-
-         logger.info("Bot stopped working " + timeBotsWorked + " / " + timeBotsWaited);
       }
    }
 }

@@ -66,11 +66,12 @@ import de.novanic.eventservice.client.event.RemoteEventServiceFactory;
 import de.novanic.eventservice.client.event.domain.DomainFactory;
 import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 import uni.oldenburg.shared.model.statistic.BotWorkloadDataModel;
+import uni.oldenburg.shared.model.statistic.PackageProcessingTimeDataModel;
 
 /**
  * Der Mainframepresenter ist dafuer da das Hauptfenster zu initialisieren und alle Aktionen durchzuführen, die durch
  * das Drücken eines Gui-Elements initialisiert werden.
- * @author Matthias, Raschid, Nagihan, Simon, Christopher
+ * @author Matthias, Raschid, Nagihan, sijakubo, Christopher
  */
 public class MainFramePresenter extends Presenter {
 	public final static String DOMAIN_NAME = "uni.oldenburg.faise";
@@ -105,8 +106,9 @@ public class MainFramePresenter extends Presenter {
 		HasClickHandlers getConveyorWallButton();
 		
 		Panel 	getConveyorPanel();
-      StatisticModalPanel getStatisticModalPanel();
-		
+      StatisticPackageProcessingModalPanel getStatisticPackageProcessingModalPanel();
+      StatisticBotWorkloadModalPanel getStatisticBotWorkloadModalPanel();
+
 		HasText	getJobCount();
 
 		MenuBar getMenuBar();
@@ -1003,10 +1005,17 @@ public class MainFramePresenter extends Presenter {
 			}
 		}));
 
-      menuName = "Statistik anzeigen";
+      menuName = "Bot-Auslastung anzeigen";
       this.display.getStatisticMenuBar().addItem(menuName, new Command() {
          public void execute() {
-            display.getStatisticModalPanel().show();
+            display.getStatisticBotWorkloadModalPanel().show();
+         }
+      });
+
+      menuName = "Paketdurchlaufzeit";
+      this.display.getStatisticMenuBar().addItem(menuName, new Command() {
+         public void execute() {
+            display.getStatisticPackageProcessingModalPanel().show();
          }
       });
 
@@ -1143,11 +1152,20 @@ public class MainFramePresenter extends Presenter {
 					loadSzenario(currentSzenario);
 				}
 
-            if (anEvent instanceof BotWorkloadChangedEvent) {
-               BotWorkloadDataModel dataModelBotWaited = ((BotWorkloadChangedEvent) anEvent).getBotWaitedDataModel();
-               BotWorkloadDataModel dataModelBotWorked = ((BotWorkloadChangedEvent) anEvent).getBotWorkedDataModel();
-               display.getStatisticModalPanel()
-                     .newBotWorkloadDataReceived(dataModelBotWaited, dataModelBotWorked);
+            //Statistic Events
+            if (anEvent instanceof StatisticBotWorkloadChangedEvent) {
+               BotWorkloadDataModel dataModelBotWaited = ((StatisticBotWorkloadChangedEvent) anEvent).getBotWaitedDataModel();
+               BotWorkloadDataModel dataModelBotWorked = ((StatisticBotWorkloadChangedEvent) anEvent).getBotWorkedDataModel();
+
+               display.getStatisticBotWorkloadModalPanel().newBotWorkloadDataReceived(dataModelBotWaited, dataModelBotWorked);
+               return;
+            }
+
+            if (anEvent instanceof StatisticPackageProcessingTimeChangedEvent) {
+               PackageProcessingTimeDataModel processingTimeDataModel =
+                     ((StatisticPackageProcessingTimeChangedEvent) anEvent).getPackageProcessingTimeDataModel();
+
+               display.getStatisticPackageProcessingModalPanel().newPackageProcessingTimeDataReceived(processingTimeDataModel);
                return;
             }
          }

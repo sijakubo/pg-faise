@@ -154,7 +154,8 @@ public class PackageAgent extends Agent {
 			if(myConveyor instanceof ConveyorRamp) {
 				EventHelper.addEvent(new JobCounterUpdateEvent(myConveyor.getID(), true));
 
-            if (myPackage.getType() == Job.INCOMING) {
+            boolean isOutGoingRamp = ((ConveyorRamp) myConveyor).getRampType() == ConveyorRamp.RAMP_EXIT;
+            if (isOutGoingRamp && myPackage.getType() == Job.INCOMING ) {
                sendPackageLeftSimulationBehaviour(myPackage);
             }
 			}

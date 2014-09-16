@@ -17,36 +17,33 @@ import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.HideEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
-
 import uni.oldenburg.shared.model.statistic.BotWorkloadDataModel;
 
 
 /**
  * @author sijakubo
  */
-public class StatisticModalPanel implements IsWidget {
-   private static final BotWorkloadDataModelProperties botWorkloadDataModelProperties = GWT.create(BotWorkloadDataModelProperties.class);
+public class StatisticBotWorkloadModalPanel implements IsWidget {
+   private final Window window = new Window();
    private Chart<BotWorkloadDataModel> botWorkloadChart;
 
+   private static final BotWorkloadDataModelProperties botWorkloadDataModelProperties =
+         GWT.create(BotWorkloadDataModelProperties.class);
+
    public interface BotWorkloadDataModelProperties extends PropertyAccess<BotWorkloadDataModel> {
+
       ModelKeyProvider<BotWorkloadDataModel> id();
 
       ValueProvider<BotWorkloadDataModel, String> state();
 
       ValueProvider<BotWorkloadDataModel, Long> timeSpan();
+
    }
 
-   private final Window window = new Window();
-
-   public StatisticModalPanel() {
+   public StatisticBotWorkloadModalPanel() {
       initWindow();
       botWorkloadChart = createBotWorkloadChart();
       window.add(botWorkloadChart);
-   }
-
-   @SuppressWarnings("unused")
-private Chart<BotWorkloadDataModel> createPackageProcessingTimeChart() {
-      return null;
    }
 
    private Chart<BotWorkloadDataModel> createBotWorkloadChart() {
@@ -102,7 +99,7 @@ private Chart<BotWorkloadDataModel> createPackageProcessingTimeChart() {
       window.setPixelSize(500, 300);
       window.setModal(false);
       window.setBlinkModal(true);
-      window.setHeadingText("Statistiken");
+      window.setHeadingText("Bot-Auslastung");
       window.addHideHandler(new HideEvent.HideHandler() {
          public void onHide(HideEvent event) {
             TextButton open = ((Window) event.getSource()).getData("open");
@@ -122,6 +119,7 @@ private Chart<BotWorkloadDataModel> createPackageProcessingTimeChart() {
 
    public void show() {
       this.window.show();
+      botWorkloadChart.redrawChart();
    }
 
    public Widget asWidget() {

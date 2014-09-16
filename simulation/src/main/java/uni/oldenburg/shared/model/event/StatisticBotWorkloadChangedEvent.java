@@ -7,14 +7,14 @@ import uni.oldenburg.shared.model.statistic.BotWorkloadDataModel;
 /**
  * @author sijakubo
  */
-public class BotWorkloadChangedEvent implements Event {
+public class StatisticBotWorkloadChangedEvent implements Event {
    private BotWorkloadDataModel botWaitedDataModel;
    private BotWorkloadDataModel botWorkedDataModel;
 
-   public BotWorkloadChangedEvent() {
+   public StatisticBotWorkloadChangedEvent() {
    }
 
-   public BotWorkloadChangedEvent(BotWorkloadDataModel botWaitedDataModel, BotWorkloadDataModel botWorkedDataModel) {
+   public StatisticBotWorkloadChangedEvent(BotWorkloadDataModel botWaitedDataModel, BotWorkloadDataModel botWorkedDataModel) {
       this.botWaitedDataModel = botWaitedDataModel;
       this.botWorkedDataModel = botWorkedDataModel;
    }
