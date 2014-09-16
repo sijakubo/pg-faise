@@ -193,7 +193,7 @@ Nachdem ein Paket ein Ziel zugewiesen bekommen hat, startet der Routingagent der
 \end{itemize}
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{Auktion.png}        
+		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{Auktion.PNG}        
 		\caption{Auktion}
 	\label{Auktion}
 \end{figure}
@@ -213,7 +213,7 @@ Nachdem das Fahren initiiert wurde, führt der Plattformagent des entsprechenden
 \end{itemize}
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{Fahren.png}        
+		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{Fahren.PNG}        
 		\caption{Paket abholen und zur Zielrampe bringen}
 	\label{Fahren}
 \end{figure}
@@ -229,7 +229,7 @@ Das Starten einer Simulation wird über das Menuitem \glqq Starten/Anhalten\grqq
 Die  Variable agentPlatformService referenziert das Interface AgentPlatformServiceAsync. Serverseitig gibt es ein Servlet \glqq AgentPlatformService\grqq , das verschiedene Methoden bereitstellt, die über das Interface AgentPlatformServiceAsync aufgerufen werden können. Die Variable ist als AgentPlatformServiceAsync Interface deklariert, wird aber mit einer automatisch generierten Proxy-Klasse instantiiert (s. Quellcode/Konstruktor der Klasse MainframePresenter). In der Methode execute wird über den Aufruf der Methode startSimulation das Szenario übergeben und zum Server geschickt. Für den Aufruf ist ein Objekt notwendig, das das Interface AsyncCalback implementiert, welches wiederum der Methode als interne Klasse übergeben wird. Der Typparameter, in diesem Fall ein Integer, definiert, welcher Rückgabewert vom Server erwartet wird. Außerdem wird in den Methoden onFailure und onSuccess definiert, was passieren soll, wenn der RPC fehlschlägt bzw. erfolgreich war. Wenn die Simulation serverseitig erfolgreich gestartet wurde, dann soll die auf dem Server generierte ID dem aktuellen Szenario zugewiesen werden und der Status der Simulation auf gestartet gesetzt werden.    
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{RPCS.png}        
+		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{RPCS.PNG}        
 		\caption{Starten einer Simulation}
 	\label{RPCS}
 \end{figure}
@@ -237,7 +237,7 @@ Die  Variable agentPlatformService referenziert das Interface AgentPlatformServi
 Nachdem die Daten zum Server geschickt wurden, wird die Methode startSimulation des Servlets AgentPlatformServiceImpl aufgerufen. Für das Szenario wird eine ID generiert und über das Object Array wird das Szenario allen Agenten als Parameter zur Verfügung gestellt. Danach wird eine Agentenplattform für das jeweilige Szenario gestartet. Die Liste der Conveyor aus dem Szenario wird durchlaufen und für jeden Conveyor werden die benötigten Agenten erzeugt. Die Methode addAgentToSimulation erzeugt anhand der Conveyor- und Szenario-ID einen eindeutigen Namen für jeden Agenten, übergibt die Parameter und fügt ihn der Simulation hinzu. Anschließend wird der Jobagent initialisiert und die Agenten werden gestartet. Die letzte Anweisung schickt die Szenario ID zum Client zurück.  
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{StartMAS.png}        
+		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{StartMAS.PNG}        
 		\caption{Starten des MAS}
 	\label{SMAS}
 \end{figure}
@@ -245,7 +245,7 @@ Nachdem die Daten zum Server geschickt wurden, wird die Methode startSimulation 
 Nachdem der Jobagent alle Informationen erhalten hat, die er für die Zuweisung von Aufträgen benötigt, schickt er eine Nachricht an den Client, dass die Aufträge zum Server geschickt werden können (Vgl.Abschnitt \ref{Jobagent}). Der Client startet den Jobtimer mit der Methode startJobTimer des MainframePresenters (s.Abbildung \ref{jobtim}). Die Integer Variable elapsedTimeSec repräsentiert die Zeit. Der Timer wird gestartet und die run-Methode wird kontinuierlich ausgeführt, bis der Jobtimer gestoppt wird. Die Zeitvariable wird bei jedem Durchlauf um eins hochgezählt, was bedeutet, dass eine Sekunde vergangen ist. Die einzelnen Jobs aus der Liste werden in der for-Schleife abgefragt und ihr Zeitstempel wird mit der elapsedTimeSec Variable abgeglichen. Ist die vergangene Zeit größer oder gleich der Zeit zu der ein Job ausgeführt werden soll, dann wird der Job mit der Methode addJob zum Server geschickt. Mit der vorletzten Anweisung wird festgelegt, in welchen Zeitabständen der Timer ausgeführt werden soll. Die letzte Anweisung dient dazu, den Timer initial zu starten.
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{Jobtimer.png}        
+		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{Jobtimer.PNG}        
 		\caption{Start des Jobtimers}
 	\label{jobtim}
 \end{figure}
@@ -253,7 +253,7 @@ Nachdem der Jobagent alle Informationen erhalten hat, die er für die Zuweisung 
 Abbildung \ref{jobtimserv} zeigt die serverseitige Weiterleitung des empfangenen Auftrags. In der Methode addJob des AgentPlatformServiceImpl Servlets wird der jeweilige Jobagent anhand der Szenario ID aus einer Hashmap geholt. Es wird ein ACLMessageObjekt erzeugt und der Nachrichtentyp wird im Konstruktor festgelegt, um gezielt die notwendige Behaviour zu adressieren. Als Empfänger wird der Jobagent selber festgelegt. Anschließend wird der Job der Nachricht als ContentObject hinzugefügt und versendet.
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{addJob.png}        
+		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{addJob.PNG}        
 		\caption{Weiterleitung des Auftrags}
 	\label{jobtimserv}
 \end{figure}
@@ -263,7 +263,7 @@ Die einzelnen Agenten führen Aktionen durch. Werden dadurch Zustände veränder
 Die Klasse PackageAddedEvent ist eine selbst definierte Event-Klasse, die das Interface Event des Eventservices implementiert (Vgl.\cite{gwteventservice}). Mithilfe dieser Klasse können Informationen für den Client transportiert werden. Die Informationen werden im Konstruktor der Klasse PackageAddedEvent übergeben. In diesem Fall werden die Conveyor- und Package-ID übergeben, damit der Client weiß, welchen Conveyor er neu zeichnen soll und welches Paket mit welcher ID hinzugefügt wurde.
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{addEvent.png}        
+		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{addEvent.PNG}        
 		\caption{Feuern eines Events}
 	\label{addEvent}
 \end{figure}
@@ -271,7 +271,7 @@ Die Klasse PackageAddedEvent ist eine selbst definierte Event-Klasse, die das In
 Abbildung \ref{addEventClient} zeigt die clientseitige Verarbeitung der Events, die vom Server empfangen werden. In der Methode HandleEvents des Mainframepresenters , wird zunächst eine Instanz der Klasse RemoteEventService über die RemoteEventServiceFactory geliefert. Alle vorhandenen Listener werden entfernt und es wird ein neuer Listener hinzugefügt. Beim Hinzufügen des Listeners wird eine Domain mit einer Zeichenkette übergeben. Durch die Domain kann gezielt festgelegt werden, für wen eine Nachricht bestimmt ist (Vgl.\cite{gwteventservice}). Die Zuordnung einer Nachricht zu einer Domain, wird beim Versenden der Nachricht festgelegt (S. Quellcode Klasse EventHelper). In der Methode apply des Listeners wird für alle definierten Events festgelegt, welche Aktion beim Empfang auf dem Client ausgeführt werden soll. Beispielsweise wird durch das SimStartedEvent das Starten des Jobtimers durch die Methode startJobTimer initialisiert.  
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{Vis.png}        
+		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{Vis.PNG}        
 		\caption{Clientseitige Verarbeitung des Events}
 	\label{addEventClient}
 \end{figure} 
