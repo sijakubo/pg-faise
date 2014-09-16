@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2014.8.27)  9 SEP 2014 10:39
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2014.8.27)  15 SEP 2014 10:01
 entering extended mode
  %&-line parsing enabled.
 **masterfile.tex
@@ -1357,9 +1357,6 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Warning: Data encoding is 'utf8'.
 (biblatex)                Use backend=biber.
 
-
-Package biblatex Warning: File 'masterfile-blx.bib' created by wrong version.
-
 \openout3 = `masterfile-blx.bib'.
 
 Package biblatex Info: Trying to load bibliographic data...
@@ -1400,10 +1397,10 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 \openout2 = `src/title.aux'.
 
- (./src/title.tex <image/UniLogo.png, id=231, 1187.43625pt x 367.3725pt>
+ (./src/title.tex <image/UniLogo.png, id=243, 1187.43625pt x 367.3725pt>
 File: image/UniLogo.png Graphic file (type png)
 
-<use image/UniLogo.png> <image/BUIENGLOGO.png, id=233, 348.30125pt x 72.27pt>
+<use image/UniLogo.png> <image/BUIENGLOGO.png, id=245, 348.30125pt x 72.27pt>
 File: image/BUIENGLOGO.png Graphic file (type png)
 
 <use image/BUIENGLOGO.png>
@@ -1580,26 +1577,26 @@ File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
 LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <10.95> not available
 (Font)              Font shape `T1/ppl/b/n' tried instead on input line 84.
  [6]
-<image/Prinzipskizze_induktiven.jpg, id=451, 459.21562pt x 124.96687pt>
+<image/Prinzipskizze_induktiven.jpg, id=466, 459.21562pt x 124.96687pt>
 File: image/Prinzipskizze_induktiven.jpg Graphic file (type jpg)
 
 <use image/Prinzipskizze_induktiven.jpg>
-<image/Prinzipskizze_Koppelnavigation_rechts.jpg, id=454, 461.47406pt x 115.180
+<image/Prinzipskizze_Koppelnavigation_rechts.jpg, id=469, 461.47406pt x 115.180
 31pt>
 File: image/Prinzipskizze_Koppelnavigation_rechts.jpg Graphic file (type jpg)
  <use image/Prinzipskizze_Koppelnavigation_rechts.jpg>
-<image/Prinzipskizze_Koppelnavigation_links.jpg, id=457, 304.13625pt x 208.78pt
+<image/Prinzipskizze_Koppelnavigation_links.jpg, id=472, 304.13625pt x 208.78pt
 >
 File: image/Prinzipskizze_Koppelnavigation_links.jpg Graphic file (type jpg)
  <use image/Prinzipskizze_Koppelnavigation_links.jpg> [7 <./image/Prinzipskizze
 _induktiven.jpg> <./image/Prinzipskizze_Koppelnavigation_rechts.jpg>] [8 <./ima
 ge/Prinzipskizze_Koppelnavigation_links.jpg>]
-<image/Prinzipskizze_zur_Navigation_mittels_GPS.jpg, id=468, 563.85657pt x 140.
+<image/Prinzipskizze_zur_Navigation_mittels_GPS.jpg, id=483, 563.85657pt x 140.
 77594pt>
 File: image/Prinzipskizze_zur_Navigation_mittels_GPS.jpg Graphic file (type jpg
 )
  <use image/Prinzipskizze_zur_Navigation_mittels_GPS.jpg>
-<image/Systemarchitektur_FTS.jpg, id=470, 732.7375pt x 365.365pt>
+<image/Systemarchitektur_FTS.jpg, id=485, 732.7375pt x 365.365pt>
 File: image/Systemarchitektur_FTS.jpg Graphic file (type jpg)
 
 <use image/Systemarchitektur_FTS.jpg> [9 <./image/Prinzipskizze_zur_Navigation_
@@ -1607,11 +1604,11 @@ mittels_GPS.jpg>]
 File: image/Systemarchitektur_FTS.jpg Graphic file (type jpg)
  <use image/Systemarchitektur_FTS.jpg> [10 <./image/Systemarchitektur_FTS.jpg>]
 
-<image/Wertschoepfungskette.jpg, id=482, 705.63625pt x 318.18875pt>
+<image/Wertschoepfungskette.jpg, id=497, 705.63625pt x 318.18875pt>
 File: image/Wertschoepfungskette.jpg Graphic file (type jpg)
 
 <use image/Wertschoepfungskette.jpg> [11]
-<image/Stetigfoerderer.jpg, id=491, 411.5375pt x 270.00874pt>
+<image/Stetigfoerderer.jpg, id=506, 411.5375pt x 270.00874pt>
 File: image/Stetigfoerderer.jpg Graphic file (type jpg)
 
 <use image/Stetigfoerderer.jpg> [12 <./image/Wertschoepfungskette.jpg>]
@@ -1623,18 +1620,18 @@ File: image/Stetigfoerderer.jpg Graphic file (type jpg)
 
 
 ]
-<image/Projektorganisation_Scrum.png, id=529, 974.13937pt x 271.0125pt>
+<image/Projektorganisation_Scrum.png, id=544, 974.13937pt x 271.0125pt>
 File: image/Projektorganisation_Scrum.png Graphic file (type png)
 
 <use image/Projektorganisation_Scrum.png>
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[18] <image/Vorgehensmodell_Prototyping.png, id=534, 859.71187pt x 493.845pt>
+[18] <image/Vorgehensmodell_Prototyping.png, id=549, 859.71187pt x 493.845pt>
 File: image/Vorgehensmodell_Prototyping.png Graphic file (type png)
 
 <use image/Vorgehensmodell_Prototyping.png> [19 <./image/Projektorganisation_Sc
-rum.png>] <image/logoAtlassian.png, id=540, 810.02625pt x 250.9375pt>
+rum.png>] <image/logoAtlassian.png, id=555, 810.02625pt x 250.9375pt>
 File: image/logoAtlassian.png Graphic file (type png)
 
 <use image/logoAtlassian.png> [20 <./image/Vorgehensmodell_Prototyping.png> <./
@@ -1659,29 +1656,29 @@ Underfull \hbox (badness 10000) in paragraph at lines 16--19
  []
 
 [24] [25]
-Underfull \hbox (badness 10000) in paragraph at lines 31--35
+Underfull \hbox (badness 10000) in paragraph at lines 32--35
 
  []
 
-<image/grobarchitektur.jpg, id=583, 778.91pt x 438.63875pt>
+<image/grobarchitektur.jpg, id=598, 778.91pt x 438.63875pt>
 File: image/grobarchitektur.jpg Graphic file (type jpg)
 
 <use image/grobarchitektur.jpg> [26 <./image/grobarchitektur.jpg>]
-<image/Mockup.png, id=591, 1007.765pt x 554.07pt>
+<image/Mockup.png, id=606, 1007.765pt x 554.07pt>
 File: image/Mockup.png Graphic file (type png)
  <use image/Mockup.png>
 [27 <./image/Mockup.png (PNG copy)>]
 
 LaTeX Warning: Reference `GA' on page 28 undefined on input line 54.
 
-[28] [29] <image/Interaktion.jpg, id=615, 914.41624pt x 635.37375pt>
+[28] [29] <image/Interaktion.jpg, id=630, 914.41624pt x 635.37375pt>
 File: image/Interaktion.jpg Graphic file (type jpg)
 
 <use image/Interaktion.jpg>
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[30] <image/architekturSimu.jpg, id=632, 760.8425pt x 438.63875pt>
+[30] <image/architekturSimu.jpg, id=647, 760.8425pt x 438.63875pt>
 File: image/architekturSimu.jpg Graphic file (type jpg)
 
 <use image/architekturSimu.jpg>
@@ -1692,7 +1689,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 LaTeX Warning: Citation 'jadetwo' on page 31 undefined on input line 110.
 
 [31 <./image/Interaktion.jpg>] [32 <./image/architekturSimu.jpg>] [33]
-<image/Jobagent.png, id=654, 831.85782pt x 406.51875pt>
+<image/Jobagent.png, id=669, 831.85782pt x 406.51875pt>
 File: image/Jobagent.png Graphic file (type png)
 
 <use image/Jobagent.png>
@@ -1704,7 +1701,7 @@ Overfull \hbox (44.10031pt too wide) in paragraph at lines 140--141
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [34] [35 <./image/Jobagent.png>]
-<image/EingangAusgang.png, id=666, 828.09375pt x 408.77719pt>
+<image/EingangAusgang.png, id=681, 828.09375pt x 408.77719pt>
 File: image/EingangAusgang.png Graphic file (type png)
 
 <use image/EingangAusgang.png>
@@ -1796,7 +1793,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 227--236
 
  []
 
-[40] [41]
+[40]
 
 LaTeX Warning: File `StartMAS.png' not found on input line 240.
 
@@ -1818,6 +1815,7 @@ Overfull \hbox (44.23859pt too wide) in paragraph at lines 240--241
  [][] 
  []
 
+[41]
 
 LaTeX Warning: File `Jobtimer.png' not found on input line 248.
 
@@ -1937,7 +1935,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
 ]
-<image/Aubau_eines_Mikrocontrollers.png, id=753, 446.41782pt x 352.31625pt>
+<image/Aubau_eines_Mikrocontrollers.png, id=767, 446.41782pt x 352.31625pt>
 File: image/Aubau_eines_Mikrocontrollers.png Graphic file (type png)
 
 <use image/Aubau_eines_Mikrocontrollers.png>
@@ -1945,58 +1943,55 @@ File: image/Aubau_eines_Mikrocontrollers.png Graphic file (type png)
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [48] [49 <./image/Aubau_eines_Mikrocontrollers.png (PNG copy)>]
-<image/Atmel8.png, id=768, 337.26pt x 283.81032pt>
+<image/Atmel8.png, id=781, 337.26pt x 283.81032pt>
 File: image/Atmel8.png Graphic file (type png)
  <use image/Atmel8.png>
-Underfull \hbox (badness 10000) in paragraph at lines 88--88
+Underfull \hbox (badness 10000) in paragraph at lines 87--87
 []$\T1/pcr/m/n/10.95 (http : / / www . ids . tu-[]bs . de / tl _ files / Lehre 
 / Vorlesungen /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 88--88
+Underfull \hbox (badness 10000) in paragraph at lines 87--87
 \T1/pcr/m/n/10.95 Simulation2 / Einfuehrung _ in _ die _ MC _ Programmierung _ 
 Teil1 .
  []
 
-<image/LegendeAtmel8.png, id=771, 382.42876pt x 79.79813pt>
+<image/LegendeAtmel8.png, id=784, 382.42876pt x 79.79813pt>
 File: image/LegendeAtmel8.png Graphic file (type png)
 
 <use image/LegendeAtmel8.png>
-Underfull \hbox (badness 10000) in paragraph at lines 94--94
+Underfull \hbox (badness 10000) in paragraph at lines 93--93
 [][][]|\T1/ppl/m/n/10.95 At-mel 8 []$\T1/pcr/m/n/10.95 (http : / / www . ids . 
 tu-[]bs . de / tl _ files / Lehre /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 94--94
+Underfull \hbox (badness 10000) in paragraph at lines 93--93
 \T1/pcr/m/n/10.95 Vorlesungen / Simulation2 / Einfuehrung _ in _ die _ MC _
  []
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-[50] [51 <./image/Atmel8.png (PNG copy)> <./image/LegendeAtmel8.png (PNG copy)>
-] <image/Systemarchitektur_Contiki.png, id=788, 310.91156pt x 183.68625pt>
+[50 <./image/Atmel8.png (PNG copy)>] [51 <./image/LegendeAtmel8.png (PNG copy)>
+] <image/Systemarchitektur_Contiki.png, id=801, 310.91156pt x 183.68625pt>
 File: image/Systemarchitektur_Contiki.png Graphic file (type png)
 
 <use image/Systemarchitektur_Contiki.png>
-Underfull \hbox (badness 6268) in paragraph at lines 145--145
+Underfull \hbox (badness 6268) in paragraph at lines 144--144
 [][][]|\T1/ppl/m/n/10.95 Adam Dun-kels, Björn Grön-vall, Thie-mo Voigt: Con-ti-
 ki - a Light-
  []
 
 
-Underfull \hbox (badness 3271) in paragraph at lines 145--145
+Underfull \hbox (badness 3271) in paragraph at lines 144--144
 \T1/ppl/m/n/10.95 weight and Fle-xi-ble Ope-ra-ting Sys-tem for Ti-ny Net-wor-k
 ed Sen-sors.
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 145--145
+Underfull \hbox (badness 10000) in paragraph at lines 144--144
 []$\T1/pcr/m/n/10.95 (Quelle : http : / / www . up . edu . ps / ocw / upinar / 
 moodledata / 872 /
  []
@@ -2004,27 +1999,70 @@ moodledata / 872 /
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[52] [53 <./image/Systemarchitektur_Contiki.png (PNG copy)>]
-<image/Beispielprozess.png, id=806, 378.66469pt x 258.21469pt>
+[52] <image/Beispielprozess.png, id=814, 378.66469pt x 258.21469pt>
 File: image/Beispielprozess.png Graphic file (type png)
 
-<use image/Beispielprozess.png> [54 <./image/Beispielprozess.png (PNG copy)>]
+<use image/Beispielprozess.png>
 
-LaTeX Warning: Citation 'BZW98' on page 55 undefined on input line 206.
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[53 <./image/Systemarchitektur_Contiki.png (PNG copy)>] [54 <./image/Beispielpr
+ozess.png (PNG copy)>]
+
+LaTeX Warning: Citation 'GH:2010' on page 55 undefined on input line 201.
 
 
-LaTeX Warning: Citation 'Stasch:Hahn' on page 55 undefined on input line 216.
+LaTeX Warning: Citation 'BZW:1998' on page 55 undefined on input line 206.
 
-) [55]
+
+LaTeX Warning: Citation 'Roidl:2012' on page 55 undefined on input line 211.
+
+<image/ArchitekturMicazRampe.png, id=827, 1037.8775pt x 620.3175pt>
+File: image/ArchitekturMicazRampe.png Graphic file (type png)
+
+<use image/ArchitekturMicazRampe.png>
+
+LaTeX Warning: Citation 'Stasch:Hahn' on page 55 undefined on input line 218.
+
+
+LaTeX Warning: Citation 'Stasch:Hahn' on page 55 undefined on input line 218.
+
+
+Overfull \hbox (6.47452pt too wide) in paragraph at lines 200--221
+\T1/ppl/m/n/10.95 Zur Um-set-zung der de-zen-tra-len Steue-rung wer-den Soft-wa
+-re-agen-ten ein-ge-setzt. Bei Software-
+ []
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: Citation 'Stasch:Hahn' on page 55 undefined on input line 227.
+
+
+LaTeX Warning: Citation 'Stasch:Hahn' on page 55 undefined on input line 229.
+
+[55]
+
+LaTeX Warning: Citation 'Stasch:Hahn' on page 56 undefined on input line 233.
+
+
+LaTeX Warning: Citation 'Stasch:Hahn' on page 56 undefined on input line 243.
+
+[56 <./image/ArchitekturMicazRampe.png>]
+
+LaTeX Warning: Citation 'Stasch:Hahn' on page 57 undefined on input line 250.
+
+) [57]
 Overfull \hbox (15.22435pt too wide) in paragraph at lines 140--140
 \T1/pcr/m/n/10.95 Vorlesungen / Simulation2 / Einfuehrung \ _in \ _die \ _MC \ 
 _Programmierung \
  []
 
-[56
+[58
 
 
-] [57] (./masterfile.aux (./src/title.aux) (./src/abstract.aux)
+] [59] (./masterfile.aux (./src/title.aux) (./src/abstract.aux)
 (./src/tableofcontents.aux) (./src/chapter1.aux) (./src/chapter2.aux)
 (./src/chapter3.aux) (./src/chapter4.aux) (./src/chapter5.aux)
 (./src/chapter6.aux))
@@ -2044,22 +2082,22 @@ Package logreq Info: Writing requests to 'masterfile.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 17632 strings out of 493848
- 269230 string characters out of 1152823
- 474045 words of memory out of 3000000
- 20225 multiletter control sequences out of 15000+50000
+ 17643 strings out of 493848
+ 269458 string characters out of 1152823
+ 472614 words of memory out of 3000000
+ 20228 multiletter control sequences out of 15000+50000
  64455 words of font info for 103 fonts, out of 3000000 for 9000
  718 hyphenation exceptions out of 8191
- 51i,11n,49p,1456b,2286s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 51i,11n,49p,1458b,2286s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-texli
 ve/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw
 /helvetic/uhvb8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/palatino/uplb8a.
 pfb></usr/share/texmf-texlive/fonts/type1/urw/palatino/uplr8a.pfb></usr/share/t
 exmf-texlive/fonts/type1/urw/palatino/uplr8a.pfb></usr/share/texmf-texlive/font
 s/type1/urw/palatino/uplri8a.pfb>
-Output written on masterfile.pdf (62 pages, 922027 bytes).
+Output written on masterfile.pdf (64 pages, 987970 bytes).
 PDF statistics:
- 926 PDF objects out of 1000 (max. 8388607)
- 230 named destinations out of 1000 (max. 500000)
- 572 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 953 PDF objects out of 1000 (max. 8388607)
+ 237 named destinations out of 1000 (max. 500000)
+ 601 words of extra memory for PDF output out of 10000 (max. 10000000)
 
