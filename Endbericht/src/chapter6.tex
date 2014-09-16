@@ -1,30 +1,27 @@
 \section{Teilbericht Materialfluss}
-Das Ziel der Materialfgruppe ist das dezentrale Management der Fördereinheiten auf der Rampen und auf dem Volksbots.
+Das Ziel der Materialflussgruppe ist das dezentrale Management der Fördereinheiten auf den Rampen und auf dem Volksbots.
 \subsection{Lastenheft}
-Aus einem neutzwerk drathlosen Sensorknoten müssen die Rampen auf mikrocontrollerebene miteiander kommunizieren können und die Fördereinheiten steuern.
-Die Steuerung und Überwachung muss dezentral durch softwareagenten ablaufen. Die Mikrocontrollern dienen als Agentenplattform und bei der Entwicklung muss 
+Aus einem drathlosen Sensorknoten-Netzwerk müssen die Rampen auf Mikrocontrollerebene miteinander kommunizieren können und die Fördereinheiten steuern.
+Die Steuerung und Überwachung muss dezentral durch Softwareagenten ablaufen. Die Mikrocontroller dienen als Agentenplattform und bei der Entwicklung muss 
 auf Leistungsressourcen (CPU, Kommunikationsbandbreite, Speicher) geachtet werden.
 \paragraph{Produktfunktionen}
 \begin{enumerate}
- \item \textbf{Aktorik/sensorik}: Die Rampen verfügen über Magnetstreifen zum Vereinzeln der Pakete und Lichtschranken 
- zum Erkennen von ein- bzw. ausgehenden Pakete. An den ATMega128 Mikrocontroller der Rampen werden die Lichtschranken und Magnetstifte angeschlossen.
- \item \textbf{Echtzeitsteuerung}: An den ATMega128 Mikrocontroller der Rampen werden die Lichtschranken und Magnetstifte angeschlossen. Der Controller führt die
- Befehle für die rampe aus. 
- \item \textbf{Kommunikation}:Die Micaz-Module kommunizieren drahtlos mit anderen Rampen und Volksbot
- \item \textbf{Synchronisation}: Die Simulation wird über ein Micaz-Modul an die drahtlose Kommunikation angebunden. Die Synchronisation der Zustand erfolgt
-  mittels vorhandenem Ice Interface.
- \item \textbf{Disposition}:Die Controller kennen den Belegungszustand der Rampe und generieren entsprechend Aufträge, die sie an die Fahrzeuge vergeben. 
+ \item \textbf{Aktorik/Sensorik}: Die Rampen verfügen über Magnetstifte zum Vereinzeln der Pakete und Lichtschranken zum Erkennen von ein- bzw. ausgehenden Paketen.
+An den ATMega128 Mikrocontroller der Rampen werden die Lichtschranken und Magnetstifte angeschlossen.
+ \item \textbf{Echtzeitsteuerung}: An den ATMega128 Mikrocontroller der Rampen werden die Lichtschranken und Magnetstifte angeschlossen.
+Der Controller führt die Befehle für die Rampe aus. 
+ \item \textbf{Kommunikation}: Die Micaz-Module kommunizieren drahtlos mit anderen Rampen und Volksbots.
+ \item \textbf{Synchronisation}: Die Simulation wird über ein Micaz-Modul an die drahtlose Kommunikation angebunden.
+Die Synchronisation der Zustände erfolgt mittels vorhandenem Ice Interface.
+ \item \textbf{Disposition}: Die Controller kennen den Belegungszustand der Rampe und generieren entsprechend Aufträge, die sie an die Fahrzeuge vergeben. 
  Das ganze soll nach dem FIFO-Verfahren ablaufen.
- \item \textbf{Übergabe}: Wenn eine Ein- oder Auslagerung an einer Rampe ausgeführt werden soll, so übernimmt der Controller der Rampe die Kontrolle
- über die Fördereinheit des Fahrzeugs und sorgt dafür, dass das Paket verladen wird
- \item \textbf{Kooperation}: Einsatz Kooperativer Lösungsstrategien für die Materialflusssteuerung. Überwachung und Steuerung mittels Multi-Agentensystem
+ \item \textbf{Übergabe}: Wenn eine Ein- oder Auslagerung an einer Rampe ausgeführt werden soll, so übernimmt der Controller der Rampe die Kontrolle über die Fördereinheit des Fahrzeugs und sorgt dafür, dass das Paket verladen wird.
+ \item \textbf{Kooperation}: Einsatz Kooperativer Lösungsstrategien für die Materialflusssteuerung, Überwachung und Steuerung mittels Multi-Agentensystem.
 \end{enumerate}
 
 \subsection{Komponentenbeschreibung}
 \subsubsection{Rampe}
-Eine rampe dient zur Aufnahme und Ausgabe von paketen. Es kann bis zu 4 paketen aufnehmen. Es gibt eine Eingangsseite und eine
-Ausgangsseite. Die Pakete bewegen sich nur in eine Richtung. Jeder Slot wird mit einer Lichtschranke überwacht und ausfahrbare 
-Bolzen vereinzeln die Pakete. Ein Micaz Controller ist die Agentenplattform. 
+Eine Rampe dient zur Aufnahme und Ausgabe von Paketen. Sie kann bis zu 4 Paketen aufnehmen. Es gibt eine Eingangsseite und eine Ausgangsseite. Die Pakete bewegen sich nur in eine Richtung. Jeder Slot wird mit einer Lichtschranke überwacht und ausfahrbare Bolzen vereinzeln die Pakete. Ein Micaz Controller ist die Agentenplattform. 
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.9\textwidth]{SkizzeRampe.png}
@@ -33,12 +30,12 @@ Bolzen vereinzeln die Pakete. Ein Micaz Controller ist die Agentenplattform.
 \end{figure}
 
 \subsubsection{Mikrocontroller}
-Ein Mikrocontroller ist ein kleiner Computer auf einem einzelnen Halbleiter-Chip. Dazu geh\"ort ein Prozessor,
+Ein Mikrocontroller ist ein kleiner Computer auf einem einzelnen Halbleiter-Chip. Dazu geh\"oren ein Prozessor,
 der Programme ausf\"uhren kann, Arbeits- und Programmspeicher sowie Schnittstellen, die eine Kommunikation mit 
 der Umgebung erm\"oglichen sog. Peripheriefunktionen \cite{Wikibooks:2014:Online}. Mit ihnen lassen sich komplexe
 Aufgaben l\"osen, f\"ur die sonst ein aufw\"andiger Schaltungsaufbau notwendig w\"are. Standardm\"a{\ss}ig sind folgende Bestandteile in Mikrocontrollern integriert:
 CPU, SRAM und Flash-Speicher f\"ur den Programmcode. Weiterhin bieten MCs analoge und digitale Ports, 
-mehrere AD/DA-Wandler, Timer und Schnittstellen zur Kommunikation mit der Au\"{ss}enwelt \cite[vgl.]{Viktor:Seib:2014:Online}.
+mehrere AD/DA-Wandler, Timer und Schnittstellen zur Kommunikation mit der Außenwelt \cite[vgl.]{Viktor:Seib:2014:Online}.
 In der nachstehenden Abbildung ist der allgemeine schematische Aufbau eines Mikrocontrollers in folgender Abbildung dargestellt.
 \begin{figure}[h!]
 	\centering
@@ -50,7 +47,7 @@ In der nachstehenden Abbildung ist der allgemeine schematische Aufbau eines Mikr
 \begin{itemize}
 \item Prozessor (CPU)
 \begin{itemize}
-          \item Arithmetic Logic Unit kurz ALU (Rechenwerk)
+          \item Arithmetic Logic Unit, kurz ALU (Rechenwerk)
           \item 32 GPIO-Register (Arbeitsregister f\"ur ALU)
           \item Programmcounter (Programmposition)
 					\item Statusregister (Status der aktuellen Operation) 
@@ -72,8 +69,8 @@ In der nachstehenden Abbildung ist der allgemeine schematische Aufbau eines Mikr
 					\item ISP (Schnittstelle zum \"{U}bertragen des kompilierten Programms)
 	\end{itemize}
 \end{itemize}
-Mikrocontroller sind im heutigen Leben weit verbreitet und es gibt eine viele Anzahl von Herstellern, die mikrocontroller anbieten.
-Im folgenden werden einige Hersteller mit ihren MC-Familien beispielhaft aufgef\"urt:
+Mikrocontroller sind im heutigen Leben weit verbreitet und es gibt eine große Anzahl von Herstellern, die Mikrocontroller anbieten.
+Im Folgenden werden einige Hersteller mit ihren MC-Familien beispielhaft aufgef\"uhrt:
 \begin{itemize}
 \item Intel (8051-Serie)
 \item Renesas (H8)
@@ -82,7 +79,7 @@ Im folgenden werden einige Hersteller mit ihren MC-Familien beispielhaft aufgef\
 \item Freescale (fr\"uher Motorola) (68HC08 bzw. 68HCS08)
 \item Atmel (AVR, 8051-Serie)
 \end{itemize}
-F\"ur das Projekt FAISE wurde das Atmel-Serie eingesetzt. Es sind Mikrocontroller mit erweiterten Peripherien und Funktionen, 
+F\"ur das Projekt FAISE wurde die Atmel-Serie eingesetzt. Es sind Mikrocontroller mit erweiterten Peripherien und Funktionen, 
 die auf der 8-Bit-AVR-Architektur basieren. Bei AVR handelt es sich um einen RISC-Kern, der an der Universit\"at von Trondheim 
 in Norwegen entwickelt und von Atmel aufgekauft wurde. Die CPU besitzt 32 allgemeine 8-Bit Register (general purpose registers) 
 und ist in der Lage in einem einzigen Taktzyklus Daten aus zwei beliebigen Registern in die ALU zu laden, diese zu verarbeiten 
@@ -103,7 +100,7 @@ und das Ergebnis in einem beliebigen Register zu speichern \cite[vgl.]{Viktor:Se
 \item Pins f\"ur die Minimalbeschaltung
 \begin{itemize}
           \item Spannungsversorgung
-          \item ReferenzspannungTaktgeber
+          \item Referenzspannung/Taktgeber
           \item Reset      
 					\end{itemize}
 \item Prim\"arfunktion eines Pins
@@ -119,17 +116,15 @@ und das Ergebnis in einem beliebigen Register zu speichern \cite[vgl.]{Viktor:Se
 \end{itemize}
 F\"ur die Programmierung der AVR-Controller gibt es eine kostenlose Entwicklungsumgebung AVR-Studio, die das Einbinden des Compilers problemlos erlaubt.
 
-\subsubsection{Sensorik/ Aktorik}
-Hauptziel der Teilgruppe Materialfluss ist das Management von Paketen auf einer Rampe. Die Aufgabe der Sensorik ist dabei, 
-die mit Lichtschranken ausgestatteten Rampen Paketen zu detektieren und auf \"Anderung der Position der Paketen zu reagieren.
+\subsubsection{Sensorik/Aktorik}
+Hauptziel der Teilgruppe Materialfluss ist das Management von Paketen auf einer Rampe.
+Die Aufgabe der Sensorik ist dabei, dass die mit Lichtschranken ausgestatteten Rampen Pakete detektieren und auf \"Anderungen der Positionen der Pakete reagieren.
 Die Lichtschranken bestehen aus einer Lichtstrahlenquelle (dem Sender) und einem Sensor (dem Empf\"anger) f\"{u}r diese Strahlung.
 Als Lichtquelle kommt Infrarotlicht zum Einsatz und der Vorteil besteht in der einfachen Einstellung des Sensorsystems durch den
-sichtbaren Lichtfleck. Das Funktionsprinzip der Lichtschranke besteht darin, der zu  \"andernden Zustand durch die Lichtintensit\"at 
-mit dem Sensor zu registrieren. 
+sichtbaren Lichtfleck. Das Funktionsprinzip der Lichtschranke besteht darin, den sich  \"andernden Zustand durch die Lichtintensit\"at mit dem Sensor zu registrieren. 
 Die Rampen werden auf Hardwareebene um eine Aktorik zum Arretieren der Kisten erg\"anzt. Diese Aktoren (in unserem Fall die
-eingesetzte Bolzenpaar) sind f\"ur das Ausf\"uhren von Bewegungen zust\"andig. Sie sind aktive Stellelemente, die in der 
-Antriebs - und Steuerungstechnik, die vom  Mikrorechner angesteuert werden und das Verhalten des Prozesses durch das vom 
-Sensor kommende Signal in einer gew\"{u}nschten Weise zu erm\"oglichen. In dieser allgemeinen Darstellung stehen die 
+eingesetzte Bolzenpaare) sind f\"ur das Ausf\"uhren von Bewegungen zust\"andig.
+Sie sind aktive Stellelemente, die in der Antriebs- und Steuerungstechnik vom  Mikrorechner angesteuert werden, um das Verhalten des Prozesses durch das vom Sensor kommende Signal in einer gew\"{u}nschten Weise zu erm\"oglichen. In dieser allgemeinen Darstellung stehen die 
 Ausgangssignale eines Sensors und die Stellsignale der Aktoren mit einem
 Informationsverarbeitungssystem (IVS) in Verbindung.
 
@@ -137,7 +132,7 @@ Informationsverarbeitungssystem (IVS) in Verbindung.
 Contiki ist ein Open Source Echtzeitbetriebssystem, das bei uns in der PG auf den MICAz-Modulen eingesetzt wird.
 Contiki bietet einen einfachen ereignisgesteuerten Betriebssystemkern mit sogenannten Protothreads, optionalem 
 pr\"aemptiven Multiprogramming, Interprozesskommunikation via Messagepassing durch Events, eine dynamische Prozessstruktur
-mit Unterst\"utzung f\"ur das Laden und Entladen von Programmen, nativen TCP/IP-Support \"ber den uIP TCP/IP-Stack und eine 
+mit Unterst\"utzung f\"ur das Laden und Entladen von Programmen, nativen TCP/IP-Support über den uIP TCP/IP-Stack und eine 
 grafische Benutzerschnittstelle, welche direkt auf einem Bildschirm oder als virtuelle Anzeige \"uber Telnet oder VNC genutzt werden kann \cite{Wikipedia:2013:Online}.
  
 \paragraph{Systemarchitektur}
