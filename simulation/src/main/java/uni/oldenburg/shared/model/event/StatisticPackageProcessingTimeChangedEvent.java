@@ -5,6 +5,8 @@ import uni.oldenburg.shared.model.statistic.PackageProcessingTimeDataModel;
 
 @SuppressWarnings("serial")
 /**
+ * Event zum transportieren von neuen Paketdurchlaufzeiten
+ *
  * @author sijakubo
  */
 public class StatisticPackageProcessingTimeChangedEvent implements Event {

@@ -25,6 +25,8 @@ import uni.oldenburg.shared.model.statistic.PackageProcessingTimeDataModel;
 
 
 /**
+ * ModalPanel zum anzeigen der Statistik über die Paketdurchlaufzeit
+ *
  * @author sijakubo
  */
 public class StatisticPackageProcessingModalPanel implements IsWidget {

@@ -5,6 +5,8 @@ import uni.oldenburg.shared.model.statistic.BotWorkloadDataModel;
 
 @SuppressWarnings("serial")
 /**
+ * Event zum transportieren von neuen Auslastungswerten von Bots
+ *
  * @author sijakubo
  */
 public class StatisticBotWorkloadChangedEvent implements Event {

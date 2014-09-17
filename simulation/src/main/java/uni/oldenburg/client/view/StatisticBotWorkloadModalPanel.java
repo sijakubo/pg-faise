@@ -21,6 +21,8 @@ import uni.oldenburg.shared.model.statistic.BotWorkloadDataModel;
 
 
 /**
+ * ModalPanel zum anzeigen der Statistik über die Auslastung der Bots
+ *
  * @author sijakubo
  */
 public class StatisticBotWorkloadModalPanel implements IsWidget {

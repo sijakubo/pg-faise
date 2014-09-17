@@ -3,6 +3,9 @@ package uni.oldenburg.shared.model.statistic;
 import java.io.Serializable;
 
 /**
+ * Datenmodell fuer die Paketdurchlaufzeit. Das Model enthaelt immer einen neuen Wert der gemeldet wird,
+ * sobald ein Paket die Simulation verlaesst
+ *
  * @author sijakubo
  */
 @SuppressWarnings("serial")

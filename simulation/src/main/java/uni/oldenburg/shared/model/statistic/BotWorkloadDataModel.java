@@ -3,6 +3,8 @@ package uni.oldenburg.shared.model.statistic;
 import java.io.Serializable;
 
 /**
+ * Datenmodell fuer die Auslastung der Bots.
+ *
  * @author sijakubo
  */
 @SuppressWarnings("serial")
