@@ -100,7 +100,7 @@ public class MainFramePresenter extends Presenter {
 		CellTable<Job> getJobTable();
 		
 		HasClickHandlers getAddJobsButton();
-		HasClickHandlers getStrategiesButton();
+//		HasClickHandlers getStrategiesButton();
 		HasClickHandlers getConveyorRampButton();
 		HasClickHandlers getConveyorVehicleButton();
 		HasClickHandlers getConveyorWallButton();
@@ -317,12 +317,12 @@ public class MainFramePresenter extends Presenter {
 		});
 	}
 
-	private void addStrategiesButtonListener() {
-		display.getStrategiesButton().addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-			}
-		});
-	}
+//	private void addStrategiesButtonListener() {
+//		display.getStrategiesButton().addClickHandler(new ClickHandler() {
+//			public void onClick(ClickEvent event) {
+//			}
+//		});
+//	}
 
 	/**
 	 * select ramp as drag/drop-able conveyor
@@ -851,7 +851,7 @@ public class MainFramePresenter extends Presenter {
 	public void bind() {
 		this.initializeMenuBars();
 		this.addAddJobsButtonListener();
-		this.addStrategiesButtonListener();
+//		this.addStrategiesButtonListener();
 		this.addConveyorRampButtonListener();
 		this.addConveyorVehicleButtonListener();
 		this.addConveyorWallButtonListener();
