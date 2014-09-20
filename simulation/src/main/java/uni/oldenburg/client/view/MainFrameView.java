@@ -112,7 +112,7 @@ public class MainFrameView extends Composite implements MainFramePresenter.IDisp
 		vpConveyor = new VerticalPanel();
 		vpConveyor.addStyleName("conveyor_panel");
 		
-		lblConveyor = new Label("Stetigf" + (char)246 + "rderer");
+		lblConveyor = new Label("Modellelemente");
 		lblConveyor.addStyleName("conveyor_label");
 		btnConveyorRamp = new Button("Rampe");
 		btnConveyorRamp.addStyleName("conveyor_ramp");
