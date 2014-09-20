@@ -7,7 +7,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 /**
- * @author sijakubo Matthias
+ * @author sijakubo Matthias Raschid
  */
 @RemoteServiceRelativePath("agentPlatformService")
 public interface AgentPlatformService extends RemoteService {

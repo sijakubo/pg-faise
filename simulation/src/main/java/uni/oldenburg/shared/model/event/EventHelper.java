@@ -6,7 +6,9 @@ import uni.oldenburg.client.presenter.MainFramePresenter;
 import de.novanic.eventservice.client.event.Event;
 import de.novanic.eventservice.client.event.domain.DomainFactory;
 import de.novanic.eventservice.service.RemoteEventServiceServlet;
-
+/**
+ * @author Matthias, Raschid 
+ */
 @SuppressWarnings("serial")
 public class EventHelper extends RemoteEventServiceServlet {	
 	private static EventHelper myHelper = null;

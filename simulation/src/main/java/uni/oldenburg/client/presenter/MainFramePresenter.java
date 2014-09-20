@@ -1038,7 +1038,11 @@ public class MainFramePresenter extends Presenter {
 	public ServiceAsync getService() {
 		return this.rpcService;
 	}
-	
+	/**
+	 * 
+	 * @author  Raschid
+	 * 
+	 */
 	private void handleEvents() {
 		myRES = RemoteEventServiceFactory.getInstance().getRemoteEventService();
 		myRES.removeListeners();
@@ -1172,7 +1176,11 @@ public class MainFramePresenter extends Presenter {
 		});
 	}
 	
-	
+	/**
+	 * 
+	 * @author Matthias, Raschid
+	 * 
+	 */
 	public void startJobTimer() {
 		if (tmrJobStarter != null)
 			return;

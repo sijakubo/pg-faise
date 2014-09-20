@@ -11,7 +11,9 @@ import uni.oldenburg.shared.model.Szenario;
 import uni.oldenburg.shared.model.SzenarioInfo;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-
+/**
+ * @author Matthias, Raschid 
+ */ 
 @SuppressWarnings("serial")
 public class SimulationServiceImpl extends RemoteServiceServlet implements SimulationService {
 	/**

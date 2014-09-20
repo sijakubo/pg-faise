@@ -31,7 +31,9 @@ import uni.oldenburg.shared.model.Job;
 import uni.oldenburg.shared.model.Szenario;
 import uni.oldenburg.shared.model.event.EventHelper;
 import uni.oldenburg.shared.model.event.SimStoppedEvent;
-
+/**
+ * @author Matthias, sijakubo  
+ */
 @SuppressWarnings("serial")
 public class AgentPlatformServiceImpl extends RemoteServiceServlet implements AgentPlatformService {
    private Logger logger = Logger.getLogger(AgentPlatformServiceImpl.class);

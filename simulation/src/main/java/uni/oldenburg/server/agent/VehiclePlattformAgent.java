@@ -95,7 +95,7 @@ public class VehiclePlattformAgent extends Agent {
 	 * - drives to the destination ramp
 	 * - gives package to destination ramp
 	 * 
-     * @author Matthias
+     * @author Matthias, Raschid
      */
 	private class DrivePath extends CyclicBehaviour {
 		private int step = 0;

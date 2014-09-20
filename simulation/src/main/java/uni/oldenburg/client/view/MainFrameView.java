@@ -10,7 +10,9 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.SimplePager;
-
+/**
+ * @author sijakubo Matthias Raschid
+ */
 public class MainFrameView extends Composite implements MainFramePresenter.IDisplay {
 
    private MenuBar			menuBar;

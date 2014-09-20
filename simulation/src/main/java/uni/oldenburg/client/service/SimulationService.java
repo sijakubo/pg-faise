@@ -8,7 +8,9 @@ import uni.oldenburg.shared.model.SzenarioInfo;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-
+/**
+ * @author  Raschid
+ */
 @RemoteServiceRelativePath("simulationsService")
 public interface SimulationService extends RemoteService {
 	Szenario loadSzenario(String name);

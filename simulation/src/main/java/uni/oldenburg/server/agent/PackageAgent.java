@@ -30,7 +30,7 @@ import uni.oldenburg.shared.model.event.PackageAddedEvent;
 import uni.oldenburg.shared.model.event.PackageRemovedEvent;
 
 /**
- * @author Matthias
+ * @author Matthias, Raschid, sijakubo
  */
 @SuppressWarnings("serial")
 public class PackageAgent extends Agent {
@@ -46,9 +46,7 @@ public class PackageAgent extends Agent {
 
 	private Logger logger = Logger.getLogger(PackageAgent.class);
 
-   /**
-	 * @author Matthias, sijakubo
-	 */
+   
 	// init
 	protected void setup() {
 		Object[] args = getArguments();
@@ -211,7 +209,7 @@ public class PackageAgent extends Agent {
 	 * 
 	 * sends message to own order agent to relay the ramp-enquiring
 	 * 
-     * @author Matthias
+     * @author Matthias , Raschid
      */
 	private class SendEnquirePackageRequest extends TickerBehaviour {
 		public SendEnquirePackageRequest(Agent a, long period) {
@@ -305,7 +303,7 @@ public class PackageAgent extends Agent {
 	 * 
 	 * sends info is package is found in first position in the packagelist
 	 * 
-     * @author Matthias
+     * @author Matthias, Raschid
      */
 	private class PackageFoundInStorage extends CyclicReceiverBehaviour {
 		protected PackageFoundInStorage(int msgType) {
@@ -396,7 +394,9 @@ public class PackageAgent extends Agent {
 			send(msgAnswer);
 		}		
 	}
-	
+	/**
+	 * @author Raschid 
+	 */
 	private class TransferPackage extends CyclicReceiverBehaviour {
 		protected TransferPackage(int msgType) {
 			super(MessageTemplate.MatchPerformative(msgType));

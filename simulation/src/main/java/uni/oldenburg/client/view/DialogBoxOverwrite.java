@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 /**
- * Dialogbox is used to ask the user if he wants to overwrite or not
+ * Dialogbox zum Fragen, ob ein Szenario überschrieben werden soll oder nicht
  * 
  * @author Raschid
  */

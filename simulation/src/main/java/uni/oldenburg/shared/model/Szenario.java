@@ -9,7 +9,7 @@ import uni.oldenburg.client.view.MainFrameView;
 /**
  * szenario class to store and handle related information
  * 
- * @author Matthias
+ * @author Matthias, Raschid
  */
 
 @SuppressWarnings("serial")

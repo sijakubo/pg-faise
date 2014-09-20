@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 
 /**
- * Dialogbox for selecting and loading of a Scenario
+ * Dialogbox zum Auswählen und Laden eines Szenarios
  * 
  * @author Raschid
  */

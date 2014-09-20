@@ -133,7 +133,7 @@ public class VehicleRoutingAgent extends Agent {
 	 * 
 	 * handles estimation requests
 	 * 
-     * @author Matthias
+     * @author Matthias, Raschid
      */
 
 	private class EstimationRequest extends CyclicReceiverBehaviour {
@@ -267,7 +267,9 @@ public class VehicleRoutingAgent extends Agent {
 			auctionInProgress = false;
 		}
 	}
-
+	/**
+	 * @author Matthias, Nagi
+	 */
    private int CalculateEstimation(Point startPoint, Point stopPoint) {
 		List<List<PathPoint>> lstPathPointsTmp = null;
 		

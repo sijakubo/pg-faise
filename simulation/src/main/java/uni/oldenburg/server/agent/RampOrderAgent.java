@@ -88,7 +88,7 @@ public class RampOrderAgent extends Agent {
 	 * 
 	 * enquires ramp(s) if they want/demand to get a package
 	 * 
-     * @author Matthias
+     * @author Matthias, Raschid
      */
 	private class SendEnquirePackageRequestRelay extends CyclicBehaviour {
 		int step = 0;
@@ -307,7 +307,7 @@ public class RampOrderAgent extends Agent {
 	 * determines if ramp has space to take a package
 	 * and demands to get it when ramp has a job for it
 	 * 
-     * @author Matthias
+     * @author Matthias, Raschid
      */
 	private class GetEnquirePackageRequest extends CyclicReceiverBehaviour {
 		protected GetEnquirePackageRequest(MessageTemplate mt) {

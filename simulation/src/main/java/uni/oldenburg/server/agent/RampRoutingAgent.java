@@ -65,7 +65,7 @@ public class RampRoutingAgent extends Agent {
 	 * 
 	 * handles complete auction process
 	 * 
-     * @author Matthias
+     * @author Matthias, Raschid
      */
 	private class Auction extends CyclicBehaviour {
 		int step = 0;

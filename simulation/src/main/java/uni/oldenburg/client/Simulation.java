@@ -12,7 +12,8 @@ import uni.oldenburg.client.util.LoggingUtil;
 
 /**
  * Entry point Klasse. Beim starten der GWT-Applikation wird die onModuleLoad-Methode aufgerufen.
- * Es werden alle notwendigen Klassen fuer Viewwechsel und Client-Server Kommunikation initialisiert.  
+ * Es werden alle notwendigen Klassen fuer Viewwechsel und Client-Server Kommunikation initialisiert.
+ * @author Raschid  
  */
 public class Simulation implements EntryPoint {
 
