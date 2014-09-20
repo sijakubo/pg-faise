@@ -1,17 +1,17 @@
 \section{Teilbericht Simulation}
-Der Teilbericht der Simulationsgruppe beschreibt die entwickelte Simulationssoftware von der Anforderungsanalyse über die Implementierung hin zum Testen und Validieren. 
+Der Teilbericht der Simulationsgruppe beschreibt die entwickelte Simulationssoftware von der Anforderungsanalyse über die Implementierung hin zum Testen und Validieren. Im Lastenheft werden, die für die Simulation vorgegebenen Anforderungen beschrieben. Grundlegende Designentscheidungen, die vor dem Erstellen der Anforderungen getroffen werden müssen, werden ebenfalls beschrieben. In dem darauffolgenden Kapitel werden die jeweiligen Systemkomponenten konzipiert. Anschließend soll beschrieben werden, wie die Komponenten implementiert wurden. Das letzte Kapitel dieses Teilberichts beinhaltet Testen und Validieren des entwickelten Systems.
 \subsection{Lastenheft}
 Mit der Komponente Simulation soll auf Basis des Ablaufkonzepts eine Software erstellt werden, die es erlaubt, einen automatisierten Materialfluss auf Basis von FTS zu simulieren, ohne dabei an die zahlenmäßigen Beschränkungen des physischen Systems gebunden zu sein. Vonseiten des Auftraggebers wurde ein Lastenheft vorgegeben, das die gewünschten Kernfunktionalitäten der Simulationssoftware beschreibt. Es enthält folgende Anforderungen:
 \begin{enumerate}
-\item \textbf{Akteure}: Die virtuellen Akteure sind in ihrem Verhalten und Eigenschaften (Geschwindigkeit, Dauer einer Paketübergabe etc.) den echten Objekten aus dem physischen System nachempfunden (Volksbots und passive Rampen).
-\item \textbf{Ablauf}: Der in Abschnitt 4.1 beschriebene Ablauf wird in der Simulation umgesetzt. 
+\item \textbf{Akteure}: Die virtuellen Akteure ähneln in ihrem Verhalten und Eigenschaften (Geschwindigkeit, Dauer einer Paketübergabe etc.) den echten Objekten aus dem physischen System (Volksbots und passive Rampen).
+\item \textbf{Ablauf}: Der in Abschnitt 4.1 beschriebene Ablauf, wird in der Simulation umgesetzt. 
 \item \textbf{Visualisierung}: Die Zustände der Akteure werden dynamisch visualisiert. Wird beispielsweise die Anzahl der Pakete auf einer Rampe um eins erhöht, dann soll dies unmittelbar in der Anzeige visualisiert werden.
 \item \textbf{Generierung von Aufträgen}: Eingehende und ausgehende Transportaufträge können erstellt und simuliert werden. 
 \item \textbf{Einstellungen}: Verschiedene Parameter der Simulation (Anzahl und Art der Akteure, Anzahl der Aufträge etc.) können vom Nutzer vor dem Starten der Simulation angepasst werden.
-\item \textbf{Statistiken}: Es werden wichtige Daten geloggt, um am Ende eines Simulationslaufs aussagekräftige Analysen über Stromverbrauch, gefahrene Strecken, Vergabe von Aufträgen usw. machen zu können.
+\item \textbf{Statistiken}: Es werden wichtige Daten geloggt, um am Ende eines Simulationslaufs aussagekräftige Analysen  machen zu können.
 \end{enumerate}
 \subsection{Grundlegende Designentscheidungen}
-Vor der Entwicklung der Simulationssoftware mussten grundlegende Designentscheidung getroffen werden. Zum einen musste entschieden werden, ob die Simulation von einem autonomen Lager auf Basis eines vorhanden Tools oder komplett neu entwickelt werden sollte. Auch musste zwischen Desktop- und Webanwendung entschieden werden und ob die jeweilige Alternative mit oder ohne Zuhilfenahme eines Frameworks implementiert wird. In den nachfolgenden Abschnitten werden die getroffenen Designentscheidungen begründet.
+Vor der Entwicklung der Simulationssoftware mussten grundlegende Designentscheidung getroffen werden. Zum einen musste entschieden werden, ob die Software auf Basis eines vorhanden Tools oder komplett neu entwickelt werden sollte. Auch musste zwischen Desktop- und Webanwendung entschieden werden und ob die jeweilige Alternative mit oder ohne Zuhilfenahme eines Frameworks implementiert wird. In den nachfolgenden Abschnitten werden die getroffenen Designentscheidungen begründet.
 \subsubsection{Eigenentwicklung}
 Im Vorfeld der Entwicklung wurde der Teilgruppe Simulation das Player/Stage Tool als Alternative zu einer kompletten Neuentwicklung einer Software vorgeschlagen. Das Tool beinhaltet zum einen die Komponente Player, die eine Hardware Abstraktionsschicht darstellt. Mit dieser Komponente kann mit Robotern, wie beispielsweise einem Volksbot, interagiert werden, ohne dass technische Details der Komponenten (Laserscanner, Motor etc.) bekannt sein müssen. Auf Basis von selbstgeschriebenem Code können Roboter gesteuert werden. Die Komponente Stage horcht auf die Befehle, die Player ausführt und visualisiert diese in einem eigenen Graphical User Interface. Jedoch kann Stage auch ohne Hardware benutzt werden, indem man über Konfigurationsdateien ein eigenes Szenario erstellt und die virtuellen Roboter über den eigenen Code steuert. Somit bietet das Tool die Möglichkeit, eine Simulation mit Robotern zu erstellen und das gewünschte Verhalten der Roboter über eigenen Code abzubilden. Auch muss die Visualisierung nicht selbst entwickelt werden (Vgl.\cite{plstg}). 
 \\\\
@@ -24,14 +24,14 @@ Die Software soll als Webanwendung implementiert werden. Gegenüber einer Deskto
 \item Werden Änderungen an der Software vorgenommen, sind diese direkt verfügbar, da Updates über den Webserver eingespeist werden. Die Software ist somit immer auf dem aktuellsten Stand. 
 \end{itemize}
 \subsubsection{Umsetzung durch GWT}\label{GWT} 
-Die Entwicklung der Webanwendung sollte mithilfe eines Frameworks erfolgen, das es erlaubt, den Code sowohl für die Client- als auch für die Serverseite in einer Programmiersprache zu entwickeln. Außerdem sollte das Framework Schnittstellen bieten, um asynchrone Kommunikation und Push-Dienste zu nutzen, ohne sich um die exakten Details kümmern zu müssen. Ausgewählt wurde das Google Web Toolkit (GWT). GWT ist ein von Google entwickeltes Framework zur Erstellung von Webanwendungen. Der Java-Code für den Client wird von dem GWT Compiler in den entsprechenden Javascript- und HTML-Code übersetzt. Somit kann die Entwicklung sowohl für Client als auch für den Server auf Basis von Java erfolgen. Zudem entfällt die Anpassung des Javascript-Codes für die verschiedenen Browser, da GWT beim Kompilieren automatisch für jeden Browser eine lauffähige Version erzeugt. Weiterhin besitzt GWT  eine RCP-Schnittstelle für die asynchrone Kommunikation zwischen Client und Server und lässt sich um Komponenten erweitern, um Daten vom Server zum Client zu pushen (Vgl.\cite{gwt}). Somit erfüllt GWT sämtliche an ein Framework gestellte Anforderungen. Weitere Alternativen wurden nicht in Betracht gezogen, da drei von fünf Mitgliedern der Teilgruppe Simulation bereits positive Erfahrungen mit GWT gemacht haben und die anderen Mitglieder somit schnell einarbeiten konnten. 
+Die Entwicklung der Webanwendung sollte mithilfe eines Frameworks erfolgen, das es erlaubt, den Code sowohl für die Client- als auch für die Serverseite in einer Programmiersprache zu entwickeln. Außerdem sollte das Framework Schnittstellen bieten, um asynchrone Kommunikation und Push-Dienste zu nutzen, ohne sich um die exakten Details kümmern zu müssen. Ausgewählt wurde das Google Web Toolkit (GWT). GWT ist ein von Google entwickeltes Framework zur Erstellung von Webanwendungen. Der Java-Code für den Client wird von dem GWT Compiler in den entsprechenden Javascript- und HTML-Code übersetzt. Somit kann die Entwicklung sowohl für Client als auch für den Server auf Basis von Java erfolgen. Zudem entfällt die Anpassung des Javascript-Codes für die verschiedenen Browser, da GWT beim Kompilieren automatisch für jeden Browser eine lauffähige Version erzeugt. Weiterhin besitzt GWT  eine RCP-Schnittstelle für die Kommunikation zwischen Client und Server und lässt sich um Komponenten erweitern, um Daten vom Server zum Client zu pushen (Vgl.\cite{gwt}). Somit erfüllt GWT sämtliche an ein Framework gestellte Anforderungen. Weitere Alternativen wurden nicht in Betracht gezogen, da drei von fünf Mitgliedern der Teilgruppe Simulation bereits positive Erfahrungen mit GWT gemacht haben und die anderen Mitglieder somit schnell einarbeiten konnten. 
 \subsection{Konzeption der Systemkomponenten}
 In diesem Abschnitt wird die Konzeption der Gesamtarchitektur als auch der einzelnen Systemkomponenten beschrieben, die im Rahmen der Sprints erarbeitet wurde. Die Konzeption beinhaltet zum einen die Anforderungen, als auch die daraus abgeleiteten Implementierungsvorgaben.
 \newpage
 \subsubsection{Gesamtarchitektur}\label{GA} 
-Wie in Kapitel \ref{sec:Entwicklung einer Webanwendung} beschrieben, soll die Software als Webanwendung realisiert werden. Eine Webanwendung erfordert eine Client-Server Architektur. Abbildung \ref{Gesamtarchitektur} beschreibt die wesentlichen Komponenten des Systems und wie diese sich auf die Client- und Serverseite verteilen. Basis der Anwendung ist der Webserver, der die Basiskomponenten des Systems hosted. Zum einen stellt er die Laufzeitumgebung für Webanwendung und Datenbank bereit. Die Datenbank wird benötigt, um Daten, wie beispielsweise erstellte Szenarien, persistent zu speichern. Aus der Webanwendung heraus kann auf die Datenbank lesend und schreibend zugegriffen werden. In die Webanwendung soll ein Multiagentensystem (MAS) eingebettet werden. Ein MAS ist ein Netzwerk aus Softwareagenten. Softwareagenten sind Softwareeinheiten, die in in der Lage sind, Aufgaben selbstständig durchzuführen (Vgl.\cite{mas}). Mithilfe des MAS kann ein Lager simuliert werden, in dem der Warenfluss durch vollständig autonome Akteure durchgeführt wird. 
+Wie in Kapitel \ref{sec:Entwicklung einer Webanwendung} beschrieben, soll die Software als Webanwendung realisiert werden. Eine Webanwendung erfordert eine Client-Server Architektur. Abbildung \ref{Gesamtarchitektur} beschreibt die wesentlichen Komponenten des Systems und wie diese sich auf die Client- und Serverseite verteilen. Basis der Anwendung ist der Webserver, der die Basiskomponenten des Systems hosted. Zum einen stellt er die Laufzeitumgebung für Webanwendung und Datenbank bereit. Die Datenbank wird benötigt, um Daten, wie beispielsweise erstellte Szenarien, persistent zu speichern. Aus der Webanwendung heraus kann auf die Datenbank lesend und schreibend zugegriffen werden. In die Webanwendung soll ein Multiagentensystem (MAS) eingebettet werden. Ein MAS ist ein Netzwerk aus Softwareagenten. Softwareagenten sind Softwareeinheiten, die in  der Lage sind, Aufgaben selbstständig durchzuführen (Vgl.\cite{mas}). Mithilfe des MAS können die im Ablaufszenario beschriebenen Aktionen softwareseitig auf die Akteure abgebildet werden.
 \\\\
-Der Webserver beinhaltet die Logik des Systems. Auf dem Client soll die Visualisierung erfolgen und der Nutzer soll das Starten einer Simulation initiieren können. Das System soll von einem Webbrowser aus aufrufbar sein, in dem die Ergebnisse der serverseitigen Prozesse dargestellt werden. Mehrere Nutzer sollen das System gleichzeitig nutzen können, ohne Login und Registrierung.
+Der Webserver beinhaltet die Logik des Systems. Auf dem Client soll die Visualisierung erfolgen und der Nutzer soll das Starten einer Simulation initiieren können. Das System soll von einem Webbrowser aus aufrufbar sein, in dem die Ergebnisse der serverseitigen Prozesse dargestellt werden. 
 
 \begin{figure}[h!]
 	\centering
@@ -61,7 +61,7 @@ Sowohl Rampen als auch Fahrzeuge müssen verschiedene Aktionen durchführen. Daz
 \item Plattformagent: Durchführung physischer Aktionen (Fahren, Aufladen von Paketen etc.)
 \end{itemize}
 \subsubsection{Kommunikation zwischen den Agenten}
-Die zu entwickelnde Software soll die in Abschnitt \ref{AL} beschriebenen Abläufe umsetzen. Die Aufgaben der verschiedenen Akteure müssen auf die Agenten verteilt werden. Die entworfenen Kommunikationsschritte der Agenten sollen für den Fall dass ein Eingang Ausgänge und Zwischenlager fragt, beschrieben werden, um die Aufgaben der einzelnen Agenten genauer abzugrenzen. Im Rahmen der Implementierung können sich noch Änderungen ergeben, die technisch notwendig sind. 
+Die zu entwickelnde Software soll die in Abschnitt \ref{AL} beschriebenen Abläufe umsetzen. Die Aufgaben der verschiedenen Akteure müssen auf die Agenten verteilt werden. Die entworfenen Kommunikationsschritte der Agenten sollen für das Szenario, dass ein Eingang Ausgänge und Zwischenlager fragt, beschrieben werden, um die Aufgaben der einzelnen Agenten genauer abzugrenzen.  
 \begin{enumerate}
 \item Trifft ein Paket ein, verlangt der Paketagent vom Orderagenten eine Destination für das entsprechende Paket.
 \item Der Orderagent einer Eingangsrampe fragt die Orderagenten der Ausgangs- und Zwischenrampen.
@@ -73,7 +73,14 @@ Die zu entwickelnde Software soll die in Abschnitt \ref{AL} beschriebenen Abläu
 \item Der Plattformagent fährt zu der jeweiligen Eingangsrampe und lädt das Paket auf. Dies geschieht durch einen Nachrichtenaustausch mit dem jeweiligen Plattformagenten der Rampe, der die Paketdaten übergibt. Das Fahren zur Zielrampe und das Abladen des Pakets erfolgt analog. 
 \end{enumerate}
 \subsubsection{Konzeption des Pathfindings}
+Die Fahrzeuge eines Szenarios holen die Pakete von den Eingangsrampen ab und liefern sie zu den gefundenen Zwischen-/Ausgangsrampen. Da der Anwender nicht selbst in der Simulationsablauf eingreifen möchte, um mögliche Pfade von Hand anzugeben (für den Transport der Pakete), wurde ein Pathfinding-Konzept entwickelt. Zunächst wird die Startposition in der Karte ermittelt. Anschließend wird im Uhrzeigersinn jede benachbarte Kachel ermittelt, bei der es sich um kein Hindernis handelt. Sollte eine gefundene Kachel noch nicht bearbeitet worden sein, wird ihr ein Wert zugewiesen, der zum einem Aufschluss darüber gibt, wie weit die anliegende Kachel von der aktuellen entfernt ist (notwendig u.a. für diagonales Fahren). Zum anderen wird der aktuelle Gridwert erhöht und der neuen Kachel zugewiesen. Sollte eine Kachel mehrmals bei der Zuweisung ermittelt werden, wird der kleinste gefundene Wert in der Kachel beibehalten, da ein kleinerer Wert einen kürzeren Pfad repräsentiert.
+\\\\
+Nachdem alle Kacheln auf der Karte mit Werten versehen wurden, wird vom Endpunkt aus ein möglicher Weg zum Startpunkt zurück berechnet. Dabei wird der Wert in der Endkachel genommen und mit den benachbarten Kacheln verglichen. Sollte min. eine Kachel eine kleinere Wertigkeit aufweisen, wird somit erkannt, dass es sich um einen kurzen Weg zur Startposition handelt. Sollten mehrere angrenzende Kacheln diese Eigenschaft auszeichnen, wird zufällig eine von ihnen für die Ermittlung genommen. Während dieser Rückwärtssuche (von der Endposition zur Startposition)
+werden bis die Startposition wieder gefunden wurde, jede Position der ausgewählten Kacheln gespeichert. Nachdem der Startpunkt gefunden wurde, müssen sämtliche gefundenen Positionen in der Liste getauscht werden (Punkte an Ende der Liste starten nun am Anfang der Liste, und umgekhert).
+Dies ist notwendig, da das Fahrzeug diese Positionen abfahren soll, jedoch liegen die Punkte in umgekehrter Reihenfolge vor, weil von der Endposition zur Startposition ermittelt wird.
+
 \subsubsection{Konzeption der Statistiken}
+
 \subsubsection{Interaktion der Komponenten} \label{Interaktion der Komponenten}
 Durch das Zusammenspiel der Komponenten der verschiedenen Systemkomponenten soll eine Simulation durchgeführt werden können. Die Aufträge müssen entsprechend ihrer Zeiten an den Server geschickt werden. Dies soll clientseitig durch einen Timer durchgeführt werden, um das MAS zu entlasten. Abbildung \ref{Int} zeigt den Ablauf und die Komponenten, die für das Starten einer Simulation erforderlich sind: 
 \begin{enumerate}
@@ -93,11 +100,12 @@ Durch das Zusammenspiel der Komponenten der verschiedenen Systemkomponenten soll
 		\caption{Interaktion der Systemkomponenten}
 	\label{Int}
 \end{figure}
+
 \newpage
 \subsection{Implementierung der Systemkomponenten}
 In diesem Abschnitt soll die Implementierung der zuvor konzipierten Systemkomponenten beschrieben werden. Zum einen soll die Auswahl von Technologien und Frameworks zur Umsetzung beschrieben sowie die Funktionalität des Systems auf technischer Ebene dargestellt werden.
 \subsubsection{Implementierte Gesamtarchitektur}
-Abbildung \ref{GAI} zeigt die konkrete Gesamtarchitektur des Systems, die durch die Auswahl von Umsetzungstechnologien entstanden ist. Die Webanwendung soll, wie bereits in Abschnitt \ref{GWT} beschrieben, durch das GWT Framework implementiert werden. Der Code für Server und Client, der für Visualisierung, Client-Server Kommunikation u.~ä., benötigt wird, wird durch GWT-Bilbiotheken bereitgestellt. Eingebettet in die GWT-Klassen wird das Multiagentensystem, das mithilfe des Java Agent Development Framework (JADE)\footnote{\cite{jade}} implementiert wurde. Als Datenbankmanagementsystem wurde PostgreSQL ausgewählt. Die Applikation wird durch einen Jetty Server gehostet, der die Java Laufzeitumgebung und das GWT Software Development Kit ebenfalls bereitstellt.  
+Abbildung \ref{GAI} zeigt die konkrete Gesamtarchitektur des Systems, die durch die Auswahl von Umsetzungstechnologien entstanden ist. Die Webanwendung soll, wie bereits in Abschnitt \ref{GWT} beschrieben, durch das GWT Framework implementiert werden. Der Code für Server und Client, der für Visualisierung, Client-Server Kommunikation u.~ä., benötigt wird, wird durch GWT-Bilbiotheken bereitgestellt. Eingebettet in den serverseitigen Code wird das Multiagentensystem, das mithilfe des Java Agent Development Framework (JADE)\footnote{\cite{jade}} implementiert wurde. Als Datenbankmanagementsystem wurde PostgreSQL ausgewählt. Die Applikation wird durch den internen Jetty Server von GWT gehostet, der die Java Laufzeitumgebung und das GWT Software Development Kit ebenfalls bereitstellt. Die Anwendung kann im Produktivmodus prinzipiell auf jeden Java-fähigen Webserver aufgesetzt werden.  
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.8\textwidth]{architekturSimu.jpg}        
@@ -105,7 +113,21 @@ Abbildung \ref{GAI} zeigt die konkrete Gesamtarchitektur des Systems, die durch 
 	\label{GAI}
 \end{figure}
 \subsubsection{Benutzeroberfläche}
+Die Implementierung der Benutzeroberfläche erfolgt durch die Klassen Mainframeview und Mainframepresenter. Die View beinhaltet die graphischen Elemente und der Presenter ist für die Programmlogik, wie das Hinzufügen von Listenern oder das Senden von Daten an den Server verantwortlich. Die Benutzeroberfläche ist in die fünf Bereiche Menüleiste, Auftragsliste, Modellelemente, Zeichenfläche und Debugkonsole unterteilt. In der Auftragsliste werden eingehende und ausgehende Aufträge mit ihrer Startzeit, ihrer Paket-ID und ihrem jeweiligen Ziel gelistet. Die Auflistung ist nicht chronologisch, sondern anhand der ID geordnet. Einzelne Aufträge können über einen Button in der vierten Spalte entfernt werden. Eine beliebige Anzahl an Aufträgen kann generiert werden. Der Bereich Modellelemente enthält Rampen, Fahrzeuge und Wände, die per Drag an Drop auf der Zeichenoberfläche platziert werden können. Im untersten Bereich befindet sich die Debugkonsole. 
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.8\textwidth]{Gui}        
+		\caption{Benutzeroberfläche}
+	\label{GUI}
+\end{figure}
 \subsubsection{Generierung von Aufträgen}
+Abbildung \ref{AGEN} zeigt die Methode addRandomJobs mit deren Hilfe zufällig eingehende und ausgehende Aufträge generiert werden. Für jeden zu generierenden Auftrag wird in der Variable destinationID zufällig festgelegt, ob es sich, um einen eingehenden oder ausgehenden Auftrag handelt. Der Wert Null steht für einen eingehenden und minus Eins für einen ausgehenden Auftrag. In der Variable Timestamp wird die Zeit für den Auftrag festgelegt. Jeder Auftrag beginnt eine Sekunde später als der vorhergehende. Die Zeiten können prinzipiell beliebig angepasst werden. Die ID eines Auftrags wird durch eine Variable der Klasse Joblist generiert, die um eins inkrementiert wird.  
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.8\textwidth]{Auftragsgenerierung}        
+		\caption{Auftragsgenerierung}
+	\label{AGEN}
+\end{figure}
 \subsubsection{Auswahl eines Multiagenten-Frameworks}
 Das Java Agent Development Framework wurde genutzt, um ein Netzwerk aus verschiedenen Agenten zu implementieren. Jade erlaubt das Erstellen von verschiedenen Agenten. Agenten werden als Java-Klasse implementiert, die von der vordefinierten Klasse Agent erbt. Die Aktionen, die ein Agent ausführen soll, werden durch Behaviours implementiert, die ebenfalls Klassen sind. Um die Anzahl an Klassen zu reduzieren, wurden die Behaviours als interne Klassen in die Agenten eingefügt. Jade ermöglicht die Kommunikation zwischen den Agenten durch ein vordefiniertes Nachrichtensystem. Nachrichten können sowohl gezielt an einen Agenten adressiert oder an alle Agenten verschickt werden. Die Agenten können in Echtzeit miteinander kommunizieren und mehrere Agenten können parallel Aktionen ausführen, da jeder Agent in einem eigenen Thread läuft (Vgl.\cite{jadetwo}). 
 \subsubsection{Implementierte Agententypen}
@@ -218,7 +240,24 @@ Nachdem das Fahren initiiert wurde, führt der Plattformagent des entsprechenden
 	\label{Fahren}
 \end{figure}
 \subsubsection{Implementierung des Pathfindings}
-% TODO
+Der entwickelte Pathfindingalgorithmus verwendet eine Karte, die in Kacheln unterteilt ist. Diese können durch eine veränderbare Einstellung beliebig in ihrere Größe variiert werden. Eine Kachel kann dabei entweder als einfache, befahrbare Fläche, als Startposition, als Endposition oder als Hindernis definiert werden. Da Anfangs vorgesehen war, dass die Simulation mehrere alternative Pathfindingalgorithmen verwenden kann, wurde eine einheitliche Schnittstelle definiert, um schnell und einfach (ohne Umbauten von Programmelementen wo das Pathfinding benutzt wird) mögliche zukünftige Algorithmen einbinden zu können. Diese Schnittstelle ist in Form eines Interfaces definiert. Im Interface sind Funktionen zu finden, die von jeder alternativen Pathfindingroutine implementiert werden müssen. Sollten dabei einige keine Verwendung finden, sollte schlichtweg ein Standardwert zurückgeliefert werden, der sich nicht verändern lässt. Folgende Funktionen sind im Interface vorgesehen:
+\begin{itemize}
+\item Statusmeldung, ob ein Pfad zur Zeit berechnet wird
+\item Anzahl der Zeilen und Spalten in der Liste
+\item Position des Start-/Stoppunktes
+\item Angabe, ob man diagonales Fahren (de)aktivieren möchte
+\item Vermeidung von (möglicherweise unnötigen) Rotationen
+\item Initialisierung des Pathfindingalgorithmus
+\item Aktuelle Status-(bzw. Fehler-)Meldung
+\item Funktion zum Suchen eines Pfades unter andere einer Start- und Stopposition
+\end{itemize}
+
+Jede Kachel wird im System als GridItem definiert. Dabei wird in der Kachel die Größe hinterlegt (ist bei allen Kacheln in einer Karte die selbe Größe). Jedes GridItem besitzt einen Typ. Darüber hinaus gibt es noch GridValue und StepValue. GridValue ist dabei der Wert einer Kachel, die bei der Vorwärtssuche ermittelt wurde, wo eine aktuelle Kachel ihre benachbarten freien Kachel einen Wert für die Pfadfindung zugewiesen hat. StepValue repräsentiert hingegen die Anzahl an Schritten im System, um diese Kachel zu erreichen.
+\\\\
+Damit bei der Rückwärtsberechnung die Punkte eines Pfades gespeichert werden können, wurde die Klasse PathPoint implementiert. Diese kann die Position (x/y-Koortinate) speichern. Sie speichert unter anderem aber auch den Erwartungswert für die Kachel an dieses Position (EstimationValue), welche Aufschluss darüber gibt wie hoch die Kosten (Aufwand) sind um diese Position zu erreichen. Sollte (durch einen zusätzliche Eigenschaft) sich die Richtung der aktuellen Kachel von der vorherigen nicht unterscheiden, hat diese einen kleineren Erwartungswert.
+\\\\
+Der implementierte Pathfindingalgorithmus wurde hingehen in zwei Klassen implementiert. Bei der einen Klasse handelt sich um eine abstrakte Klasse, welches alle Funktionen, Eigenschaften und Statusmeldungen vom eigentlichen Pathfinding beherbergt, bis auf die Implementation der eigentlichen Pfadsuche. Die Funktion für die Pfadsuche wurde in einer seperaten Klasse implementiert, welche von der abstrakten Klasse erbt (Polymorphie), so dass diese sämliche zu Grunde legende Funktionen verwenden kann. Diese Struktur wurde dahingehend entwickelt, weil der verwendete Suchalgorithmus lediglich einen Pfad ermittelt und zurück liefert. Jedoch wäre es auch möglich den Suchalgorithmus zu modifizieren, um so mehrere alternative Routen auf einer Karte zu ermitteln, die mit bestimmten Kriterien versehen sind. Da diese Suche auch die grundlegenden Funktionen verwenden würde, wurde nur die eigentliche Funktion für die Pfadsuche gekapselt (die Rückwärtsssuche).
+
 \subsubsection{Implementierung der Statistiken}
 % TODO
 \subsubsection{Interaktion der Komponenten}
@@ -229,49 +268,59 @@ Das Starten einer Simulation wird über das Menuitem \glqq Starten/Anhalten\grqq
 Die  Variable agentPlatformService referenziert das Interface AgentPlatformServiceAsync. Serverseitig gibt es ein Servlet \glqq AgentPlatformService\grqq , das verschiedene Methoden bereitstellt, die über das Interface AgentPlatformServiceAsync aufgerufen werden können. Die Variable ist als AgentPlatformServiceAsync Interface deklariert, wird aber mit einer automatisch generierten Proxy-Klasse instantiiert (s. Quellcode/Konstruktor der Klasse MainframePresenter). In der Methode execute wird über den Aufruf der Methode startSimulation das Szenario übergeben und zum Server geschickt. Für den Aufruf ist ein Objekt notwendig, das das Interface AsyncCalback implementiert, welches wiederum der Methode als interne Klasse übergeben wird. Der Typparameter, in diesem Fall ein Integer, definiert, welcher Rückgabewert vom Server erwartet wird. Außerdem wird in den Methoden onFailure und onSuccess definiert, was passieren soll, wenn der RPC fehlschlägt bzw. erfolgreich war. Wenn die Simulation serverseitig erfolgreich gestartet wurde, dann soll die auf dem Server generierte ID dem aktuellen Szenario zugewiesen werden und der Status der Simulation auf gestartet gesetzt werden.    
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{RPCS.PNG}        
+		\includegraphics[width=1\textwidth, height=0.6\textwidth]{RPCS.PNG}        
 		\caption{Starten einer Simulation}
 	\label{RPCS}
 \end{figure}
 \paragraph{Start des Multiagenten-Systems}
-Nachdem die Daten zum Server geschickt wurden, wird die Methode startSimulation des Servlets AgentPlatformServiceImpl aufgerufen. Für das Szenario wird eine ID generiert und über das Object Array wird das Szenario allen Agenten als Parameter zur Verfügung gestellt. Danach wird eine Agentenplattform für das jeweilige Szenario gestartet. Die Liste der Conveyor aus dem Szenario wird durchlaufen und für jeden Conveyor werden die benötigten Agenten erzeugt. Die Methode addAgentToSimulation erzeugt anhand der Conveyor- und Szenario-ID einen eindeutigen Namen für jeden Agenten, übergibt die Parameter und fügt ihn der Simulation hinzu. Anschließend wird der Jobagent initialisiert und die Agenten werden gestartet. Die letzte Anweisung schickt die Szenario ID zum Client zurück.  
+Nachdem die Daten zum Server geschickt wurden, wird die Methode startSimulation des Servlets AgentPlatformServiceImpl aufgerufen. Für das Szenario wird eine ID generiert und über das Object Array wird das Szenario allen Agenten als Parameter zur Verfügung gestellt. Danach wird eine Agentenplattform für das jeweilige Szenario gestartet. Die Liste der Conveyor (Fahrzeuge und Rampen) aus dem Szenario wird durchlaufen und für jeden Conveyor werden die benötigten Agenten erzeugt. Die Methode addAgentToSimulation erzeugt anhand der Conveyor- und Szenario-ID einen eindeutigen Namen für jeden Agenten, übergibt die Parameter und fügt ihn der Simulation hinzu. Anschließend wird der Jobagent initialisiert und die Agenten werden gestartet. Die letzte Anweisung schickt die Szenario ID zum Client zurück.
+\\\\  
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{StartMAS.PNG}        
+		\includegraphics[width=1\textwidth, height=0.6\textwidth]{StartMAS.PNG}        
 		\caption{Starten des MAS}
 	\label{SMAS}
 \end{figure}
+\\\\
 \paragraph{Start des Jobtimers} 
 Nachdem der Jobagent alle Informationen erhalten hat, die er für die Zuweisung von Aufträgen benötigt, schickt er eine Nachricht an den Client, dass die Aufträge zum Server geschickt werden können (Vgl.Abschnitt \ref{Jobagent}). Der Client startet den Jobtimer mit der Methode startJobTimer des MainframePresenters (s.Abbildung \ref{jobtim}). Die Integer Variable elapsedTimeSec repräsentiert die Zeit. Der Timer wird gestartet und die run-Methode wird kontinuierlich ausgeführt, bis der Jobtimer gestoppt wird. Die Zeitvariable wird bei jedem Durchlauf um eins hochgezählt, was bedeutet, dass eine Sekunde vergangen ist. Die einzelnen Jobs aus der Liste werden in der for-Schleife abgefragt und ihr Zeitstempel wird mit der elapsedTimeSec Variable abgeglichen. Ist die vergangene Zeit größer oder gleich der Zeit zu der ein Job ausgeführt werden soll, dann wird der Job mit der Methode addJob zum Server geschickt. Mit der vorletzten Anweisung wird festgelegt, in welchen Zeitabständen der Timer ausgeführt werden soll. Die letzte Anweisung dient dazu, den Timer initial zu starten.
+\\\\
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{Jobtimer.PNG}        
+		\includegraphics[width=1\textwidth, height=0.6\textwidth]{Jobtimer.PNG}        
 		\caption{Start des Jobtimers}
 	\label{jobtim}
 \end{figure}
 \\\\
 Abbildung \ref{jobtimserv} zeigt die serverseitige Weiterleitung des empfangenen Auftrags. In der Methode addJob des AgentPlatformServiceImpl Servlets wird der jeweilige Jobagent anhand der Szenario ID aus einer Hashmap geholt. Es wird ein ACLMessageObjekt erzeugt und der Nachrichtentyp wird im Konstruktor festgelegt, um gezielt die notwendige Behaviour zu adressieren. Als Empfänger wird der Jobagent selber festgelegt. Anschließend wird der Job der Nachricht als ContentObject hinzugefügt und versendet.
+\\\\
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{addJob.PNG}        
+		\includegraphics[width=0.8\textwidth, height=0.4\textwidth]{addJob.PNG}        
 		\caption{Weiterleitung des Auftrags}
 	\label{jobtimserv}
 \end{figure}
+\newpage
 \paragraph{Visualisierung von Zustandsveränderungen}
 Die einzelnen Agenten führen Aktionen durch. Werden dadurch Zustände verändert (z.~B. Hinzufügen eines Pakets etc.), müssen diese visualisiert werden. Das MAS läuft auf dem Server. Damit ein Client die Zustandsveränderungen visualisieren kann, muss er vom Server über die Art der Zustandsveränderung informiert werden. Das Schicken von Nachrichten vom Server zum Client wurde mithilfe des GWT Eventservices implementiert. Der Eventservice ist ein event-basiertes Kommunikationsframework, dass auf dem GWT-RPC Mechanismus und der Comet Server-Push Technologie basiert (Vgl. \cite{gwteventservice}). Abbildung \ref{addEvent} zeigt die Methode AddPackage des Packageagents, die für das Hinzufügen eines Pakets benötigt wird. Nachdem das Paket in die Liste eingefügt wurde, wird mithilfe der Klasse EventHelper ein Event zum Client gefeuert. Der EventHelper erbt von dem Servlet RemoteEventServiceServlet, das vom EventService Framework bereitgestellt wird und das GWT-Servlet, um die Funktionalität zum Versenden von Events erweitert (Vgl.\cite{gwteventservice}). 
 \\\\
-Die Klasse PackageAddedEvent ist eine selbst definierte Event-Klasse, die das Interface Event des Eventservices implementiert (Vgl.\cite{gwteventservice}). Mithilfe dieser Klasse können Informationen für den Client transportiert werden. Die Informationen werden im Konstruktor der Klasse PackageAddedEvent übergeben. In diesem Fall werden die Conveyor- und Package-ID übergeben, damit der Client weiß, welchen Conveyor er neu zeichnen soll und welches Paket mit welcher ID hinzugefügt wurde.
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{addEvent.PNG}        
+		\includegraphics[width=0.8\textwidth, height=0.4\textwidth]{addEvent.PNG}        
 		\caption{Feuern eines Events}
 	\label{addEvent}
 \end{figure}
 \\\\
-Abbildung \ref{addEventClient} zeigt die clientseitige Verarbeitung der Events, die vom Server empfangen werden. In der Methode HandleEvents des Mainframepresenters , wird zunächst eine Instanz der Klasse RemoteEventService über die RemoteEventServiceFactory geliefert. Alle vorhandenen Listener werden entfernt und es wird ein neuer Listener hinzugefügt. Beim Hinzufügen des Listeners wird eine Domain mit einer Zeichenkette übergeben. Durch die Domain kann gezielt festgelegt werden, für wen eine Nachricht bestimmt ist (Vgl.\cite{gwteventservice}). Die Zuordnung einer Nachricht zu einer Domain, wird beim Versenden der Nachricht festgelegt (S. Quellcode Klasse EventHelper). In der Methode apply des Listeners wird für alle definierten Events festgelegt, welche Aktion beim Empfang auf dem Client ausgeführt werden soll. Beispielsweise wird durch das SimStartedEvent das Starten des Jobtimers durch die Methode startJobTimer initialisiert.  
+Die Klasse PackageAddedEvent ist eine selbst definierte Event-Klasse, die das Interface Event des Eventservices implementiert (Vgl.\cite{gwteventservice}). Mithilfe dieser Klasse können Informationen für den Client transportiert werden. Die Informationen werden im Konstruktor der Klasse PackageAddedEvent übergeben. In diesem Fall werden die Conveyor- und Package-ID übergeben, damit der Client weiß, welchen Conveyor er neu zeichnen soll und welches Paket mit welcher ID hinzugefügt wurde.
+\\\\
+Abbildung \ref{addEventClient} zeigt die clientseitige Verarbeitung der Events, die vom Server empfangen werden. In der Methode HandleEvents des Mainframepresenters , wird zunächst eine Instanz der Klasse RemoteEventService über die RemoteEventServiceFactory geliefert. Alle vorhandenen Listener werden entfernt und es wird ein neuer Listener hinzugefügt. Beim Hinzufügen des Listeners wird eine Domain mit einer Zeichenkette übergeben. Durch die Domain kann gezielt festgelegt werden, für wen eine Nachricht bestimmt ist (Vgl.\cite{gwteventservice}). Die Zuordnung einer Nachricht zu einer Domain, wird beim Versenden der Nachricht festgelegt (S. Quellcode Klasse EventHelper). In der Methode apply des Listeners wird für alle definierten Events festgelegt, welche Aktion beim Empfang auf dem Client ausgeführt werden soll. Beispielsweise wird durch das SimStartedEvent das Starten des Jobtimers durch die Methode startJobTimer initialisiert.
+\\\\  
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{Vis.PNG}        
+		\includegraphics[width=1\textwidth, height=0.6\textwidth]{Vis.PNG}        
 		\caption{Clientseitige Verarbeitung des Events}
 	\label{addEventClient}
 \end{figure} 
+\newpage
+\subsection{Testen und Validieren}
+%Todo

@@ -1,20 +1,28 @@
 \section{Allgemeine Anforderungen}
-In diesem Abschnitt sollen allgemeine Anforderungen beschrieben werden, die für das Gesamtsystem gelten. Zunächst soll ein Ablaufszenario beschrieben werden, das beschreibt, wie Rampen und Volksbots im Lager miteinander kommunizieren.
+In diesem Abschnitt sollen allgemeine Anforderungen beschrieben werden, die für das Gesamtsystem gelten. Dazu wird ein Ablaufszenario beschrieben, dass beschreibt, welche Schritte notwendig sind, um den Warenfluss in einem Umschlagslager zu automatisieren.
 \subsection{Ablaufszenario}\label{AL} 
-Das Ablaufszenario beschreibt die logischen Schritte, die von den Akteuren ausgeführt werden, um das Ziel zu erreichen, ohne dabei auf die technischen Implementierungsdetails einzugehen. Es dient als Basis für die Implementierung sowohl des physischen Systems als auch der Simulationssoftware.
-In der Software soll der Ablauf komplett umgesetzt werden. Aus zeitlichen Gründen ist es nicht möglich, den gesamten Ablauf im physischen System umzusetzen, weshalb dort eine Anpassung erfolgt. Der Ablauf lässt sich in folgende Schritte unterteilen:
-
-\begin{itemize}
-\item Nachdem ein Paket am Eingang angekommen ist, wird ihm eine ID zugewiesen, so dass es eindeutig anhand seiner ID identifiziert werden kann.
-\item Die Eingangsrampe, auf der sich das Paket befindet, fragt alle Ausgänge, ob dieses Paket benötigt wird und zeitgleich werden die Zwischenrampen kontaktiert, um zu überprüfen, ob dort Platz frei ist. Falls ein Ausgang antwortet, wird dem Paket die ID des Ausgangs als Ziel zugewiesen. Falls nicht, wird dem Paket die ID eines der freien Zwischenlager zugeordnet.
-\item
-Falls der Ausgang eines oder mehrere Pakete benötigt, fragt der Ausgang die Zwischenrampen, ob ein Paket mit der vorhandenen ID verfügbar ist. Falls dies der Fall ist, wird dem Paket aus dem Zwischenlager die Ausgangs ID als Ziel zugewiesen.
-\item
-Sowohl Eingang als auch Ausgang stellen ihre Anfragen zyklisch, da bei einer einzigen Anfrage keine Garantie besteht, dass eine Zielrampe gefunden wird.
-\item
-Nachdem einem Paket ein Ziel zugewiesen wurde, versucht die Rampe, ein Transportmittel zu finden. Dazu werden die Volksbots kontaktiert, die anhand des Energie- und Zeitaufwands ein Angebot abgeben. Die Rampe wählt den Bot mit dem besten Angebot aus.
-\item
-Der ausgewählte Volksbot bewegt sich zur Rampe mit dem Paket und meldet sich an der Rampe, wenn er seine Zielposition erreicht hat. Die Rampe übergibt dem Volksbot das Paket mit allen notwendigen Informationen (ID und Ziel).
-\item
-Der Volksbot fährt zur Zielrampe, meldet sich dort an und übergibt das Paket.
-\end{itemize} 
+Das Ablaufszenario beschreibt die Schritte, die von den Akteuren ausgeführt werden, um das Ziel zu erreichen, aus logischer Sicht ohne dabei auf die technischen Implementierungsdetails einzugehen. Es dient als Basis für die Implementierung sowohl des physischen Systems als auch der Simulationssoftware. Abbildung \ref{Abl1} zeigt den schemenhaften Aufbau des Umschlagslagers. Die Rampen unterteilen sich in Eingangs-, Zwischenlager- und Ausgangsrampen abhängig von ihrer Position. Pakete treffen am Eingang ein und werden dort aufgenommen. 
+\\\\
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.6\textwidth]{Alg1}        
+		\caption{Teil 1 Ablaufszenario}
+	\label{Abl1}
+\end{figure}
+\\
+Die Eingangsrampe sucht für das Paket ein Ziel, indem das Zwischenlager gefragt wird, ob Platz vorhanden ist oder ob am Ausgang Bedarf besteht. Sobald ein Ziel gefunden ist, sucht die Rampe über eine Auktion ein Transportmittel. Die Bots berechnen eine Aufwandsabschätzung und schicken diese an die Rampe, die einen Bot auswählt (Vgl.\ref{Abl2}). 
+\\   
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.6\textwidth]{Alg2}        
+		\caption{Teil 2 Ablaufszenario}
+	\label{Abl2}
+\end{figure} 
+\\
+Die Bots fahren zu den Eingangsrampen, laden die Pakete auf und bringen diese zu den Zwischenrampen oder Ausgangsrampen (Vgl.\ref{Abl3}). Pakete, die im Zwischenlager ankommen, werden analog dem beschriebenen Ablaufmuster von den Bots zu den Rampen gebracht. Der einzige Unterschied besteht darin, dass die Ausgangsrampen anfragen, ob ein gewünschtes Paket im Zwischenlager vorhanden ist.
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.6\textwidth]{Alg3}        
+		\caption{Teil 3 Ablaufszenario}
+	\label{Abl3}
+\end{figure}  
