@@ -10,6 +10,7 @@ A level-1 auxiliary file: src/chapter4.aux
 A level-1 auxiliary file: src/chapter5.aux
 A level-1 auxiliary file: src/chapter6.aux
 A level-1 auxiliary file: src/chapter7.aux
+A level-1 auxiliary file: src/chapter8.aux
 Database file #1: masterfile-blx.bib
 Database file #2: src/literatur.bib
 I was expecting a `,' or a `}'---line 75 of file src/literatur.bib
