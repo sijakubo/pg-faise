@@ -116,7 +116,7 @@ Abbildung \ref{GAI} zeigt die konkrete Gesamtarchitektur des Systems, die durch 
 Die Implementierung der Benutzeroberfläche erfolgt durch die Klassen Mainframeview und Mainframepresenter. Die View beinhaltet die graphischen Elemente und der Presenter ist für die Programmlogik, wie das Hinzufügen von Listenern oder das Senden von Daten an den Server verantwortlich. Die Benutzeroberfläche ist in die fünf Bereiche Menüleiste, Auftragsliste, Modellelemente, Zeichenfläche und Debugkonsole unterteilt. In der Auftragsliste werden eingehende und ausgehende Aufträge mit ihrer Startzeit, ihrer Paket-ID und ihrem jeweiligen Ziel gelistet. Die Auflistung ist nicht chronologisch, sondern anhand der ID geordnet. Einzelne Aufträge können über einen Button in der vierten Spalte entfernt werden. Eine beliebige Anzahl an Aufträgen kann generiert werden. Der Bereich Modellelemente enthält Rampen, Fahrzeuge und Wände, die per Drag an Drop auf der Zeichenoberfläche platziert werden können. Im untersten Bereich befindet sich die Debugkonsole. 
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=0.8\textwidth]{Gui}        
+		\includegraphics[width=0.8\textwidth]{Gui.PNG}        
 		\caption{Benutzeroberfläche}
 	\label{GUI}
 \end{figure}
@@ -124,7 +124,7 @@ Die Implementierung der Benutzeroberfläche erfolgt durch die Klassen Mainframev
 Abbildung \ref{AGEN} zeigt die Methode addRandomJobs mit deren Hilfe zufällig eingehende und ausgehende Aufträge generiert werden. Für jeden zu generierenden Auftrag wird in der Variable destinationID zufällig festgelegt, ob es sich, um einen eingehenden oder ausgehenden Auftrag handelt. Der Wert Null steht für einen eingehenden und minus Eins für einen ausgehenden Auftrag. In der Variable Timestamp wird die Zeit für den Auftrag festgelegt. Jeder Auftrag beginnt eine Sekunde später als der vorhergehende. Die Zeiten können prinzipiell beliebig angepasst werden. Die ID eines Auftrags wird durch eine Variable der Klasse Joblist generiert, die um eins inkrementiert wird.  
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=0.8\textwidth]{Auftragsgenerierung}        
+		\includegraphics[width=0.8\textwidth]{Auftragsgenerierung.PNG}        
 		\caption{Auftragsgenerierung}
 	\label{AGEN}
 \end{figure}
