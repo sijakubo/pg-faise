@@ -12,7 +12,7 @@ public class Job implements Serializable, Comparable<Job> {
 	public static final int INCOMING = 0;
 	public static final int OUTGOING = 1;
 	
-	private static int idCounterPacket = 0;
+	public static int idCounterPacket = 0;
 	
     private int type = -1;
     private int timestamp = 0;

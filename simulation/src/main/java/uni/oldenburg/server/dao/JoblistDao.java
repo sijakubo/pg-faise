@@ -161,7 +161,8 @@ public class JoblistDao {
 		int idJoblist = resultSet.getInt("id");
 
 		JobList jobList = new JobList(resultSet.getString("name"));
-
+        JobList.lastTimestamp=0;
+        Job.idCounterPacket=0;
 		List<Job> lstJob = loadJobs(idJoblist, jobList);
 
 		for (Job newJob : lstJob) {

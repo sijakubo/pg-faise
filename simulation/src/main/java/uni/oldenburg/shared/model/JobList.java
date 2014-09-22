@@ -12,13 +12,16 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class JobList implements Serializable {
 	public static final String TABLE_NAME = "joblist";
-	private static int lastTimestamp = 0;
+	public static int lastTimestamp = 0;
 
 	private String name = "undefined";
 	private List<Job> lstJobs = new ArrayList<Job>();
 	private List<Integer> lstOutgoingPackageIDs = new ArrayList<Integer>();
 
-	public JobList() {}
+	public JobList() {
+		lastTimestamp=0;
+		Job.idCounterPacket=0;
+	}
 
 	public JobList(String name) {
 		this.name = name;
