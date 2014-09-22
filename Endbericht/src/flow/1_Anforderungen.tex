@@ -1,0 +1,19 @@
+\subsection{Anforderungen}
+Aus einem drathlosen Sensorknoten-Netzwerk müssen die Rampen auf Mikrocontrollerebene miteinander kommunizieren können und die Fördereinheiten steuern.
+Die Steuerung und Überwachung muss dezentral durch Softwareagenten ablaufen. Die Mikrocontroller dienen als Agentenplattform und bei der Entwicklung muss 
+auf Leistungsressourcen (CPU, Kommunikationsbandbreite, Speicher) geachtet werden.
+\subsubsection{Funktionale Anforderungen}
+\begin{enumerate}
+ \item \textbf{Aktorik/Sensorik}: Die Rampen verfügen über Magnetstifte zum Vereinzeln der Pakete und Lichtschranken zum Erkennen von ein- bzw. ausgehenden Paketen.
+An den ATMega128 Mikrocontroller der Rampen werden die Lichtschranken und Magnetstifte angeschlossen.
+ \item \textbf{Echtzeitsteuerung}: An den ATMega128 Mikrocontroller der Rampen werden die Lichtschranken und Magnetstifte angeschlossen.
+Der Controller führt die Befehle für die Rampe aus. 
+ \item \textbf{Kommunikation}: Die Micaz-Module kommunizieren drahtlos mit anderen Rampen und Volksbots.
+ \item \textbf{Synchronisation}: Die Simulation wird über ein Micaz-Modul an die drahtlose Kommunikation angebunden.
+Die Synchronisation der Zustände erfolgt mittels vorhandenem Ice Interface.
+ \item \textbf{Disposition}: Die Controller kennen den Belegungszustand der Rampe und generieren entsprechend Aufträge, die sie an die Fahrzeuge vergeben. 
+ Das ganze soll nach dem FIFO-Verfahren ablaufen.
+ \item \textbf{Übergabe}: Wenn eine Ein- oder Auslagerung an einer Rampe ausgeführt werden soll, so übernimmt der Controller der Rampe die Kontrolle über die Fördereinheit des Fahrzeugs und sorgt dafür, dass das Paket verladen wird.
+ \item \textbf{Kooperation}: Einsatz Kooperativer Lösungsstrategien für die Materialflusssteuerung, Überwachung und Steuerung mittels Multi-Agentensystem.
+\end{enumerate}
+\subsubsection{Nicht-funktionale Anforderungen}
