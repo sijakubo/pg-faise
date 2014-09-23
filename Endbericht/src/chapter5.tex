@@ -1,13 +1,13 @@
 \section{Teilbericht Simulation}
-Der Teilbericht der Simulationsgruppe beschreibt die entwickelte Simulationssoftware von der Anforderungsanalyse über die Implementierung hin zum Testen und Validieren. Im Lastenheft werden, die für die Simulation vorgegebenen Anforderungen beschrieben. Grundlegende Designentscheidungen, die vor dem Erstellen der Anforderungen getroffen werden müssen, werden ebenfalls beschrieben. In dem darauffolgenden Kapitel werden die jeweiligen Systemkomponenten konzipiert. Anschließend soll beschrieben werden, wie die Komponenten implementiert wurden. Das letzte Kapitel dieses Teilberichts beinhaltet Testen und Validieren des entwickelten Systems.
+Der Teilbericht der Simulationsgruppe beschreibt die entwickelte Simulationssoftware von der Anforderungsanalyse über die Implementierung hin zum Testen und Validieren. Im Lastenheft werden, die für die Simulation vorgegebenen Anforderungen beschrieben. Grundlegende Designentscheidungen, die vor dem Erstellen der Anforderungen getroffen werden müssen, sind ebenfalls Teil der nachfolgenden Kapitel. In dem darauffolgenden Kapitel werden die jeweiligen Systemkomponenten konzipiert. Anschließend soll beschrieben werden, wie die Komponenten implementiert wurden. Das letzte Kapitel dieses Teilberichts beinhaltet Testen und Validieren des entwickelten Systems.
 \subsection{Lastenheft}
-Mit der Komponente Simulation soll auf Basis des Ablaufkonzepts eine Software erstellt werden, die es erlaubt, einen automatisierten Materialfluss auf Basis von FTS zu simulieren, ohne dabei an die zahlenmäßigen Beschränkungen des physischen Systems gebunden zu sein. Vonseiten des Auftraggebers wurde ein Lastenheft vorgegeben, das die gewünschten Kernfunktionalitäten der Simulationssoftware beschreibt. Es enthält folgende Anforderungen:
+In der Teilgruppe Simulation soll auf Basis des Ablaufkonzepts (Vgl.Abschnitt\ref{AL}) ein Softwaretool entwickelt werden, das es erlaubt, einen automatisierten Materialfluss auf Basis von FTS zu simulieren, ohne dabei an die zahlenmäßigen Beschränkungen des physischen Systems gebunden zu sein. Vonseiten des Auftraggebers wurde ein Lastenheft vorgegeben, das die gewünschten Kernfunktionalitäten der Software beschreibt. Es enthält folgende Anforderungen:
 \begin{enumerate}
-\item \textbf{Akteure}: Die virtuellen Akteure ähneln in ihrem Verhalten und Eigenschaften (Geschwindigkeit, Dauer einer Paketübergabe etc.) den echten Objekten aus dem physischen System (Volksbots und passive Rampen).
-\item \textbf{Ablauf}: Der in Abschnitt 4.1 beschriebene Ablauf, wird in der Simulation umgesetzt. 
+\item \textbf{Akteure}: Die virtuellen Akteure ähneln in ihrem Verhalten und Eigenschaften (Geschwindigkeit, Dauer einer Paketübergabe etc.) den echten Objekten aus dem physischen System (Volksbots und Rampen).
+\item \textbf{Ablauf}: Der in Abschnitt 4.1 beschriebene Ablauf, wird durch die Software simuliert. 
 \item \textbf{Visualisierung}: Die Zustände der Akteure werden dynamisch visualisiert. Wird beispielsweise die Anzahl der Pakete auf einer Rampe um eins erhöht, dann soll dies unmittelbar in der Anzeige visualisiert werden.
-\item \textbf{Generierung von Aufträgen}: Eingehende und ausgehende Transportaufträge können erstellt und simuliert werden. 
-\item \textbf{Einstellungen}: Verschiedene Parameter der Simulation (Anzahl und Art der Akteure, Anzahl der Aufträge etc.) können vom Nutzer vor dem Starten der Simulation angepasst werden.
+\item \textbf{Generierung von Aufträgen}: Eingehende und ausgehende Transportaufträge können erstellt und ausgeführt werden. 
+\item \textbf{Einstellungen}: Parameter der Simulation (Anzahl und Art der Akteure, Anzahl der Aufträge etc.) können vom Nutzer vor dem Starten der Simulation angepasst werden.
 \item \textbf{Statistiken}: Es werden wichtige Daten geloggt, um am Ende eines Simulationslaufs aussagekräftige Analysen  machen zu können.
 \end{enumerate}
 \subsection{Grundlegende Designentscheidungen}
@@ -48,10 +48,10 @@ Die Benutzeroberfläche soll einem Nutzer die Möglichkeit bieten, auf sämtlich
 		\caption{Schematischer Aufbau der Benutzeroberfläche}
 	\label{GUI}
 \end{figure}
-\subsubsection{Generierung von Aufträgen}
-Die Simulationssoftware soll ein Umschlagslager simulieren. Das bedeutet, dass Pakete in das Lager geliefert, zwischengelagert und an den Ausgangsrampen wieder abgeholt werden, wenn ein bestimmtes Paket angefragt wird (Vgl.\ref{Einsatzszenario}). Das bedeutet, dass eine Unterscheidung getroffen werden muss zwischen einem physischen Paket und einer Nachfrage nach einem bestimmten Paket, die ein Ausgang stellt. Deshalb soll zwischen eingehenden und ausgehenden Aufträgen unterschieden werden. Es soll möglich sein, eine festgelegte Anzahl an Aufträgen zufällig über die Gui zu generieren. Außerdem muss sichergestellt werden, dass die Menge an generierten eingehenden und ausgehenden Aufträgen in einem bestimmten Verhältnis zueinander stehen, um zu verhindern, dass nur eingehende oder nur ausgehende Aufträge generiert werden. 
+\subsubsection{Generierung von Aufträgen} \label{Generierung von Aufträgen}  
+Die Simulationssoftware soll ein Umschlagslager simulieren. Das bedeutet, dass Pakete in das Lager geliefert, zwischengelagert und an den Ausgangsrampen wieder abgeholt werden, wenn ein bestimmtes Paket angefragt wird (Vgl.\ref{Einsatzszenario}). Das bedeutet, dass eine Unterscheidung getroffen werden muss zwischen einem physischen Paket und einer Nachfrage nach einem bestimmten Paket, die ein Ausgang stellt. Deshalb soll zwischen eingehenden und ausgehenden Aufträgen unterschieden werden. Es soll möglich sein, eine festgelegte Anzahl an Aufträgen zufällig über die Gui zu generieren. Es muss sichergestellt werden, dass die Menge an generierten eingehenden und ausgehenden Aufträgen in einem bestimmten Verhältnis zueinander stehen und ausgehende Aufträge für vorhandene Pakete generiert werden. So wird sichergestellt, dass Pakete nicht nur im Zwischenlager landen, sondern auch am Ausgang nachgefragt werden.
 \subsubsection{Anforderungen an ein Multiagenten-Framework}
-Um ein Umschlagslager und die darin enthaltenden Akteure (Rampen und Fahrzeuge) zu simulieren, wird ein Multiagentensystem benötigt (Vgl.\ref{GA}). Zur Erstellung eines MAS soll ein Framework verwendet werden, dass die nachfolgenden Anforderungen erfüllt: Das Framework muss das Erstellen von verschiedenen Agententypen ermöglichen, um die Akteure und ihre spezifischen Aufgabenstellungen umzusetzen. Agenten müssen in der Lage sein, untereinander Nachrichten auszutauschen und auf bestimmte Nachrichten oder Ereignisse mit definierten Verhaltensweisen zu reagieren. Weiterhin sollen die Aktionen der Agenten denen der realen Akteure hinsichtlich der Dauer ähneln. Außerdem muss das Framework Aktionen von verschiedenen Agenten parallel ausführen können, damit beispielsweise das gleichzeitige Fahren mehrerer Fahrzeuge möglich ist.
+Um ein Umschlagslager und die darin enthaltenden Akteure (Rampen und Fahrzeuge) zu simulieren, soll ein Multiagentensystem eingesetzt werden (Vgl.\ref{GA}). Zur Erstellung eines MAS soll ein Framework verwendet werden, dass die nachfolgenden Anforderungen erfüllt: Das Framework muss das Erstellen von verschiedenen Agententypen ermöglichen, um die Akteure mit ihren spezifischen Aufgabenstellungen simulieren. Agenten müssen in der Lage sein, untereinander Nachrichten auszutauschen und auf bestimmte Nachrichten oder Ereignisse mit definierten Verhaltensweisen zu reagieren. Weiterhin sollen die Aktionen der Agenten denen der realen Akteure hinsichtlich der Dauer ähneln. Außerdem muss das Framework Aktionen von verschiedenen Agenten parallel ausführen können, damit beispielsweise das gleichzeitige Fahren mehrerer Fahrzeuge möglich ist.
 \subsubsection{Benötigte Agententypen}
 Sowohl Rampen als auch Fahrzeuge müssen verschiedene Aktionen durchführen. Dazu gehören u.~a. das Befördern von Paketen, die Vergabe von Aufträge, Durchführung von Auktionen usw. Würde man alle Aufgaben, die ein Akteur durchführen muss, in einem Agenten bündeln, so wäre ein solcher Agent nur schwer wartbar und es könnten abhängig vom Agenten-Framework Probleme bei der Parallelisierung von Aktionen auftreten. Es bietet sich an, die erforderlichen Aufgaben eines Akteurs auf mehreren Agenten zu verteilen. Durch die Modularisierung kann die Entwicklung des Systems parallelisiert werden und Änderungen an einem Agenten haben geringere Auswirkungen auf das Gesamtsystem. Die Wartbarkeit des Systems erhöht sich. Für das zu entwickelnde System wurden die folgenden vier Agententypen konzipiert:  
 \begin{itemize}
@@ -61,7 +61,7 @@ Sowohl Rampen als auch Fahrzeuge müssen verschiedene Aktionen durchführen. Daz
 \item Plattformagent: Durchführung physischer Aktionen (Fahren, Aufladen von Paketen etc.)
 \end{itemize}
 \subsubsection{Kommunikation zwischen den Agenten}
-Die zu entwickelnde Software soll die in Abschnitt \ref{AL} beschriebenen Abläufe umsetzen. Die Aufgaben der verschiedenen Akteure müssen auf die Agenten verteilt werden. Die entworfenen Kommunikationsschritte der Agenten sollen für das Szenario, dass ein Eingang Ausgänge und Zwischenlager fragt, beschrieben werden, um die Aufgaben der einzelnen Agenten genauer abzugrenzen.  
+Die zu entwickelnde Software soll die in Abschnitt \ref{AL} beschriebenen Abläufe umsetzen. Die Aufgaben der verschiedenen Akteure müssen auf die Agenten verteilt werden. Die entworfenen Kommunikationsschritte der Agenten sollen für den Fall beschrieben werden, dass ein Eingang Ausgänge und Zwischenlager fragt, ob ein Paket entgegengenommen werden kann. Anhand des Beispiels soll die Verteilung der Aufgaben auf die unterschiedlichen Agenten skizziert werden.
 \begin{enumerate}
 \item Trifft ein Paket ein, verlangt der Paketagent vom Orderagenten eine Destination für das entsprechende Paket.
 \item Der Orderagent einer Eingangsrampe fragt die Orderagenten der Ausgangs- und Zwischenrampen.
@@ -73,16 +73,16 @@ Die zu entwickelnde Software soll die in Abschnitt \ref{AL} beschriebenen Abläu
 \item Der Plattformagent fährt zu der jeweiligen Eingangsrampe und lädt das Paket auf. Dies geschieht durch einen Nachrichtenaustausch mit dem jeweiligen Plattformagenten der Rampe, der die Paketdaten übergibt. Das Fahren zur Zielrampe und das Abladen des Pakets erfolgt analog. 
 \end{enumerate}
 \subsubsection{Konzeption des Pathfindings}
-Die Fahrzeuge eines Szenarios holen die Pakete von den Eingangsrampen ab und liefern sie zu den gefundenen Zwischen-/Ausgangsrampen. Da der Anwender nicht selbst in der Simulationsablauf eingreifen möchte, um mögliche Pfade von Hand anzugeben (für den Transport der Pakete), wurde ein Pathfinding-Konzept entwickelt. Zunächst wird die Startposition in der Karte ermittelt. Anschließend wird im Uhrzeigersinn jede benachbarte Kachel ermittelt, bei der es sich um kein Hindernis handelt. Sollte eine gefundene Kachel noch nicht bearbeitet worden sein, wird ihr ein Wert zugewiesen, der zum einem Aufschluss darüber gibt, wie weit die anliegende Kachel von der aktuellen entfernt ist (notwendig u.a. für diagonales Fahren). Zum anderen wird der aktuelle Gridwert erhöht und der neuen Kachel zugewiesen. Sollte eine Kachel mehrmals bei der Zuweisung ermittelt werden, wird der kleinste gefundene Wert in der Kachel beibehalten, da ein kleinerer Wert einen kürzeren Pfad repräsentiert.
+Die Fahrzeuge eines Szenarios holen die Pakete von den Eingangsrampen ab und liefern sie zu den jeweiligen Zielrampen. Da der Anwender nicht selbst in den Simulationsablauf eingreifen möchte, um mögliche Pfade von Hand anzugeben (für den Transport der Pakete), wurde ein Pathfinding-Konzept entwickelt. Zunächst wird die Startposition in der Karte ermittelt. Anschließend wird im Uhrzeigersinn jede benachbarte Kachel ermittelt, bei der es sich um kein Hindernis handelt. Sollte eine gefundene Kachel noch nicht bearbeitet worden sein, wird ihr ein Wert zugewiesen, der  Aufschluss darüber gibt, wie weit die anliegende Kachel von der aktuellen entfernt ist (notwendig u.a. für diagonales Fahren). Zudem wird der aktuelle Gridwert erhöht und der neuen Kachel zugewiesen. Sollte eine Kachel mehrmals bei der Zuweisung ermittelt werden, wird der kleinste gefundene Wert in der Kachel beibehalten, da ein kleinerer Wert einen kürzeren Pfad repräsentiert.
 \\\\
-Nachdem alle Kacheln auf der Karte mit Werten versehen wurden, wird vom Endpunkt aus ein möglicher Weg zum Startpunkt zurück berechnet. Dabei wird der Wert in der Endkachel genommen und mit den benachbarten Kacheln verglichen. Sollte min. eine Kachel eine kleinere Wertigkeit aufweisen, wird somit erkannt, dass es sich um einen kurzen Weg zur Startposition handelt. Sollten mehrere angrenzende Kacheln diese Eigenschaft auszeichnen, wird zufällig eine von ihnen für die Ermittlung genommen. Während dieser Rückwärtssuche (von der Endposition zur Startposition)
-werden bis die Startposition wieder gefunden wurde, jede Position der ausgewählten Kacheln gespeichert. Nachdem der Startpunkt gefunden wurde, müssen sämtliche gefundenen Positionen in der Liste getauscht werden (Punkte an Ende der Liste starten nun am Anfang der Liste, und umgekhert).
-Dies ist notwendig, da das Fahrzeug diese Positionen abfahren soll, jedoch liegen die Punkte in umgekehrter Reihenfolge vor, weil von der Endposition zur Startposition ermittelt wird.
+Nachdem alle Kacheln auf der Karte mit Werten versehen wurden, wird vom Endpunkt aus ein möglicher Weg zum Startpunkt zurück berechnet. Dabei wird der Wert in der Endkachel genommen und mit den benachbarten Kacheln verglichen. Sollte mindestens eine Kachel eine kleinere Wertigkeit aufweisen, wird somit erkannt, dass es sich um einen kürzeren Weg zur Startposition handelt. Sollten mehrere angrenzende Kacheln diese Eigenschaft aufweisen, wird zufällig eine von ihnen ausgewählt. Während dieser Rückwärtssuche (von der Endposition zur Startposition)
+wird bis die Startposition wieder gefunden wurde, jede Position der ausgewählten Kacheln gespeichert. Nachdem der Startpunkt gefunden wurde, müssen sämtliche gefundenen Positionen in der Liste getauscht werden (Punkte an Ende der Liste starten nun am Anfang der Liste und umgekehrt).
+Dies ist notwendig, da das Fahrzeug diese Positionen abfahren soll, jedoch liegen die Punkte in umgekehrter Reihenfolge vor, weil der Pfad von der Endposition zur Startposition ermittelt wird.
 
 \subsubsection{Konzeption der Statistiken}
 
 \subsubsection{Interaktion der Komponenten} \label{Interaktion der Komponenten}
-Durch das Zusammenspiel der Komponenten der verschiedenen Systemkomponenten soll eine Simulation durchgeführt werden können. Die Aufträge müssen entsprechend ihrer Zeiten an den Server geschickt werden. Dies soll clientseitig durch einen Timer durchgeführt werden, um das MAS zu entlasten. Abbildung \ref{Int} zeigt den Ablauf und die Komponenten, die für das Starten einer Simulation erforderlich sind: 
+Durch das Zusammenspiel der Systemkomponenten soll eine Simulation durchgeführt werden. Die Aufträge müssen entsprechend ihrer Zeiten an den Server geschickt werden. Dies soll clientseitig durch einen Timer durchgeführt werden. Abbildung \ref{Int} zeigt den Ablauf und die Komponenten, die für das Starten einer Simulation erforderlich sind: 
 \begin{enumerate}
 \item Ein potenzieller Nutzer startet eine Simulation über die Benutzeroberfläche.
 \item Der Server wird durch die GUI informiert, dass die Simulation gestartet werden soll.
@@ -103,9 +103,9 @@ Durch das Zusammenspiel der Komponenten der verschiedenen Systemkomponenten soll
 
 \newpage
 \subsection{Implementierung der Systemkomponenten}
-In diesem Abschnitt soll die Implementierung der zuvor konzipierten Systemkomponenten beschrieben werden. Zum einen soll die Auswahl von Technologien und Frameworks zur Umsetzung beschrieben sowie die Funktionalität des Systems auf technischer Ebene dargestellt werden.
+Inhalt diesen Abschnitts ist die Implementierung der zuvor konzipierten Systemkomponenten. Zum einen soll die Auswahl von Technologien und Frameworks zur Umsetzung beschrieben sowie die Funktionalität des Systems auf technischer Ebene dargestellt werden.
 \subsubsection{Implementierte Gesamtarchitektur}
-Abbildung \ref{GAI} zeigt die konkrete Gesamtarchitektur des Systems, die durch die Auswahl von Umsetzungstechnologien entstanden ist. Die Webanwendung soll, wie bereits in Abschnitt \ref{GWT} beschrieben, durch das GWT Framework implementiert werden. Der Code für Server und Client, der für Visualisierung, Client-Server Kommunikation u.~ä., benötigt wird, wird durch GWT-Bilbiotheken bereitgestellt. Eingebettet in den serverseitigen Code wird das Multiagentensystem, das mithilfe des Java Agent Development Framework (JADE)\footnote{\cite{jade}} implementiert wurde. Als Datenbankmanagementsystem wurde PostgreSQL ausgewählt. Die Applikation wird durch den internen Jetty Server von GWT gehostet, der die Java Laufzeitumgebung und das GWT Software Development Kit ebenfalls bereitstellt. Die Anwendung kann im Produktivmodus prinzipiell auf jeden Java-fähigen Webserver aufgesetzt werden.  
+Abbildung \ref{GAI} zeigt die konkrete Gesamtarchitektur des Systems, die durch die Auswahl von Umsetzungstechnologien entstanden ist. Die Webanwendung soll, wie bereits in Abschnitt \ref{GWT} beschrieben, durch das GWT Framework implementiert werden. Der Code für Server und Client, der für Visualisierung, Client-Server Kommunikation u.~ä., benötigt wird, wird durch GWT-Bilbiotheken bereitgestellt. Eingebettet in den serverseitigen Code wird das Multiagentensystem, das mithilfe des Java Agent Development Framework (JADE)\footnote{\cite{jade}} implementiert wurde. Als Datenbankmanagementsystem wurde PostgreSQL ausgewählt. Die Applikation wird durch den internen Jetty Server von GWT gehostet, der die Java Laufzeitumgebung und das GWT Software Development Kit ebenfalls bereitstellt. Die Anwendung kann im Produktivmodus prinzipiell auf jedem Java-fähigen Webserver aufgesetzt werden.  
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.8\textwidth]{architekturSimu.jpg}        
@@ -116,22 +116,25 @@ Abbildung \ref{GAI} zeigt die konkrete Gesamtarchitektur des Systems, die durch 
 Die Implementierung der Benutzeroberfläche erfolgt durch die Klassen Mainframeview und Mainframepresenter. Die View beinhaltet die graphischen Elemente und der Presenter ist für die Programmlogik, wie das Hinzufügen von Listenern oder das Senden von Daten an den Server verantwortlich. Die Benutzeroberfläche ist in die fünf Bereiche Menüleiste, Auftragsliste, Modellelemente, Zeichenfläche und Debugkonsole unterteilt. In der Auftragsliste werden eingehende und ausgehende Aufträge mit ihrer Startzeit, ihrer Paket-ID und ihrem jeweiligen Ziel gelistet. Die Auflistung ist nicht chronologisch, sondern anhand der ID geordnet. Einzelne Aufträge können über einen Button in der vierten Spalte entfernt werden. Eine beliebige Anzahl an Aufträgen kann generiert werden. Der Bereich Modellelemente enthält Rampen, Fahrzeuge und Wände, die per Drag an Drop auf der Zeichenoberfläche platziert werden können. Im untersten Bereich befindet sich die Debugkonsole. 
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=0.8\textwidth]{Gui.PNG}        
+		\includegraphics[width=0.8\textwidth]{Gui}        
 		\caption{Benutzeroberfläche}
-	\label{GUI}
+	\label{GUIIMPL}
 \end{figure}
 \subsubsection{Generierung von Aufträgen}
-Abbildung \ref{AGEN} zeigt die Methode addRandomJobs mit deren Hilfe zufällig eingehende und ausgehende Aufträge generiert werden. Für jeden zu generierenden Auftrag wird in der Variable destinationID zufällig festgelegt, ob es sich, um einen eingehenden oder ausgehenden Auftrag handelt. Der Wert Null steht für einen eingehenden und minus Eins für einen ausgehenden Auftrag. In der Variable Timestamp wird die Zeit für den Auftrag festgelegt. Jeder Auftrag beginnt eine Sekunde später als der vorhergehende. Die Zeiten können prinzipiell beliebig angepasst werden. Die ID eines Auftrags wird durch eine Variable der Klasse Joblist generiert, die um eins inkrementiert wird.  
+Abbildung \ref{AGEN} zeigt die Methode addRandomJobs mit deren Hilfe zufällig eingehende und ausgehende Aufträge generiert werden. Für jeden zu generierenden Auftrag wird in der Variable destinationID zufällig festgelegt, ob es sich, um einen eingehenden oder ausgehenden Auftrag handelt.
+Eingehende und Ausgehende Aufträge treten mit gleicher Wahrscheinlichkeit auf. Der Wert Null steht für einen eingehenden und minus Eins für einen ausgehenden Auftrag. In der Variable Timestamp wird die Zeit für den Auftrag festgelegt. Jeder Auftrag beginnt eine Sekunde später als der vorhergehende. Die Zeiten können prinzipiell beliebig angepasst werden. Die ID eines eingehenden Auftrags wird durch eine Variable der Klasse Joblist generiert, die um eins inkrementiert wird. Die IDs der ausgehenden Aufträge werden ebenfalls zufällig generiert, jedoch wird sichergestellt, dass ein ausgehender Auftrag für ein schon vorhandenes Paket generiert wird (Vgl. Abschnitt\ref{Generierung von Aufträgen}).
+\\\\  
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=0.8\textwidth]{Auftragsgenerierung.PNG}        
+		\includegraphics[width=1\textwidth]{Auftragsgenerierung.PNG}        
 		\caption{Auftragsgenerierung}
 	\label{AGEN}
 \end{figure}
+\\\\
 \subsubsection{Auswahl eines Multiagenten-Frameworks}
 Das Java Agent Development Framework wurde genutzt, um ein Netzwerk aus verschiedenen Agenten zu implementieren. Jade erlaubt das Erstellen von verschiedenen Agenten. Agenten werden als Java-Klasse implementiert, die von der vordefinierten Klasse Agent erbt. Die Aktionen, die ein Agent ausführen soll, werden durch Behaviours implementiert, die ebenfalls Klassen sind. Um die Anzahl an Klassen zu reduzieren, wurden die Behaviours als interne Klassen in die Agenten eingefügt. Jade ermöglicht die Kommunikation zwischen den Agenten durch ein vordefiniertes Nachrichtensystem. Nachrichten können sowohl gezielt an einen Agenten adressiert oder an alle Agenten verschickt werden. Die Agenten können in Echtzeit miteinander kommunizieren und mehrere Agenten können parallel Aktionen ausführen, da jeder Agent in einem eigenen Thread läuft (Vgl.\cite{jadetwo}). 
 \subsubsection{Implementierte Agententypen}
-Implementiert wurden sieben verschiedene Agententypen. Jede Rampe besitzt jeweils einen Paket-, Order-, Routing- und Plattformagenten. Ein Fahrzeug besitzt einen Paket-, Routing- und Plattformagenten. Die Routing- und Plattformagenten wurden für Fahrzeuge und Rampen durch unterschiedliche Agenten implementiert, um die Anzahl an Behaviours pro Agent zu reduzieren und den Code übersichtlicher zu gestalten und unnötigen Speicherverbrauch zu vermeiden. Damit ein Agent weiß, welchem Szenario und welchem Akteur er zugeordnet ist, werden Szenario und Conveyor als Referenz übergeben \footnote{Der genaue Ablauf der Initialisierung wird in Abschnitt \ref{Interaktion der Komponenten} beschrieben}. Neben den genannten Agenten war es notwendig, einen Jobagent zu implementieren, der die Übergabe eines Pakets, die im phyischen System durch einen Menschen geschieht, zu simulieren. Außerdem werden ausgehende Aufträge durch den Jobagent an die Ausgangsrampen übermittelt.
+Implementiert wurden sieben verschiedene Agententypen. Jede Rampe besitzt jeweils einen Paket-, Order-, Routing- und Plattformagenten. Ein Fahrzeug besitzt einen Paket-, Routing- und Plattformagenten. Die Routing- und Plattformagenten wurden für Fahrzeuge und Rampen durch unterschiedliche Agenten implementiert, um die Anzahl an Behaviours pro Agent zu reduzieren und den Code übersichtlicher zu gestalten und unnötigen Speicherverbrauch zu vermeiden. Damit ein Agent weiß, welchem Szenario und welchem Akteur er zugeordnet ist, werden Szenario und Conveyor als Referenz übergeben \footnote{Der genaue Ablauf der Initialisierung wird in Abschnitt \ref{Interaktion der Komponenten} beschrieben}. Neben den genannten Agenten war es notwendig, einen Jobagent zu implementieren, der die Übergabe eines Pakets zu simulieren, die im phyischen System durch einen Menschen geschieht. Außerdem werden ausgehende Aufträge durch den Jobagent an die Ausgangsrampen übermittelt. Es wurde anders als im physischen System darauf verzichtet für jedes Paket einen Paketagenten zu erzeugen, da die Synchronisation der Paketdaten ansonsten einen zu großen Synchronisationsaufwand erfordert hätte, was wiederum die Anzahl der Nachrichten zwischen den Agenten erhöht und fehleranfälliger ist.
 \subsubsection{Kommunikation zwischen den Agenten}
 In den nachfolgenden Abschnitten soll die Kommunikation zwischen den Agenten, die implementiert wurde, anhand von Sequenzdiagrammen beschrieben werden. Dabei werden folgende Anwendungsszenarien durchlaufen:
 \begin{itemize}
@@ -159,7 +162,7 @@ Abbildung \ref{Job} zeigt die Jobzuweisung an die Ein- und Ausgangsrampen durch 
 \end{itemize}   
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{Jobagent.png}        
+		\includegraphics[width=1\textwidth, height=0.6\textwidth]{Jobagent.png}        
 		\caption{Jobzuweisung an Ein- und Ausgänge}
 	\label{Job}
 \end{figure}
@@ -174,13 +177,18 @@ Pakete, die am Eingang eintreffen, werden weitergeleitet. Besteht ein Bedarf am 
 \item Sofern kein Paket erwartet wird, fährt der Orderagent fort und stellt eine erneute Anfrage an seinen Paketagenten, um zu fragen, ob das entsprechende Paket benötigt wird (Ausgang) oder ob Platz frei ist (Zwischenlager).
 \item Der jeweilige Orderagent antwortet dem Eingang, ob das Paket entgegengenommen werden kann oder nicht.
 \item Der Orderagent des Eingangs speichert die IDs der Rampen, die ein Paket aufnehmen können, wählt unter diesen zufällig eine aus und übermittelt die Daten für Start- und Zielrampe an den Routingagent, damit dieser die Auktion starten kann. Der Orderagent wartet bis die Auktion beendet ist. 
+\item Wurde die Auktion erfolgreich durchgeführt, teilt der Orderagent des Eingangs dem Paketagenten der Zielrampe mit, dass sich ein Paket im Anmarsch befindet, damit dieser das IncomingJobFlag setzt.
+\item Paketagent antwortet dem Orderagenten, dass das Flag gesetzt wurde.
+\item Der Orderagent informiert seinen Paketagent, damit dieser das OutgoingJobFlag setzt.
 \end{itemize} 
+
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{EingangAusgang.png}        
+		\includegraphics[width=1\textwidth, height=0.6\textwidth]{EingangAusgang.png}        
 		\caption{Eingang fragt Ausgang und Zwischenlager}
 	\label{Eingang fragt}
 \end{figure}
+\newpage
 \paragraph{Ausgang fragt Zwischenlager}
 Pakete, die am Eingang eintreffen und für die noch keine Nachfrage an den Ausgangsrampen besteht, werden ins Zwischenlager gebracht. Damit auch diese Pakete zum Ausgang gelangen, fragt der Ausgang zyklisch im Zwischenlager für die entsprechenden Pakete nach. Abbildung \ref{Ausgang fragt} zeigt den Ablauf im Detail:
 \begin{itemize}
@@ -194,10 +202,11 @@ Pakete, die am Eingang eintreffen und für die noch keine Nachfrage an den Ausga
 \end{itemize} 
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{EingangAusgang.png}        
+		\includegraphics[width=1\textwidth, height=0.6\textwidth]{AusgangZW.png}        
 		\caption{Ausgang fragt Zwischenlager}
 	\label{Ausgang fragt}
 \end{figure}
+\newpage
 \paragraph{Auktion}
 Nachdem ein Paket ein Ziel zugewiesen bekommen hat, startet der Routingagent der jeweiligen Eingangs- oder Zwischenrampe eine Auktion, um ein Fahrzeug zu finden, das das Paket befördert. Abbildung \ref{Auktion} zeigt den Ablauf der Auktion:
 \begin{itemize}
@@ -215,7 +224,7 @@ Nachdem ein Paket ein Ziel zugewiesen bekommen hat, startet der Routingagent der
 \end{itemize}
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{Auktion.PNG}        
+		\includegraphics[width=1\textwidth, height=0.6\textwidth]{Auktion.PNG}        
 		\caption{Auktion}
 	\label{Auktion}
 \end{figure}
@@ -235,12 +244,12 @@ Nachdem das Fahren initiiert wurde, führt der Plattformagent des entsprechenden
 \end{itemize}
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=1.1\textwidth, height=0.6\textwidth]{Fahren.PNG}        
+		\includegraphics[width=1\textwidth, height=0.6\textwidth]{Fahren.PNG}        
 		\caption{Paket abholen und zur Zielrampe bringen}
 	\label{Fahren}
 \end{figure}
 \subsubsection{Implementierung des Pathfindings}
-Der entwickelte Pathfindingalgorithmus verwendet eine Karte, die in Kacheln unterteilt ist. Diese können durch eine veränderbare Einstellung beliebig in ihrere Größe variiert werden. Eine Kachel kann dabei entweder als einfache, befahrbare Fläche, als Startposition, als Endposition oder als Hindernis definiert werden. Da Anfangs vorgesehen war, dass die Simulation mehrere alternative Pathfindingalgorithmen verwenden kann, wurde eine einheitliche Schnittstelle definiert, um schnell und einfach (ohne Umbauten von Programmelementen wo das Pathfinding benutzt wird) mögliche zukünftige Algorithmen einbinden zu können. Diese Schnittstelle ist in Form eines Interfaces definiert. Im Interface sind Funktionen zu finden, die von jeder alternativen Pathfindingroutine implementiert werden müssen. Sollten dabei einige keine Verwendung finden, sollte schlichtweg ein Standardwert zurückgeliefert werden, der sich nicht verändern lässt. Folgende Funktionen sind im Interface vorgesehen:
+Der entwickelte Pathfindingalgorithmus verwendet eine Karte, die in Kacheln unterteilt ist. Eine Kachel kann dabei entweder als einfache, befahrbare Fläche, als Startposition, als Endposition oder als Hindernis definiert werden. Damit die Simulation um alternative Pathfindingalgorithmen erweitert werden kann, wurde eine einheitliche Schnittstelle definiert, um schnell und einfach (ohne Umbauten von Programmelementen in denen das Pathfinding benutzt wird) mögliche zukünftige Algorithmen einbinden zu können. Diese Schnittstelle ist in Form eines Interfaces definiert. Im Interface sind Funktionen zu finden, die von jeder alternativen Pathfindingroutine implementiert werden müssen. Sollten dabei einige keine Verwendung finden, sollte schlichtweg ein Standardwert zurückgeliefert werden, der sich nicht verändern lässt. Folgende Funktionen sind im Interface vorgesehen:
 \begin{itemize}
 \item Statusmeldung, ob ein Pfad zur Zeit berechnet wird
 \item Anzahl der Zeilen und Spalten in der Liste
