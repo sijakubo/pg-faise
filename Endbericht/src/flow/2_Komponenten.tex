@@ -36,6 +36,13 @@ Durch die \textbf{Peripheriekomponenten} wird die Verbindung und Kommunikation z
 
 Bei der Umsetzung des Projekts wurden \textsc{Mica}z-Module eingesetzt. Im Folgenden werden kurz die Eigenheiten dieser Module erläutert.
 
+\begin{figure}[th]
+  \centering
+    \includegraphics[width = 0.5\textwidth]{flow/blockmicaz.PNG}
+    \caption{Blockdiagramm der \textsc{Mica}z-Module}
+    \label{fig:blockmicaz}
+\end{figure}
+
 \paragraph{\textsc{Mica}z-Modul}
 Abbildung \autoref{fig:blockmicaz} stellt ein Blockdiagramm der \textsc{Mica}z-Module dar. Herzstück der Module ist ein ATMega128L-Mikrocontroller. Bei diesem handelt es sich um einen Low-Power-Mikrocontroller von der Firma Atmel. Darüber hinaus verfügt ein \textsc{Mica}z-Module über einen CC2420-Funkchip der Firma Texas Instruments. Dieser ermöglicht die drahtlose Kommunikation mit anderen Modulen auf einer Frequenz von 2.4 GHz ermöglicht. Es wird dabei der IEEE 802.15.4 Standard verwendet. Eine Antenne kann über eine MMCX-Schnittstelle mit dem Modul verbunden werden, um Signalstärke und -reichweite zu erhöhen. Weiter verfügen die Module über einen 128 KB großen Flash-Speicher.
 Zugang zu einee Vielzahl der Leitungen des Moduls gewährt ein 51-poliger Steckverbinder. Über eine Erweiterungsplatine werden so etwa die Lichtschranken und Magnetbolzen der Rampe angeschlossen. Denkbar wäre auch ein größerer Arbeitsspeicher, alle nötigen Pins des Mikrocontrollers sind über den Steckverbinder erreichbar.
@@ -43,13 +50,6 @@ Im Projekt wurde die Steckverbindung weiterhin dafür genutzt, die \textsc{Mica}
 
 \paragraph{\textsc{Mib}520}
 Ein \textsc{Mib}520 stellt eine Schnittstelle für \textsc{Mica}z-Module dar. Es erlaubt die Verbindung eines \textsc{Mica}z-Moduls mit einem Computer per USB-Schnittstelle. So kann über die USART-Schnittstelle des Moduls mit dem PC kommuniziert werden. Über diese Verbindung wurde die Schnittstelle zu den Volksbots realisiert. Weiterhin verfügt ein \textsc{Mib}520-Gateway über eine \textbf{JTAG}-Schnittstelle. \textbf{JTAG} steht für \textit{Joint Test Action Group} und ist eine standardisierte (IEEE 1149.1, siehe \cite{IEEE1149:2014:Online}) Schnittstelle für das Programmieren und das Debuggging von integrierten Schaltungen.
-
-\begin{figure}[th]
-  \centering
-    \includegraphics[width = 0.5\textwidth]{flow/blockmicaz.PNG}
-    \caption{Blockdiagramm der \textsc{Mica}z-Module}
-    \label{fig:blockmicaz}
-\end{figure}
 %\paragraph{Sensorik und Aktorik}
 %Hauptziel der Teilgruppe Materialfluss ist das Management von Paketen auf einer Rampe.
 %Die Aufgabe der Sensorik ist dabei, dass die mit Lichtschranken ausgestatteten Rampen Pakete detektieren und auf Änderungen der Positionen der Pakete reagieren.
