@@ -1,0 +1,27 @@
+\subsection{Agenten}
+Auf diesem Level werden die Verschiedene Agenten implementiert. Die Agenten RTE soll den Agenten ihnen alle benötigten Schnittstellen zur
+Verfügung stellen. Sie soll die Agenten aktivieren und deaktivieren können und die Kommunikation zwischen den Agenten managen
+(Messages innerhalb und außerhalb der Plattform trennen)\cite[S. 26]{Stasch:Hahn}. 
+\paragraph{Plattformagent}
+Jeder Plattformagent ist für die Steuerung von der verantwortlichen Rampe zuständig.
+Der Plattform Agent kümmert sich um die Annahme und Abgabe der Pakete mit den Volksbots. Er
+hat die alleinige Zugriffsrechte auf die Lichtschranken und ausfahrbaren Stifte. Er überwacht auch die reale Position 
+der Pakete und damit auch deren Reihenfolge.
+\paragraph{Orderagent}
+Der Orderagent spielt die Rolle der alten Materialflussrechner im Materialflusssystem. Seine aufgabe liegt bei der Bearbeitung der aufträge
+wo und wann die ware zu sein hat. Sie befinden sich auf jeder Plattform und können den Paketen ihre Destination (Zielmodul)mit Prioritäten (z.B.
+eine Ausgangszuweisung zu einem näheren Zeitpunkt hat höhere Priorität als eine Spätere und diese ist höher als eine Zwischeneinlagerung usw.) 
+und ihre Agent ID zuweisen\cite[S. 30]{Stasch:Hahn}. 
+\paragraph{Paketagent}
+Der Paket Agent repräsentiert die physische Fördereinheit. Beim Eintritt im System kümmert sich der Paketagent um 
+eine destination und schon bei vorhandener Destination gibt er dem Routingagent sein ziel mit Priorität zur weiteren Planung durch.
+Er aktualisiert regelmäßg seinen Status und gibt neue Routinganfragen wenn sich seine Destination ändert.
+Wenn das physische Paket das Modul wechselt, wandert der paketagent auch von der jeweiligen Plattform zur nächsten. 
+Da jeder Paket Agent gleich ist wird der Plattformwechsel realisiert, in dem seine Parameter weitergegeben
+werden, ein neuer Paket Agent auf der nächsten Plattform aktiviert wird und auf der vorigen Plattform deaktiviert\cite[S. 31]{Stasch:Hahn}.
+\paragraph{Routingagent}
+Der Routingagent kümmern sich um die Wegplanung der Agenten im Materialfluss. Der Weg bestimmt die Hops über welche Module das Paket geleitet wird.
+Das Ziel der Paket-Agents ist es, an ihrem Ziel in der effizientesten Art und Weise durch die Wahl optimaler Routen 
+mit minimalen Abständen und kürzesten Fahrzeiten anzukommen. Das heisst, dass Die Planungsanfragen
+von Paketagent kommen und bei erfolgter Planung oder neu Planung werden die betroffenen Paket Agenten informiert. Für die Planung der 
+Route wurde ein Routingalgorithmus entwickelt und implementiert.
