@@ -64,11 +64,6 @@ k\"onnen genutzt werden, um den angerufenen Prozess so schnell wie m\"oglich aus
 sind besonders bei der Abarbeitung von Hardware-Interrupts wichtig, da Interrupts-Handler keine Events, sondern nur
 Polling-Anfragen absetzten d\"urfen \cite[vgl.][S. 7]{Walter:2010}.
 
-\subsubsection{Treiber, Services und Interfaces}
-Auf dieser Ebene werden der Agenten RTE alle Funktionalitäten zur Verfügung gestellt. Das RTOS stellt Infrastruktur wie z.~B. Task Management, Timing, Events usw.
-Die Driver Ebene kümmert sich um die Schnittstellen/Pins des Controllers wie z.~B. Protokolle angeschlossener
-Devices\cite[S. 26]{Stasch:Hahn}. Die Aufgabe des Service ist es, Funktionen für spezielle Anwendungen zur Verfügung zu stellen.
-Darüber kommen die Interfaces. Diese sind nötig, damit bestimmte Funktionen immer gleich der Agenten RTE zur Verfügung gestellt werden, auch wenn der Service anders ist oder wenn ein Service verschiedene Interfaces bedienen soll\cite[S. 26]{Stasch:Hahn}.
-
+\input{src/flow/4_2_Treiber}
 \input{src/flow/4_3_AgentRTE}
 \input{src/flow/4_4_Agenten}
