@@ -52,7 +52,7 @@ und flexible Fahrzeuge, die extrem schnell Bed\"urfnisse befriedigen k\"onnen. H
 viele Universit\"aten in der ganzen Welt im Bereich der Schwarm-Experimente. Hier sollen die kleinen 
 FTF intelligent miteinander arbeiten. Die Fahrzeuge sollen sich ohne eine eigene separate FTS-Leitsteuerung 
 untereinander verst\"andigen, Strategien entwickeln und gemeinsam Arbeiten ausf\"uhren. Die Forschungsgebiete 
-hei\"ssen Agentensysteme und Schwarmtheorie. Die Mini-FTF k\"onnen nur intralogistische Aufgaben ausf\"uhren. 
+heißen Agentensysteme und Schwarmtheorie. Die Mini-FTF k\"onnen nur intralogistische Aufgaben ausf\"uhren. 
 Dennoch sind viele unkonventionelle Einsatzf\"alle denkbar. Die Kommissionierung (eine ausf\"uhrliche 
 Begriffserkl\"arung wird im Teil Materialfluss gegeben) ist die verbreitetste Anwendungsm\"oglichkeit von Mini-FTF\cite[vgl.][S. 105]{Guenther:2011}.
 Als Zusammenfassung kann man sagen, dass die Fahrzeugsteuerung die Systemsicherheit, das Energiemanagement, 
@@ -298,6 +298,19 @@ St\"uckg\"utern zu einem St\"uckgutstapel nach einem gewissen Muster verstanden 
 Handhabungsfunktionen k\"onnen entweder von Automaten z.~B. Roboter oder von Menschen durchgef\"uhrt werden.
 Auf Grund der Greifflexibilit\"at ist der Mensch jedoch meist un\"ubertroffen in der Handhabung.
 \end{itemize}
+
+\subsection{Multiagentensysteme}
+Zur Umsetzung der dezentralen Steuerung werden Softwareagenten eingesetzt. Bei Software-Agenten handelt es sich um Prozesse, die lose gekoppelt 
+und leicht austauschbar sind \cite[vgl.][S. 31-37]{GH:2010}. Es existieren verschiedene Definitionen eines Agenten, von denen sich keine als Standard etablieren konnte. Die hier verwendete Definition stammt von Brenner, Zarnekow und Wittig. Sie definieren einen Agenten als „ ... ein Softwareprogramm,
+das für einen Benutzer bestimmte Aufgaben erledigen kann und dabei einen Grad an
+Intelligenz besitzt, der es befähigt, seine Aufgaben in Teilen autonom durchzuführen und mit
+seiner Umwelt auf sinnvolle Art und Weise zu interagieren“\cite{BZW:1998}. Ein System, das aus mehreren kommunizierenden und interagierenden Agenten besteht heißt auch Multiagentensystem (MAS). Ein wesentlicher Vorteil von MAS bzw. von verteilten Steuerungssystemen ist die Fähigkeit, dynamisch auf Veränderungen zu reagieren. Ein Beispiel für eine solche Veränderung ist der Ausfall einer Steuerungseinheit beziehungsweise eines Agenten. Der Ausfall einer Einheit hat nicht unbedingt zur Folge, dass das gesamte System ausfällt.  Die restlichen Einheiten können sich eigenständig auf eine solche Veränderung einstellen und diese beim weiteren Ablauf berücksichtigen\cite[S. 13]{Roidl:2012}. Im Falle eines Materialflusssystems gilt gleiches auch für die Erweiterbarkeit des Systems: Reicht die Kapazität des Systems nicht mehr aus, können neue Module und somit auch Agenten mit erheblich geringerem Aufwand hinzugefügt werden, als dies bei statischen Systemen der Fall wäre.
+
+Die Modellierung von agentenbasierten Systemen für industrielle Bereiche wird durch die
+Entwicklung von Standards festgelegt. Diese beschreiben Modelle für die Architektur
+sowie die Kommunikation zwischen Agenten. Die FIPA (Foundation of Intelligent Physical Agents) ist das Standardisierungsorgan für Agentensysteme.
+Seit der Gründung 1996 in der Schweiz wurden verschiedene Standardisierungen veröffentlicht, so zum Beispiel auch die Agentenkommunikation (Agent Communication), die als FIPA/ACL (Agent Communication Language, ACL) bekannt geworden ist. Jeder Agent ist mit einem eindeutigen
+Identifikationsnamen (Agent Identifier oder AID) versehen und wird im Agent Management System verwaltet\cite[S. 24]{Roidl:2012}.
 
 \subsection{Fallbeispiele}
 \subsubsection{FTS in der Gl\"asernen Manufaktur Dresden (Volkswagen)}
