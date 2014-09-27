@@ -1,16 +1,72 @@
 \section{Teilbericht Fahrzeuge}
-Ziel der Teilgruppe Fahrzeuge ist es, einen autonomen Transport zwischen den Rampen zu realisieren. Dafür sollen die Volksbots in der Lage sein...
+
+Ziel der Teilgruppe Fahrzeuge ist es, einen autonomen Transport zwischen den Rampen zu realisieren. Dafür sollen die Volksbots in der Lage sein, auf die eingehenden Aufträge zu reagieren.
+Dies beinhaltet die Teilnahme an Auktionen ( Jobverteilung ), welche durch eine Aufwandsabschätzung des Auftrages eines jeden Volksbots entschieden werden. Nach der Zuweisung an den best geeigneten Volksbot soll dieser das Paket von der entsprechenden Startrampe holen und zur Zielrampe transportieren.
+
+Es wird in den folgenden Abschnitten behandelt:
+
+\begin{itemize}
+	\item Anforderungskatalog an das Endsystem
+	\item Beschreibung der Komponenten
+	\item Werkzeuge
+	\item Architektur
+	\item Implementierung
+	\item Erreichte Funktionalitäten
+	\item Herausforderungen
+	\item Ausblick
+\end{itemize} 
+
 \subsection{Anforderungen}
-(siehe Materialfluss)
-\subsubsection{Funktionale Anforderungen}
-\subsubsection{Nicht Funktionale Anforderungen}
+
+\begin{itemize}
+
+\item \textbf{Aufträge}: Aufträge enthalten den Start- und Zielpunkt, welche in der Umgebungskarte gesetzt werden. Diese werden für weitere Berechnungen verwendet.
+
+\item \textbf{Bieten}: Ein Volksbot ist in der Lage an einer Auftragsverteilung teilzunehmen, sofern er noch keinen Auftrag ausführt und sein Energievorrat nicht das kritische Minimum erreicht hat. Die Teilnahme beinhaltet eine Aufwandsschätzung anhand einer Distanzfunktion, sowie dem aktuellen Energiezustand. 
+
+\item \textbf{Planung}: Bei der Erteilung eines Auftrages und dem Bieten für einen Auftrag, muss der Volksbot die Route vom aktuellen Standort zum Startpunkt berechnen. Dies gilt ebenso vom Startpunkt zum Endpunkt.
+
+\item \textbf{Navigation}: Für die Routenplanung soll der kürzeste Weg verwendet werden, sofern möglich die direkte Verbindung zum gewüschten Ziel. Die Planung, Navigation und Positionierung erfolgt dabei auf dem entsprechenden Notebook.
+
+\item \textbf{Positionierung}: Die Umgebungskarte ist jedem Volksbot bekannt. Bei Bewegungen aktualisiert dieser seine Position mittels Odometrie, um die geplante Route korrekt zu befahren. Zur lokalen Unterstützung können die Laserscanner verwendet werden. Startpunkt eines Volksbots wird statisch definiert.
+
+\item \textbf{Synchronisation}: Jegliche Information eines Volksbots wird an die Simulation übermittelt. Dies beinhaltet neben der aktuellen Position auch den Ladezustand, sowie den Energievorrat eines Volksbots.
+
+\item \textbf{Feinsteuerung}: Das genaue Heranfahren an ein Objekt, sei es die Ladestation oder eine Rampe, erfolgt mit Hilfe der Laserscanner. 
+
+\item \textbf{Überabe}: Bei Einnahme der korrekten Position zum Be- oder Entladen des Volksbots findet ein Datenaustausch mit der entsprechenden Rampe statt. Es folgt eine kooperative Interaktion beider, bis der Volksbot das Paket erhalten oder abgeladen hat.
+
+\item \textbf{Energiemanagement}: Sobald ein Volksbot seinen kritischen Energiezustand erreicht, werden alle Auftragsverteilungen ignoriert und der Bot setzt die Dockingstation als primäres Ziel. Sollten mehrere Bots die Ladestation ansteuern, oder diese bereits belegt sein, so wird der Folgeablauf durch eine Queue oder ein anderes Verfahren geregelt.
+
+\item \textbf{Kollisionsvermeidung}: Sobald eine Kollision mit einem festen oder mobilen Objekt erkannt wird, wird eine Neuberechnung, Umplanung oder ein Ausweichverfahren eingeleitet um entsprechend zu reagieren.
+
+\end{itemize}
+
+
 
 \subsection{Beschreibung der Komponenten}
-\subsubsection{Volksbot}
+
+Bei dem Volksbot handelt es sich um einen modular aufgebauten und mobilen Roboter, der vom Frauenhofer-Institut IAIS entwickelt wurde. Die in diesem Projekt verwendeten Prototypen bestehen aus drei zentralen Elementen. 
+
+	\begin{figure}[h!]
+		\centering
+			\includegraphics[width=0.9\textwidth]{Volksbot.png}
+			\caption{Darsellung eines Volksbots}
+			\label{Volksbot}
+	\end{figure}	
+
 \begin{itemize}
-\item Bild Volksbot
-\item Hub/ Flow
-\item Fahreinheit
+
+\item \textbf{Fahreinheit}
+Die Fahreinheit wird aus 2 Maxonantrieben links und rechts, sowie dem Gerüst des Bots gebildet. Vorne befindet sich ein 3D sick Lms100 Laserscanner,  hinten ein 2D sick tim310 Laserscanner. Angesteuert werden die Hardwarekomponenten mit Hilfe eines Epos2 Controllers, der sich im Zentrum der Fahreinheit befindet. 
+
+\item \textbf{Hub-Flow}
+Zum Transportieren der Pakete ist der Volksbot mit einer Hubeinheit ausgestattet, die zum Schutz vor Überdrehungen zwei Hallsensor auf beiden seiten beinhaltet. Des weiteren befindet sich auf der Hubeinheit ein Förderband, an dem sich zwei Lichtschranken befinden. Diese sollen zur Ermittlung des Beladungszustandes dienen. 
+
+\item \textbf{Steuereinheit}
+Gesteuert wird das System mit Hilfe eines Notebooks, welches unter Ubuntu mit Hilfe von ROS die Hardware anspricht. Auf dem Notebook werden ausserdem sämtliche 
+Berechnungen durchgeführt. Neben der Ansteuerung des EPOS2 Controllers wird der Sick LMS100 über eine USB Schnittstelle angeschlossen. Zur Kommunikation mit den Rampen wird zusätzlich ein MICAZ Controller verwendet, welcher ebenfalls mittels einer USB Schnittstelle mit dem Notebook verbunden ist.
+
 \end{itemize}
 \subsection{Werkzeuge}
 Beschreibung ROS. 
@@ -171,6 +227,10 @@ Einführung in den Quellcode
 \begin{itemize}
 \item Was machen die Dateien? 
 \item Diagramm Michael
+
+folgt Sonntag im laufe des Tages
+
+
 \end{itemize}
 Wegfindung/ Navigation
 \begin{itemize}
@@ -180,7 +240,48 @@ Hub, Flow
 Kommunikation Volksbot, Micaz, Materialfluss
 
 \subsection{Erreichte Funktionalitäten}
-\subsection{Herausforderungen}
+
+Dem Volksbot wird manuell eine Position auf der Karte zugewiesen. Danach ist dieser in der Lage Ziele, die ihm auf der Karte angegeben werden, mit Hilfe des Dijkstra Algorithmus anzusteuern und durch die Berechnun einer Route zu erreichen. Er kann ausserdem mit den Rampen über das MICAZ Modul kommunizieren und somit einfache Aufträge annehmen. Mit Hilfe der Odometrie kennt er seine aktuelle Position, wobei der LMS100 zur Unterstützung verwendet wird. Einfache Hindernisse, die im Sichtfeld des Volksbots liegen werden umfahren und die Route zum entsprechenden Ziel wird fortgesetzt. Beim Anfahren einer Rampe kann er die mittels des Hubs die Pakete auf die entsprechende Höhe bringen und durch das Fließband an die Rampe übergeben oder dieses aufnehmen.
+
+\subsection{Herausforderungen}:
+
+\begin{itemize}
+
+\item Die Odometrie weisst zwischenzeitlich schwächen auf und musste mittels des Laserscanners ausgeglichen werden.
+
+\item Die Erkennung von Hindernissen muss angepasst werden, da zwar die Räder nicht mit anderen Hindernissen kollidieren, dafür der Rahmen des Hubs bei abstehenden Hindernissen oberhalb des Laserscanns weiterhin Kollisionen verursachen kann.
+
+\item Die optimale Ansteuerung des Maxon Controller erwiess sich als komplizierter wie erwartet, da kleine Werteänderungen schon zum Absturz des Volksbots führten und behoben werden mussten.
+
+\item ROS bietet zwar viele Erweiterungen, welche vorimplementiert sind, allerdings mussten diese angepasst und teilweise neu geschrieben werden.
+
+\item Fehlkonfigurationen führten zu unerwarteteten Fehler wie zum Beispiel das ansprechen der LMS100 Laserscanner, da diese zwar eine IP - Adresse hatten, diese allerdings mittels der EPOS Software Manuell neu gesetzt werden musste.
+
+
+
+
+\end{itemize}
+
+
 \subsection{Ausblick}
+
+Der Volksbot sollte um folgende Funktionalitäten erweitert werden:
+
+\begin{itemize}
+
+\item \textbf{Kollisionserkennung mobile Hindernisse}: Der Volksbot sollte Hindernisse, die sich selbstständig bewegen, erkennen und entsprechend reagieren. Dies könnte mittels einer Neuplanung der Route, einer kurzen Unterbrechung der Fahrt oder eines Ausweichmanövers umgesetzt werden. 
+
+\item \textbf{Rückkopplung an Simulation}: Die Volksbots sollten ihre aktuelle Position, sowie den Beladungs- und Eneriezustand an die Simulation zurückgeben.
+
+\item \textbf{Fahralgorithmus}: Es können alternative Alorithmen implementiert werden, um die Berechnungszeiten zu verkürzen oder optimalere Routen zu finden. 
+
+\item \textbf{Positionen}: Die Positionen der Rampen und Volksbots sollten auf der Karte bekannt gegeben werden, damit der Volksbot in der Lage ist, durch die Daten des Auftrages selbstständig sein Ziel anzusteuern.
+
+\item \textbf{Kostenabschätzung}: Eine optimale Berechnung zur Bestiimmung der benötigten Zeit, Strecke und Energieverbrauchs würde die Jobverteilung effizienter gestalten.
+
+\item \textbf{Ladestation}: Die Ladestation muss angebracht und getestet werde. Danach fehlt die automatische Erkennung des kritischen Zustandes, sowie das selbstständige Landen des Speichers.
+
+\end{itemize}
+
 
 
