@@ -76,6 +76,28 @@ Es existiert eine Bibliothek die auch echte Threads mit jeweils einzelnen Stacks
 
 Ein Problem der Event-getrieben Nebenläufigkeit ist jedoch das Reaktionsvermögen auf Echtzeitanforderungen und externe Events: Sollte ein Prozess eine aufwändige Berechnung durchführen, kann es zu spät sein, bis er die Kontrolle abgibt. Aus diesem Grund führt Contiki eine zweite Prioritätsebene ein, sogenannte Polls. Diese werden zwischen asynchron auftretende Events geplant und rufen in Reihenfolge einer Priorität alle Prozesse auf, die ein Polling-Flag gesetzt haben. Üblicherweise sind dies insbesondere hardwarenahe Prozesse, die auf Änderungen an den Ein- und Ausgangspins beziehungsweise auf Timer reagieren müssen.
 \paragraph{Der Rime Kommunikationsstack}\mbox{}\\
+Die drahtlose Kommunikation in Contiki erfolgt über einen leichtgewichtigen Netzwerstack namens \textit{Rime} \cite{Dunkels:2007:Proc}. . Dieser übergibt seine Daten an und erhält seine Daten von der sogenannten \textit{Charmeleon}-Architektur
+
+Der \textit{Rime}-Stack implementiert das Network- und MAC- (beziehungsweise Data Link-)Layer des ISO OSI Referenzmodells. Darunter folgt eine sogenannte \textit{Radio Duty Cycling}-Schicht (RDC), die der Stromersparnis in drahtlosen Sensornetzwerken dient: Es ermöglicht, die Übertragungs- und Empfangseinheit des Moduls auszuschalten, während es nicht benötigt wird.
+
+Auf der physikalischen Schicht schließlich wird die Übertragungseinheit über die Ein- und Ausgangspins angesteuert. Im Falle des \textsc{Mica}z-Moduls ist dies in CC2420-Chip für paketbasierte Funkübertragung auf einer Frequenz von 2.4 GHz \cite{CC2420:2014:Online}.
+
+\autoref{fig:rime} zeigt den kompletten Stack, ausgehend vom Radio Driver, der in der Projektgruppe implementiert wurde bis hin zum Treiber des Funkmoduls.
+
+\begin{figure}[h!]
+ \centering
+		\includegraphics[width=0.7\textwidth]{flow/Rime.png}
+	\caption{Der Rime Netzwerkstack \cite{Dunkels:2007:Proc}}
+	\label{fig:rime}
+\end{figure}
+
+Der Radio Driver der Projektgruppe implementiert ein einfach Network-Flooding, auf das im nächsten Abschnitt näher eingegangen wird. Dieses greift schließlich auf einen \textit{Atomic Broadcast Channel} (abc) zu. Dieser einfachste Channel in Contiki fügt der Nachricht lediglich die ID des Senders und eine Time-To-Live Angabe für das Network-Flooding als Header-Informationen hinzu. Der Channel sendet das Paket an den \textit{Rime Network Layer}. Dieser ruft den Chameleon-Service auf. Dieser sorgt für eine Trennung von Header-Informationen und Ebenen und reduziert den Header, indem er redundante Informationen entfernt. 
+
+Anschließend wird das Paket der \textit{Carrier Sense Multiple Access}-Schicht (CSMA) übergeben. Da drahtlose Kommunikation immer über ein geteiltes Medium erfolgt, muss vor dem Senden geprüft werden, ob nicht gerade ein anderer Knoten sendet. Ist dies der Fall, wird mit der Übertragung gewartet, bis das Medium wieder frei ist.
+
+Wurde ein freies Medium erkannt, wird das Paket an den RDC-Treiber übergeben. Im Falle unser Projektgruppe implementiert dieser das \textit{X-Mac}-Protokoll für energiesparende Kommunikation in drahtlosen Sensornetzwerken \cite{Buettner:2006:Proc}. Dieses nutzt Early Acking und möglichst frühe Übertragung der Adresse, um die nötigen Wachzeiten der Übertraungseinheiten der teilnehmenden Module möglichst gering zu halten und so Strom zu sparen. X-Mac sorgt weiterhin dafür, dass auch der Empfänger aufgeweckt und damit empfangsbereit ist. Ist dies der Fall, wird das Paket schließlich an den CC2420-Driver übergeben, der die passenden Ausgangspins bedient, um den externen Funkchip anzusprechen.
+
+Ein eingehendes Paket nimmt exakt den umgekehrten Weg: Der CC2420-Chip löst einen Interrupt aus, sobald er ein Paket empfangen hat. Dieses wird von jeder der genannten Schichten verarbeitet und bis zum Radio Driver aus der Projektgruppe weitergeleitet.
 \label{sec:rime}
 \input{src/flow/4_2_Treiber}
 \input{src/flow/4_3_AgentRTE}
