@@ -340,4 +340,33 @@ Abbildung \ref{addEventClient} zeigt die clientseitige Verarbeitung der Events, 
 \end{figure} 
 \newpage
 \subsection{Testen und Validieren}
-%Todo
+Das Artefakt, welches zuletzt ausgebracht werden soll, wird mithilfe verschiedener Werkzeuge validiert. Dazu gehören mitunter Unit-Tests und manuelle UI-Tests. Mithilfe der Unit-Tests werden verschiedene Komponenten innerhalb der Software getestet und dessen Funktionsweise mithilfe dessen garantiert. Unit-Tests sind aber nur dann ein probates Mittel, wenn man abgeschlossene Funktionen innerhalb der Software testen möchte. Sobald es darum geht, Anordnung und Funktionsweise von UI-Komponenten zu testen (wie z.B. die Bewegung der Bots), reichen die Möglichkeiten von Unit-Tests leider nicht mehr aus. Zu diesem Zwecke könnte man automatisierte UI-Tests implementieren. Diese sind aber nur schwer zu realisieren und bedürfen einem hohen Arbeitsaufwand bei der initialen Realisierung. Zunächst müsste die Infrastruktur für solche Tests bereitsgestellt werden und in der Praxis hat sich gezeigt, dass diese einen sehr hohen Wartungsaufwand benötigen. Aus diesem Grund wurde hier auf automatisierte UI-Tests verzichtet und wurden durch manuelle Tests ersetzt. Nachdem die Simulationsmitglieder Features ausgebracht haben, wurden jeweils eine handvoll UI-Tests durchgeführt, die die Korrektheit UI versichert haben. Zu diesem Testset gehören folgende Tests mit den jeweiligen Akzeptanzkriterien:
+
+\begin{itemize}
+\item Laden eines Szenarios.
+	\begin{itemize}
+	\item Sind die Objekte korrekt auf der UI angeordnet und charakterisiert (wird der Bot als Bot erkannt oder fälschlicherweise als Rampe / Wand)?
+	\end{itemize}	
+	
+\item Aktuere können per Drag and Drop in dem Szenario anders platziert werden
+	\begin{itemize}
+	\item Die Aktuere lassen sich mit der linken Maustaste aufheben
+	\item Ein Aktuere der soeben aufgehoben wurde, kann durch erneutes linksklicken, neu platziert werden
+	\end{itemize}	
+	
+
+
+\item Speichern eines geänderten Szenarios.
+	\begin{itemize}
+	\item Das Szenario wird nach dem speichern korrekt, mit den vorgenommenen Änderungen geöffnet.
+	\item Das alte Szenario wurde nicht überschrieben
+	\end{itemize}	
+	
+\item Ausführen der Simulation
+	\begin{itemize}
+	\item Die Simulation läuft über 5 Minuten stabil
+	\item Es wird keine Exception im in der Logausgabe erzeugt
+	\item Die UI wird über Bewegungen der Aktuere informiert und zeichnet diese wie erwartet
+	\end{itemize}	
+
+\end{itemize}
