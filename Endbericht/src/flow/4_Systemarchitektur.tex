@@ -1,18 +1,31 @@
 \subsection{Systemarchitektur}
 
+Das Materialflusssystem auf den \textsc{Mica}z-Modulen ist in einer Schichtenarchitektur aufgebaut. Diese ist an den Aufbau von AUTOSAR \cite{AUTOSAR:2014:Online} angelehnt. Abbildungen \ref{fig:architecture_ramp} und \ref{fig:architecture_vb} zeigen den Aufbau des Systems auf den Rampen beziehungsweise Volksbots.
+
 \begin{figure}[h!]
  \centering
-		\includegraphics[width=0.9\textwidth]{flow/Architektur_Rampe.png}
+		\includegraphics[width=1\textwidth]{flow/Architektur_Rampe.png}
 	\caption{Architektur der Rampe \cite{Stasch:Hahn}}
-	\label{ArchitekturMicazRampe}
+	\label{fig:architecture_ramp}
 \end{figure}
 
 \begin{figure}[h!]
  \centering
-		\includegraphics[width=0.9\textwidth]{flow/Architektur_VB.png}
+		\includegraphics[width=1\textwidth]{flow/Architektur_VB.png}
 	\caption{Architektur der Volksbots aus Sicht des Materialfluss \cite{Stasch:Hahn}}
-	\label{ArchitekturMicazVB}
+	\label{fig:architecture_vb}
 \end{figure}
+
+Ganz unten in der Hierarchie befindet sich die eigentliche \textsc{Mica}z Hardware (Hardware Level) mit allen Peripherie-Komponenten. Diese wird vom den darüber liegenden Background Level angesteuert. Im Backgrund Level befinden sich im je nach Modul hardwareabhängige Treiber für drahtlose und serielle Kommunikation, Lichtschranken, Bolzen und einen externen Flash-Speicher. Diese agieren meist auf Pin-Ebene, steuern also die einzelnen GPIOs des Mikrocontrollers. Eine Besonderheit stellt hier der Radio-Driver dar, der nicht direkt auf die Hardware, sondern auf den Kommunikationsstack des Echtzeitbetriebssystems Contiki zugreift.
+
+Darüber finden sich Interfaces, die die Funktionen der Treiber aufbereiten und in Funktionen gliedern, die es den oberen Schichten erlauben, ohne großen Aufwand und Kenntnis der Implementierungsdetails (konkreter Ein- beziehungsweise Ausgangs-Pin, Timing, usw.) auf die Hardware zuzugreifen. Neben den Treibern und Interfaces befindet sich im Background Level auch das Echtzeitbetriebssystem Contiki OS. Dieses beinhaltet unter anderem einen Scheduler, eine Prozessverwaltung und den Kommunikationsstack \textit{Rime} (siehe \autoref{sec:rime}). 
+
+Schließlich folgt auf der höchsten Hierarchieebene das Agent Level. Hier befindet sich zunächst das AgentRTE, eine Laufzeitumgebung für Agenten. Dieses ist weitgehend hardwareunabhängig. Lediglich bei der Prozessverwaltung gibt es noch Unterschiede die in \autoref{sec:AgentRTE} noch näher betrachtet werden.
+Aufgaben des AgentRTE sind vor allem die Verwaltung aller Agenten auf der Plattform und deren Scheduling, sowie der Austausch von Nachrichten untereinander.
+
+Das letzte Glied in der Kette bilden letztendlich die Agenten. Sie werden vom AgentenRTE verwaltet und sind grundsätzlich hardwareunabhängig. Die Agenten bilden die echte Betriebslogik des Systems ab und kommunizieren dafür untereinander mit Nachrichten. Auf jedem Modul gibt es einen Platform-, einen Order- und einen Routing-Agenten. Dazu können auf den Volksbots ein und auf den Rampen bis zu vier Paket-Agenten registriert sein.
+
+In den folgenden Abschnitten wird nun die Implementierung des Materialflusssystems anhand dieser Architektur erläutert, beginnend beim Echtzeitbetriebssystem Contiki, über die Treiber und Interfaces hin zum AgentenRTE und schließlich den Agenten.
 
 \subsubsection{Contiki}
 Contiki ist ein quelloffenes Echtzeitbetriebssystem (RTOS: Real Time Operating System), das in dieser Projektgruppe auf den \textsc{Mica}z-Modulen eingesetzt wird. Es ist speziell für die Anforderungen des Internet of Things und von Wireless Sensor Networks zugeschnitten und bietet einen einfachen ereignisgesteuerten Betriebssystemkern mit sogenannten Protothreads (Threads, die sich einen gemeinsamen Stack teilen und daher schnell gewechselt werden können), optionalem präemptives Multithreading, Interprozess-Kommunikation via Message-Passing mit Events, eine dynamische Prozessstruktur mit Unterstützung für das Laden und Beenden von Prozessen und einen nativen Kommunikationsstack für die drahtlose Kommunikation gemäß dem IEEE-Standard \textit{802.15.4}.
@@ -77,7 +90,7 @@ setzt seine Ausführung erst fort, wenn der aufgerufene Prozess die Kontrolle wi
 \paragraph{Scheduling und Timer}\mbox{}\\
 
 \paragraph{Der Rime Kommunikationsstack}\mbox{}\\
-
+\label{sec:rime}
 \input{src/flow/4_2_Treiber}
 \input{src/flow/4_3_AgentRTE}
 \input{src/flow/4_4_Agenten}
