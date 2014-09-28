@@ -3,7 +3,7 @@
 Ziel der Teilgruppe Fahrzeuge ist es, einen autonomen Transport zwischen den Rampen zu realisieren. Dafür sollen die Volksbots in der Lage sein, auf die eingehenden Aufträge zu reagieren.
 Dies beinhaltet die Teilnahme an Auktionen ( Jobverteilung ), welche durch eine Aufwandsabschätzung des Auftrages eines jeden Volksbots entschieden werden. Nach der Zuweisung an den besten geeigneten Volksbot soll dieser das Paket von der entsprechenden Startrampe holen und zur Zielrampe transportieren.
 
-Es wird in den folgenden Abschnitten behandelt:
+Folgendes wird in den nächsten Unterkapiteln behandelt:
 
 \begin{itemize}
 	\item Anforderungskatalog an das Endsystem
@@ -28,7 +28,7 @@ Es wird in den folgenden Abschnitten behandelt:
 
 \item \textbf{Navigation}: Für die Routenplanung soll der kürzeste Weg verwendet werden, sofern möglich die direkte Verbindung zum gewüschten Ziel. Die Planung, Navigation und Positionierung erfolgt dabei auf dem entsprechenden Notebook.
 
-\item \textbf{Positionierung}: Die Umgebungskarte ist jedem Volksbot bekannt. Bei Bewegungen aktualisiert dieser seine Position mittels Odometrie, um die geplante Route korrekt zu befahren. Zur lokalen Unterstützung können die Laserscanner verwendet werden. Startpunkt eines Volksbots wird statisch definiert.
+\item \textbf{Positionierung}: Die Umgebungskarte ist jedem Volksbot bekannt. Bei Bewegungen aktualisiert dieser seine Position mittels Odometrie, um die geplante Route korrekt zu befahren. Zur lokalen Unterstützung werden die Laserscanner verwendet werden. Startpunkt eines Volksbots wird statisch definiert.
 
 \item \textbf{Synchronisation}: Jegliche Information eines Volksbots wird an die Simulation übermittelt. Dies beinhaltet neben der aktuellen Position auch den Ladezustand, sowie den Energievorrat eines Volksbots.
 
@@ -58,14 +58,14 @@ Bei dem Volksbot handelt es sich um einen modular aufgebauten und mobilen Robote
 \begin{itemize}
 
 \item \textbf{Fahreinheit}
-Die Fahreinheit wird aus 2 Maxonantrieben links und rechts, sowie dem Gerüst des Bots gebildet. Vorne befindet sich ein 3D sick Lms100 Laserscanner,  hinten ein 2D sick tim310 Laserscanner. Angesteuert werden die Hardwarekomponenten mit Hilfe eines Epos2 Controllers, der sich im Zentrum der Fahreinheit befindet. 
+Die Fahreinheit wird aus zwei Maxonantrieben links und rechts, sowie dem Gerüst des Bots gebildet. Vorne befindet sich ein SICK LMS100 Laserscanner,  hinten ein SICK TiM310 Laserscanner. Angesteuert werden die Hardwarekomponenten mit Hilfe von vier Epos2 Controllern, die mit Hilfe einer CAN-Verbindung ansteuerbar sind. 
 
-\item \textbf{Hub-Flow}
+\item \textbf{Hub-Förderband}
 Zum Transportieren der Pakete ist der Volksbot mit einer Hubeinheit ausgestattet, die zum Schutz vor Überdrehungen zwei Hallsensor auf beiden seiten beinhaltet. Des weiteren befindet sich auf der Hubeinheit ein Förderband, an dem sich zwei Lichtschranken befinden. Diese sollen zur Ermittlung des Beladungszustandes dienen. 
 
 \item \textbf{Steuereinheit}
-Gesteuert wird das System mit Hilfe eines Notebooks, welches unter Ubuntu mit Hilfe von ROS die Hardware anspricht. Auf dem Notebook werden ausserdem sämtliche 
-Berechnungen durchgeführt. Neben der Ansteuerung des EPOS2 Controllers wird der Sick LMS100 über eine USB Schnittstelle angeschlossen. Zur Kommunikation mit den Rampen wird zusätzlich ein MICAZ Controller verwendet, welcher ebenfalls mittels einer USB Schnittstelle mit dem Notebook verbunden ist.
+Gesteuert wird das System mit Hilfe eines Notebooks, welches unter Ubuntu mit Hilfe des Robot Operating System (ROS) die Hardware anspricht. Auf dem Notebook werden ausserdem sämtliche 
+Berechnungen durchgeführt. Neben der Ansteuerung der EPOS2 Controller wird der SICK LMS100 über eine Ethernet Schnittstelle angeschlossen. Zur Kommunikation mit den Rampen wird zusätzlich ein MICAZ Modul verwendet, welches mittels einer USB Schnittstelle mit dem Notebook verbunden ist.
 
 \end{itemize}
 \subsection{Werkzeuge}
@@ -77,8 +77,7 @@ Wichtige Funktionen in ROS:
 \item ...
 \end{itemize}
 \subsubsection{Robot Operating System (ROS)}
-Die Hauptelemente des Projekts FAISE sind die Fahrzeuge (Volksbots). Die Volksbots sind
-mit einem „Robot Operating System“ gerüstet, der unter Linux- Betriebssystem läuft.
+
 \subsubsection{Was ist ROS}
 Es gibt viele Robotik-Frameworks, die spezifisch für präzise Anwendungen, für Prototypen,
 erstellt wurden. ROS strebt da eher das Allgemeine an. Das »Robot Operating System«
@@ -248,18 +247,15 @@ Dem Volksbot wird manuell eine Position auf der Karte zugewiesen. Danach ist die
 
 \begin{itemize}
 
-\item Die Odometrie weisst zwischenzeitlich schwächen auf und musste mittels des Laserscanners ausgeglichen werden.
+\item Durch die Fehleranfälligkeit der einfachen Odometrieberechnung aus den Motordaten, wurde die in ROS vorhandene \textit{adaptive Monte Carlo localization} Methode zur Verbesserung der Selbstlokalisierung verwendet.
 
 \item Die Erkennung von Hindernissen muss angepasst werden, da zwar die Räder nicht mit anderen Hindernissen kollidieren, dafür der Rahmen des Hubs bei abstehenden Hindernissen oberhalb des Laserscanns weiterhin Kollisionen verursachen kann.
 
-\item Die optimale Ansteuerung des Maxon Controller erwiess sich als komplizierter wie erwartet, da kleine Werteänderungen schon zum Absturz des Volksbots führten und behoben werden mussten.
+\item Die optimale Ansteuerung des Maxon Controller erwies sich als komplizierter wie erwartet, da kleine Werteänderungen schon zum Absturz des Volksbots führten und behoben werden mussten.
 
-\item ROS bietet zwar viele Erweiterungen, welche vorimplementiert sind, allerdings mussten diese angepasst und teilweise neu geschrieben werden.
+\item ROS bietet zwar viele nützliche Erweiterungen, deren Parametrisierung teilweise sehr aufwendig und unübersichtlich war.
 
-\item Fehlkonfigurationen führten zu unerwarteteten Fehler wie zum Beispiel das ansprechen der LMS100 Laserscanner, da diese zwar eine IP - Adresse hatten, diese allerdings mittels der EPOS Software Manuell neu gesetzt werden musste.
-
-
-
+\item Die Programmierung und Parametrisierung der Teilfunktionen musst mit Blick auf die CPU-Auslastung der Steuereinheit geschehen, da einige Berechnungen bei falscher Verwendung zu sehr hohen Auslastungen und einer unzureichenden Performance des Roboters führten.
 
 \end{itemize}
 
@@ -269,6 +265,8 @@ Dem Volksbot wird manuell eine Position auf der Karte zugewiesen. Danach ist die
 Der Volksbot sollte um folgende Funktionalitäten erweitert werden:
 
 \begin{itemize}
+
+\item \textbf{Genauigkeit bei der Übergabe}: Die Genauigkeit des Heranfahrens an eine Zielposition, wie z.B. den Ausgang einer Rampe, sollte verbessert werden, um eine erfolgreiche Übergabe zu gewährleisten. Schon kleinere Abweichungen können dazu führen, dass Pakete an einigen Stellen festhängen oder sogar zu Boden fallen.
 
 \item \textbf{Kollisionserkennung mobile Hindernisse}: Der Volksbot sollte Hindernisse, die sich selbstständig bewegen, erkennen und entsprechend reagieren. Dies könnte mittels einer Neuplanung der Route, einer kurzen Unterbrechung der Fahrt oder eines Ausweichmanövers umgesetzt werden. 
 
