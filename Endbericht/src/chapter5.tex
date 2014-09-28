@@ -80,6 +80,14 @@ wird bis die Startposition wieder gefunden wurde, jede Position der ausgewählte
 Dies ist notwendig, da das Fahrzeug diese Positionen abfahren soll, jedoch liegen die Punkte in umgekehrter Reihenfolge vor, weil der Pfad von der Endposition zur Startposition ermittelt wird.
 
 \subsubsection{Konzeption der Statistiken}
+Um eine Vergleichbarkeit zwischen verschiedenen Ausführungen einer Simulation zu schaffen, müssen Statistiken berechnet werden, die einfache Kennzahlen berechnet, mithilfe dessen man die Simulationen bewerten und vergleichen kann. Als wichtigen Kennzahlen wurde hier die Auslastung der Volksbots und die Durchlaufzeit der Pakete in der Simulation gewählt.
+
+\begin{enumerate}
+	\item \textbf{Auslastung der Volksbots}: Die Statistik erhält immer dann Daten, wenn ein Bot einen seinen Status wechselt ("Arbeitend" <-> "Wartend"). Daraufhin muss das Intervall berechnet werden, welches zwischen dem jetzigen und dem letzten Statuswechsel lag. Dieses sagt dann aus, wie lange der Volksbot sich in dem jeweiligen Status befand. Diese Daten werden dann über alle Bots aggregiert und ins Verhältnis gesetzt und visuell aufbereitet abrufbar.
+	\item \textbf{Paketdurchlaufzeit}: Die Statistik der Paketdurchlaufzeit muss immer dann benachrichtet werden, sobald ein neuer Auftrag in die Simulation eintritt. Dieser Zeitpunkt wird im dann festgehalten und sobald dieses Paket dann die Simulation verlässt (Abtransport eines Pakets) wird das Intervall zwischen Eintritt und Austritt des Pakets berechnet. Der neue Wert wird dann in einem Liniendiagramm vermerkt. Das Liniendiagramm bietet die Möglichkeit, zu erkennen wie sich die Paketdurchlaufzeit über die Ablaufzeit der Simulation verändert.
+\end{enumerate}
+
+Für die Kapselung der Aufgaben, die zur Datenhaltung und Berechnung der Statistiken nötig sind, wird eigens ein Statistik-Agent in der Simulation eingeführt. Dieser soll zu bestimmten Ereignissen informiert werden. Er sorgt dafür, die Daten zu aggregieren und in aufbereiteter Form der UI bereitzustellen. Des weiteren informiert er die UI, sobald neue Daten bereitstehen.
 
 \subsubsection{Interaktion der Komponenten} \label{Interaktion der Komponenten}
 Durch das Zusammenspiel der Systemkomponenten soll eine Simulation durchgeführt werden. Die Aufträge müssen entsprechend ihrer Zeiten an den Server geschickt werden. Dies soll clientseitig durch einen Timer durchgeführt werden. Abbildung \ref{Int} zeigt den Ablauf und die Komponenten, die für das Starten einer Simulation erforderlich sind: 
