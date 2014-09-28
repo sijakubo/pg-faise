@@ -79,7 +79,7 @@ Nachdem alle Kacheln auf der Karte mit Werten versehen wurden, wird vom Endpunkt
 wird bis die Startposition wieder gefunden wurde, jede Position der ausgewählten Kacheln gespeichert. Nachdem der Startpunkt gefunden wurde, müssen sämtliche gefundenen Positionen in der Liste getauscht werden (Punkte an Ende der Liste starten nun am Anfang der Liste und umgekehrt).
 Dies ist notwendig, da das Fahrzeug diese Positionen abfahren soll, jedoch liegen die Punkte in umgekehrter Reihenfolge vor, weil der Pfad von der Endposition zur Startposition ermittelt wird.
 
-\subsubsection{Konzeption der Statistiken}
+\subsubsection{Konzeption der Statistiken}\label{konzept_statistik}
 Um eine Vergleichbarkeit zwischen verschiedenen Ausführungen einer Simulation zu schaffen, müssen Statistiken berechnet werden, die einfache Kennzahlen berechnet, mithilfe dessen man die Simulationen bewerten und vergleichen kann. Als wichtigen Kennzahlen wurde hier die Auslastung der Volksbots und die Durchlaufzeit der Pakete in der Simulation gewählt.
 
 \begin{enumerate}
@@ -276,7 +276,14 @@ Damit bei der Rückwärtsberechnung die Punkte eines Pfades gespeichert werden k
 Der implementierte Pathfindingalgorithmus wurde hingehen in zwei Klassen implementiert. Bei der einen Klasse handelt sich um eine abstrakte Klasse, welches alle Funktionen, Eigenschaften und Statusmeldungen vom eigentlichen Pathfinding beherbergt, bis auf die Implementation der eigentlichen Pfadsuche. Die Funktion für die Pfadsuche wurde in einer seperaten Klasse implementiert, welche von der abstrakten Klasse erbt (Polymorphie), so dass diese sämliche zu Grunde legende Funktionen verwenden kann. Diese Struktur wurde dahingehend entwickelt, weil der verwendete Suchalgorithmus lediglich einen Pfad ermittelt und zurück liefert. Jedoch wäre es auch möglich den Suchalgorithmus zu modifizieren, um so mehrere alternative Routen auf einer Karte zu ermitteln, die mit bestimmten Kriterien versehen sind. Da diese Suche auch die grundlegenden Funktionen verwenden würde, wurde nur die eigentliche Funktion für die Pfadsuche gekapselt (die Rückwärtsssuche).
 
 \subsubsection{Implementierung der Statistiken}
-% TODO
+Nachdem innerhalb des Kapitels \ref{konzept_statistik} das Konzept der Statistiken erarbeitet wurde, geht es in diesem Kapitel darum, die Statistiken umzusetzen. Um Statistiken anbieten zu können, musste zunächst ein geeignetes Framework gefunden werden, mit dessen Hilfe man leich Statistiken erzeugen kann. Hierzu wurde das Framework \textbf{Sencha GXT} gewählt (http://www.sencha.com/products/gxt/). Diese bietet eine Vielzahl von Möglichkeiten, um in einfacher Art und Weise Diagramme zu generieren.
+
+Die Einbindung der Diagramme erfolgt über Popups. So hat der Benutzer die Möglichkeit, nach belieben die für ihn interessante Statistik ein- bzw. auszublenden. 
+
+Die Berechnung der Statistiken erfolgt mithilfe des Statistik-Agenten, der eigens dafür in die Simulation eingebracht wird. Dieser wird an definierten Stellen von den unterschiedlichen Agenten aufgerufen, wenn ein bestimmtes Ereignis eingetreten ist (z.B. Ein Auftrag verlässt die Simulation, ein Bot wechselt seinen Status von Arbeitend auf Wartend, ...). Diese Daten werden dann vom Statistik-Agenten aufgefangen und zu seiner Datenhaltung hinzugefügt. Sobald ein Ereignis eine Neuberechnung einer Statistik erfordert, informiert der Statistik-Agent die UI und fordert eine Neuzeichnung dieser. So erhält der Benutzer sofort Feedback über das soeben eingetretene Ereignis. Die Kommunikation zwischen Server und Client erfolgt hier mithilfe von AJAX. Die Ergebnisse werden dem Benutzer also nahezu Live präsentiert. 
+
+Die Statistiken sind in der Simulation im Reiter "Statistiken" zu finden.
+
 \subsubsection{Interaktion der Komponenten}
 In Abschnitt \ref{Interaktion der Komponenten} wurden die Interaktionen der Systemkomponenten auf logischer Ebene beschrieben, die für das Starten einer Simulation bis hin zur Visualisierung notwendig sind. Im Folgenden Abschnitt soll beschrieben werden, wie und mit welchen Mitteln die einzelnen Schritte implementiert wurden. 
 \paragraph{Client-Server Kommunikation}
@@ -353,8 +360,6 @@ Das Artefakt, welches zuletzt ausgebracht werden soll, wird mithilfe verschieden
 	\item Die Aktuere lassen sich mit der linken Maustaste aufheben
 	\item Ein Aktuere der soeben aufgehoben wurde, kann durch erneutes linksklicken, neu platziert werden
 	\end{itemize}	
-	
-
 
 \item Speichern eines geänderten Szenarios.
 	\begin{itemize}
