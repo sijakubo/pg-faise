@@ -1,0 +1,11 @@
+struct Communication_Message {
+	uint16_t destination_id; // Empfänger-ID oder Gruppen-ID
+	uint16_t source_id; // Sender-ID
+	int8_t priority; // Agent, Device, NoMessage
+	uint16_t type; // Nachrichten-Typ
+	uint16_t agentType; //nur für die Registrierung von Agenten: Agenten-Typ
+	uint16_t messageID; // Sender und Message-ID kennzeichnen eine Nachricht eindeutig
+	struct ThreeByte_ID conversationID; // Genutzt für Auktionen zwischen Volksbots
+	int8_t dataLength; // Länge der Nutzdaten in Bytes
+	uint8_t data[MAX_MESSAGE_DATA_SIZE];
+};

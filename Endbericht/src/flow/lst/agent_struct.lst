@@ -1,0 +1,13 @@
+struct Agent {
+	uint8_t local_id; // lokale Position für Nachrichten-Buffer
+	uint8_t agent_type; // Typ des Agenten: Order-Agent, Routing-Agent, ...
+	uint16_t agent_id; // global eindeutige ID
+	const struct AgentCallbacks *cb; // Funktionszeiger
+	uint8_t data[4]; // Daten, die zwischen Aufrufen gesichert werden müssen
+};
+
+struct AgentCallbacks {
+	void (*agent_init)(struct Agent* a); // Ausführung bei Initialisierung
+	void (*agent_main)(struct Agent* a); // Ausführung bei jedem Aufruf
+	void (*agent_kill)(struct Agent* a); // Ausführung bei Terminierung
+};

@@ -14,6 +14,8 @@
 \usepackage{layout}
 \usepackage{hyperref}
 \usepackage[ngerman,bookmarks=true,bookmarksopen=true,bookmarksnumbered=true]{hyperref}
+\usepackage{listingsutf8}
+\usepackage{caption}
 \graphicspath{{image/}}
 \DeclareGraphicsExtensions{.png,.pdf}
 
@@ -32,6 +34,29 @@
 
 \setcounter{tocdepth}{4}
 \setcounter{secnumdepth}{4} 
+\lstset{inputencoding=utf8/latin1}
+\lstdefinestyle{customc}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  %frame=L,
+  xleftmargin=\parindent,
+  language=C,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  morekeywords={uint8_t,uint16_t,int8_t},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+}
+
+\DeclareCaptionFont{white}{ \color{white} }
+\DeclareCaptionFormat{listing}{
+  \colorbox[cmyk]{0.43, 0.35, 0.35,0.01 }{
+    \parbox{\textwidth}{\hspace{15pt}#1#2#3}
+  }
+}
+%\captionsetup[lstlisting]{ format=listing, labelfont=white, textfont=white, singlelinecheck=false, margin=0pt, font={bf,footnotesize} }
 
 \begin{document}
 	% Cover

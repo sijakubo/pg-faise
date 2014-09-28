@@ -1,13 +1,23 @@
 \subsection{Systemarchitektur}
 
+\begin{figure}[h!]
+ \centering
+		\includegraphics[width=0.9\textwidth]{flow/Architektur_Rampe.png}
+	\caption{Architektur der Rampe \cite{Stasch:Hahn}}
+	\label{ArchitekturMicazRampe}
+\end{figure}
+
+\begin{figure}[h!]
+ \centering
+		\includegraphics[width=0.9\textwidth]{flow/Architektur_VB.png}
+	\caption{Architektur der Volksbots aus Sicht des Materialfluss \cite{Stasch:Hahn}}
+	\label{ArchitekturMicazVB}
+\end{figure}
+
 \subsubsection{Contiki}
-Contiki ist ein Open Source Echtzeitbetriebssystem, das bei uns in der PG auf den MICAz-Modulen eingesetzt wird.
-Contiki bietet einen einfachen ereignisgesteuerten Betriebssystemkern mit sogenannten Protothreads, optionalem 
-pr\"aemptiven Multiprogramming, Interprozesskommunikation via Messagepassing durch Events, eine dynamische Prozessstruktur
-mit Unterst\"utzung f\"ur das Laden und Entladen von Programmen, nativen TCP/IP-Support über den uIP TCP/IP-Stack und eine 
-grafische Benutzerschnittstelle, welche direkt auf einem Bildschirm oder als virtuelle Anzeige \"uber Telnet oder VNC genutzt werden kann \cite{Wikipedia:2013:Online}.
+Contiki ist ein quelloffenes Echtzeitbetriebssystem (RTOS: Real Time Operating System), das in dieser Projektgruppe auf den \textsc{Mica}z-Modulen eingesetzt wird. Es ist speziell für die Anforderungen des Internet of Things und von Wireless Sensor Networks zugeschnitten und bietet einen einfachen ereignisgesteuerten Betriebssystemkern mit sogenannten Protothreads (Threads, die sich einen gemeinsamen Stack teilen und daher schnell gewechselt werden können), optionalem präemptives Multithreading, Interprozess-Kommunikation via Message-Passing mit Events, eine dynamische Prozessstruktur mit Unterstützung für das Laden und Beenden von Prozessen und einen nativen Kommunikationsstack für die drahtlose Kommunikation gemäß dem IEEE-Standard \textit{802.15.4}.
  
-\paragraph{Systemarchitektur}
+\paragraph{Build-Vorgang}\mbox{}\\
 Ein laufendes Contiki System besteht aus dem Kernel, Bibliotheken, Prozessen und dem Programm-Lader, mit dem Anwendungen zur Laufzeit aus dem Speicher oder \"uber ein Funkmodul geladen werden k\"onnen.
 Die unten stehende Abbildung zeigt die Aufteilung des Betriebssystems in zwei Teile. 
 \begin{figure}[h!]
@@ -21,23 +31,7 @@ Im allgemeinen sind \"Anderungen am Core nicht vorgesehen und nur unter Verwendu
 Die konkrete Aufteilung des Systems in Core und ladbare Programme wird beim Kompilieren des Systems entschieden und h\"angt 
 von der Hardware-Plattform ab \cite[vgl.][S. 7]{Walter:2010}. Ger\"atetreiber werden als Bibliotheken implementiert. 
 
-\paragraph{Events}
-In Contiki kommunizieren Prozesse \"uber Events. Auch der Kernel versendet Events, um Prozesse \"uber ihren Status 
-(Init, Continue, Exit) oder \"uber abgelaufene Timer zu Informieren. Zur Identifikation stehen dabei Event IDs zur 
-Verf\"ugung. Die Event IDs 0-127 k\"onnen vom Benutzer frei vergeben werden, w\"ahrend die Prozess IDs ab 128 vom 
-System genutzt werden. Grunds\"atzlich unterscheidet Contiki zwischen synchronen und asynchronen Events. 
-\begin{itemize}
-\item \textbf{Asynchrone Events} sind eine Form der Deferred Procedure Call: asynchrone Events werden vom Kernel in einer 
-Warteschlange gespeichert. Die Scheduling-Funktion des Kernels l\"auft nach Systemstart in einer Endlosschleife. 
-In jedem Durchlauf wird ein Event aus der Schlange entnommen und wird einige Zeit sp\"ater an den Zielprozess weitergeleitet.
-\item \textbf{Synchrone Events} gleichen einem Funktionsaufruf.
-Sie werden ohne Umweg \"uber die Warteschlange direkt an den Empf\"anger-Prozess
-zugestellt \cite[vgl.][S. 7]{Walter:2010}.  Mit der Funktion process\_post\_synch(\&example\_process, EVENT\_ID, msg) wird gezielt ein 
-Prozess aufgerufen (ein Broadcast ist nicht m\"oglich). W\"ahrend der aufgerufene Prozess aktiv ist, blockiert der Aufrufer und 
-setzt seine Ausführung erst fort, wenn der aufgerufene Prozess die Kontrolle wieder abgibt.
-\end{itemize}
-
-\paragraph{Prozesse}
+\paragraph{Prozesse}\mbox{}\\
 Prozesse in Contiki implementieren ein Konzept namens Protothreads. Dies erlaubt es Prozessen, ohne den Overhead und die langen 
 Prozesswechselzeiten von normalen Threads auszukommen. Gleichzeitig k\"onnen trotzdem andere Prozesse ausgef\"uhrt werden, falls ein Prozess auf ein Event (Timer, Nachricht von anderem Prozess...) warten muss.
 F\"ur die Entwicklung mit Prozessen ist wichtig, dass nicht-statische Variablen nicht zwischen zwei Aufrufen erhalten bleiben.
@@ -63,6 +57,26 @@ Prozesse k\"onnen \"uber Events (siehe Events) oder Polling-Anfragen kommunizier
 k\"onnen genutzt werden, um den angerufenen Prozess so schnell wie m\"oglich auszuf\"uhren. Sie
 sind besonders bei der Abarbeitung von Hardware-Interrupts wichtig, da Interrupts-Handler keine Events, sondern nur
 Polling-Anfragen absetzten d\"urfen \cite[vgl.][S. 7]{Walter:2010}.
+
+\paragraph{Prozesskommunikation}\mbox{}\\
+In Contiki kommunizieren Prozesse \"uber Events. Auch der Kernel versendet Events, um Prozesse \"uber ihren Status 
+(Init, Continue, Exit) oder \"uber abgelaufene Timer zu Informieren. Zur Identifikation stehen dabei Event IDs zur 
+Verf\"ugung. Die Event IDs 0-127 k\"onnen vom Benutzer frei vergeben werden, w\"ahrend die Prozess IDs ab 128 vom 
+System genutzt werden. Grunds\"atzlich unterscheidet Contiki zwischen synchronen und asynchronen Events. 
+\begin{itemize}
+\item \textbf{Asynchrone Events} sind eine Form der Deferred Procedure Call: asynchrone Events werden vom Kernel in einer 
+Warteschlange gespeichert. Die Scheduling-Funktion des Kernels l\"auft nach Systemstart in einer Endlosschleife. 
+In jedem Durchlauf wird ein Event aus der Schlange entnommen und wird einige Zeit sp\"ater an den Zielprozess weitergeleitet.
+\item \textbf{Synchrone Events} gleichen einem Funktionsaufruf.
+Sie werden ohne Umweg \"uber die Warteschlange direkt an den Empf\"anger-Prozess
+zugestellt \cite[vgl.][S. 7]{Walter:2010}.  Mit der Funktion process\_post\_synch(\&example\_process, EVENT\_ID, msg) wird gezielt ein 
+Prozess aufgerufen (ein Broadcast ist nicht m\"oglich). W\"ahrend der aufgerufene Prozess aktiv ist, blockiert der Aufrufer und 
+setzt seine Ausführung erst fort, wenn der aufgerufene Prozess die Kontrolle wieder abgibt.
+\end{itemize}
+
+\paragraph{Scheduling und Timer}\mbox{}\\
+
+\paragraph{Der Rime Kommunikationsstack}\mbox{}\\
 
 \input{src/flow/4_2_Treiber}
 \input{src/flow/4_3_AgentRTE}
