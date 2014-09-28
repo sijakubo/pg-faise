@@ -51,6 +51,16 @@ nav_msgs/Odometry.h
 -
 sensor_msgs/LaserScan.h
 /home/pg/catkin_ws/src/epos2_control/src/sensor_msgs/LaserScan.h
+fstream
+-
+iostream
+-
+string
+-
+stdlib.h
+-
+stdio.h
+-
 
 /home/pg/catkin_ws/src/epos2_control/src/epos2_driver.cpp
 TankSteering.h

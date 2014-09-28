@@ -4,7 +4,7 @@ project(epos2_control)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS actionlib geometry_msgs nav_msgs roscpp rospy sensor_msgs std_msgs bondcpp tf message_generation)
+find_package(catkin REQUIRED COMPONENTS move_base_msgs actionlib geometry_msgs nav_msgs roscpp rospy sensor_msgs std_msgs bondcpp tf message_generation)
 #move_base_msgs
 
 ## System dependencies are found with CMake's conventions
@@ -86,6 +86,9 @@ include_directories(include
 #   ${catkin_LIBRARIES}
 # )
 
+#add executable Data for Serial-Stream
+add_executable(r2Serial src/r2Serial.cpp)
+
 add_executable(epos2_talker src/epos2_talker.cpp)
 add_executable(epos2_driver src/epos2_driver.cpp)
 add_executable(epos2_stateOutput src/epos2_stateOutput.cpp)
@@ -100,6 +103,11 @@ target_link_libraries(epos2_driver Epos2MotorController)
 target_link_libraries(epos2_driver TankSteering)
 #linking the ros-Libaries
 target_link_libraries(epos2_driver ${catkin_LIBRARIES})
+
+#link the libarie for Serial-Stream
+target_link_libraries(r2Serial
+  ${catkin_LIBRARIES}
+)
 
 #include the SampleMoving-class for the talker
 add_library(SampleMoving src/SampleMoving.cpp)

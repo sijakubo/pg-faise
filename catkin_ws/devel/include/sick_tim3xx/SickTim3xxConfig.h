@@ -258,17 +258,17 @@ class DEFAULT
 
     void setParams(SickTim3xxConfig &config, const std::vector<AbstractParamDescriptionConstPtr> params)
     {
-      for (std::vector<AbstractParamDescriptionConstPtr>::const_iterator i = params.begin(); i != params.end(); ++i)
+      for (std::vector<AbstractParamDescriptionConstPtr>::const_iterator _i = params.begin(); _i != params.end(); ++_i)
       {
         boost::any val;
-        (*i)->getValue(config, val);
+        (*_i)->getValue(config, val);
 
-        if("min_ang"==(*i)->name){min_ang = boost::any_cast<double>(val);}
-        if("max_ang"==(*i)->name){max_ang = boost::any_cast<double>(val);}
-        if("intensity"==(*i)->name){intensity = boost::any_cast<bool>(val);}
-        if("skip"==(*i)->name){skip = boost::any_cast<int>(val);}
-        if("frame_id"==(*i)->name){frame_id = boost::any_cast<std::string>(val);}
-        if("time_offset"==(*i)->name){time_offset = boost::any_cast<double>(val);}
+        if("min_ang"==(*_i)->name){min_ang = boost::any_cast<double>(val);}
+        if("max_ang"==(*_i)->name){max_ang = boost::any_cast<double>(val);}
+        if("intensity"==(*_i)->name){intensity = boost::any_cast<bool>(val);}
+        if("skip"==(*_i)->name){skip = boost::any_cast<int>(val);}
+        if("frame_id"==(*_i)->name){frame_id = boost::any_cast<std::string>(val);}
+        if("time_offset"==(*_i)->name){time_offset = boost::any_cast<double>(val);}
       }
     }
 

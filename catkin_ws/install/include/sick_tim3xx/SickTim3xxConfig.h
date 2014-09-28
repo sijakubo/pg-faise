@@ -164,7 +164,7 @@ namespace sick_tim3xx
 
       void convertParams()
       {
-        for(std::vector<AbstractParamDescriptionConstPtr>::const_iterator i = abstract_parameters.begin(); i != abstract_parameters.end(); i++)
+        for(std::vector<AbstractParamDescriptionConstPtr>::const_iterator i = abstract_parameters.begin(); i != abstract_parameters.end(); ++i)
         {
           parameters.push_back(dynamic_reconfigure::ParamDescription(**i));
         }
@@ -193,8 +193,8 @@ namespace sick_tim3xx
         PT* config = boost::any_cast<PT*>(cfg);
         if(!dynamic_reconfigure::ConfigTools::getGroupState(msg, name, (*config).*field))
           return false;
-        
-        for(std::vector<AbstractGroupDescriptionConstPtr>::const_iterator i = groups.begin(); i != groups.end(); i++) 
+
+        for(std::vector<AbstractGroupDescriptionConstPtr>::const_iterator i = groups.begin(); i != groups.end(); ++i)
         {
           boost::any n = &((*config).*field);
           if(!(*i)->fromMessage(msg, n))
@@ -210,14 +210,14 @@ namespace sick_tim3xx
         T* group = &((*config).*field);
         group->state = state;
 
-        for(std::vector<AbstractGroupDescriptionConstPtr>::const_iterator i = groups.begin(); i != groups.end(); i++)
+        for(std::vector<AbstractGroupDescriptionConstPtr>::const_iterator i = groups.begin(); i != groups.end(); ++i)
         {
           boost::any n = boost::any(&((*config).*field));
           (*i)->setInitialState(n);
         }
 
       }
-      
+
       virtual void updateParams(boost::any &cfg, SickTim3xxConfig &top) const
       {
         PT* config = boost::any_cast<PT*>(cfg);
@@ -225,7 +225,7 @@ namespace sick_tim3xx
         T* f = &((*config).*field);
         f->setParams(top, abstract_parameters);
 
-        for(std::vector<AbstractGroupDescriptionConstPtr>::const_iterator i = groups.begin(); i != groups.end(); i++) 
+        for(std::vector<AbstractGroupDescriptionConstPtr>::const_iterator i = groups.begin(); i != groups.end(); ++i)
         {
           boost::any n = &((*config).*field);
           (*i)->updateParams(n, top);
@@ -237,7 +237,7 @@ namespace sick_tim3xx
         const PT config = boost::any_cast<PT>(cfg);
         dynamic_reconfigure::ConfigTools::appendGroup<T>(msg, name, id, parent, config.*field);
 
-        for(std::vector<AbstractGroupDescriptionConstPtr>::const_iterator i = groups.begin(); i != groups.end(); i++)
+        for(std::vector<AbstractGroupDescriptionConstPtr>::const_iterator i = groups.begin(); i != groups.end(); ++i)
         {
           (*i)->toMessage(msg, config.*field);
         }
@@ -258,7 +258,7 @@ class DEFAULT
 
     void setParams(SickTim3xxConfig &config, const std::vector<AbstractParamDescriptionConstPtr> params)
     {
-      for (std::vector<AbstractParamDescriptionConstPtr>::const_iterator i = params.begin(); i != params.end(); i++)
+      for (std::vector<AbstractParamDescriptionConstPtr>::const_iterator i = params.begin(); i != params.end(); ++i)
       {
         boost::any val;
         (*i)->getValue(config, val);
@@ -287,17 +287,17 @@ double time_offset;
 
 
 
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       double min_ang;
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       double max_ang;
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       bool intensity;
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       int skip;
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       std::string frame_id;
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       double time_offset;
 //#line 255 "/opt/ros/hydro/share/dynamic_reconfigure/cmake/../templates/ConfigType.h.template"
 
@@ -307,7 +307,7 @@ double time_offset;
       const std::vector<AbstractGroupDescriptionConstPtr> &__group_descriptions__ = __getGroupDescriptions__();
 
       int count = 0;
-      for (std::vector<AbstractParamDescriptionConstPtr>::const_iterator i = __param_descriptions__.begin(); i != __param_descriptions__.end(); i++)
+      for (std::vector<AbstractParamDescriptionConstPtr>::const_iterator i = __param_descriptions__.begin(); i != __param_descriptions__.end(); ++i)
         if ((*i)->fromMessage(msg, *this))
           count++;
 
@@ -348,10 +348,10 @@ double time_offset;
     void __toMessage__(dynamic_reconfigure::Config &msg, const std::vector<AbstractParamDescriptionConstPtr> &__param_descriptions__, const std::vector<AbstractGroupDescriptionConstPtr> &__group_descriptions__) const
     {
       dynamic_reconfigure::ConfigTools::clear(msg);
-      for (std::vector<AbstractParamDescriptionConstPtr>::const_iterator i = __param_descriptions__.begin(); i != __param_descriptions__.end(); i++)
+      for (std::vector<AbstractParamDescriptionConstPtr>::const_iterator i = __param_descriptions__.begin(); i != __param_descriptions__.end(); ++i)
         (*i)->toMessage(msg, *this);
 
-      for (std::vector<AbstractGroupDescriptionConstPtr>::const_iterator i = __group_descriptions__.begin(); i != __group_descriptions__.end(); i++)
+      for (std::vector<AbstractGroupDescriptionConstPtr>::const_iterator i = __group_descriptions__.begin(); i != __group_descriptions__.end(); ++i)
       {
         if((*i)->id == 0)
         {
@@ -370,7 +370,7 @@ double time_offset;
     void __toServer__(const ros::NodeHandle &nh) const
     {
       const std::vector<AbstractParamDescriptionConstPtr> &__param_descriptions__ = __getParamDescriptions__();
-      for (std::vector<AbstractParamDescriptionConstPtr>::const_iterator i = __param_descriptions__.begin(); i != __param_descriptions__.end(); i++)
+      for (std::vector<AbstractParamDescriptionConstPtr>::const_iterator i = __param_descriptions__.begin(); i != __param_descriptions__.end(); ++i)
         (*i)->toServer(nh, *this);
     }
 
@@ -379,7 +379,7 @@ double time_offset;
       static bool setup=false;
 
       const std::vector<AbstractParamDescriptionConstPtr> &__param_descriptions__ = __getParamDescriptions__();
-      for (std::vector<AbstractParamDescriptionConstPtr>::const_iterator i = __param_descriptions__.begin(); i != __param_descriptions__.end(); i++)
+      for (std::vector<AbstractParamDescriptionConstPtr>::const_iterator i = __param_descriptions__.begin(); i != __param_descriptions__.end(); ++i)
         (*i)->fromServer(nh, *this);
 
       const std::vector<AbstractGroupDescriptionConstPtr> &__group_descriptions__ = __getGroupDescriptions__();
@@ -397,7 +397,7 @@ double time_offset;
       const std::vector<AbstractParamDescriptionConstPtr> &__param_descriptions__ = __getParamDescriptions__();
       const SickTim3xxConfig &__max__ = __getMax__();
       const SickTim3xxConfig &__min__ = __getMin__();
-      for (std::vector<AbstractParamDescriptionConstPtr>::const_iterator i = __param_descriptions__.begin(); i != __param_descriptions__.end(); i++)
+      for (std::vector<AbstractParamDescriptionConstPtr>::const_iterator i = __param_descriptions__.begin(); i != __param_descriptions__.end(); ++i)
         (*i)->clamp(*this, __max__, __min__);
     }
 
@@ -405,7 +405,7 @@ double time_offset;
     {
       const std::vector<AbstractParamDescriptionConstPtr> &__param_descriptions__ = __getParamDescriptions__();
       uint32_t level = 0;
-      for (std::vector<AbstractParamDescriptionConstPtr>::const_iterator i = __param_descriptions__.begin(); i != __param_descriptions__.end(); i++)
+      for (std::vector<AbstractParamDescriptionConstPtr>::const_iterator i = __param_descriptions__.begin(); i != __param_descriptions__.end(); ++i)
         (*i)->calcLevel(level, config, *this);
       return level;
     }
@@ -434,73 +434,73 @@ double time_offset;
     SickTim3xxConfigStatics()
     {
 SickTim3xxConfig::GroupDescription<SickTim3xxConfig::DEFAULT, SickTim3xxConfig> Default("Default", "", 0, 0, true, &SickTim3xxConfig::groups);
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __min__.min_ang = -2.35619449019;
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __max__.min_ang = 2.35619449019;
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __default__.min_ang = -2.35619449019;
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       Default.abstract_parameters.push_back(SickTim3xxConfig::AbstractParamDescriptionConstPtr(new SickTim3xxConfig::ParamDescription<double>("min_ang", "double", 0, "The angle of the first range measurement [rad].", "", &SickTim3xxConfig::min_ang)));
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __param_descriptions__.push_back(SickTim3xxConfig::AbstractParamDescriptionConstPtr(new SickTim3xxConfig::ParamDescription<double>("min_ang", "double", 0, "The angle of the first range measurement [rad].", "", &SickTim3xxConfig::min_ang)));
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __min__.max_ang = -2.35619449019;
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __max__.max_ang = 2.35619449019;
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __default__.max_ang = 2.35619449019;
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       Default.abstract_parameters.push_back(SickTim3xxConfig::AbstractParamDescriptionConstPtr(new SickTim3xxConfig::ParamDescription<double>("max_ang", "double", 0, "The angle of the first range measurement [rad].", "", &SickTim3xxConfig::max_ang)));
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __param_descriptions__.push_back(SickTim3xxConfig::AbstractParamDescriptionConstPtr(new SickTim3xxConfig::ParamDescription<double>("max_ang", "double", 0, "The angle of the first range measurement [rad].", "", &SickTim3xxConfig::max_ang)));
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __min__.intensity = 0;
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __max__.intensity = 1;
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __default__.intensity = 1;
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       Default.abstract_parameters.push_back(SickTim3xxConfig::AbstractParamDescriptionConstPtr(new SickTim3xxConfig::ParamDescription<bool>("intensity", "bool", 0, "Whether or not the TiM3xx returns intensity values.", "", &SickTim3xxConfig::intensity)));
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __param_descriptions__.push_back(SickTim3xxConfig::AbstractParamDescriptionConstPtr(new SickTim3xxConfig::ParamDescription<bool>("intensity", "bool", 0, "Whether or not the TiM3xx returns intensity values.", "", &SickTim3xxConfig::intensity)));
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __min__.skip = 0;
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __max__.skip = 9;
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __default__.skip = 0;
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       Default.abstract_parameters.push_back(SickTim3xxConfig::AbstractParamDescriptionConstPtr(new SickTim3xxConfig::ParamDescription<int>("skip", "int", 0, "The number of scans to skip between each measured scan.", "", &SickTim3xxConfig::skip)));
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __param_descriptions__.push_back(SickTim3xxConfig::AbstractParamDescriptionConstPtr(new SickTim3xxConfig::ParamDescription<int>("skip", "int", 0, "The number of scans to skip between each measured scan.", "", &SickTim3xxConfig::skip)));
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __min__.frame_id = "";
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __max__.frame_id = "";
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __default__.frame_id = "laser";
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       Default.abstract_parameters.push_back(SickTim3xxConfig::AbstractParamDescriptionConstPtr(new SickTim3xxConfig::ParamDescription<std::string>("frame_id", "str", 0, "The TF frame in which laser scans will be returned.", "", &SickTim3xxConfig::frame_id)));
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __param_descriptions__.push_back(SickTim3xxConfig::AbstractParamDescriptionConstPtr(new SickTim3xxConfig::ParamDescription<std::string>("frame_id", "str", 0, "The TF frame in which laser scans will be returned.", "", &SickTim3xxConfig::frame_id)));
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __min__.time_offset = -0.25;
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __max__.time_offset = 0.25;
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __default__.time_offset = -0.001;
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       Default.abstract_parameters.push_back(SickTim3xxConfig::AbstractParamDescriptionConstPtr(new SickTim3xxConfig::ParamDescription<double>("time_offset", "double", 0, "An offset to add to the time stamp before publication of a scan [s].", "", &SickTim3xxConfig::time_offset)));
-//#line 260 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 262 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __param_descriptions__.push_back(SickTim3xxConfig::AbstractParamDescriptionConstPtr(new SickTim3xxConfig::ParamDescription<double>("time_offset", "double", 0, "An offset to add to the time stamp before publication of a scan [s].", "", &SickTim3xxConfig::time_offset)));
-//#line 231 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 233 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       Default.convertParams();
-//#line 231 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
+//#line 233 "/opt/ros/hydro/lib/python2.7/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __group_descriptions__.push_back(SickTim3xxConfig::AbstractGroupDescriptionConstPtr(new SickTim3xxConfig::GroupDescription<SickTim3xxConfig::DEFAULT, SickTim3xxConfig>(Default)));
 //#line 390 "/opt/ros/hydro/share/dynamic_reconfigure/cmake/../templates/ConfigType.h.template"
-    
-      for (std::vector<SickTim3xxConfig::AbstractGroupDescriptionConstPtr>::const_iterator i = __group_descriptions__.begin(); i != __group_descriptions__.end(); i++)
+
+      for (std::vector<SickTim3xxConfig::AbstractGroupDescriptionConstPtr>::const_iterator i = __group_descriptions__.begin(); i != __group_descriptions__.end(); ++i)
       {
         __description_message__.groups.push_back(**i);
       }

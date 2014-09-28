@@ -81,9 +81,13 @@ void SampleMoving::publishSpeed(const ros::TimerEvent& event)
 	epos2_control::velocity speed;
 	geometry_msgs::Twist speedVector;
 
+
+
+
 		//get velocity in meter per second
 	for (int i=left; i<=right; i++) { speedMPS[i] = sampleMovingSet.targetVelocity[i] * sampleMovingSet.maxMPS; }
 	//ROS_ERROR("[Talker-Publish] targetSpeed_left: %.4lf & targetSpeed_right: %.4lf", sampleMovingSet.targetVelocity[left], sampleMovingSet.targetVelocity[right]);
+
 
 
 	switch (sampleMovingSet.msgType) {
@@ -93,7 +97,7 @@ void SampleMoving::publishSpeed(const ros::TimerEvent& event)
 			sampleMovingSet.epos2MPS.publish(speed);
 			break;
 		case cmdVel:	//publish current velocity in a cmd_vel message
-			speedVectro.linear.x = 0.5;
+			//speedVector.linear.x = 0.5;
 			speedVector.linear.x = ( speedMPS[right] + speedMPS[left] ) * 0.5;
 			speedVector.linear.y= sampleMovingSet.targetVelocity[hub];
 			speedVector.linear.z= sampleMovingSet.targetVelocity[flow];
@@ -104,7 +108,8 @@ void SampleMoving::publishSpeed(const ros::TimerEvent& event)
 			break;
 	}
 
-		//calculate current position depending on last position
+	
+			//calculate current position depending on last position
 	for (int i=left; i<=right; i++) { pos_delta[i] = speedMPS[i] * (event.current_real - event.last_real).toSec(); }
 
 	double polar_s  =(pos_delta[right] + pos_delta[left] ) * 0.5;
@@ -119,6 +124,8 @@ void SampleMoving::publishSpeed(const ros::TimerEvent& event)
 	pos.last.x = pos.now.x;
 	pos.last.y = pos.now.y;
 	pos.last.theta = pos.now.theta;
+
+
 
 	//sending actionLib-msg for NavStack ...doesn't work by now on ros::groovy
 	/*if (targetSpeed.publishMsgType == navStack) {
@@ -390,12 +397,12 @@ void SampleMoving::keyboardCallback(const ros::TimerEvent& event)
 			case KEYCODE_F:	targetSpeed[left] = 0;
 							targetSpeed[right]= 0;
 							sampleMovingSet.targetVelocity[hub] = 0;
-							sampleMovingSet.targetVelocity[flow] = 0.02;
+							sampleMovingSet.targetVelocity[flow] = 1;
 							break;
 			case KEYCODE_C:	targetSpeed[left] = 0;
 							targetSpeed[right]= 0;
 							sampleMovingSet.targetVelocity[hub] = 0;
-							sampleMovingSet.targetVelocity[flow] = -0.02;
+							sampleMovingSet.targetVelocity[flow] = 1;
 							break;
 
 			}
@@ -409,6 +416,20 @@ void SampleMoving::keyboardCallback(const ros::TimerEvent& event)
 		sampleMovingSet.targetVelocity[right] = smoothVeloRight;
 	}
 }
+
+
+// NEW JV
+/*
+void SampleMoving::einfacheFahrt(const ros::TimerEvent& event)
+{
+	sampleMovingSet.targetVelocity[left] = 0.5;
+	sampleMovingSet.targetVelocity[right] = 0.5;
+
+
+
+}
+*/
+// END NEW
 
 void SampleMoving::smoothVelocity(double inputVelocity[2], double *outputVelocityLeft, double *outputVelocityRight, double speedStepSize, int useDelta)
 {

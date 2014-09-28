@@ -208,6 +208,9 @@ class Epos2MotorController {
 		 */
 		void init(double maxRPM, double wheelPerimeter);
 
+
+		void initFlow(double maxRPM, double wheelPerimeter);
+
 		/**
 		 * read out the error bit and the error history. If an error was detected a message will be send to rosOUT.
 		 *
@@ -240,6 +243,12 @@ class Epos2MotorController {
 		 * @return 1 if successful otherwise 0
 		 */
 		int activateProfileVelocity();
+                /**
+                 *
+                 * read LightSensors Value
+                 * @return 0 if flow empty otherwise value > 0
+                 */
+		int getLightSensorsValue();
 		/**
 		 * set a target angular velocity for this EPOS2.
 		 *
@@ -285,6 +294,16 @@ class Epos2MotorController {
 		 * @return 1 if successful otherwise 0
 		 */
 		int setMotorData(motorData *parameter);
+		/**
+		 * set all Data of the motor into the EPOS2.
+		 * changes are only allowed in disabled state.
+		 * maxPeakCurrent will be the double value of continousCurrent, if continousCurrent is higher than maxPeakCurrent
+		 *
+		 * @param *parameter structure with all relevant motor data
+		 * @param type MotorTyoe
+		 * @return 1 if successful otherwise 0
+		 */
+		int setMotorData(motorData *parameter, int type);
 		/**
 		 * read out all Data of the motor from the EPOS2
 		 *

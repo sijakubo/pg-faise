@@ -3,7 +3,7 @@
  *
  *  Created on: Apr 11, 2012
  *      Author: Martin Seidel
- *      modified by Jannik Flessner
+ *      modified by Jannik Flessner, Jan Paul Vox
  */
 
 #include "SampleMoving.h"
@@ -75,15 +75,20 @@ void SampleMoving::init(msgTypes msgType, inputDevice getInfoFrom)
 	}
 }
 
+//modified by @author Jannik Flessner, Jan Paul Vox
 void SampleMoving::publishSpeed(const ros::TimerEvent& event)
 {
 	double speedMPS[2], pos_delta[2];
 	epos2_control::velocity speed;
 	geometry_msgs::Twist speedVector;
 
+
+
+
 		//get velocity in meter per second
 	for (int i=left; i<=right; i++) { speedMPS[i] = sampleMovingSet.targetVelocity[i] * sampleMovingSet.maxMPS; }
 	//ROS_ERROR("[Talker-Publish] targetSpeed_left: %.4lf & targetSpeed_right: %.4lf", sampleMovingSet.targetVelocity[left], sampleMovingSet.targetVelocity[right]);
+
 
 
 	switch (sampleMovingSet.msgType) {
@@ -93,8 +98,8 @@ void SampleMoving::publishSpeed(const ros::TimerEvent& event)
 			sampleMovingSet.epos2MPS.publish(speed);
 			break;
 		case cmdVel:	//publish current velocity in a cmd_vel message
-			speedVector.linear.x = 0.5;
-			//speedVector.linear.x = ( speedMPS[right] + speedMPS[left] ) * 0.5;
+			//speedVector.linear.x = 0.5;
+			speedVector.linear.x = ( speedMPS[right] + speedMPS[left] ) * 0.5;
 			speedVector.linear.y= sampleMovingSet.targetVelocity[hub];
 			speedVector.linear.z= sampleMovingSet.targetVelocity[flow];
 			speedVector.angular.x=0;
@@ -104,7 +109,8 @@ void SampleMoving::publishSpeed(const ros::TimerEvent& event)
 			break;
 	}
 
-		//calculate current position depending on last position
+	
+			//calculate current position depending on last position
 	for (int i=left; i<=right; i++) { pos_delta[i] = speedMPS[i] * (event.current_real - event.last_real).toSec(); }
 
 	double polar_s  =(pos_delta[right] + pos_delta[left] ) * 0.5;
@@ -120,32 +126,13 @@ void SampleMoving::publishSpeed(const ros::TimerEvent& event)
 	pos.last.y = pos.now.y;
 	pos.last.theta = pos.now.theta;
 
-	//sending actionLib-msg for NavStack ...doesn't work by now on ros::groovy
-	/*if (targetSpeed.publishMsgType == navStack) {
-		move_base_msgs::MoveBaseGoal goal;
-
-		goal.target_pose.header.frame_id = "base_link";
-		goal.target_pose.header.stamp = ros::Time::now();
-
-		goal.target_pose.pose.position.x = pos.now.x;
-		goal.target_pose.pose.position.y = pos.now.y;
-		goal.target_pose.pose.orientation.w = pos.now.theta;
-
-		//ROS_ERROR("Sending goal");
-		action.sendGoal(goal);
-		action.waitForResult();
-
-		if(action.getState() != actionlib::SimpleClientGoalState::SUCCEEDED) {
-			ROS_ERROR("The base failed to move for some reason.");
-		}
-	}*/
 
 	//publish tf base_link
 	sampleMovingSet.transform.setOrigin( tf::Vector3(pos.now.x, pos.now.y, 0.0) );
 	sampleMovingSet.transform.setRotation(tf::Quaternion( 0,0, sin(pos.now.theta/2), cos(pos.now.theta/2) ));
 	sampleMovingSet.tfBroad.sendTransform(tf::StampedTransform(sampleMovingSet.transform, event.current_real, "odom", "talker_base"));
 }
-
+//modified by @author Jannik Flessner, Jan Paul Vox
 void SampleMoving::gamepadCallback (const sensor_msgs::Joy joymsg)
 {
 	double targetSpeed[2] = {0,0};
@@ -163,6 +150,8 @@ void SampleMoving::gamepadCallback (const sensor_msgs::Joy joymsg)
 	axesRemap.righty = 0;
 	axesRemap.switchButton = 0;
 	axesRemap.quickStopButton = 0;
+	axesRemap.flowButtonA = 0;
+	axesRemap.flowButtonB = 0;
 
 //----------Switching of interfaces--------------------------//
 	switch (joymsg.axes.size()) {
@@ -193,6 +182,10 @@ void SampleMoving::gamepadCallback (const sensor_msgs::Joy joymsg)
 				axesRemap.rightx = joymsg.axes[2];
 				axesRemap.righty = joymsg.axes[3];
 				axesRemap.switchButton = joymsg.buttons[3];
+				axesRemap.flowButtonA = joymsg.buttons[0];
+				axesRemap.flowButtonB = joymsg.buttons[1];
+				axesRemap.hubButtonLB = joymsg.buttons[4];
+				axesRemap.hubButtonRB = joymsg.buttons[5];
 				sampleMovingSet.ableToMove = true;
 				break;
 		case 6:	sampleMovingSet.joyControll = gamePad;
@@ -203,6 +196,10 @@ void SampleMoving::gamepadCallback (const sensor_msgs::Joy joymsg)
 				axesRemap.righty = joymsg.axes[3];
 				axesRemap.switchButton = joymsg.buttons[3];
 				axesRemap.quickStopButton = joymsg.buttons[2];
+				axesRemap.flowButtonA = joymsg.buttons[0];
+				axesRemap.flowButtonB = joymsg.buttons[1];
+				axesRemap.hubButtonLB = joymsg.buttons[4];
+				axesRemap.hubButtonRB = joymsg.buttons[5];
 				sampleMovingSet.ableToMove = true;
 				break;
 		case 8:	sampleMovingSet.joyControll = gamePad;
@@ -212,7 +209,11 @@ void SampleMoving::gamepadCallback (const sensor_msgs::Joy joymsg)
 				axesRemap.rightx = joymsg.axes[3];
 				axesRemap.righty = joymsg.axes[4];
 				axesRemap.switchButton = joymsg.buttons[3];
-				axesRemap.quickStopButton = joymsg.buttons[1];
+				axesRemap.quickStopButton = joymsg.buttons[2];
+				axesRemap.flowButtonA = joymsg.buttons[0];
+				axesRemap.flowButtonB = joymsg.buttons[1];
+				axesRemap.hubButtonLB = joymsg.buttons[4];
+				axesRemap.hubButtonRB = joymsg.buttons[5];
 				sampleMovingSet.ableToMove = true;
 				break;
 	}
@@ -243,6 +244,9 @@ void SampleMoving::gamepadCallback (const sensor_msgs::Joy joymsg)
 		double Ratio;	//pretend against values higher 1
 		float r_min = 0.3, r_delta = 1;	//in meter - wheel
 		double sideShift = 0, radius;	//wheel
+		double sensibility = 0.2;
+		double hubpositive = 0.8;
+		double hubnegative = -0.8;
 
 		switch (sampleMovingSet.joyControll) {
 			case gamePad:
@@ -252,16 +256,115 @@ void SampleMoving::gamepadCallback (const sensor_msgs::Joy joymsg)
 						if (Ratio < 1) {Ratio = 1;}
 						targetSpeed[left] = (axesRemap.lefty - axesRemap.leftx) / Ratio;
 						targetSpeed[right] =(axesRemap.lefty + axesRemap.leftx) / Ratio;
+
+						if (targetSpeed[left] >= sensibility || targetSpeed[left] <= (sensibility * -1)){
+						}
+						else{
+							targetSpeed[left] = 0;
+						}
+						if (targetSpeed[right] >= sensibility || targetSpeed[right] <= (sensibility * -1)){
+						}
+						else{
+							targetSpeed[right] = 0;
+						}
+
+						ROS_ERROR("%f", targetSpeed[left]);
+						ROS_ERROR("%f", targetSpeed[right]);
+						if (axesRemap.flowButtonA == 1){
+						    sampleMovingSet.targetVelocity[flow] = 1;
+						}
+						if (axesRemap.flowButtonB == 1){
+							sampleMovingSet.targetVelocity[flow] = -1;
+						}
+						if (axesRemap.flowButtonA == 0 && axesRemap.flowButtonB == 0){
+							sampleMovingSet.targetVelocity[flow] = 0;
+						}
+
+						if (axesRemap.hubButtonLB == 1){
+						    sampleMovingSet.targetVelocity[hub] = hubpositive;
+						}
+						if (axesRemap.hubButtonRB == 1){
+							sampleMovingSet.targetVelocity[hub] = hubnegative;
+						}
+						if (axesRemap.hubButtonLB == 0 && axesRemap.hubButtonRB == 0){
+							sampleMovingSet.targetVelocity[hub] = 0;
+						}
 						break;
 					case twoStick:	//left Stick back- and forward; right stick left and right
 						Ratio = fabs(axesRemap.lefty) + fabs(axesRemap.rightx);
 						if (Ratio < 1) {Ratio = 1;}
 						targetSpeed[left] = (axesRemap.lefty - axesRemap.rightx) / Ratio;
 						targetSpeed[right] =(axesRemap.lefty + axesRemap.rightx) / Ratio;
+
+						if (targetSpeed[left] >= sensibility || targetSpeed[left] <= (sensibility * -1)){
+						}
+						else{
+							targetSpeed[left] = 0;
+						}
+						if (targetSpeed[right] >= sensibility || targetSpeed[right] <= (sensibility * -1)){
+						}
+						else{
+							targetSpeed[right] = 0;
+						}
+
+						ROS_ERROR("%f", targetSpeed[left]);
+						ROS_ERROR("%f", targetSpeed[right]);
+						if (axesRemap.flowButtonA == 1){
+						    sampleMovingSet.targetVelocity[flow] = 1;
+						}
+						if (axesRemap.flowButtonB == 1){
+							sampleMovingSet.targetVelocity[flow] = -1;
+						}
+						if (axesRemap.flowButtonA == 0 && axesRemap.flowButtonB == 0){
+							sampleMovingSet.targetVelocity[flow] = 0;
+						}
+
+						if (axesRemap.hubButtonLB == 1){
+						    sampleMovingSet.targetVelocity[hub] = hubpositive;
+						}
+						if (axesRemap.hubButtonRB == 1){
+							sampleMovingSet.targetVelocity[hub] = hubnegative;
+						}
+						if (axesRemap.hubButtonLB == 0 && axesRemap.hubButtonRB == 0){
+							sampleMovingSet.targetVelocity[hub] = 0;
+						}
 						break;
 					case tankStick:	//left stick=left side; right stick = right side
 						targetSpeed[left]=axesRemap.lefty;
 						targetSpeed[right]=axesRemap.righty;
+
+						if (targetSpeed[left] >= sensibility || targetSpeed[left] <= (sensibility * -1)){
+						}
+						else{
+							targetSpeed[left] = 0;
+						}
+						if (targetSpeed[right] >= sensibility || targetSpeed[right] <= (sensibility * -1)){
+						}
+						else{
+							targetSpeed[right] = 0;
+						}
+
+						ROS_ERROR("%f", targetSpeed[left]);
+						ROS_ERROR("%f", targetSpeed[right]);
+						if (axesRemap.flowButtonA == 1){
+						    sampleMovingSet.targetVelocity[flow] = 1;
+						}
+						if (axesRemap.flowButtonB == 1){
+							sampleMovingSet.targetVelocity[flow] = -1;
+						}
+						if (axesRemap.flowButtonA == 0 && axesRemap.flowButtonB == 0){
+							sampleMovingSet.targetVelocity[flow] = 0;
+						}
+
+						if (axesRemap.hubButtonLB == 1){
+						    sampleMovingSet.targetVelocity[hub] = hubpositive;
+						}
+						if (axesRemap.hubButtonRB == 1){
+							sampleMovingSet.targetVelocity[hub] = hubnegative;
+						}
+						if (axesRemap.hubButtonLB == 0 && axesRemap.hubButtonRB == 0){
+							sampleMovingSet.targetVelocity[hub] = 0;
+						}
 						break;
 				}
 				break;
@@ -325,7 +428,7 @@ void SampleMoving::keyboardInit()
 	sampleMovingSet.timeForKeys.tv_sec = sec;
 	sampleMovingSet.timeForKeys.tv_usec = usec;
 }
-
+//modified by @author Jannik Flessner, Jan Paul Vox
 void SampleMoving::keyboardCallback(const ros::TimerEvent& event)
 {
 	struct timeval timeForKeys;
@@ -390,12 +493,12 @@ void SampleMoving::keyboardCallback(const ros::TimerEvent& event)
 			case KEYCODE_F:	targetSpeed[left] = 0;
 							targetSpeed[right]= 0;
 							sampleMovingSet.targetVelocity[hub] = 0;
-							sampleMovingSet.targetVelocity[flow] = 0.02;
+							sampleMovingSet.targetVelocity[flow] = 1;
 							break;
 			case KEYCODE_C:	targetSpeed[left] = 0;
 							targetSpeed[right]= 0;
 							sampleMovingSet.targetVelocity[hub] = 0;
-							sampleMovingSet.targetVelocity[flow] = -0.02;
+							sampleMovingSet.targetVelocity[flow] = -1;
 							break;
 
 			}
@@ -409,6 +512,8 @@ void SampleMoving::keyboardCallback(const ros::TimerEvent& event)
 		sampleMovingSet.targetVelocity[right] = smoothVeloRight;
 	}
 }
+
+
 
 void SampleMoving::smoothVelocity(double inputVelocity[2], double *outputVelocityLeft, double *outputVelocityRight, double speedStepSize, int useDelta)
 {

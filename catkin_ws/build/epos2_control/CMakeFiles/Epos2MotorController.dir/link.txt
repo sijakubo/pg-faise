@@ -1,1 +1,1 @@
-/usr/bin/c++  -fPIC    -shared -Wl,-soname,libEpos2MotorController.so -o /home/pg/catkin_ws/devel/lib/libEpos2MotorController.so CMakeFiles/Epos2MotorController.dir/src/Epos2MotorController.cpp.o -L/opt/lib -lEposCmd -Wl,-rpath,/opt/lib 
+/usr/bin/c++  -fPIC -O3 -DNDEBUG   -shared -Wl,-soname,libEpos2MotorController.so -o /home/pg/catkin_ws/devel/lib/libEpos2MotorController.so CMakeFiles/Epos2MotorController.dir/src/Epos2MotorController.cpp.o -L/opt/lib -lEposCmd -Wl,-rpath,/opt/lib 

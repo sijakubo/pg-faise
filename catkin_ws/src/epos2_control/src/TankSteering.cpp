@@ -31,7 +31,7 @@ TankSteering::TankSteering(ros::NodeHandle roshandle, Epos2MotorController* epos
 	pos.last.x = pos.last.y = pos.last.theta = 0;
 
 	tankSettings.maxSafetyMPS = tankSettings.maxMPS;
-
+	
 	init();
 }
 
@@ -50,6 +50,7 @@ void TankSteering::driveCallback(const geometry_msgs::Twist velocityVector)
 {
 	double dxTarget = tankSettings.axisLength * velocityVector.angular.z / 2;
 	double xTarget = velocityVector.linear.x;
+	//double xTarget = 0.5;
 	double y_hub = velocityVector.linear.y;
 	double z_flow = velocityVector.linear.z;
 
@@ -70,7 +71,7 @@ void TankSteering::driveCallback(const geometry_msgs::Twist velocityVector)
 		tankSettings.targetVelocityMPS[left]  = x - dx;
 		tankSettings.targetVelocityMPS[right] = x + dx;
 		tankSettings.targetVelocityMPS[hub] = tankSettings.maxMPS * y_hub;
-		tankSettings.targetVelocityMPS[flow] = tankSettings.maxMPS * z_flow;
+		tankSettings.targetVelocityMPS[flow] = 22.0 * z_flow;
 		//tankSettings.targetVelocityMPS[flow] = tankSettings.targetVelocityMPS[hub];
 		//ROS_ERROR("TankSteering:maxMPS: %.4lf",tankSettings.targetVelocityMPS[left]);
 	} else {
@@ -82,18 +83,172 @@ void TankSteering::driveCallback(const geometry_msgs::Twist velocityVector)
 	}
 }
 
+//@author Jannik Flessner
+void TankSteering::flowCallback(const std_msgs::String::ConstPtr& msg)
+{
+	
+  	std::string messageGoal = msg->data.c_str();
+	std::string hubDown = "down";
+	std::string hubUp = "up";
+  	std::string rampeAusgang = "load";
+	std::string rampeEingang = "unload";
+
+  	if (messageGoal == rampeAusgang){
+		tankSettings.flowControl = 1.0;       
+	}    
+	else if (messageGoal == rampeEingang){
+		tankSettings.flowControl = 2.0;
+	}
+	else if (messageGoal == hubDown){
+		tankSettings.hubControl = 1.0;
+	}
+	else if (messageGoal == hubUp){
+		tankSettings.hubControl = 2.0;
+	}
+        //ROS_ERROR("Callback: %f", tankSettings.flowControl);	
+}
+
+//@author Jannik Flessner
+void TankSteering::flowControl(const ros::TimerEvent& event)
+{
+
+	int lightValue;
+	lightValue = tankSettings.epos[flow]->getLightSensorsValue();
+	
+	int sensorBack = 0x4000;
+	int sensorNo = 0x0000;
+	//ROS_ERROR("Lichtschrankenwert: %x", lightValue);
+	//tankSettings.flowControl = 1.0;
+	std::string loadStatus;
+	//ROS_ERROR("Control: %f",tankSettings.flowControl);
+
+	if (tankSettings.flowControl == 1.0){
+		if (lightValue == sensorBack){
+			//ROS_ERROR("Stop Flow Motor");
+			tankSettings.targetVelocityMPS[flow] = 0.0;
+			loadStatus = "PackageLoaded";
+			tankSettings.flowPub.publish(loadStatus);
+			tankSettings.flowControl = 0.0;
+		}
+		else if (lightValue != sensorBack){
+			//ROS_ERROR("Start Flow Motor");
+			tankSettings.targetVelocityMPS[flow] = 20.0;
+		}
+	}
+
+
+	if (tankSettings.flowControl == 2.0){
+		if (lightValue == sensorNo){
+			//ROS_ERROR("Stop Flow Motor");
+			tankSettings.targetVelocityMPS[flow] = 0.0;
+			loadStatus = "PackageUnloaded";
+			tankSettings.flowPub.publish(loadStatus);
+			tankSettings.flowControl = 0.0;
+		}
+		else if (lightValue != sensorNo){
+			//ROS_ERROR("Start Flow Motor");
+			tankSettings.targetVelocityMPS[flow] = -20.0;
+		}
+	}
+	
+}
+
+//@author Jannik Flessner
+void TankSteering::hubControl(const ros::TimerEvent& event){
+
+	double stopDown;
+	double stopUp;
+
+	if (tankSettings.hubControl == 1.0){
+		if (tankSettings.hubPosition <= stopDown){
+			ROS_ERROR("Stop Hub Motor");
+			tankSettings.targetVelocityMPS[hub] = 0.0;
+			tankSettings.hubControl = 0.0;
+		}
+		else if (tankSettings.hubPosition > stopDown){
+			tankSettings.targetVelocityMPS[hub] = -7.0;
+		}
+	}
+
+	if (tankSettings.hubControl == 2.0){
+		if (tankSettings.hubPosition >= stopUp){
+			ROS_ERROR("Stop Hub Motor");
+			tankSettings.targetVelocityMPS[hub] = 0.0;
+			tankSettings.hubControl = 0.0;
+		}
+		else if (tankSettings.hubPosition < stopUp){
+			tankSettings.targetVelocityMPS[hub] = 7.0;
+		}
+	}
+
+}
+
+//modified by @author Jannik Flessner, Raschid Alkhatib
 void TankSteering::setVelocityCallback(const ros::TimerEvent& event)
 {
+        
 	double targetVelocityRPM[4];
-
-	for (int i=left; i <=hub; i++) {targetVelocityRPM[i] = tankSettings.factorMPSToRPM * tankSettings.targetVelocityMPS[i];}
+	double absolutePosition;
+	double diffPosition;
+	double txtPosition;
+	char strInput[256];
+	
+	//ROS_ERROR("Teste auf Datei");
+	FILE * fileTest;
+	fileTest = fopen("/home/pg/Position.txt","r");
+	
+	if(fileTest==NULL){
+		std::fstream file;
+		file.open("/home/pg/Position.txt", std::ios::out);
+		file << "0";
+		file.close();
+	}
+		else {
+		//ROS_ERROR("File vorhanden");
+	}
+	
+	
+	for (int i=left; i <=flow; i++) {targetVelocityRPM[i] = tankSettings.factorMPSToRPM * tankSettings.targetVelocityMPS[i];}
 
 	ROS_DEBUG("Try to set Velocity left to %.3f rpm and right to %.3f rpm", targetVelocityRPM[left], targetVelocityRPM[right]);
 	ROS_INFO("Try to set Velocity left to %.4f m/s and right to %.4f m/s", tankSettings.targetVelocityMPS[left], tankSettings.targetVelocityMPS[right]);
 
-	for (int i=left; i <=hub; i++) {tankSettings.epos[i]->changeRotationPerMinute(targetVelocityRPM[i]);}
+	//ROS_ERROR("%f", targetVelocityRPM[flow]);
+	for (int i=left; i <=flow; i++) {
+		
+		absolutePosition = tankSettings.epos[hub]-> getAbsolutePosition();
+		
+		tankSettings.epos[i]->changeRotationPerMinute(targetVelocityRPM[i]);
+	
+		diffPosition = (tankSettings.epos[hub]-> getAbsolutePosition()) - absolutePosition;
+		
+		std::fstream file;
+		file.open("/home/pg/Position.txt", std::ios::in);
+		file.getline(strInput, sizeof(strInput));
+		file.close();
+		
+		
+		txtPosition = atof(strInput);
+		
+		txtPosition = txtPosition + diffPosition;
+		
+		file.open("/home/pg/Position.txt", std::ios::out);
+		file << txtPosition;
+		file.close();
+		//ROS_ERROR("%f", txtPosition);
+		tankSettings.hubPosition = txtPosition;
+	}
+	
+	//tankSettings.epos[flow]->changeRotationPerMinute(8.0);
+	tankSettings.epos[flow]->testForErrorsAndPrint();
+	//double abposi = tankSettings.epos[hub] ->getAbsolutePosition();
+	//ROS_ERROR("%f", abposi);
+	
+		
+
 }
 
+//modified by @author Jannik Flessner
 void TankSteering::odomCallback(const ros::TimerEvent& event)
 {
 	double pos_linear_z=0;
@@ -102,17 +257,19 @@ void TankSteering::odomCallback(const ros::TimerEvent& event)
 	geometry_msgs::TransformStamped transform;
 	nav_msgs::Odometry nav_odom;
 
-	for (int i=left; i<=right; i++) { temp_pos[i] = tankSettings.epos[i]->getAbsolutePosition() * tankSettings.wheelPerimeter; }
+	for (int i=left; i<=right; i++) { 
+	  temp_pos[i] = tankSettings.epos[i]->getAbsolutePosition() * tankSettings.wheelPerimeter; //Bestimmung der zurueckgelegten Strecke beider Raeder
+	  //ROS_ERROR("%f",temp_pos[i]);
+	}
 	for (int i=left; i<=right; i++) {
-		pos_delta[i] = temp_pos[i] - pos.lastPosition[i];
+		pos_delta[i] = temp_pos[i] - pos.lastPosition[i]; // Unterschied von jetziger zur vorheriger Position
 		pos.lastPosition[i] = temp_pos[i];
 	}
 
-	float timeDelta = (event.current_real - event.last_real).toSec();
-	double polar_s  =(pos_delta[right] + pos_delta[left] ) * 0.5;
-	double polar_theta=(pos_delta[right] - pos_delta[left]) / tankSettings.axisLength;
-	double delta_r = (polar_theta == 0) ? polar_s : (polar_s / polar_theta) * sin(polar_theta/2) * 2;
-
+	float timeDelta = (event.current_real - event.last_real).toSec(); // Vergangene Zeit zwischen der Messung
+	double polar_s  =(pos_delta[right] + pos_delta[left] ) * 0.5; // Berechnung der Weglaenge
+	double polar_theta=(pos_delta[right] - pos_delta[left]) / tankSettings.axisLength; // Berechnung der Drehung
+	
 	try {
 		tankSettings.tfListener.lookupTransform("/odom", "/base_link", ros::Time(0), readTransform);
 		pos.last.x = readTransform.getOrigin().x();
@@ -121,9 +278,10 @@ void TankSteering::odomCallback(const ros::TimerEvent& event)
 	} catch (tf::TransformException ex) {
 		ROS_ERROR("%s",ex.what());
 	}
-
-	pos.now.x = pos.last.x + delta_r * cos(polar_theta/2 + pos.last.theta);
-	pos.now.y = pos.last.y + delta_r * sin(polar_theta/2 + pos.last.theta);
+	
+	pos.now.x = pos.last.x + polar_s * cos(pos.last.theta + polar_theta);
+	pos.now.y = pos.last.y + polar_s * sin(pos.last.theta + polar_theta);
+	
 	pos.now.theta = pos.last.theta + polar_theta;
 
 	//odom
@@ -137,7 +295,7 @@ void TankSteering::odomCallback(const ros::TimerEvent& event)
 	transform.transform.translation.y = pos.now.y;
 	transform.transform.translation.z = pos_linear_z;
 	transform.transform.rotation = odom_quat;
-
+// Test
 	tankSettings.tfBroad.sendTransform(transform);
 
 	nav_odom.header.stamp = event.current_real;
@@ -213,7 +371,7 @@ void TankSteering::getDeviceErrorCallback(const ros::TimerEvent& event)
 }
 
 
-// Hier werden die Nachrichten abgehoert und Callbacks gestartet
+//modified by @author Jannik Flessner
 int TankSteering::init()
 {
 	int j = 0;
@@ -222,7 +380,9 @@ int TankSteering::init()
 
 	for (int i = left; i <= flow; i++) { tankSettings.epos[i]->testForErrorsAndPrint(); }
 	resetEPOS2Fault();
-	for (int i=left; i<=flow;i++) {tankSettings.epos[i]->init(tankSettings.maxRPM, tankSettings.wheelPerimeter);}
+	for (int i=left; i<=hub;i++) {tankSettings.epos[i]->init(tankSettings.maxRPM, tankSettings.wheelPerimeter);}
+
+	tankSettings.epos[flow]->initFlow(tankSettings.maxRPM, tankSettings.wheelPerimeter);
 	ROS_INFO("initialize both EPOS2 successfully");
 
 	j = 0;
@@ -240,16 +400,20 @@ int TankSteering::init()
 			active[i] = tankSettings.epos[i]->activateProfileVelocity();
 		}
 
-		if ( active[left] == 1 && active[right] == 1  && active[hub] == 1  && active[flow] == 1 ) {
+		if ( active[left] == 1 && active[right] == 1  && active[hub] == 1 && active[flow] == 1) {
 			// Abhoeren von SteuerNachrichten
 			tankSettings.epos2MPS = tankSettings.roshandle.subscribe("epos2_MPS_left_right", 1000, &TankSteering::driveCallbackMPS, this);
 			tankSettings.epos2Twist = tankSettings.roshandle.subscribe("cmd_vel", 1000, &TankSteering::driveCallback, this);
+			tankSettings.flowMessage = tankSettings.roshandle.subscribe("flow", 1000, &TankSteering::flowCallback, this);
 
 			for (int i=left; i<=right; i++) { pos.lastPosition[i]=tankSettings.epos[i]->getAbsolutePosition() * tankSettings.wheelPerimeter; }
 
 			tankSettings.odomTimer = tankSettings.roshandle.createTimer(ros::Duration(tankSettings.odomDuration), &TankSteering::odomCallback, this);
+			tankSettings.flowTimer = tankSettings.roshandle.createTimer(ros::Duration(tankSettings.velocityDuration), &TankSteering::flowControl, this);
+			tankSettings.hubTimer = tankSettings.roshandle.createTimer(ros::Duration(tankSettings.velocityDuration), &TankSteering::hubControl, this);
 			tankSettings.setVelocity = tankSettings.roshandle.createTimer(ros::Duration(tankSettings.velocityDuration), &TankSteering::setVelocityCallback, this);
 			tankSettings.odomPub = tankSettings.roshandle.advertise<nav_msgs::Odometry>("odom", 50);
+			tankSettings.flowPub = tankSettings.roshandle.advertise<std_msgs::String>("flow", 1000);
 
 			tankSettings.getErrorLoop = tankSettings.roshandle.createTimer(ros::Duration(1.02), &TankSteering::getDeviceErrorCallback, this);
 
@@ -285,6 +449,7 @@ void TankSteering::initLaserscanner(int range, double low, double high)
 
 	//ROS_ERROR("Laser-Scanner successfully initialized (Parameter-> a: %.4lf, b: %.4lf, c: %.4lf)", LaserDistance.a, LaserDistance.b, LaserDistance.c);
 }
+
 
 void TankSteering::resetEPOS2Fault()
 {

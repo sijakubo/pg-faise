@@ -17,6 +17,8 @@
 		
 		<param name="leftNodeNr" value="2" type="int"/>
 		<param name="rightNodeNr" value="1" type="int"/>
+		<param name="hubNodeNr" value="3" type="int"/>
+		<param name="flowNodeNr" value="4" type="int"/>
 		<param name="reverseLeft" value="0" type="int"/>
 		<param name="reverseRight" value="1" type="int"/>
 	</group>

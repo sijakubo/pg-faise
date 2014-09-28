@@ -47,6 +47,7 @@
 
 class SampleMoving {
 
+		
 		/**
 		 * enumeration for naming the EPOS2s
 		 */
@@ -99,8 +100,12 @@ class SampleMoving {
 			double lefty;	/**< leftStick: up - down */
 			double rightx;	/**< rightStick: left - right */
 			double righty;	/**< rightStick: up - down */
-			int switchButton;	/**< if set to one and a gamepad was detected, the gamepad-mode will be switched */
+			int switchButton;	/**< if set to one and a gamepad was detected, the gamepad-mtode will be switched */
 			int quickStopButton;	/**< if set, all velocity's will be set to zero */
+			int flowButtonA;
+			int flowButtonB;
+			int hubButtonLB;
+			int hubButtonRB;
 		};
 
 	public:
@@ -239,6 +244,10 @@ class SampleMoving {
 		 * @param event contains some time values according to the event
 		 */
 		void keyboardCallback(const ros::TimerEvent& event);
+// NEW		
+		//void SampleMoving::einfacheFahrt(const ros::TimerEvent& event);
+// NEW END
+
 		/**
 		 * Prevent the velocity from higher steps than the speedStepSize according to the current velocity.
 		 *

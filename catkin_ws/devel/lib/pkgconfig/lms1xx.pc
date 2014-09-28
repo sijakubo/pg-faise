@@ -2,7 +2,7 @@ prefix=/home/pg/catkin_ws/devel
 
 Name: lms1xx
 Description: Description of lms1xx
-Version: 0.0.0
+Version: 0.1.0
 Cflags: 
 Libs: -L/home/pg/catkin_ws/devel/lib 
-Requires: roscpp sensor_msgs liblms1xx
+Requires: 

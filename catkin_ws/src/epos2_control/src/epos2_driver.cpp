@@ -177,13 +177,14 @@ int main(int argc, char **argv) {
 			tank.initLaserscanner(120, 0.15, 1.0);
 
 			//example how to read and edit regulator- and motor-data
-			Epos2MotorController::regulator controlParameter[2];
-			Epos2MotorController::motorData motorParameter[2];
-			Epos2MotorController::gearData gearParameter[2];
-			Epos2MotorController::accelerationData accelerationParameter[2];
-			double maxRobotRPM[2];
+			Epos2MotorController::regulator controlParameter[4];
+			Epos2MotorController::motorData motorParameter[4];
+			Epos2MotorController::gearData gearParameter[4];
+			Epos2MotorController::accelerationData accelerationParameter[4];
+			double maxRobotRPM[4];
 
-			//for (int i=TankSteering::left; i<=TankSteering::right; i++) {
+
+			//for (int i=TankSteering::left; i<=TankSteering::flow; i++) {
 				//epos[i]->disableEpos2();
 
 				//epos[i]->getRegulatorParameter( &(controlParameter[i]) );
@@ -195,7 +196,7 @@ int main(int argc, char **argv) {
 				//epos[i]->setRegulatorParameter( &(controlParameter[i]) );
 
 				//epos[i]->getMotorData( &(motorParameter[i]) );
-				//ROS_ERROR("[main %s] (motor) maxCurrent: %i, PeakCurrent: %i, ThermalTimeConstant: %i, maxMotorSpeed: %li",(i==TankSteering::left)?"left":"right", motorParameter[i].continuousCurrent, motorParameter[i].maxPeakCurrent, motorParameter[i].thermalTimeConstantWinding, motorParameter[i].maxRPM);
+				//ROS_ERROR("[main %s] (motor) maxCurrent: %i, PeakCurrent: %i, ThermalTimeConstant: %i, maxMotorSpeed: %li",(i==TankSteering::left)?"left":"flow", motorParameter[i].continuousCurrent, motorParameter[i].maxPeakCurrent, motorParameter[i].thermalTimeConstantWinding, motorParameter[i].maxRPM);
 				//motorParameter[i].thermalTimeConstantWinding = 10;
 				//epos[i]->setMotorData( &(motorParameter[i]) );
 
@@ -203,13 +204,15 @@ int main(int argc, char **argv) {
 				//ROS_ERROR("[main %s] (Gear)-> maxRPM: %li, numerator: %li, denominator: %i",(i==TankSteering::left)?"left":"right", gearParameter[i].maxRPM, gearParameter[i].numerator, gearParameter[i].denominator);
 
 				//epos[i]->getMaxRPM( &(maxRobotRPM[i]) );
-				//ROS_ERROR("[main %s] maxRobotRPM: %.4lf",(i==TankSteering::left)?"left":"right", maxRobotRPM[i]);
+				//ROS_ERROR("[main %s] maxRobotRPM: %.4lf",(i==TankSteering::left)?"left":"flow", maxRobotRPM[i]);
 
 				//epos[i]->getAccelerationData( &(accelerationParameter[i]) );
 				//ROS_ERROR("[main %s] (acceleration) maxAcc: %.3lf m/s^2, profileAcc: %.3lf m/s^2, profileDec: %.3lf m/s^2, quickstopDec: %.3lf m/s^2",(i==TankSteering::left)?"left":"right", accelerationParameter[i].maxAcceleration, accelerationParameter[i].profileAcceleration, accelerationParameter[i].profileDeceleration, accelerationParameter[i].quickstopDeceleration);
 
 				//epos[i]->enableEpos2();
 			//}//end of: example how to read and edit regulator- and motor-data
+
+
 
 			driverBond.start();
 

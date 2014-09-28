@@ -5,13 +5,13 @@ raytrace_range: 3.0
 #r6 (x,y) -> breite: 0.50 länge: 0.685 + 0.115 (laserscanner) --> drehpunkt ca. bei 0.345 von vorne
 #lasermittelpunkt ungefähr bei 0.05 vor roboter
 footprint: [[0.46, -0.25], [0.46, 0.25], [-0.34, 0.25], [-0.34, -0.25]]
-#??The radius in meters to which the map inflates obstacle cost values??
-inflation_radius: 0.55
+#Es werden nur Pfade genutzt, die den Abstand (inflation_radius) zu Objekten in der Karte einhalten.
+inflation_radius: 0.2
 
 
 #setzen von quellen und deren parameter
-observation_sources: laser_scan_sensor
+obstacles:
+    observation_sources: laser_scan_sensor
+    laser_scan_sensor: {sensor_frame: /base_laser, data_type: LaserScan, topic: /scan, marking: true, clearing: true}
 
-laser_scan_sensor: {sensor_frame: /base_laser, expected_update_rate: 0.25, data_type: LaserScan, topic: /scan, marking: false, clearing: false}
 
-#point_cloud_sensor: {sensor_frame: frame_name, data_type: PointCloud, topic: topic_name, marking: true, clearing: true}

@@ -1,0 +1,15 @@
+<launch>
+
+  <node pkg="epos2_control" type="r2Serial" name="r2Serial0" args="0 /dev/ttyUSB0 115200" output="screen" >
+  <remap from="ucCommand" to="uc0Command" />
+  <remap from="ucResponse" to="uc0Response" />
+  </node>
+
+  <node pkg="epos2_control" type="r2Serial" name="r2Serial1" args="1 /dev/ttyUSB1 115200" output="screen" >
+  <remap from="ucCommand" to="uc1Command" />
+  <remap from="ucResponse" to="uc1Response" />
+  </node>
+
+
+
+</launch>

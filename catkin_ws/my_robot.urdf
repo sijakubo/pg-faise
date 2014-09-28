@@ -1,0 +1,30 @@
+<robot name="test_robot">
+  <link name="link1" />
+  <link name="link2" />
+  <link name="link3" />
+  <link name="link4" />
+  <link name="link5" />
+
+  <joint name="joint1" type="continuous">
+    <parent link="link1"/>
+    <child link="link2"/>
+  </joint>
+
+  <joint name="joint2" type="continuous">
+    <parent link="link1"/>
+    <child link="link3"/>
+  </joint>
+
+  <joint name="joint3" type="continuous">
+    <parent link="link1"/>
+    <child link="link4"/>
+  </joint>
+
+  <joint name="joint4" type="continuous">
+    <parent link="link1"/>
+    <child link="link5"/>
+  </joint>
+
+
+</robot>
+

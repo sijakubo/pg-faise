@@ -5,7 +5,7 @@
 		<!--param name="port" value="/dev/ttyS0" /-->	
 		<param name="baud" value="1000000" />
 		<!--param name="baud" value="115200" /-->
-		<param name="timeout" value="750" />		
+		<param name="timeout" value="1000" />		
 	</node>
 	
 	<!--node name="sicklms_scan" pkg="sicktoolbox_wrapper" type="sicklms" respawn="false">

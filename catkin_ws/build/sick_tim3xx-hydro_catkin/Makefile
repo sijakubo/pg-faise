@@ -231,6 +231,20 @@ driver_base_generate_messages_py/fast:
 .PHONY : driver_base_generate_messages_py/fast
 
 # Convenience name for target.
+sick_tim3xx-hydro_catkin/CMakeFiles/dynamic_reconfigure_gencfg.dir/rule:
+	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 sick_tim3xx-hydro_catkin/CMakeFiles/dynamic_reconfigure_gencfg.dir/rule
+.PHONY : sick_tim3xx-hydro_catkin/CMakeFiles/dynamic_reconfigure_gencfg.dir/rule
+
+# Convenience name for target.
+dynamic_reconfigure_gencfg: sick_tim3xx-hydro_catkin/CMakeFiles/dynamic_reconfigure_gencfg.dir/rule
+.PHONY : dynamic_reconfigure_gencfg
+
+# fast build rule for target.
+dynamic_reconfigure_gencfg/fast:
+	cd /home/pg/catkin_ws/build && $(MAKE) -f sick_tim3xx-hydro_catkin/CMakeFiles/dynamic_reconfigure_gencfg.dir/build.make sick_tim3xx-hydro_catkin/CMakeFiles/dynamic_reconfigure_gencfg.dir/build
+.PHONY : dynamic_reconfigure_gencfg/fast
+
+# Convenience name for target.
 sick_tim3xx-hydro_catkin/CMakeFiles/dynamic_reconfigure_generate_messages_cpp.dir/rule:
 	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 sick_tim3xx-hydro_catkin/CMakeFiles/dynamic_reconfigure_generate_messages_cpp.dir/rule
 .PHONY : sick_tim3xx-hydro_catkin/CMakeFiles/dynamic_reconfigure_generate_messages_cpp.dir/rule
@@ -700,6 +714,7 @@ help:
 	@echo "... driver_base_generate_messages_cpp"
 	@echo "... driver_base_generate_messages_lisp"
 	@echo "... driver_base_generate_messages_py"
+	@echo "... dynamic_reconfigure_gencfg"
 	@echo "... dynamic_reconfigure_generate_messages_cpp"
 	@echo "... dynamic_reconfigure_generate_messages_lisp"
 	@echo "... dynamic_reconfigure_generate_messages_py"

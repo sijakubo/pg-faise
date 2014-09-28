@@ -55,7 +55,7 @@ CMAKE_AR:FILEPATH=/usr/bin/ar
 
 //Choose the type of build, options are: None(CMAKE_CXX_FLAGS or
 // CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel.
-CMAKE_BUILD_TYPE:STRING=
+CMAKE_BUILD_TYPE:STRING=Release
 
 //Enable/Disable color output during build.
 CMAKE_COLOR_MAKEFILE:BOOL=ON
@@ -254,7 +254,7 @@ UBUNTU:BOOL=TRUE
 UBUNTU_PRECISE:BOOL=TRUE
 
 //Path to a file.
-_CATKIN_GTEST_INCLUDE:FILEPATH=_CATKIN_GTEST_INCLUDE-NOTFOUND
+_CATKIN_GTEST_INCLUDE:FILEPATH=/usr/include/gtest/gtest.h
 
 //Path to a file.
 _CATKIN_GTEST_SRC:FILEPATH=/usr/src/gtest/src/gtest.cc
@@ -351,7 +351,7 @@ gtest_force_shared_crt:BOOL=OFF
 gtest_main_LIB_DEPENDS:STATIC=general;-lpthread;general;gtest;
 
 //Path to a library.
-lib:FILEPATH=/opt/ros/hydro/lib/libdynamic_reconfigure_config_init_mutex.so
+lib:FILEPATH=/opt/ros/hydro/lib/libtf2.so
 
 //Value Computed by CMake
 liblms1xx_BINARY_DIR:STATIC=/home/pg/catkin_ws/build/liblms1xx
@@ -372,13 +372,13 @@ libusb_INCLUDE_DIRS:PATH=/usr/include/libusb-1.0
 libusb_LIBRARIES:FILEPATH=/usr/lib/i386-linux-gnu/libusb-1.0.so
 
 //Value Computed by CMake
-lms1xx_BINARY_DIR:STATIC=/home/pg/catkin_ws/build/lms1xx
+lms1xx_BINARY_DIR:STATIC=/home/pg/catkin_ws/build/LMS1xx
 
 //Dependencies for target
 lms1xx_LIB_DEPENDS:STATIC=
 
 //Value Computed by CMake
-lms1xx_SOURCE_DIR:STATIC=/home/pg/catkin_ws/src/lms1xx
+lms1xx_SOURCE_DIR:STATIC=/home/pg/catkin_ws/src/LMS1xx
 
 //The directory containing a CMake configuration file for message_filters.
 message_filters_DIR:PATH=/opt/ros/hydro/share/message_filters/cmake
@@ -388,6 +388,12 @@ message_generation_DIR:PATH=/opt/ros/hydro/share/message_generation/cmake
 
 //The directory containing a CMake configuration file for message_runtime.
 message_runtime_DIR:PATH=/opt/ros/hydro/share/message_runtime/cmake
+
+//The directory containing a CMake configuration file for move_base_msgs.
+move_base_msgs_DIR:PATH=/opt/ros/hydro/share/move_base_msgs/cmake
+
+//The directory containing a CMake configuration file for move_base_msgsactionlib.
+move_base_msgsactionlib_DIR:PATH=move_base_msgsactionlib_DIR-NOTFOUND
 
 //The directory containing a CMake configuration file for nav_msgs.
 nav_msgs_DIR:PATH=/opt/ros/hydro/share/nav_msgs/cmake
@@ -439,6 +445,12 @@ sick_tim3xx_SOURCE_DIR:STATIC=/home/pg/catkin_ws/src/sick_tim3xx-hydro_catkin
 
 //Dependencies for the target
 sick_tim_3xx_LIB_DEPENDS:STATIC=general;/opt/ros/hydro/lib/libroscpp.so;general;/usr/lib/libboost_signals-mt.so;general;/usr/lib/libboost_filesystem-mt.so;general;/opt/ros/hydro/lib/librosconsole.so;general;/opt/ros/hydro/lib/librosconsole_log4cxx.so;general;/opt/ros/hydro/lib/librosconsole_backend_interface.so;general;/usr/lib/liblog4cxx.so;general;/usr/lib/libboost_regex-mt.so;general;/opt/ros/hydro/lib/libxmlrpcpp.so;general;/opt/ros/hydro/lib/libdynamic_reconfigure_config_init_mutex.so;general;/opt/ros/hydro/lib/libroscpp_serialization.so;general;/opt/ros/hydro/lib/librostime.so;general;/usr/lib/libboost_date_time-mt.so;general;/usr/lib/libboost_system-mt.so;general;/usr/lib/libboost_thread-mt.so;general;/usr/lib/i386-linux-gnu/libpthread.so;general;/opt/ros/hydro/lib/libcpp_common.so;general;/opt/ros/hydro/lib/libconsole_bridge.so;general;/usr/lib/i386-linux-gnu/libusb-1.0.so;
+
+//Value Computed by CMake
+simple_navigation_goals_BINARY_DIR:STATIC=/home/pg/catkin_ws/build/simple_navigation_goals
+
+//Value Computed by CMake
+simple_navigation_goals_SOURCE_DIR:STATIC=/home/pg/catkin_ws/src/simple_navigation_goals
 
 //Value Computed by CMake
 slam_gmapping_BINARY_DIR:STATIC=/home/pg/catkin_ws/build/slam_gmapping-hydro-devel/slam_gmapping
@@ -590,7 +602,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_LOCAL_GENERATORS:INTERNAL=7
+CMAKE_NUMBER_OF_LOCAL_GENERATORS:INTERNAL=9
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
@@ -624,7 +636,7 @@ FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[/usr/bin/python][v2.7.3()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 GTEST_FROM_SOURCE_FOUND:INTERNAL=TRUE
-GTEST_FROM_SOURCE_INCLUDE_DIRS:INTERNAL=
+GTEST_FROM_SOURCE_INCLUDE_DIRS:INTERNAL=/usr/include
 GTEST_FROM_SOURCE_LIBRARIES:INTERNAL=gtest
 GTEST_FROM_SOURCE_LIBRARY_DIRS:INTERNAL=/home/pg/catkin_ws/build/gtest
 GTEST_FROM_SOURCE_MAIN_LIBRARIES:INTERNAL=gtest_main

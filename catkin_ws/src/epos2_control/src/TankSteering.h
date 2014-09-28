@@ -21,6 +21,15 @@
 #include <tf/transform_listener.h>
 #include <nav_msgs/Odometry.h>
 #include "sensor_msgs/LaserScan.h"
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <stdlib.h>
+#include <stdio.h>
+#include <move_base_msgs/MoveBaseAction.h>
+#include <actionlib/client/simple_action_client.h>
+
+typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
 class TankSteering {
 
@@ -38,12 +47,16 @@ class TankSteering {
 
 			ros::NodeHandle roshandle; /**< the handle on a ROSNode to open Timers, Subscribers, Publishers... */
 
+			ros::Subscriber flowMessage;    /**< object for listing to goal messages (flow) */
 			ros::Subscriber epos2Twist;	/**< object for listing to twist messages (cmd_vel) */
 			ros::Subscriber epos2MPS;	/**< object for listing to speed messages (one value for each side of the robot) */
 			ros::Subscriber sickLMS;	/**< a object for listing to point-cloud-messages from the laser scanner */
 			ros::Timer odomTimer;	/**< a timer object to call the function which calculates the current position */
+			ros::Timer flowTimer;
+			ros::Timer hubTimer;
 			ros::Timer setVelocity;	/**< a timer object to call the function which sets the current velocity value to the EPOS2 */
 			ros::Publisher odomPub;	/**< object for sending the current position to the ROS NavStack */
+			ros::Publisher flowPub;	/**< object for sending to goal messages (uc1Response) */		
 
 			ros::Timer getErrorLoop;	/**< a timer object to call a function which reads out both EPOS2 error historys */
 
@@ -53,6 +66,8 @@ class TankSteering {
 			double targetVelocityMPS[4];	/**< [m/s] the target velocity for both sides */
 			double odomDuration;	/**< [s] the time between to calls of the odomCallback() */
 			double velocityDuration;	/**< [s] the time between to calls of the setVelocityCallback() */
+			double flowControl;
+			double hubControl;
 		}tankSettings;	/**< Main Settings for tank-steering a robot with two EPOS2 */
 
 		/**
@@ -126,10 +141,21 @@ class TankSteering {
 		 */
 		void driveCallback(const geometry_msgs::Twist velocityVector);
 		/**
+		 * flowControl-callback-function - Control flow to load/unload robot
+		 *
+		 * @param string contains stop/load/unload command
+		 */
+		void flowCallback(const std_msgs::String::ConstPtr& msg);
+		/**
 		 * velocity-callback-function - every time called it will set the targetVelocity to both EPOS2
 		 *
 		 * @param event contains some time values according to the event
 		 */
+
+		void flowControl(const ros::TimerEvent& event);
+
+		void hubControl(const ros::TimerEvent& event);
+
 		void setVelocityCallback(const ros::TimerEvent& event);
 		/**
 		 * odom-callback-function - reads out the current position of both motors connected to the EPOS2s and calculate the odometry-data

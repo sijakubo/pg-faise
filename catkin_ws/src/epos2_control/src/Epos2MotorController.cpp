@@ -3,6 +3,7 @@
  *
  *  Created on: Apr 11, 2012
  *      Author: Martin Seidel
+ *      modified: Jan-Gerd Meﬂ, Jannik Flessner, Malte Falk
  */
 
 #include "Epos2MotorController.h"
@@ -236,7 +237,7 @@ int Epos2MotorController::activateProfileVelocity()
 	int bit=0, j=0;
 	char mode = 0;
 	unsigned int errorCode=0, bytesWritten;
-	short int value = 1;
+	short int value = 0;
 
 	bit = VCS_SetObject(devhandle, epos2MotorSet.node, 0x6086, 0x00, &value, 1, &bytesWritten, &errorCode);
 	if (!bit) {
@@ -281,12 +282,24 @@ int Epos2MotorController::activateProfileVelocity()
 
 }
 
+// @author Jannik Flessner, Malte Falke
+int Epos2MotorController::getLightSensorsValue()
+{
+  int bit=0;
+  short unsigned int value;
+  unsigned int errorCode=0;
+ 
+  bit = VCS_GetAllDigitalInputs(devhandle, epos2MotorSet.node, &value, &errorCode);
+  //if(!bit) {errorOutput("Can't read LightSensors", error, errorCode);}
+  return value;
+}
+
 int Epos2MotorController::changeRotationPerMinute(double targetVelocityRPM)
 {
 	int bit=0;
 	unsigned int errorCode=0;
 	double absoluteTargetVelocityRPM = fabs(targetVelocityRPM);
-
+	//ROS_ERROR("changeRotationPerMinute to %f --- MAX: %f", absoluteTargetVelocityRPM,epos2MotorSet.maxRotationPerMinute);
 	if ( epos2MotorSet.maxRotationPerMinute >= absoluteTargetVelocityRPM ) {
 		if (absoluteTargetVelocityRPM < 0.2) {	//stop motor
 			bit = VCS_HaltVelocityMovement(devhandle, epos2MotorSet.node, &errorCode);
@@ -311,7 +324,7 @@ int Epos2MotorController::changeRotationPerMinute(double targetVelocityRPM)
 			}
 		}//end rpm==0
 	} else {
-		ROS_WARN("speed wasn't changed. Absolute Values greater then the maximal velocity are not allowed.");
+		ROS_ERROR("speed wasn't changed. Absolute Values greater then the maximal velocity are not allowed.");
 		return 0;
 	}//end maxRPM >= rpm
 }
@@ -373,14 +386,16 @@ int Epos2MotorController::setGearData(gearData *parameter)
 	state = getEpos2State();
 
 	if (state == disabled) {
-
+		//ROS_ERROR("Set Gear Numerator");
 		bit = VCS_SetObject(devhandle, epos2MotorSet.node, 0x2230, 0x01, &value, 4, &bytesWritten, &errorCode);
 		if (!bit) { errorOutput("set Gear-Numerator", error, bit, errorCode);}
-
+		
+		//ROS_ERROR("Set Gear Denominator");
 		bit = VCS_SetObject(devhandle, epos2MotorSet.node, 0x2230, 0x02, &value, 2, &bytesWritten, &errorCode);
 		if (!bit) { errorOutput("set Gear-Denominator", error, bit, errorCode);}
 
 		value = abs(parameter->maxRPM);
+		//ROS_ERROR("Set Gear max RPM: %x", value);
 		bit = VCS_SetObject(devhandle, epos2MotorSet.node, 0x2230, 0x03, &value, 4, &bytesWritten, &errorCode);
 		if (!bit) { errorOutput("set max RPM of Gear", error, bit, errorCode);}
 
@@ -426,7 +441,7 @@ int Epos2MotorController::getGearData(gearData *parameter)
 	}
 }
 
-int Epos2MotorController::setMotorData(motorData *parameter)
+int Epos2MotorController::setMotorData(motorData *parameter, int type)
 {
 	int bit=0;
 	unsigned int errorCode=0, bytesWritten=0;
@@ -436,21 +451,22 @@ int Epos2MotorController::setMotorData(motorData *parameter)
 
 	if (state == disabled) {
 
-		bit = VCS_SetMotorType(devhandle, epos2MotorSet.node, MT_DC_MOTOR, &errorCode);
+		bit = VCS_SetMotorType(devhandle, epos2MotorSet.node, type, &errorCode);
 		if (!bit) { errorOutput("can't set motorType to brushed DC", error, bit, errorCode);}
 
-		if (parameter->maxPeakCurrent < parameter->continuousCurrent) { parameter->maxPeakCurrent = 2 * parameter->continuousCurrent;}
+		if (parameter->maxPeakCurrent < parameter->continuousCurrent) {
+			parameter->maxPeakCurrent = 2 * parameter->continuousCurrent;}
 
 		bit = VCS_SetDcMotorParameter(devhandle, epos2MotorSet.node, parameter->continuousCurrent, parameter->maxPeakCurrent, parameter->thermalTimeConstantWinding, &errorCode);
 		if (bit != 0) {
-			ROS_DEBUG("MotorData set %s to: NominalCurrent - %i, PeakCurrent - %i, ThermalTimeConstant - %i", nodeStr, parameter->continuousCurrent, parameter->maxPeakCurrent, parameter->thermalTimeConstantWinding);
+			ROS_ERROR("MotorData set %s to: NominalCurrent - %i, PeakCurrent - %i, ThermalTimeConstant - %i", nodeStr, parameter->continuousCurrent, parameter->maxPeakCurrent, parameter->thermalTimeConstantWinding);
 		} else {
 			errorOutput("couldn't set DC-Motor parameter", warn, bit, errorCode);
 		}
 
 		bit = VCS_SetObject(devhandle, epos2MotorSet.node, 0x6410, 0x04, &value, 4, &bytesWritten, &errorCode);
 		if (bit != 0) {
-			ROS_DEBUG("Maximum Velocity set %s to: %li rpm", nodeStr, parameter->maxRPM);
+			ROS_ERROR("Maximum Velocity set %s to: %li rpm", nodeStr, parameter->maxRPM);
 		} else {
 			errorOutput("couldn't set maximum RPM of Motor", warn, bit, errorCode);
 		}
@@ -459,6 +475,10 @@ int Epos2MotorController::setMotorData(motorData *parameter)
 	} else {
 		return 0;
 	}
+}
+
+int Epos2MotorController::setMotorData(motorData *parameter){
+	setMotorData(parameter, MT_DC_MOTOR);
 }
 
 int Epos2MotorController::getMotorData(motorData *parameter)
@@ -545,8 +565,8 @@ int Epos2MotorController::getAccelerationData(accelerationData *parameter)
 	unsigned int value, value2;
 
 	//init
-	parameter->maxAcceleration = 0.51;
-	parameter->profileAcceleration = 0.4;
+	parameter->maxAcceleration = 0.51; 
+	parameter->profileAcceleration = 0.4;	
 	parameter->profileDeceleration = 0.4;
 	parameter->quickstopDeceleration = 0.5;
 
@@ -695,14 +715,14 @@ int Epos2MotorController::setRegulatorParameter(regulator *parameter)
 
 		bit = VCS_SetPositionRegulatorFeedForward(devhandle, epos2MotorSet.node, (*parameter).positionFF.Velocity, (*parameter).positionFF.Acceleration, &errorCode);
 		if (bit != 0) {
-			ROS_INFO("PositionFeedForward was set %s to: Velocity - %i, Acceleration - %i", nodeStr, (*parameter).positionFF.Velocity, (*parameter).positionFF.Acceleration);
+			ROS_ERROR("PositionFeedForward was set %s to: Velocity - %i, Acceleration - %i", nodeStr, (*parameter).positionFF.Velocity, (*parameter).positionFF.Acceleration);
 		} else {
 			errorOutput("couldn't write Position FeedForward Values", warn, bit, errorCode);
 		}
 
 		bit = VCS_SetVelocityRegulatorGain(devhandle, epos2MotorSet.node, (*parameter).velocityGain.p, (*parameter).velocityGain.i, &errorCode);
 		if (bit != 0) {
-			ROS_INFO("VelocityGain was set %s to: P - %i, I - %i", nodeStr, (*parameter).velocityGain.p, (*parameter).velocityGain.i);
+			ROS_ERROR("VelocityGain was set %s to: P - %i, I - %i", nodeStr, (*parameter).velocityGain.p, (*parameter).velocityGain.i);
 		} else {
 			errorOutput("couldn't write Velocity Gain Values", warn, bit, errorCode);
 		}
@@ -710,14 +730,14 @@ int Epos2MotorController::setRegulatorParameter(regulator *parameter)
 		bit = VCS_SetObject(devhandle, epos2MotorSet.node, 0x60f9, 0x04, (short unsigned int *) &(*parameter).velocityFF.Velocity, 2, &bytesWritten, &errorCode);
 		bit1 = VCS_SetObject(devhandle, epos2MotorSet.node, 0x60f9, 0x05, (short unsigned int *) &(*parameter).velocityFF.Acceleration, 2, &bytesWritten, &errorCode);
 		if (bit != 0 && bit1 !=0) {
-			ROS_INFO("VelocityFeedForward was set %s to: Velocity - %i, Acceleration - %i", nodeStr, (*parameter).velocityFF.Velocity, (*parameter).velocityFF.Acceleration);
+			ROS_ERROR("VelocityFeedForward was set %s to: Velocity - %i, Acceleration - %i", nodeStr, (*parameter).velocityFF.Velocity, (*parameter).velocityFF.Acceleration);
 		} else {
 			errorOutput("couldn't write Velocity FeedForward Values", warn, bit, errorCode);
 		}
 
 		bit = VCS_SetCurrentRegulatorGain(devhandle, epos2MotorSet.node, (*parameter).currentGain.p, (*parameter).currentGain.i, &errorCode);
 		if (bit != 0) {
-			ROS_INFO("CurrentGain was set %s to: P - %i, I - %i", nodeStr, (*parameter).currentGain.p, (*parameter).currentGain.i);
+			ROS_ERROR("CurrentGain was set %s to: P - %i, I - %i", nodeStr, (*parameter).currentGain.p, (*parameter).currentGain.i);
 		} else {
 			errorOutput("couldn't write Current Gain Values", warn, bit, errorCode);
 		}
@@ -842,10 +862,40 @@ void Epos2MotorController::init(double maxRPM, double wheelPerimeter)
 
 		gearData gearTemp = {7000, 147, 2};
 		setGearData(&gearTemp);
-		motorData motorTemp = {5770, 12000, 10, 7000};
+		motorData motorTemp = {5770, 12000, 10, 7000}; 
 		setMotorData(&motorTemp);
-		accelerationData accTemp = {2.0, 2.0, 3.5, 3.52};
+		accelerationData accTemp = {2.0, 2.0, 3.5, 3.52}; 
 		setAccelerationData(&accTemp);
+
+		setMaxRPM(maxRPM);
+
+		storeSettings();
+
+		enableEpos2();
+	} else {
+		errorOutput("can't initialize device because it's not in disable state", error);
+	}
+}
+//@author Jan-Gerd Meﬂ, Jannik Flessner
+void Epos2MotorController::initFlow(double maxRPM, double wheelPerimeter)
+{
+	if ( disableEpos2() ) {
+
+		epos2MotorSet.wheelPerimeter = wheelPerimeter;
+
+		//setSpin(epos2MotorSet.reverse);
+		setDimensionAndNotation();
+
+		//gearData gearTemp = {100000, 0, 1};
+		//ROS_ERROR("Init Gear Flow");
+		//setGearData(&gearTemp);
+		epos2MotorSet.gearRatio = 1;
+		motorData motorTemp = {1400, 2800, 28, 15000000};
+		setMotorData(&motorTemp, MT_EC_SINUS_COMMUTATED_MOTOR);
+		accelerationData accTemp = {25, 25, 25, 25};
+		setAccelerationData(&accTemp);
+		maxRPM = 3234.0;
+		ROS_ERROR("Set Max RPM");
 		setMaxRPM(maxRPM);
 
 		storeSettings();

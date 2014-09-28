@@ -189,90 +189,6 @@ TankSteering/fast:
 .PHONY : TankSteering/fast
 
 # Convenience name for target.
-epos2_control/CMakeFiles/actionlib_generate_messages_cpp.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/actionlib_generate_messages_cpp.dir/rule
-.PHONY : epos2_control/CMakeFiles/actionlib_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-actionlib_generate_messages_cpp: epos2_control/CMakeFiles/actionlib_generate_messages_cpp.dir/rule
-.PHONY : actionlib_generate_messages_cpp
-
-# fast build rule for target.
-actionlib_generate_messages_cpp/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/actionlib_generate_messages_cpp.dir/build.make epos2_control/CMakeFiles/actionlib_generate_messages_cpp.dir/build
-.PHONY : actionlib_generate_messages_cpp/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/actionlib_generate_messages_lisp.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/actionlib_generate_messages_lisp.dir/rule
-.PHONY : epos2_control/CMakeFiles/actionlib_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-actionlib_generate_messages_lisp: epos2_control/CMakeFiles/actionlib_generate_messages_lisp.dir/rule
-.PHONY : actionlib_generate_messages_lisp
-
-# fast build rule for target.
-actionlib_generate_messages_lisp/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/actionlib_generate_messages_lisp.dir/build.make epos2_control/CMakeFiles/actionlib_generate_messages_lisp.dir/build
-.PHONY : actionlib_generate_messages_lisp/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/actionlib_generate_messages_py.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/actionlib_generate_messages_py.dir/rule
-.PHONY : epos2_control/CMakeFiles/actionlib_generate_messages_py.dir/rule
-
-# Convenience name for target.
-actionlib_generate_messages_py: epos2_control/CMakeFiles/actionlib_generate_messages_py.dir/rule
-.PHONY : actionlib_generate_messages_py
-
-# fast build rule for target.
-actionlib_generate_messages_py/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/actionlib_generate_messages_py.dir/build.make epos2_control/CMakeFiles/actionlib_generate_messages_py.dir/build
-.PHONY : actionlib_generate_messages_py/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/rule
-.PHONY : epos2_control/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-actionlib_msgs_generate_messages_cpp: epos2_control/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/rule
-.PHONY : actionlib_msgs_generate_messages_cpp
-
-# fast build rule for target.
-actionlib_msgs_generate_messages_cpp/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/build.make epos2_control/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/build
-.PHONY : actionlib_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/actionlib_msgs_generate_messages_lisp.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/actionlib_msgs_generate_messages_lisp.dir/rule
-.PHONY : epos2_control/CMakeFiles/actionlib_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-actionlib_msgs_generate_messages_lisp: epos2_control/CMakeFiles/actionlib_msgs_generate_messages_lisp.dir/rule
-.PHONY : actionlib_msgs_generate_messages_lisp
-
-# fast build rule for target.
-actionlib_msgs_generate_messages_lisp/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/actionlib_msgs_generate_messages_lisp.dir/build.make epos2_control/CMakeFiles/actionlib_msgs_generate_messages_lisp.dir/build
-.PHONY : actionlib_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/actionlib_msgs_generate_messages_py.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/actionlib_msgs_generate_messages_py.dir/rule
-.PHONY : epos2_control/CMakeFiles/actionlib_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-actionlib_msgs_generate_messages_py: epos2_control/CMakeFiles/actionlib_msgs_generate_messages_py.dir/rule
-.PHONY : actionlib_msgs_generate_messages_py
-
-# fast build rule for target.
-actionlib_msgs_generate_messages_py/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/actionlib_msgs_generate_messages_py.dir/build.make epos2_control/CMakeFiles/actionlib_msgs_generate_messages_py.dir/build
-.PHONY : actionlib_msgs_generate_messages_py/fast
-
-# Convenience name for target.
 epos2_control/CMakeFiles/bond_generate_messages_cpp.dir/rule:
 	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/bond_generate_messages_cpp.dir/rule
 .PHONY : epos2_control/CMakeFiles/bond_generate_messages_cpp.dir/rule
@@ -455,48 +371,6 @@ epos2_talker/fast:
 .PHONY : epos2_talker/fast
 
 # Convenience name for target.
-epos2_control/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule
-.PHONY : epos2_control/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-geometry_msgs_generate_messages_cpp: epos2_control/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule
-.PHONY : geometry_msgs_generate_messages_cpp
-
-# fast build rule for target.
-geometry_msgs_generate_messages_cpp/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/build.make epos2_control/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/build
-.PHONY : geometry_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule
-.PHONY : epos2_control/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-geometry_msgs_generate_messages_lisp: epos2_control/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule
-.PHONY : geometry_msgs_generate_messages_lisp
-
-# fast build rule for target.
-geometry_msgs_generate_messages_lisp/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/build.make epos2_control/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/build
-.PHONY : geometry_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/geometry_msgs_generate_messages_py.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/geometry_msgs_generate_messages_py.dir/rule
-.PHONY : epos2_control/CMakeFiles/geometry_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-geometry_msgs_generate_messages_py: epos2_control/CMakeFiles/geometry_msgs_generate_messages_py.dir/rule
-.PHONY : geometry_msgs_generate_messages_py
-
-# fast build rule for target.
-geometry_msgs_generate_messages_py/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/geometry_msgs_generate_messages_py.dir/build.make epos2_control/CMakeFiles/geometry_msgs_generate_messages_py.dir/build
-.PHONY : geometry_msgs_generate_messages_py/fast
-
-# Convenience name for target.
 epos2_control/CMakeFiles/nav_msgs_generate_messages_cpp.dir/rule:
 	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/nav_msgs_generate_messages_cpp.dir/rule
 .PHONY : epos2_control/CMakeFiles/nav_msgs_generate_messages_cpp.dir/rule
@@ -539,256 +413,18 @@ nav_msgs_generate_messages_py/fast:
 .PHONY : nav_msgs_generate_messages_py/fast
 
 # Convenience name for target.
-epos2_control/CMakeFiles/roscpp_generate_messages_cpp.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-.PHONY : epos2_control/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
+epos2_control/CMakeFiles/r2Serial.dir/rule:
+	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/r2Serial.dir/rule
+.PHONY : epos2_control/CMakeFiles/r2Serial.dir/rule
 
 # Convenience name for target.
-roscpp_generate_messages_cpp: epos2_control/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-.PHONY : roscpp_generate_messages_cpp
+r2Serial: epos2_control/CMakeFiles/r2Serial.dir/rule
+.PHONY : r2Serial
 
 # fast build rule for target.
-roscpp_generate_messages_cpp/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/roscpp_generate_messages_cpp.dir/build.make epos2_control/CMakeFiles/roscpp_generate_messages_cpp.dir/build
-.PHONY : roscpp_generate_messages_cpp/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/roscpp_generate_messages_lisp.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-.PHONY : epos2_control/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_lisp: epos2_control/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-.PHONY : roscpp_generate_messages_lisp
-
-# fast build rule for target.
-roscpp_generate_messages_lisp/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/roscpp_generate_messages_lisp.dir/build.make epos2_control/CMakeFiles/roscpp_generate_messages_lisp.dir/build
-.PHONY : roscpp_generate_messages_lisp/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/roscpp_generate_messages_py.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/roscpp_generate_messages_py.dir/rule
-.PHONY : epos2_control/CMakeFiles/roscpp_generate_messages_py.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_py: epos2_control/CMakeFiles/roscpp_generate_messages_py.dir/rule
-.PHONY : roscpp_generate_messages_py
-
-# fast build rule for target.
-roscpp_generate_messages_py/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/roscpp_generate_messages_py.dir/build.make epos2_control/CMakeFiles/roscpp_generate_messages_py.dir/build
-.PHONY : roscpp_generate_messages_py/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
-.PHONY : epos2_control/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_cpp: epos2_control/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
-.PHONY : rosgraph_msgs_generate_messages_cpp
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_cpp/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build.make epos2_control/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build
-.PHONY : rosgraph_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
-.PHONY : epos2_control/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_lisp: epos2_control/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
-.PHONY : rosgraph_msgs_generate_messages_lisp
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_lisp/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build.make epos2_control/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build
-.PHONY : rosgraph_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
-.PHONY : epos2_control/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_py: epos2_control/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
-.PHONY : rosgraph_msgs_generate_messages_py
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_py/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build.make epos2_control/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build
-.PHONY : rosgraph_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule
-.PHONY : epos2_control/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-sensor_msgs_generate_messages_cpp: epos2_control/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule
-.PHONY : sensor_msgs_generate_messages_cpp
-
-# fast build rule for target.
-sensor_msgs_generate_messages_cpp/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build.make epos2_control/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build
-.PHONY : sensor_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule
-.PHONY : epos2_control/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-sensor_msgs_generate_messages_lisp: epos2_control/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule
-.PHONY : sensor_msgs_generate_messages_lisp
-
-# fast build rule for target.
-sensor_msgs_generate_messages_lisp/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build.make epos2_control/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build
-.PHONY : sensor_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule
-.PHONY : epos2_control/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-sensor_msgs_generate_messages_py: epos2_control/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule
-.PHONY : sensor_msgs_generate_messages_py
-
-# fast build rule for target.
-sensor_msgs_generate_messages_py/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/sensor_msgs_generate_messages_py.dir/build.make epos2_control/CMakeFiles/sensor_msgs_generate_messages_py.dir/build
-.PHONY : sensor_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
-.PHONY : epos2_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_cpp: epos2_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
-.PHONY : std_msgs_generate_messages_cpp
-
-# fast build rule for target.
-std_msgs_generate_messages_cpp/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make epos2_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
-.PHONY : std_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-.PHONY : epos2_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_lisp: epos2_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-.PHONY : std_msgs_generate_messages_lisp
-
-# fast build rule for target.
-std_msgs_generate_messages_lisp/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make epos2_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
-.PHONY : std_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/std_msgs_generate_messages_py.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/std_msgs_generate_messages_py.dir/rule
-.PHONY : epos2_control/CMakeFiles/std_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_py: epos2_control/CMakeFiles/std_msgs_generate_messages_py.dir/rule
-.PHONY : std_msgs_generate_messages_py
-
-# fast build rule for target.
-std_msgs_generate_messages_py/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/std_msgs_generate_messages_py.dir/build.make epos2_control/CMakeFiles/std_msgs_generate_messages_py.dir/build
-.PHONY : std_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/rule
-.PHONY : epos2_control/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-tf2_msgs_generate_messages_cpp: epos2_control/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/rule
-.PHONY : tf2_msgs_generate_messages_cpp
-
-# fast build rule for target.
-tf2_msgs_generate_messages_cpp/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/build.make epos2_control/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/build
-.PHONY : tf2_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/rule
-.PHONY : epos2_control/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-tf2_msgs_generate_messages_lisp: epos2_control/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/rule
-.PHONY : tf2_msgs_generate_messages_lisp
-
-# fast build rule for target.
-tf2_msgs_generate_messages_lisp/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/build.make epos2_control/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/build
-.PHONY : tf2_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/tf2_msgs_generate_messages_py.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/tf2_msgs_generate_messages_py.dir/rule
-.PHONY : epos2_control/CMakeFiles/tf2_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-tf2_msgs_generate_messages_py: epos2_control/CMakeFiles/tf2_msgs_generate_messages_py.dir/rule
-.PHONY : tf2_msgs_generate_messages_py
-
-# fast build rule for target.
-tf2_msgs_generate_messages_py/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/tf2_msgs_generate_messages_py.dir/build.make epos2_control/CMakeFiles/tf2_msgs_generate_messages_py.dir/build
-.PHONY : tf2_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/tf_generate_messages_cpp.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/tf_generate_messages_cpp.dir/rule
-.PHONY : epos2_control/CMakeFiles/tf_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-tf_generate_messages_cpp: epos2_control/CMakeFiles/tf_generate_messages_cpp.dir/rule
-.PHONY : tf_generate_messages_cpp
-
-# fast build rule for target.
-tf_generate_messages_cpp/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/tf_generate_messages_cpp.dir/build.make epos2_control/CMakeFiles/tf_generate_messages_cpp.dir/build
-.PHONY : tf_generate_messages_cpp/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/tf_generate_messages_lisp.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/tf_generate_messages_lisp.dir/rule
-.PHONY : epos2_control/CMakeFiles/tf_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-tf_generate_messages_lisp: epos2_control/CMakeFiles/tf_generate_messages_lisp.dir/rule
-.PHONY : tf_generate_messages_lisp
-
-# fast build rule for target.
-tf_generate_messages_lisp/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/tf_generate_messages_lisp.dir/build.make epos2_control/CMakeFiles/tf_generate_messages_lisp.dir/build
-.PHONY : tf_generate_messages_lisp/fast
-
-# Convenience name for target.
-epos2_control/CMakeFiles/tf_generate_messages_py.dir/rule:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 epos2_control/CMakeFiles/tf_generate_messages_py.dir/rule
-.PHONY : epos2_control/CMakeFiles/tf_generate_messages_py.dir/rule
-
-# Convenience name for target.
-tf_generate_messages_py: epos2_control/CMakeFiles/tf_generate_messages_py.dir/rule
-.PHONY : tf_generate_messages_py
-
-# fast build rule for target.
-tf_generate_messages_py/fast:
-	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/tf_generate_messages_py.dir/build.make epos2_control/CMakeFiles/tf_generate_messages_py.dir/build
-.PHONY : tf_generate_messages_py/fast
+r2Serial/fast:
+	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/r2Serial.dir/build.make epos2_control/CMakeFiles/r2Serial.dir/build
+.PHONY : r2Serial/fast
 
 src/Epos2MotorController.o: src/Epos2MotorController.cpp.o
 .PHONY : src/Epos2MotorController.o
@@ -934,6 +570,30 @@ src/epos2_talker.cpp.s:
 	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/epos2_talker.dir/build.make epos2_control/CMakeFiles/epos2_talker.dir/src/epos2_talker.cpp.s
 .PHONY : src/epos2_talker.cpp.s
 
+src/r2Serial.o: src/r2Serial.cpp.o
+.PHONY : src/r2Serial.o
+
+# target to build an object file
+src/r2Serial.cpp.o:
+	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/r2Serial.dir/build.make epos2_control/CMakeFiles/r2Serial.dir/src/r2Serial.cpp.o
+.PHONY : src/r2Serial.cpp.o
+
+src/r2Serial.i: src/r2Serial.cpp.i
+.PHONY : src/r2Serial.i
+
+# target to preprocess a source file
+src/r2Serial.cpp.i:
+	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/r2Serial.dir/build.make epos2_control/CMakeFiles/r2Serial.dir/src/r2Serial.cpp.i
+.PHONY : src/r2Serial.cpp.i
+
+src/r2Serial.s: src/r2Serial.cpp.s
+.PHONY : src/r2Serial.s
+
+# target to generate assembly for a file
+src/r2Serial.cpp.s:
+	cd /home/pg/catkin_ws/build && $(MAKE) -f epos2_control/CMakeFiles/r2Serial.dir/build.make epos2_control/CMakeFiles/r2Serial.dir/src/r2Serial.cpp.s
+.PHONY : src/r2Serial.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -943,12 +603,6 @@ help:
 	@echo "... Epos2MotorController"
 	@echo "... SampleMoving"
 	@echo "... TankSteering"
-	@echo "... actionlib_generate_messages_cpp"
-	@echo "... actionlib_generate_messages_lisp"
-	@echo "... actionlib_generate_messages_py"
-	@echo "... actionlib_msgs_generate_messages_cpp"
-	@echo "... actionlib_msgs_generate_messages_lisp"
-	@echo "... actionlib_msgs_generate_messages_py"
 	@echo "... bond_generate_messages_cpp"
 	@echo "... bond_generate_messages_lisp"
 	@echo "... bond_generate_messages_py"
@@ -963,9 +617,6 @@ help:
 	@echo "... epos2_driver"
 	@echo "... epos2_stateOutput"
 	@echo "... epos2_talker"
-	@echo "... geometry_msgs_generate_messages_cpp"
-	@echo "... geometry_msgs_generate_messages_lisp"
-	@echo "... geometry_msgs_generate_messages_py"
 	@echo "... install"
 	@echo "... install/local"
 	@echo "... install/strip"
@@ -973,26 +624,9 @@ help:
 	@echo "... nav_msgs_generate_messages_cpp"
 	@echo "... nav_msgs_generate_messages_lisp"
 	@echo "... nav_msgs_generate_messages_py"
+	@echo "... r2Serial"
 	@echo "... rebuild_cache"
-	@echo "... roscpp_generate_messages_cpp"
-	@echo "... roscpp_generate_messages_lisp"
-	@echo "... roscpp_generate_messages_py"
-	@echo "... rosgraph_msgs_generate_messages_cpp"
-	@echo "... rosgraph_msgs_generate_messages_lisp"
-	@echo "... rosgraph_msgs_generate_messages_py"
-	@echo "... sensor_msgs_generate_messages_cpp"
-	@echo "... sensor_msgs_generate_messages_lisp"
-	@echo "... sensor_msgs_generate_messages_py"
-	@echo "... std_msgs_generate_messages_cpp"
-	@echo "... std_msgs_generate_messages_lisp"
-	@echo "... std_msgs_generate_messages_py"
 	@echo "... test"
-	@echo "... tf2_msgs_generate_messages_cpp"
-	@echo "... tf2_msgs_generate_messages_lisp"
-	@echo "... tf2_msgs_generate_messages_py"
-	@echo "... tf_generate_messages_cpp"
-	@echo "... tf_generate_messages_lisp"
-	@echo "... tf_generate_messages_py"
 	@echo "... src/Epos2MotorController.o"
 	@echo "... src/Epos2MotorController.i"
 	@echo "... src/Epos2MotorController.s"
@@ -1011,6 +645,9 @@ help:
 	@echo "... src/epos2_talker.o"
 	@echo "... src/epos2_talker.i"
 	@echo "... src/epos2_talker.s"
+	@echo "... src/r2Serial.o"
+	@echo "... src/r2Serial.i"
+	@echo "... src/r2Serial.s"
 .PHONY : help
 
 

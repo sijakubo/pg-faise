@@ -7,9 +7,9 @@
 		<!--Geometry of the Roboter in meter-->
 			<!--distance between the middle of the last and the first wheel on one side of the roboter-->
 		<param name="wheelBase" value="0.456" type="double"/>
-			<!--distance between both wheels on one axis-->
-		<param name="axisLength" value="0.440" type="double"/>
-			<!--perimeter of one wheel-->
+			<!--distance between both wheels on one axis 0.440-->
+		<param name="axisLength" value="0.478" type="double"/>
+			<!--perimeter of one wheel -->
 		<param name="wheelPerimeter" value="0.677" type="double"/>
 		
 			<!--set max Rotation per Minutes-->
@@ -17,13 +17,15 @@
 		
 		<param name="leftNodeNr" value="2" type="int"/>
 		<param name="rightNodeNr" value="1" type="int"/>
+		<param name="hubNodeNr" value="3" type="int"/>
+		<param name="flowNodeNr" value="4" type="int"/>
 		<param name="reverseLeft" value="0" type="int"/>
 		<param name="reverseRight" value="1" type="int"/>
 	</group>
 
-	<arg name="laserX" default="0.41"/>
+	<arg name="laserX" default="0.35"/>
 	<arg name="laserY" default="0.0"/>
-	<arg name="laserZ" default="0.0"/>
+	<arg name="laserZ" default="0.38"/>
 	
 	<node name="laser_to_base" pkg="tf" type="static_transform_publisher" args="$(arg laserX) $(arg laserY) $(arg laserZ) 0 0 0 base_link base_laser 100" />
 	
