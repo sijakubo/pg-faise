@@ -28,67 +28,53 @@ Das letzte Glied in der Kette bilden letztendlich die Agenten. Sie werden vom Ag
 In den folgenden Abschnitten wird nun die Implementierung des Materialflusssystems anhand dieser Architektur erläutert, beginnend beim Echtzeitbetriebssystem Contiki, über die Treiber und Interfaces hin zum AgentenRTE und schließlich den Agenten.
 
 \subsubsection{Contiki}
-Contiki ist ein quelloffenes Echtzeitbetriebssystem (RTOS: Real Time Operating System), das in dieser Projektgruppe auf den \textsc{Mica}z-Modulen eingesetzt wird. Es ist speziell für die Anforderungen des Internet of Things und von Wireless Sensor Networks zugeschnitten und bietet einen einfachen ereignisgesteuerten Betriebssystemkern mit sogenannten Protothreads (Threads, die sich einen gemeinsamen Stack teilen und daher schnell gewechselt werden können), optionalem präemptives Multithreading, Interprozess-Kommunikation via Message-Passing mit Events, eine dynamische Prozessstruktur mit Unterstützung für das Laden und Beenden von Prozessen und einen nativen Kommunikationsstack für die drahtlose Kommunikation gemäß dem IEEE-Standard \textit{802.15.4}.
+Contiki ist ein quelloffenes Echtzeitbetriebssystem (RTOS: Real Time Operating System), das in dieser Projektgruppe auf den \textsc{Mica}z-Modulen eingesetzt wird \cite{Contiki:2014:Online}. Es ist speziell für die Anforderungen des Internet of Things und von Wireless Sensor Networks zugeschnitten und bietet einen einfachen ereignisgesteuerten Betriebssystemkern mit sogenannten Protothreads (Threads, die sich einen gemeinsamen Stack teilen und daher schnell gewechselt werden können), optionalem präemptives Multithreading, Interprozess-Kommunikation via Message-Passing mit Events, eine dynamische Prozessstruktur mit Unterstützung für das Laden und Beenden von Prozessen und einen nativen Kommunikationsstack für die drahtlose Kommunikation gemäß dem IEEE-Standard \textit{802.15.4} \cite{IEEE802154:2014:Online}.
  
 \paragraph{Build-Vorgang}\mbox{}\\
-Ein laufendes Contiki System besteht aus dem Kernel, Bibliotheken, Prozessen und dem Programm-Lader, mit dem Anwendungen zur Laufzeit aus dem Speicher oder \"uber ein Funkmodul geladen werden k\"onnen.
-Die unten stehende Abbildung zeigt die Aufteilung des Betriebssystems in zwei Teile. 
-\begin{figure}[h!]
-	\centering
-		\includegraphics[width=0.9\textwidth]{Systemarchitektur_Contiki.png}
-	\caption{Komponenten von Contiki \cite{Dunkels:Groenvall:Voigt:2014:Online}}
-	\label{Systemarchitektur von Contiki}
-\end{figure}
-Der Core ist ein Basissystem und besteht aus dem Kernel, Bibliotheken, Ger\"{a}tetreibern und dem Programm-Lader. 
-Im allgemeinen sind \"Anderungen am Core nicht vorgesehen und nur unter Verwendung eines speziellen Bootloaders m\"oglich. 
-Die konkrete Aufteilung des Systems in Core und ladbare Programme wird beim Kompilieren des Systems entschieden und h\"angt 
-von der Hardware-Plattform ab \cite[vgl.][S. 7]{Walter:2010}. Ger\"atetreiber werden als Bibliotheken implementiert. 
+Es existieren Implementierungen von und Treiber für Contiki für eine Vielzahl von Plattformen. Dazu gehören neben \textsc{Mica}z-Modulen auch etwa der \textit{MSP430x} von Texas Instruments oder der \textit{Atmega128 RFA1} von Atmel. Für welche Plattform ein Contiki-System und die darauf geplanten Anwendungen gebaut wird, wird zur Compile-Zeit entschieden. Das heißt, um die selbe Anwendung mit Contiki auf mehrere Plattformen zu bringen, muss die Anwendung für jede Zielplattform neu gebaut werden.
+
+Für jede Plattform existiert dafür ein eigener Ordner im \textit{platforms}-Verzeichnis der Contiki-Quelldateien. Um nun das Zielsystem zu wählen, muss lediglich das \textit{TARGET} beim Aufruf des entsprechenden Makefiles angegeben werden und das Build-System inkludiert automatisch die passenden Treiber und Definitionen.
+
+Projektdateien können über die Makefile-Variable \textit{PROJECT\_SOURCEFILES} hinzugefügt werden. \autoref{lst:contikimakefile} zeigt exemplarisch das Makefile der Rampen.
+
+\lstinputlisting[language=C, style=customc, captionpos=b, caption={Makefile des Contiki-Systems der Rampen}, label=lst:contikimakefile]{src/flow/lst/makefile.lst}
+
 
 \paragraph{Prozesse}\mbox{}\\
-Prozesse in Contiki implementieren ein Konzept namens Protothreads. Dies erlaubt es Prozessen, ohne den Overhead und die langen 
-Prozesswechselzeiten von normalen Threads auszukommen. Gleichzeitig k\"onnen trotzdem andere Prozesse ausgef\"uhrt werden, falls ein Prozess auf ein Event (Timer, Nachricht von anderem Prozess...) warten muss.
-F\"ur die Entwicklung mit Prozessen ist wichtig, dass nicht-statische Variablen nicht zwischen zwei Aufrufen erhalten bleiben.
-Der relevante Status eines Prozesses sollte daher mithilfe von statischen Variablen abgelegt werden (siehe Variable i im folgenden Beispiel)
+Prozesse in Contiki implementieren folgen einem Konzept namens Protothreads. Dies erlaubt es Prozessen, ohne den Speicher-Overhead und die langen 
+Prozesswechselzeiten von normalen Threads auszukommen, indem sie sich einen gemeinsamen Stack auf dem Hauptspeicher teilen.
+Einzige Einschränkungen dieser Entwicklung sind, dass in Prozessen keine Switch-Case-Anweisungen auftreten dürfen und dass nur statische und globale Variablen zwischen zwei Aufrufen erhalten bleiben. Dynamisch erzeugte Variablen werden dagegen überschrieben. Entsprechend sollte der Zustand eines Prozesses mithilfe von statischen Variablen gespeichert werden. \autoref{lst:process} zeigt eine solche statische Variable (i) und den vollständigen Aufbau eines Prozesses.
 
-\begin{figure}[h!]
-	\centering
-		\includegraphics[width=0.9\textwidth]{Beispielprozess.png}
-	\label{Beispielprozess}
-\end{figure}
-In Zeile 1 wird der Prozess initialisiert und in Zeile 2 automatisch beim Boot von Contiki gestartet. Zeile 4 beinhaltet die
-Deklaration. So k\"onnen andere Prozesse diesem Prozess Events (mit oder ohne Daten) schicken, auf die unser Beispielprozess 
-mit ev und data zugreifen kann. Zeile 6 kennzeichnet den Beginn der tats\"achlichen Ablauflogik. Code \"uber dieser Zeile wird 
-bei jedem Prozessaufruf ausgef\"uhrt, dies wird jedoch in den meisten F\"allen nicht ben\"otigt. Zeile 13 schlie{\ss}lich beendet
-den Prozess und entfernt ihn aus der Prozess-Liste des Kernels. In diesem Beispiel wird die Zeile jedoch nie erreicht, sodass der Prozess immer wieder aufgerufen wird, bis er von einem anderen Prozess beendet wird.
-Wichtige Funktionen in Prozessen:
+\lstinputlisting[language=C, style=customc, captionpos=b, caption={Einfacher Beispiel-Prozess in Contiki}, label=lst:process]{src/flow/lst/process_example.lst}
+
+In Zeile 1 wird der Prozess initialisiert und in Zeile 2 automatisch beim Boot von Contiki gestartet. Zeile 4 beinhaltet die Deklaration. So können andere Prozesse diesem Prozess Events (mit oder ohne Daten) schicken, auf die unser Beispielprozess mit ev und data zugreifen kann. Zeile 6 kennzeichnet den Beginn der tatsächlichen Ablauflogik. Code über dieser Zeile wird bei jedem Prozessaufruf ausgeführt, dies wird jedoch in den meisten Fällen nicht benötigt. Zeile 13 schließlich beendet den Prozess und entfernt ihn aus der Prozess-Liste des Kernels. In diesem Beispiel wird die Zeile jedoch nie erreicht, sodass der Prozess immer wieder aufgerufen wird, bis er von einem anderen Prozess beendet wird.
+
+\paragraph{Prozesskommunikation}\mbox{}\\
+In Contiki kommunizieren Prozesse über Events. Auch der Kernel versendet Events, um Prozesse über ihren Zustand (Init, Continue, Exit) oder über abgelaufene Timer zu informieren. Zur Identifikation werden dabei Event IDs genutzt. Die Event IDs 0-127 können vom Benutzer frei vergeben werden, während die Prozess IDs ab 128 vom System genutzt werden. Grundsätzlich unterscheidet Contiki zwischen synchronen und asynchronen Events. 
+
+\begin{itemize}
+\item \textbf{Asynchrone Events} werden vom Kernel in einer Warteschlange gespeichert. Die Scheduling-Funktion des Kernels läuft nach Systemstart in einer Endlosschleife. In jedem Durchlauf wird ein Event aus der Schlange entnommen und an den Zielprozess weitergeleitet.
+\item \textbf{Synchrone Events} gleichen einem Funktionsaufruf.
+Sie werden ohne Umweg über die Warteschlange direkt an den Empfänger-Prozess
+zugestellt \cite{Contiki:2014:Online}.  Mit der Funktion \textit{process\_post\_synch(\&example\_process, EVENT\_ID, msg)} wird gezielt ein Prozess aufgerufen (ein Broadcast ist nicht möglich). Während der aufgerufene Prozess aktiv ist, blockiert der Aufrufer und setzt seine Ausführung erst fort, wenn der aufgerufene Prozess die Kontrolle wieder abgibt.
+\end{itemize}
+
+Um auf Events zu reagieren, können in Prozessen die folgenden Funktionen genutzt werden:
+
 \begin{itemize}
 \item PROCESS\_WAIT\_EVENT() - Wartet auf ein beliebiges Event, bevor die Ausf\"{u}hrung fortgesetzt wird.
 \item PROCESS\_WAIT\_EVENT\_UNTIL(condition) - Wartet auf ein beliebiges Event, setzt die Ausf\"{u}hrung aber nur fort, wenn die Bedingung erf\"{u}llt ist.
 \item PROCESS\_WAIT\_UNTIL() - Wartet, bis die Bedingung erf\"ullt ist. Muss den Prozess nicht zwangsl\"{a}ufig anhalten.
 \end{itemize}
-Prozesse k\"onnen \"uber Events (siehe Events) oder Polling-Anfragen kommunizieren.  Polls sind Events mit hoher Priorit\"at und 
-k\"onnen genutzt werden, um den angerufenen Prozess so schnell wie m\"oglich auszuf\"uhren. Sie
-sind besonders bei der Abarbeitung von Hardware-Interrupts wichtig, da Interrupts-Handler keine Events, sondern nur
-Polling-Anfragen absetzten d\"urfen \cite[vgl.][S. 7]{Walter:2010}.
 
-\paragraph{Prozesskommunikation}\mbox{}\\
-In Contiki kommunizieren Prozesse \"uber Events. Auch der Kernel versendet Events, um Prozesse \"uber ihren Status 
-(Init, Continue, Exit) oder \"uber abgelaufene Timer zu Informieren. Zur Identifikation stehen dabei Event IDs zur 
-Verf\"ugung. Die Event IDs 0-127 k\"onnen vom Benutzer frei vergeben werden, w\"ahrend die Prozess IDs ab 128 vom 
-System genutzt werden. Grunds\"atzlich unterscheidet Contiki zwischen synchronen und asynchronen Events. 
-\begin{itemize}
-\item \textbf{Asynchrone Events} sind eine Form der Deferred Procedure Call: asynchrone Events werden vom Kernel in einer 
-Warteschlange gespeichert. Die Scheduling-Funktion des Kernels l\"auft nach Systemstart in einer Endlosschleife. 
-In jedem Durchlauf wird ein Event aus der Schlange entnommen und wird einige Zeit sp\"ater an den Zielprozess weitergeleitet.
-\item \textbf{Synchrone Events} gleichen einem Funktionsaufruf.
-Sie werden ohne Umweg \"uber die Warteschlange direkt an den Empf\"anger-Prozess
-zugestellt \cite[vgl.][S. 7]{Walter:2010}.  Mit der Funktion process\_post\_synch(\&example\_process, EVENT\_ID, msg) wird gezielt ein 
-Prozess aufgerufen (ein Broadcast ist nicht m\"oglich). W\"ahrend der aufgerufene Prozess aktiv ist, blockiert der Aufrufer und 
-setzt seine Ausführung erst fort, wenn der aufgerufene Prozess die Kontrolle wieder abgibt.
-\end{itemize}
+Prozesse können neben Events auch über Polling-Anfragen kommunizieren. Polls werden bei der Bearbeitung von Hardware-Interrupts genutzt, da Interrupt-Handler keine Events absetzen dürfen. Sie können als Events mit erhöhter Priorität betrachtet werden. Ein Prozess, der einen Poll erhalten hat, wird in der Warteschlange für Prozesse priorisiert. \cite{Contiki:2014:Online, Walter:2010}.
 
 \paragraph{Scheduling und Timer}\mbox{}\\
+Grundsätzlich nutzt Contiki ein Event-getriebenes Modell von Nebenläufigkeit, wobei einzelne Events nach dem Run-To-Completion (RTC) Prinzip abgearbeitet werden. Das heißt, einmal angelaufen können Prozesse nur noch von Hardware-Interrupts unterbrochen werden oder selbst die Kontrolle abgeben. Dies ermöglicht es, alle Prozesse auf dem selben Stack arbeiten zu lassen und so Hauptspeicher zu sparen. Auf diese Weise muss kaum Speicher dynamisch alloziert werden. Außerdem werden so Race-Conditions auf geteilten Speicher nahezu ausgeschlossen. Dabei haben alle Prozesse und Events vorerst die gleiche Priorität und werden streng nacheinander in Reihenfolge abgearbeitet.
 
+Es existiert eine Bibliothek die auch echte Threads mit jeweils einzelnen Stacks ermöglicht. Aufgrund des ohnehin knappen Hauptspeichers auf den \textsc{Mica}z-Modulen wurde diese Möglichkeit jedoch in der Projektgruppe nicht weiter betrachtet.
+
+Ein Problem der Event-getrieben Nebenläufigkeit ist jedoch das Reaktionsvermögen auf Echtzeitanforderungen und externe Events: Sollte ein Prozess eine aufwändige Berechnung durchführen, kann es zu spät sein, bis er die Kontrolle abgibt. Aus diesem Grund führt Contiki eine zweite Prioritätsebene ein, sogenannte Polls. Diese werden zwischen asynchron auftretende Events geplant und rufen in Reihenfolge einer Priorität alle Prozesse auf, die ein Polling-Flag gesetzt haben. Üblicherweise sind dies insbesondere hardwarenahe Prozesse, die auf Änderungen an den Ein- und Ausgangspins beziehungsweise auf Timer reagieren müssen.
 \paragraph{Der Rime Kommunikationsstack}\mbox{}\\
 \label{sec:rime}
 \input{src/flow/4_2_Treiber}

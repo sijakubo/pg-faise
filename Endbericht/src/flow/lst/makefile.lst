@@ -1,0 +1,18 @@
+# -*- Den Contiki-Pfad hier eintragen -*-
+
+CONTIKI = ../../contiki-2.7/
+
+all: MicazFlow
+
+PROJECT_SOURCEFILES += drivers/bolt_drv.c interface/bolt_int.c 
+PROJECT_SOURCEFILES += drivers/photosensor_drv.c interface/photosensor_int.c 
+PROJECT_SOURCEFILES += drivers/proficonn_driver.c
+PROJECT_SOURCEFILES += drivers/radio_drv.c ../shared/interface/CommunicationInterface/CommunicationInterface.c
+PROJECT_SOURCEFILES += ../shared/agents/RoutingAgent/RoutingAgent.c
+PROJECT_SOURCEFILES += ../shared/agents/PlatformAgent/PlatformAgent_Ramp.c
+PROJECT_SOURCEFILES += ../shared/agents/OrderAgent/OrderAgent.c
+PROJECT_SOURCEFILES += ../shared/agents/PackageAgent/PackageAgent.c
+PROJECT_SOURCEFILES += ../shared/AgentRTE/AgentRTE.c
+
+include $(CONTIKI)/Makefile.include
+
