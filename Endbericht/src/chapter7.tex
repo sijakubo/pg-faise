@@ -220,7 +220,18 @@ stellen
 \end{itemize}
 
 \subsection{Architektur}
-Volksbot: ROS, MAXON, MICAZ
+
+Der systematische Aufbau des Volksbots ist in Abbildung \ref{fig:architecture_volksbot} dargestellt. Die Funktionen des Roboters basieren auf der Auswertung und Ansteuerung der Sensoren bzw. Aktoren. Alle Operationen, wie z.B. die Lokalisation, die Routenplanung, der Vorgang der Paketübergabe, laufen auf dem Robot Operating System und nutzen die Daten der Sensorik zur geeigneten Ansteuerung der Aktoren. Gesteuert werden die Operationen über die externe Kommunikationsebene, welche aus einem MICAz-Modul besteht. Hier werden Aufträge empfangen und auf der Operationsebene in zugehörige Ziele übersetzt.
+
+\begin{figure}[h!]
+ \centering
+		\includegraphics[width=1\textwidth]{DRIVE_Architektur.png}
+	\caption{Architektur des Volksbot}
+	\label{fig:architecture_volksbot}
+\end{figure}
+
+Die in dunkleren rot hervorgehobenen Funktionen der Operationsebene deuten deren höhere Wichtigkeit an und geben ein erstes Anzeichen darauf welche Funktionen erfolgreich umgesetzt werden konnten.
+
 \subsection{Implementierung}
 Einführung in den Quellcode
 \begin{itemize}
@@ -243,21 +254,19 @@ Kommunikation Volksbot, Micaz, Materialfluss
 Aktualisieren!!
 Dem Volksbot wird manuell eine Position auf der Karte zugewiesen. Danach ist dieser in der Lage Ziele, die ihm auf der Karte angegeben werden, mit Hilfe des Dijkstra Algorithmus anzusteuern und durch die Berechnun einer Route zu erreichen. Er kann ausserdem mit den Rampen über das MICAZ Modul kommunizieren und somit einfache Aufträge annehmen. Mit Hilfe der Odometrie kennt er seine aktuelle Position, wobei der LMS100 zur Unterstützung verwendet wird. Einfache Hindernisse, die im Sichtfeld des Volksbots liegen werden umfahren und die Route zum entsprechenden Ziel wird fortgesetzt. Beim Anfahren einer Rampe kann er die mittels des Hubs die Pakete auf die entsprechende Höhe bringen und durch das Fließband an die Rampe übergeben oder dieses aufnehmen.
 
-\subsection{Herausforderungen}:
+\subsection{Herausforderungen}
 
-\begin{itemize}
+Bei der Implementierung der Funktionen des Volksbot traten einige Herausforderungen auf, deren Lösungen besonderen Aufwand hervorriefen oder nicht umgesetzt wurden. Ein Beispiel dafür ist die Selbstlokalisation des Roboters durch die Odometrieberechnung und dessen Verbesserung durch die adaptive Monte Carlo Lokalisation (AMCL). Aufgrund der Fehleranfälligkeit der einfachen Odometrie durch Einflüsse wie die Beschaffenheit des Bodens oder Unterschiede im Reifendruck, ist der Einsatz von Algorithmen wie die adaptive Monte Carlo Lokalisation, welcher die Daten des Laserscanners nutzt, notwendig.  Die Qualität der Odometrie musste durch das Kalibrieren des Parameters der Achsenlänge des Roboters erhöht werden, um die nötige Voraussetzung für einen funktionierenden AMCL-Algorithmus zu schaffen. Eine gute Odometrie lässt sich dadurch erkennen, dass die Punkte des Laserscans auch bei Bewegung weiterhin mit den Wänden der Umgebungskarte übereinstimmen. Durch die Verwendung der Selbstlokalisation über AMCL führt der Roboter während seiner Navigation Drehungen um die eigene Achse aus, um seine Position zu berechnen. Dieses Verhalten führt dazu, dass der Roboter deutlich mehr Zeit als vermutet benötigt, um seinen Weg zurückzulegen. Bei der Parametrisierung für die Wegplanung und des AMCL-Algorithmus musste ein Gleichgewicht zwischen Schnelligkeit und Genauigkeit gefunden werden, um ein stabiles System zu schaffen. Durch die Vielzahl der Möglichkeiten war die Suche nach geeigneten Einstellungen problematisch.  
 
-\item Durch die Fehleranfälligkeit der einfachen Odometrieberechnung aus den Motordaten, wurde die in ROS vorhandene \textit{adaptive Monte Carlo localization} Methode zur Verbesserung der Selbstlokalisierung verwendet.
+Eine weitere Herausforderung stellt die Erkennung von Hindernissen dar, die ober- oder unterhalb des Laserscanners in den Raum ragen. Zur Lösung dieses Problems könnte ein weiterer bildgebender Sensor genutzt werden, um den gesamten Raum nach potenziellen Hindernissen zu untersuchen.
 
-\item Die Erkennung von Hindernissen muss angepasst werden, da zwar die Räder nicht mit anderen Hindernissen kollidieren, dafür der Rahmen des Hubs bei abstehenden Hindernissen oberhalb des Laserscanns weiterhin Kollisionen verursachen kann.
+Mit großem Aufwand war die korrekte Ansteuerung der Maxon Controller verbunden. Besonders die Parametrisierung des kleineren Maxon Controllers unter ROS, welcher für den Betrieb des Förderbandes verwendet wird, stellte sich als Problem heraus. Schon kleinere Abweichungen der Parameter für Spannungs- und Beschleunigungswerte in der Ansteuerung des Controllers führten zu Systemabstürzen.
+ 
+Die Programmierung und Parametrisierung der Teilfunktionen musste mit Blick auf
+die CPU-Auslastung der Steuereinheit geschehen, da einige Berechnungen bei falscher
+Verwendung zu sehr hohen Auslastungen und einer unzureichenden Performance des
+Roboters führten.
 
-\item Die optimale Ansteuerung des Maxon Controller erwies sich als komplizierter wie erwartet, da kleine Werteänderungen schon zum Absturz des Volksbots führten und behoben werden mussten.
-
-\item ROS bietet zwar viele nützliche Erweiterungen, deren Parametrisierung teilweise sehr aufwendig und unübersichtlich war.
-
-\item Die Programmierung und Parametrisierung der Teilfunktionen musst mit Blick auf die CPU-Auslastung der Steuereinheit geschehen, da einige Berechnungen bei falscher Verwendung zu sehr hohen Auslastungen und einer unzureichenden Performance des Roboters führten.
-
-\end{itemize}
 
 
 \subsection{Ausblick}
