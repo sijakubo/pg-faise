@@ -251,8 +251,9 @@ Kommunikation Volksbot, Micaz, Materialfluss
 
 \subsection{Erreichte Funktionalitäten}
 
-Aktualisieren!!
-Dem Volksbot wird manuell eine Position auf der Karte zugewiesen. Danach ist dieser in der Lage Ziele, die ihm auf der Karte angegeben werden, mit Hilfe des Dijkstra Algorithmus anzusteuern und durch die Berechnun einer Route zu erreichen. Er kann ausserdem mit den Rampen über das MICAZ Modul kommunizieren und somit einfache Aufträge annehmen. Mit Hilfe der Odometrie kennt er seine aktuelle Position, wobei der LMS100 zur Unterstützung verwendet wird. Einfache Hindernisse, die im Sichtfeld des Volksbots liegen werden umfahren und die Route zum entsprechenden Ziel wird fortgesetzt. Beim Anfahren einer Rampe kann er die mittels des Hubs die Pakete auf die entsprechende Höhe bringen und durch das Fließband an die Rampe übergeben oder dieses aufnehmen.
+\textbf{Beschreibung eines Szenarios mit dem bisher implementierten Volksbot}:
+
+Mit Hilfe des Sick LMS100 Laserscanners wurde eine statische Umgebungskarte generiert, welche den Volksbots bekannt ist. Innerhalb dieser Karte hat ein Volksbot einen zuvor definierten Startpunkt den er für seine eigene Lokalisierung benötigt. Mit Hilfe des MICAZ Moduls kann der Volksbot Aufträge von den Rampen annehmen und beginnt mit der Abarbeitung, indem er mit dem DijkStra Suchalgorithmus die Route bestimmt.Während der Fahrt arbeitet der Volksbot mit Odometrie und dem Laserscanner um seine aktuelle Position zu bestimmen und seine Route aktuell zu halten, ausserdem passt er die Höhe seines Hubs dem Auftrag an. Das bedeutet das er ensprechend seiner Auftragsart den Hub hoch oder runter fährt, damit er das Paket annehmnen oder abgeben kann. Sobald der Volksbot die Zielrampe erreicht hat , richtet er seine Position aus und nähert sich mit einem gewissen Sicherheitsabstand der Rampe. Zur Annahme oder Abgabe des Paketes wird das Förderband in Bewegung gesetzt und läuft solange, bis die Sensoren, welche sich an dem Förderband befinden, das Paket vollständig auf dem Förderband lokalisiert haben oder sich bei der Abgabe kein Paket mehr auf dem Förderband befindet. Sollte der Volksbot ein Paket erhalten haben, so berechnet er die neue Route zum Ziel und fährt diese ab, ansonten wartet er auf den nächsten Auftrag.
 
 \subsection{Herausforderungen}
 
