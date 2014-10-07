@@ -1,13 +1,44 @@
-
 \subsubsection{Treiber, Services und Interfaces}
 Auf dieser Ebene werden der Agenten RTE alle Funktionalitäten zur Verfügung gestellt. Das RTOS stellt Infrastruktur wie z.~B. Task Management, Timing, Events usw.
 Die Driver Ebene kümmert sich um die Schnittstellen/Pins des Controllers wie z.~B. Protokolle angeschlossener
-Devices\cite[S. 26]{Stasch:Hahn}. Die Aufgabe des Services ist es, Funktionen für spezielle Anwendungen zur Verfügung zu stellen.
+Devices\cite[S. 26]{Stasch:Hahn}. Die Aufgabe des Service ist es, Funktionen für spezielle Anwendungen zur Verfügung zu stellen.
 Darüber kommen die Interfaces. Diese sind nötig, damit bestimmte Funktionen immer gleich der Agenten RTE zur Verfügung gestellt werden, auch wenn der Service anders ist oder wenn ein Service verschiedene Interfaces bedienen soll\cite[S. 26]{Stasch:Hahn}. Im Laufe der Projektarbeit wurden unterschiedliche Treiber, Services und Interfaces selbst geschrieben. Der folgende Abschnitt soll diese etwas näher beleuchten.
 
 \paragraph{Treiber Bolzen}
+Folgende Funktionen werden im Treiber für die Bolzen bereitgestellt:
+\begin{itemize}
+  \item void BoltDriver\_init(void)
+  \item void BoltDriver\_up(unsigned char boltv)
+  \item void BoltDriver\_down(unsigned char boltv)
+  \item uint8\_t BoltDriver\_get(void)
+\end{itemize} 
+Die Funktion \textit{void BoltDriver\_init(void)} dient zur Initialisierung. Dabei werden die Ausgänge der \textsc{Mica}z-Module, die für die Bolzensteuerung nötig sind, als Ausgänge festgelegt und gleichzeitig auf HIGH-Aktiv gesetzt.
+
+Zum öffnen der Bolzen ist die Funktion \textit{void BoltDriver\_down(unsigned char boltv)} zuständig. Ihr wird ein Vektor übergeben, der die Pinbelegung von den zu öffnenden Bolzen enthält. Da die Bolzen beim öffnen jeweils eine Anfansspannung von 24 Volt benötigen, muss darauf geachtet werden, dass die Bolzen nacheinander geöffnet werden. Im ersten Schritt fragt die Funktion ab, ob Bolzen 1 geöffnet werden soll. Bei erfolgreicher Prüfung, werden Pin 1 und 2 der ersten Bolzen angeschaltet, wodurch eine Anfangsspannung von 24 Volt anliegt und der Bolzen sich öffnen kann. Damit das Öffnen erfolgreich sichergestellt werden kann, wird dieser Zustand über 60 Taktzyklen gehalten und dann wird der 2 Pin wieder ausgeschaltet. Jetzt liegen noch 12 Volt Spannung an, was ausreicht um den Bolzen offen zu halten. Im nächsten Schritt wird überprüft ob beide Bolzen gleichzeitig geöffnet werden sollen. Wenn dies so ist, dann wird wieder 60 Taktzyklen im System gewartet. Im Anschluss daran wird kontrolliert, ob Bolzen 2 geöffnet werden soll. Liegt hier eine positive Bewertung vor, wird mit den Pins von Bolzen 2 gleichermaßen wie von Bolzen 1 vorgegangen.
+
+Das Gegenstückt zur öffnenden-Funktion stellt die Funktion \textit{void BoltDriver\_up(unsigned char boltv)} dar. Dieser Funktion wird ein Vektor übergeben, der die Belegung von den Bolzen enthält, die geschlossen werden sollen. Die Vorgehensweise dabei ist so, dass überprüft welche Bolzen zu gemacht werden sollen. Anschließend werden dann jeweils beide Pins der Bolzen auf 0, sprich aus, gelegt.
+
+Mit der Funkion \textit{uint8\_t BoltDriver\_get(void)} kann die Bolzenstellung abgefragt werden. Dabei wird einfach überprüft, ob die Ausgänge des \textsc{Mica}z-Modul an denen die Bolzen angeschlossen sind auf eins stehen. Beim Rückgabevektor steht eine eins im Vektor für einen offenen und eine null für einen geschlossenen Bolzen.
 
 \paragraph{Interface Bolzen}
+Das Bolzen-Interface greift auf die Treiber von den Bolzen zu und stellt mehrere Funktionen zur Verfügung, durch die Prozesse aufgerufen werden. Die Prozesse werden auch alle durch das Interface zur Verfügung gestellt und können auch separat gestartet werden. Die unterschiedlich bereitgestellten Funkionen im Bolzen-Interface sind:
+\begin{itemize}
+  \item void BoltInterface\_init(void);
+  \item void BoltInterface\_release(void);
+  \item void BoltInterface\_release\_and\_separate(void);
+  \item void BoltInterface\_separate(void);
+\end{itemize}
+Aus \autoref{fig:architecture_ramp} auf Seite \pageref{fig:architecture_ramp} und \autoref{fig:architecture_ramp} und Seite \pageref{fig:architecture_ramp} kann entnommen werden, welche Funktion auf welchen Treiber zugreift. Darüberhinaus stellt das Interface folgende Prozesse zur Verfügung:
+\begin{itemize}
+  \item PROCESS\_NAME(bolt\_int\_release)
+  \item PROCESS\_NAME(bolt\_int\_release\_and\_separate)
+  \item PROCESS\_NAME(bolt\_int\_separate)
+\end{itemize}
+Der Prozess \textit{bolt\_int\_release} ist dafür zuständig, die untersten zwei Bolzen für einen bestimmten Zeitraum zu öffnen und dann wieder zu schließen. Dabei wird so vorgegangen, dass es zwei Status gibt. Im ersten Zustand wird die Funktion \textit{BoltDriver\_up(unsigned char boltv)} aufgerufen. So wird sichergestellt, dass die oberen beiden Bolzen geschlossen sind, wenn die untersten Bolzen auf sind. Nach dem Aufruf der Funktion wird ein Timeout ausgelöst. Zustand zwei ruft nach dem Timeout die Funktion \textit{BoltDriver\_down(unsigned char boltv)} aus dem Treiber mit einem Vektor für die unteren beiden Bolzen auf. Im Anschluss daran, wird wieder ein Timeout gesetzt und gewartet. Nach dem Durchlauf der zwei Zustände wird vorm Prozessende die Funktion \textit{BoltDriver\_up(unsigned char boltv)} aus den Treibern aufgerufen, um die unteren Bolzen wieder zu schließen.
+
+Um Pakete nicht nur von der Rampe auszugeben, sondern auch gleich das nächste Paket nachrutschen zu lassen, ist der Prozess \textit{bolt\_int\_release\_and\_separate} zuständig. Dabei werden zu Anfang des Prozesses vier unterschiedliche Zustände durchlaufen. Die ersten drei Zustände sind dafür da, das Paket von der Rampe zu entfernen. Hierbei wird genau wie oben beim der Funktion \textit{bolt\_int\_release} vorgegangen. Zustand vier wird im Anschluss daran dann benutzt, die oberen Bolzen wieder zu öffnen, damit das nächste Paket nachrutschen kann. Vorm Abschluss des Prozesses werden diese dannn wieder durch die Treiberfunktion \textit{BoltDriver\_up(unsigned char boltv)} geschlossen.
+
+Mit dem dritten Prozess wird es ermöglicht, die oberen zwei Bolzen zu öffnen. Beim Prozessdurchlauf wird im Zustand eins sichergestellt, dass die unteren beiden Bolzen geschlossen sind. Im zweiten Zustand werden dann die oberen zwei Bolzen geöffnet, was ein Nachrutschen von Paketen ermöglicht. Bevor der Prozess dann beendet wird, werden die beiden Bolzen wieder geschlossen. Der Prozess ermöglicht es somit, ein Paket zu separieren.
 
 \paragraph{Treiber Externer Speicher}
 
@@ -16,12 +47,71 @@ Darüber kommen die Interfaces. Diese sind nötig, damit bestimmte Funktionen im
 \paragraph{Service Externer Speicher}
 
 \paragraph{Treiber Lichtschranken}
+Durch den Lichtschrankentreiber werden zwei Funktionen zur Verfügung gestellt. Zum einen ist es die Funktion \textit{void photosensor\_drv\_init(void)}. In dieser werden alle nötigen Eingänge der \textsc{Mica}z-Module initialisiert. Zum anderen wird durch den Treiber die Funktion \textit{uint8\_t get\_photosensors()} implementiert. Durch die Funktion kann der Zustand der Lichtschranken abgefragt werden. Dabei steht eine 1 für eine unterbrochene und eine 0 für eine offene Lichtschranke.
 
 \paragraph{Interface Lichtschranken}
+Über das Interface zur Lichtschranke werden folgende drei Funktionen bereitgestellt:
+\begin{itemize}
+  \item void PhotosensorInterface\_init(void)
+  \item uint8\_t PhotosensorInterface\_is\_bay\_occupied(uint8\_t i)
+  \item uint8\_t PhotosensorInterface\_num\_packages(void)
+\end{itemize}
+Durch die Funktion \textit{void PhotosensorInterface\_init(void)} werden die Lichtschranken über den Treiber initialisiert. Dafür wird lediglich die Funktion \textit{void photosensor\_drv\_init(void)} aus dem Treiber aufgerufen. Dies ist nötig um die Definition von Treibern und Interfaces aus \autoref{Stasch:Hahn} zu erhalten.
+
+Die zweite oben aufgeführt Funktion ist dafür da, um zu überprüfen ob eine bestimmte Lichtschranke unterbrochen wurde oder nicht. Dafür wird der Funktion ein Wert übergeben, der die zu überprüfende Lichtschranke enthält. Ist der übergebende Wert größe als vier, mehr Lichtschranken wurden nicht verbaut, oder kleiner als eins wird eine 0 zurückgegeben, was als nicht ausgelöste Lichtschranke zu interpretieren ist.
 
 \paragraph{Treiber Funkmodul}
+%Der Treiber für das Funkmodul ist zuständig für die korrekte Funktionalität der drahtlosen Kommunikation zuständig. Es wird durch den Treiber das Contikieigene ABC-Protokoll modifiziert und für andere Ebenen bereitgestellt. Dabei werden folgende Funktionen zur Verfügung gestellt:
+%\begin{itemize}
+%  \item void radio\_open(struct radio\_conn *c, uint16\_t channel, const struct radio\_callbacks *u)
+%  \item void RadioDriver\_sendmessage(uint8\_t* msgtext, uint8\_t length)
+%  \item void RadioDriver\_receivemessage(struct radio\_conn *c)
+%  \item void RadioDriver\_init(void)
+%\end{itemize}
+%Die Funktion \textit{void radio\_open(struct radio\_conn *c, uint16\_t channel, const struct radio\_callbacks *u)} wird lediglich dazu genutzt, auf unterstem Layer eine ABC-Verbindung zu öffnen. Dazu müssen der Funktion zum einen ein Channel 
+
 
 \paragraph{Treiber UART-Schnittstelle}
+Der UART-Treiber ermöglicht es, dass das \textit{Mica}z-Modul über den USB-Port mit kommunizieren kann. Dafür werden die Funktionen
+\begin{itemize}
+  \item void UartDriver\_send(uint8\_t *buf, uint8\_t size)
+  \item int UartDriver\_line\_input\_byte(unsigned char c)
+  \item void UartDriver\_line\_init(void)
+\end{itemize}
+und zusätlich der Prozess
+\begin{itemize}
+  \item UartDriver\_recv\_process
+\end{itemize}
+bereitgestellt.
+
+Die Funktion \textit{void UartDriver\_send(uint8\_t *buf, uint8\_t size)} wird für das Senden über die UART-Schnittstelle benötigt. Dabei wird ein Zeiger auf die Adresse der zusendende Nachricht und die Länge der Nachricht an die Funktion übergeben. Zu Anfang der Funktion wird geschaut ob die zusendende Nachricht kleiner als fünf Byte ist. Wenn die Nachricht kürzer als fünf Byte ist, dann wird die Nachricht mit 0x00 am Ende aufgefüllt. Die Nachricht wird dann byteweise über die UART-Schnittstelle ausgegeben.
+
+Die Methode \textit{int UartDriver\_line\_input\_byte(unsigned char c)} wird zum einlesen über die UART-Schnittstelle verwendet. Es handelt sich hierbei um einen Callback, der von einem Interrupt immer dann aufgerufen wird, wenn ein Byte empfangen wird. Die Funktionsweise ist so, dass erst überprüft wird ob ein Überlauf vorliegt. Wenn dies der Fall ist, wird das Zeichen komplett bis zum Zeilenende ignoriert und der Parameter für den Überlauf auf 0 gesetzt. Wenn genug Platz im Buffer vorhanden ist, wird anliegende Zeichen eingelesen und im Buffer gespeichert. Kann das Zeichen nicht mehr gespeichert werden, wird der Parameter für den Überlauf auf 1 gesetzt. Zum Schluss wird der Prozess \textit{UartDriver\_recv\_process} angestoßen. Dieser ist für die Verarbeitung des empfangenen Wort verantwortlich. Dabei wird der anliegende Wert in einen Buffer geschrieben. Wenn der Buffer eine Länge von fünf Byte hat, wird dieser an das Communication Interface weitergegeben.
+
+Die Initialisierung der UART-Schnittstelle findet in der Methode \textit{void UartDriver\_line\_init(void)} statt. Dabei wird ein Ringbuffer, der für den Empfang der Zeichen zuständig ist, initialisert. Außerdem wird der für die Verarbeitung verantwortliche Prozess gestartet.
 
 \paragraph{Interface UART-Schnittstelle}
-
+Durch das UART-Interfache werden folgende Funktionen zur Verfügung gestellt:
+\begin{itemize}
+  \item void UARTInterface\_drive\_to\_entry(uint16\_t rampid)
+  \begin{itemize}
+    \item Gibt den Befehl aus, zum Eingang der Rampe mit der Rampen-ID rampid zu fahren
+  \end{itemize}
+  \item void UARTInterface\_drive\_to\_exit(uint16\_t rampid)
+  \begin{itemize}
+    \item Gibt den Befehl aus, zum Ausgang der Rampe mit der Rampen-ID rampid zu fahren
+  \end{itemize}
+  \item void UARTInterface\_how\_cost\_job(uint16\_t startid, uint16\_t targetid)
+  \begin{itemize}
+    \item Stellt die Frage, wie hoch die Kosten sind ein Paket von Startrampe (startid) zur Zielrampe (targetid)
+  \end{itemize}
+  \item void UARTInterface\_give\_package(void)
+  \begin{itemize}
+    \item Befehl Paket an die Rampe abzugeben
+  \end{itemize}
+  \item void UARTInterface\_take\_package(void)
+  \begin{itemize}
+    \item Befehl Paket von Rampe entgegenzunehmen
+  \end{itemize}
+\end{itemize}
+Alle Funktionen sind dazu nötig um Befehle an die Teilgruppe Drive zusenden. Mit diesen können Nachrichten an den Volksbot über die USB-Schnittstelle versandt werden.
