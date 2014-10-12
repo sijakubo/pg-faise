@@ -4,6 +4,27 @@
 Der erste Teil der Implementierung sah die Bereitstellung von Treibern für die Hardware des Volksbots vor. Die Initialisierung und Ansteuerung der an den EPOS2-Controllern angeschlossenen Peripherie erfolgte unter der Verwendung der EPOS2 Bibliothek. Diese Bibliothek verfügt über alle benötigten Funktionen zum Ansteuern und Auslesen der Motoren und Lichtschranken, welche mit den EPOS-Controllern verbunden sind. Die Funktionen wurden in einem ROS-Package namens „epos2-control“ zusammengeführt.
 Die Verwendung der Laserscanner wurde durch die Implementierung und Parametrisierung von im ROS vorhandenen Treibern gewährleistet. Dem an der Front des Roboters angebrachten SICK LMS100 Laserscanner, wurde dafür unter Windows eine feste IP-Adresse zugeordnet. Mit Hilfe dieser bekannten Adresse, konnte auch unter Ubuntu die Verbindung über Ethernet mit dem Laserscanner durch das Package „LMS1xx“  hergestellt werden.
 
+\begin{figure}[h!]
+ \centering
+		\includegraphics[width=0.4\textwidth]{Legende.png}
+	\caption{Legende zu Abb. 46 und 47}
+	\label{fig:Legende}
+\end{figure}
+
+\begin{figure}[h!]
+ \centering
+		\includegraphics[width=1\textwidth]{funktionen.png}
+	\caption{eingebundene Funktionen in ROS}
+	\label{fig:funktionen}
+\end{figure}
+
+\begin{figure}[h!]
+ \centering
+		\includegraphics[width=1\textwidth]{epos2_control.png}
+	\caption{Hauptsteuerung des Systems ( Epos2 Control )}
+	\label{fig:epos2_control}
+\end{figure}
+
 \subsubsection{Implementierung der Navigation}
 Nach erfolgreicher Inbetriebnahme der Hardware des Volksbots wurde die Odometrieberechnung anhand der zurückgelegten Strecke der Räder implementiert. Die Berechnung der zurückgelegten Wegstrecke und der Drehung des Roboters erfolgt über folgende Formeln: … FORMELN EINFÜGEN (Referenz: Der und Pantzer Odometrie oder Mobile Roboter Buch)
 
@@ -15,3 +36,8 @@ Eine funktionsfähige Selbstlokalisation ist die Grundlage für eine erfolgreich
 \subsubsection{Implementierung der Paketübergabe}
 Damit der Austausch der Pakete mit den Komponenten des Materialflusses erfolgen kann, musste die Kommunikation über die MICAz-Module und Automatismen zur Anpassung der Hub-Position an die Höhe der jeweiligen Rampe implementiert werden. Nachdem ein Auftrag vom Materialfluss empfangen wurde, wird die Annahme des Auftrags dem Materialfluss bestätigt und der Auftrag  in ein passendes Navigationsziel auf der Umgebungskarte umgesetzt.  Für den Prozess des Entschlüsselns von den Nachrichten des Materialflusses wurde ein ROS-Package namens „Simple-Navigation-Goals“ implementiert. Neben der Umsetzung von Navigationszielen sendet dieses Package ROS-interne Nachrichten, welche Informationen über die gewünschte Position des Hubs und das Erreichen der Zielposition enthalten.
 Sobald die Zielposition erreicht wurde, beginnt die Hubsteuerung mit der Anpassung der Hubposition an die geforderte Höhe. Anschließend folgt eine Benachrichtigung an den Materialfluss und das Förderband wird in Gang gebracht. Die Auswertung der Lichtschranken bewirkt den Haltevorgang des Förderbands und das nächste Navigationsziel wird festgelegt.
+
+\subsubsection{Struktur der einzelnen Funktionalitäten}
+
+
+
