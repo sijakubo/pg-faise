@@ -1,7 +1,21 @@
-\section{Implementierung}
+\subsection{Implementierung}
 
 Der erste Teil der Implementierung sah die Bereitstellung von Treibern für die komplette Hardware des Volksbots vor. Die Initialisierung und Ansteuerung der an den EPOS2-Controllern angeschlossenen Peripherie erfolgte unter der Verwendung der EPOS2 Bibliothek. Diese Bibliothek verfügt über alle benötigten Funktionen zum Ansteuern und Auslesen der Motoren und Lichtschranken, welche mit den EPOS-Controllern verbunden sind. Die Funktionen wurden dem ROS-Package „epos2-control“ zusammengeführt und sind in der Epos2MotorController-Node des Packages enthalten. 
 Die Verwendung der Laserscanner, welche nicht mit den EPOS2-Controllern verbunden sind, wurde durch die Implementierung und Parametrisierung von im ROS vorhandenen Treibern gewährleistet. Dem an der Front des Roboters angebrachten SICK LMS100 Laserscanner, wurde dafür unter Windows eine feste IP-Adresse zugeordnet. Mit Hilfe dieser bekannten Adresse, konnte auch unter Ubuntu die Verbindung über Ethernet mit dem Laserscanner durch das Package „LMS1xx“  hergestellt werden.
+
+\subsubsection{Ablaufkonzept}
+
+NOCH ANPASSEN!!
+Mit Hilfe des Sick LMS100 Laserscanners wurde eine statische Umgebungskarte generiert, welche den Volksbots bekannt ist. Innerhalb dieser Karte hat ein Volksbot einen zuvor definierten Startpunkt den er für seine eigene Lokalisierung benötigt. Mit Hilfe des MICAZ Moduls kann der Volksbot Aufträge von den Rampen annehmen und beginnt mit der Abarbeitung, indem er mit dem DijkStra Suchalgorithmus die Route bestimmt.Während der Fahrt arbeitet der Volksbot mit Odometrie und dem Laserscanner um seine aktuelle Position zu bestimmen und seine Route aktuell zu halten, ausserdem passt er die Höhe seines Hubs dem Auftrag an. Das bedeutet das er ensprechend seiner Auftragsart den Hub hoch oder runter fährt, damit er das Paket annehmnen oder abgeben kann. Sobald der Volksbot die Zielrampe erreicht hat , richtet er seine Position aus und nähert sich mit einem gewissen Sicherheitsabstand der Rampe. Zur Annahme oder Abgabe des Paketes wird das Förderband in Bewegung gesetzt und läuft solange, bis die Sensoren, welche sich an dem Förderband befinden, das Paket vollständig auf dem Förderband lokalisiert haben oder sich bei der Abgabe kein Paket mehr auf dem Förderband befindet. Sollte der Volksbot ein Paket erhalten haben, so berechnet er die neue Route zum Ziel und fährt diese ab, ansonten wartet er auf den nächsten Auftrag.
+
+\newpage
+
+\begin{figure}[h!]
+ \centering
+		\includegraphics[width=1\textwidth]{drive/Ablaufkonzept.png}
+	\caption{Ablaufkonzept}
+	\label{fig:Ablaufkonzept}
+\end{figure}
 
 
 \subsubsection{Implementierung der Navigation}
@@ -47,16 +61,4 @@ Sobald die Zielposition erreicht wurde, beginnt die Hubsteuerung mit der Anpassu
 	\label{fig:Legende}
 \end{figure}
 
-\begin{figure}[h!]
- \centering
-		\includegraphics[width=1\textwidth]{drive/funktionen.png}
-	\caption{eingebundene Funktionen in ROS}
-	\label{fig:funktionen}
-\end{figure}
 
-\begin{figure}[h!]
- \centering
-		\includegraphics[width=1\textwidth]{drive/epos2_control.png}
-	\caption{Hauptsteuerung des Systems ( Epos2 Control )}
-	\label{fig:epos2_control}
-\end{figure}
