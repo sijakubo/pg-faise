@@ -1,10 +1,8 @@
-\subsection{Implementierung}
+\section{Implementierung}
 
-Im folgenden Abschnitt wird auf die Implementierung der Funktionen des Transportroboters eingegangen. Dabei werden die drei Teilabschnitte, Inbetriebnahme der Hardware, Implementierung der Navigation und Implementierung der Paketübergabe, betrachtet. Der Großteil der Implementierung wurde in den ROS-Packages „epos2-control“ und „simple-navigation-goals“ realisiert.
-
-\subsubsection{Inbetriebnahme der Hardware}
 Der erste Teil der Implementierung sah die Bereitstellung von Treibern für die komplette Hardware des Volksbots vor. Die Initialisierung und Ansteuerung der an den EPOS2-Controllern angeschlossenen Peripherie erfolgte unter der Verwendung der EPOS2 Bibliothek. Diese Bibliothek verfügt über alle benötigten Funktionen zum Ansteuern und Auslesen der Motoren und Lichtschranken, welche mit den EPOS-Controllern verbunden sind. Die Funktionen wurden dem ROS-Package „epos2-control“ zusammengeführt und sind in der Epos2MotorController-Node des Packages enthalten. 
 Die Verwendung der Laserscanner, welche nicht mit den EPOS2-Controllern verbunden sind, wurde durch die Implementierung und Parametrisierung von im ROS vorhandenen Treibern gewährleistet. Dem an der Front des Roboters angebrachten SICK LMS100 Laserscanner, wurde dafür unter Windows eine feste IP-Adresse zugeordnet. Mit Hilfe dieser bekannten Adresse, konnte auch unter Ubuntu die Verbindung über Ethernet mit dem Laserscanner durch das Package „LMS1xx“  hergestellt werden.
+
 
 \subsubsection{Implementierung der Navigation}
 Nach erfolgreicher Inbetriebnahme der Hardware des Volksbots wurde die Odometrieberechnung anhand der zurückgelegten Strecke der Räder implementiert. Die Berechnung der zurückgelegten Wegstrecke und der Drehung des Roboters erfolgt über folgende Formeln\cite[S. 1]{Der:2000}:

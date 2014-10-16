@@ -1,10 +1,12 @@
 \subsection{Anforderungen}
 
+In diesem Kapitel werden sämtliche Anforderungen an die Funktionalität des Volksbots beschrieben. Diese sind in realistische und viosionierte Anforderungen unterteilt. Die realistischen Anforderungen beschreiben die tatsächlich umgesetzten Funktionalitäten.
+
+\subsubsection*{Realistische Anforderungen}
+
 \begin{itemize}
 
 \item \textbf{Aufträge}: Aufträge enthalten den Start- und Zielpunkt, welche in der Umgebungskarte gesetzt werden. Diese werden für weitere Berechnungen verwendet.
-
-\item \textbf{Bieten}: Ein Volksbot ist in der Lage an einer Auftragsverteilung teilzunehmen, sofern er noch keinen Auftrag ausführt und sein Energievorrat nicht das kritische Minimum erreicht hat. Die Teilnahme beinhaltet eine Aufwandsschätzung anhand einer Distanzfunktion, sowie dem aktuellen Energiezustand. 
 
 \item \textbf{Planung}: Bei der Erteilung eines Auftrages und dem Bieten für einen Auftrag, muss der Volksbot die Route vom aktuellen Standort zum Startpunkt berechnen. Dies gilt ebenso vom Startpunkt zum Endpunkt.
 
@@ -17,6 +19,14 @@
 \item \textbf{Feinsteuerung}: Das genaue Heranfahren an ein Objekt, sei es die Ladestation oder eine Rampe, erfolgt mit Hilfe der Laserscanner. 
 
 \item \textbf{Überabe}: Bei Einnahme der korrekten Position zum Be- oder Entladen des Volksbots findet ein Datenaustausch mit der entsprechenden Rampe statt. Es folgt eine kooperative Interaktion beider, bis der Volksbot das Paket erhalten oder abgeladen hat.
+
+\end{itemize}
+
+\subsubsection*{Visionierte Anforderungen}
+
+\begin{itemize}
+
+\item \textbf{Bieten}: Ein Volksbot ist in der Lage an einer Auftragsverteilung teilzunehmen, sofern er noch keinen Auftrag ausführt und sein Energievorrat nicht das kritische Minimum erreicht hat. Die Teilnahme beinhaltet eine Aufwandsschätzung anhand einer Distanzfunktion, sowie dem aktuellen Energiezustand. 
 
 \item \textbf{Energiemanagement}: Sobald ein Volksbot seinen kritischen Energiezustand erreicht, werden alle Auftragsverteilungen ignoriert und der Bot setzt die Dockingstation als primäres Ziel. Sollten mehrere Bots die Ladestation ansteuern, oder diese bereits belegt sein, so wird der Folgeablauf durch eine Queue oder ein anderes Verfahren geregelt.
 
