@@ -3,6 +3,7 @@
  *
  *  Created on: Apr 11, 2012
  *      Author: Martin Seidel
+ *      modified: Jan-Gerd Meﬂ, Jannik Flessner, Malte Falk
  */
 
 #include "Epos2MotorController.h"
@@ -281,6 +282,7 @@ int Epos2MotorController::activateProfileVelocity()
 
 }
 
+// @author Jannik Flessner, Malte Falke
 int Epos2MotorController::getLightSensorsValue()
 {
   int bit=0;
@@ -874,7 +876,7 @@ void Epos2MotorController::init(double maxRPM, double wheelPerimeter)
 		errorOutput("can't initialize device because it's not in disable state", error);
 	}
 }
-
+//@author Jan-Gerd Meﬂ, Jannik Flessner
 void Epos2MotorController::initFlow(double maxRPM, double wheelPerimeter)
 {
 	if ( disableEpos2() ) {

@@ -64,7 +64,7 @@
 FILE *fpSerial = NULL;   //serial port file pointer
 int fd = -1;
 ros::Publisher ucResponseMsg;
-//ros::Subscriber ucCommandMsg;
+ros::Subscriber ucCommandMsg;
 int ucIndex;          //ucontroller index number
 
 
@@ -143,14 +143,15 @@ FILE *serialInit(char * port, int baud)
   return fp;
 } //serialInit
 
-/***
+
 //Process ROS command message, send to uController
 void ucCommandCallback(const std_msgs::String::ConstPtr& msg)
 {
-  ROS_DEBUG("uc%dCommand: %s", ucIndex, msg->data.c_str());
-  fprintf(fpSerial, "%s", msg->data.c_str()); //appends newline
+  ROS_ERROR("uc%dCommand: %s", ucIndex, msg->data.c_str());
+  //fprintf(fpSerial, "%s", msg->data.c_str()); //appends newline
+  write(fd, msg->data.c_str(), 5);
 } //ucCommandCallback
-***/
+
 
 //Receive command responses from robot uController
 //and publish as a ROS message
@@ -200,7 +201,7 @@ int main(int argc, char **argv)
   char port[20];    //port name
   int baud;     //baud rate 
 
-  //char topicSubscribe[20];
+  char topicSubscribe[20];
   char topicPublish[20];
 
   pthread_t rcvThrID;   //receive thread ID
@@ -214,7 +215,7 @@ int main(int argc, char **argv)
   //Open and initialize the serial port to the uController
   if (argc > 1) {
     if(sscanf(argv[1],"%d", &ucIndex)==1) {
-      //sprintf(topicSubscribe, "uc%dCommand",ucIndex);
+      sprintf(topicSubscribe, "uc%dCommand",ucIndex);
       sprintf(topicPublish, "uc%dResponse",ucIndex);
     }
     else {
@@ -223,7 +224,7 @@ int main(int argc, char **argv)
     }
   }
   else {
-    //strcpy(topicSubscribe, "uc0Command");
+    strcpy(topicSubscribe, "uc0Command");
     strcpy(topicPublish, "uc0Response");
   }
 
@@ -248,10 +249,10 @@ int main(int argc, char **argv)
   }
   ROS_INFO("serial connection successful");
 
-  /***
+  
   //Subscribe to ROS messages
   ucCommandMsg = rosNode.subscribe(topicSubscribe, 100, ucCommandCallback);
-  ***/
+  
 
   //Setup to publish ROS messages
   ucResponseMsg = rosNode.advertise<std_msgs::String>(topicPublish, 100);

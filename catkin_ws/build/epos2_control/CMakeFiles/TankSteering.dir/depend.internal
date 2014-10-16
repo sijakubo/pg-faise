@@ -9,6 +9,26 @@ epos2_control/CMakeFiles/TankSteering.dir/src/TankSteering.cpp.o
  /home/pg/catkin_ws/src/epos2_control/src/TankSteering.h
  /opt/ros/hydro/include/XmlRpcDecl.h
  /opt/ros/hydro/include/XmlRpcValue.h
+ /opt/ros/hydro/include/actionlib/action_definition.h
+ /opt/ros/hydro/include/actionlib/client/action_client.h
+ /opt/ros/hydro/include/actionlib/client/client_goal_handle_imp.h
+ /opt/ros/hydro/include/actionlib/client/client_helpers.h
+ /opt/ros/hydro/include/actionlib/client/comm_state.h
+ /opt/ros/hydro/include/actionlib/client/comm_state_machine_imp.h
+ /opt/ros/hydro/include/actionlib/client/connection_monitor.h
+ /opt/ros/hydro/include/actionlib/client/goal_manager_imp.h
+ /opt/ros/hydro/include/actionlib/client/simple_action_client.h
+ /opt/ros/hydro/include/actionlib/client/simple_client_goal_state.h
+ /opt/ros/hydro/include/actionlib/client/simple_goal_state.h
+ /opt/ros/hydro/include/actionlib/client/terminal_state.h
+ /opt/ros/hydro/include/actionlib/decl.h
+ /opt/ros/hydro/include/actionlib/destruction_guard.h
+ /opt/ros/hydro/include/actionlib/enclosure_deleter.h
+ /opt/ros/hydro/include/actionlib/goal_id_generator.h
+ /opt/ros/hydro/include/actionlib/managed_list.h
+ /opt/ros/hydro/include/actionlib_msgs/GoalID.h
+ /opt/ros/hydro/include/actionlib_msgs/GoalStatus.h
+ /opt/ros/hydro/include/actionlib_msgs/GoalStatusArray.h
  /opt/ros/hydro/include/geometry_msgs/Point.h
  /opt/ros/hydro/include/geometry_msgs/Point32.h
  /opt/ros/hydro/include/geometry_msgs/PointStamped.h
@@ -24,6 +44,13 @@ epos2_control/CMakeFiles/TankSteering.dir/src/TankSteering.cpp.o
  /opt/ros/hydro/include/geometry_msgs/TwistWithCovariance.h
  /opt/ros/hydro/include/geometry_msgs/Vector3.h
  /opt/ros/hydro/include/geometry_msgs/Vector3Stamped.h
+ /opt/ros/hydro/include/move_base_msgs/MoveBaseAction.h
+ /opt/ros/hydro/include/move_base_msgs/MoveBaseActionFeedback.h
+ /opt/ros/hydro/include/move_base_msgs/MoveBaseActionGoal.h
+ /opt/ros/hydro/include/move_base_msgs/MoveBaseActionResult.h
+ /opt/ros/hydro/include/move_base_msgs/MoveBaseFeedback.h
+ /opt/ros/hydro/include/move_base_msgs/MoveBaseGoal.h
+ /opt/ros/hydro/include/move_base_msgs/MoveBaseResult.h
  /opt/ros/hydro/include/nav_msgs/Odometry.h
  /opt/ros/hydro/include/ros/advertise_options.h
  /opt/ros/hydro/include/ros/advertise_service_options.h

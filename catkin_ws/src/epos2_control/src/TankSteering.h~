@@ -52,6 +52,8 @@ class TankSteering {
 			ros::Subscriber epos2MPS;	/**< object for listing to speed messages (one value for each side of the robot) */
 			ros::Subscriber sickLMS;	/**< a object for listing to point-cloud-messages from the laser scanner */
 			ros::Timer odomTimer;	/**< a timer object to call the function which calculates the current position */
+			ros::Timer flowTimer;
+			ros::Timer hubTimer;
 			ros::Timer setVelocity;	/**< a timer object to call the function which sets the current velocity value to the EPOS2 */
 			ros::Publisher odomPub;	/**< object for sending the current position to the ROS NavStack */
 			ros::Publisher flowPub;	/**< object for sending to goal messages (uc1Response) */		
@@ -65,6 +67,8 @@ class TankSteering {
 			double odomDuration;	/**< [s] the time between to calls of the odomCallback() */
 			double velocityDuration;	/**< [s] the time between to calls of the setVelocityCallback() */
 			double flowControl;
+			double hubControl;
+			double hubPosition;
 		}tankSettings;	/**< Main Settings for tank-steering a robot with two EPOS2 */
 
 		/**
@@ -151,7 +155,7 @@ class TankSteering {
 
 		void flowControl(const ros::TimerEvent& event);
 
-
+		void hubControl(const ros::TimerEvent& event);
 
 		void setVelocityCallback(const ros::TimerEvent& event);
 		/**

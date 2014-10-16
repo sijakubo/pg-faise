@@ -93,4 +93,7 @@ simple_navigation_goals/CMakeFiles/simple_navigation_goals.dir/src/simple_naviga
  /opt/ros/hydro/include/ros/wall_timer_options.h
  /opt/ros/hydro/include/rosconsole/macros_generated.h
  /opt/ros/hydro/include/std_msgs/Header.h
+ /opt/ros/hydro/include/std_msgs/MultiArrayDimension.h
+ /opt/ros/hydro/include/std_msgs/MultiArrayLayout.h
  /opt/ros/hydro/include/std_msgs/String.h
+ /opt/ros/hydro/include/std_msgs/UInt8MultiArray.h

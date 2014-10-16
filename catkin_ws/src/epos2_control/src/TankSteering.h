@@ -57,6 +57,7 @@ class TankSteering {
 			ros::Timer setVelocity;	/**< a timer object to call the function which sets the current velocity value to the EPOS2 */
 			ros::Publisher odomPub;	/**< object for sending the current position to the ROS NavStack */
 			ros::Publisher flowPub;	/**< object for sending to goal messages (uc1Response) */		
+			ros::Publisher micazPub;			
 
 			ros::Timer getErrorLoop;	/**< a timer object to call a function which reads out both EPOS2 error historys */
 
@@ -68,6 +69,7 @@ class TankSteering {
 			double velocityDuration;	/**< [s] the time between to calls of the setVelocityCallback() */
 			double flowControl;
 			double hubControl;
+			double hubPosition;
 		}tankSettings;	/**< Main Settings for tank-steering a robot with two EPOS2 */
 
 		/**

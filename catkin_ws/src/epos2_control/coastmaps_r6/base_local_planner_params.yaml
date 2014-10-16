@@ -1,11 +1,31 @@
+recovery_behavior_enabled: true
+clearing_rotation_allowed: true
+
 TrajectoryPlannerROS:
-  max_vel_x: 0.20
-  min_vel_x: 0.01
-  max_rotational_vel: 0.4
-  min_in_place_rotational_vel: 0.05 #0.05
+  max_vel_x: 0.4 #0.20
+  min_vel_x: 0.1 #0.05 
+  max_rotational_vel: 0.6 #0.4
+  min_in_place_rotational_vel: 0.1 #0.1 #0.05
 
-  acc_lim_theta: 0.1
-  acc_lim_x: 0.1
-  acc_lim_y: 0.1 #0.0
+  acc_lim_theta: 0.16 #0.1
+  acc_lim_x: 0.16 #0.1
+  acc_lim_y: 0.0 #0.1 #0.0
 
+  sim_time: 1.0
+  sim_granularity: 0.025
+  angular_sim_granularity: 0.5
+  vx_samples: 8
+  vtheta_samples: 20
+  #dwa: false
+  #simple_attractor: false
+
+  occdist_scale: 0.5
+  pdist_scale: 2.0
+  #gdist_scale: 0.8
+
+  heading_scoring: false
+
+  meter_scoring: true
   holonomic_robot: false
+
+  #publish_cost_grid_pc: true
