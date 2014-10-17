@@ -143,6 +143,12 @@ class TankSteering {
 		 */
 		void driveCallback(const geometry_msgs::Twist velocityVector);
 		/**
+		* Function to let the Robot move towards/backwards after Navigation Goal is achieved
+		*
+		* @param boolean if the Robots moves forward or backward
+		*/
+		void moveToRamps(bool backward);
+		/**
 		 * flowControl-callback-function - Control flow to load/unload robot
 		 *
 		 * @param string contains stop/load/unload command

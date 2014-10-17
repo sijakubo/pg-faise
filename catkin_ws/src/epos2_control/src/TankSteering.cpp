@@ -89,6 +89,36 @@ void TankSteering::driveCallback(const geometry_msgs::Twist velocityVector)
 }
 
 //@author Jannik Flessner
+void TankSteering::moveToRamps(bool backward)
+{
+	double stop = 1.0;
+	double diffPosition = 0.0;
+	double speed;
+
+	if (backward == true){
+		speed = -0.25;
+	}
+	else{
+		speed = 0.25;
+	}
+
+	StartPositionLeft = tankSettings.epos[left]->getAbsolutePosition();
+	StartPositionRight = tankSettings.epos[right]->getAbsolutePosition();
+	StartPosition = (StartPositionLeft + StartPositionRight) * 0.5;
+
+	while (diffPosition < stop){
+		tankSettings.targetVelocityMPS[left] = tankSettings.maxMPS * speed;
+		tankSettings.targetVelocityMPS[right] = tankSettings.maxMPS* speed;
+		
+		diffPosition = abs(StartPosition - ((tankSettings.epos[left]->getAbsolutePosition() + tankSettings.epos[right]->getAbsolutePosition()) * 0.5))
+	}
+
+	tankSettings.targetVelocityMPS[left] = 0.0;
+	tankSettings.targetVelocityMPS[right] = 0.0;
+
+}
+
+//@author Jannik Flessner
 void TankSteering::flowCallback(const std_msgs::String::ConstPtr& msg)
 {
 	
@@ -130,21 +160,25 @@ void TankSteering::flowControl(const ros::TimerEvent& event)
 	
 	int sensorBack = 0x4000;
 	int sensorNo = 0x0000;
-	//ROS_ERROR("Lichtschrankenwert: %x", lightValue);
-	//tankSettings.flowControl = 1.0;
+
 	std::string loadStatus;
-	//ROS_ERROR("Control: %f",tankSettings.flowControl);
 
 	if (tankSettings.flowControl == 1.0 && tankSettings.hubControl == 0.0){
 		if (lightValue == sensorBack && loadStatus != "PackageLoaded"){
-			//ROS_ERROR("Stop Flow Motor");
+			bool backward = true;
+			TankSteering::moveToRamps(bool backward);
+
 			tankSettings.targetVelocityMPS[flow] = 0.0;
+			
 			loadStatus = "PackageLoaded";
 			tankSettings.flowPub.publish(loadStatus);
+			
 			tankSettings.flowControl = 0.0;
 		}
 		else if (lightValue != sensorBack){
-			//ROS_ERROR("Start Flow Motor");
+			bool backward = false;
+			TankSteering::moveToRamps(backward);
+
 			tankSettings.targetVelocityMPS[flow] = 20.0;
 		}
 	}
@@ -152,14 +186,20 @@ void TankSteering::flowControl(const ros::TimerEvent& event)
 
 	if (tankSettings.flowControl == 2.0 && tankSettings.hubControl == 0.0){
 		if (lightValue == sensorNo && loadStatus != "PackageUnloaded"){
-			//ROS_ERROR("Stop Flow Motor");
+			bool backward = true;
+			TankSteering::moveToRamps(bool backward);
+
 			tankSettings.targetVelocityMPS[flow] = 0.0;
+
 			loadStatus = "PackageUnloaded";
 			tankSettings.flowPub.publish(loadStatus);
+
 			tankSettings.flowControl = 0.0;
 		}
 		else if (lightValue != sensorNo){
-			//ROS_ERROR("Start Flow Motor");
+			bool backward = false;
+			TankSteering::moveToRamps(bool backward);
+
 			tankSettings.targetVelocityMPS[flow] = -20.0;
 		}
 	}
@@ -263,21 +303,6 @@ void TankSteering::setVelocityCallback(const ros::TimerEvent& event)
 	double diffPosition;
 	char strInput[256];
 	
-	//ROS_ERROR("Data test");
-	/*FILE * fileTest;
-	fileTest = fopen("/home/pg/Position.txt","r");
-	
-	if(fileTest==NULL){
-		std::fstream file;
-		file.open("/home/pg/Position.txt", std::ios::out);
-		file << "0";
-		file.close();
-	}
-		else {
-		//ROS_ERROR("File is available");
-	}*/
-	
-	
 	for (int i=left; i <=flow; i++) {targetVelocityRPM[i] = tankSettings.factorMPSToRPM * tankSettings.targetVelocityMPS[i];}
 
 	ROS_DEBUG("Try to set Velocity left to %.3f rpm and right to %.3f rpm", targetVelocityRPM[left], targetVelocityRPM[right]);
@@ -292,21 +317,19 @@ void TankSteering::setVelocityCallback(const ros::TimerEvent& event)
 		txtPosition = strtod(strInput, NULL);
 	}
 
-	//ROS_ERROR("%f", targetVelocityRPM[flow]);
 	for (int i=left; i <=flow; i++) {
 		
 		absolutePosition = tankSettings.epos[hub]-> getAbsolutePosition();
 		
 		tankSettings.epos[i]->changeRotationPerMinute(targetVelocityRPM[i]);
+		
 		diffPosition = (tankSettings.epos[hub]-> getAbsolutePosition()) - absolutePosition;
-		//ROS_ERROR("Diff: %f", diffPosition);
 
 		if (i == hub && diffPosition != 0){
 			txtPosition = txtPosition + diffPosition;
 			
 			fp = fopen("/home/pg/Position.txt", "w");
 			char out[256];
-			
 			
 			if(fp != NULL){
 				sprintf(out, "%f", txtPosition);
@@ -321,13 +344,7 @@ void TankSteering::setVelocityCallback(const ros::TimerEvent& event)
 		
 		
 	}
-	
 	tankSettings.epos[flow]->testForErrorsAndPrint();
-	//double abposi = tankSettings.epos[hub] ->getAbsolutePosition();
-	//ROS_ERROR("%f", abposi);
-	
-		
-
 }
 
 //modified by @author Jannik Flessner
