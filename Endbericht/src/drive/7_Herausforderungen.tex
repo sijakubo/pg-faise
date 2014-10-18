@@ -10,3 +10,5 @@ Die Programmierung und Parametrisierung der Teilfunktionen musste mit Blick auf
 die CPU-Auslastung der Steuereinheit geschehen, da einige Berechnungen bei falscher
 Verwendung zu sehr hohen Auslastungen und einer unzureichenden Performance des
 Roboters führten.
+
+Ein weiteres Problem stellte der LMS 1XX Laserscanner von SICK dar. Dieser wird mittels USB an das Notebook angeschlossen und sollte mittels seiner IP Adresse durch ROS direkt verwendet werden können. Allerdings konnte weder ROS noch SOPAS ET ( siehe Kapitel 3..3.3 ) auf den Scanner zugreifen. Beim erstellen eines Projekts in SOPAS war der Netzwerkscanassistent nicht in der Lage den Laserscanner zu erkennen und somit muss der LMS 1XX manuell im Gerätekatalog ausgewählt und in das Projekt eingebunden werden. Bei der Verbindung zum LMS 1XX wird die bestehende IP Adresse des Scanners angezeigt und eine Neuzuweisung einer IP Adresse angeboten. Die Neuzuweisung der IP Adresse ist notwending, damit ROS eine Verbdinung zum LMS 1XX herstellen kann.
