@@ -40,11 +40,42 @@ Um Pakete nicht nur von der Rampe auszugeben, sondern auch gleich das nächste P
 Mit dem dritten Prozess wird es ermöglicht, die oberen zwei Bolzen zu öffnen. Beim Prozessdurchlauf wird im Zustand eins sichergestellt, dass die unteren beiden Bolzen geschlossen sind. Im zweiten Zustand werden dann die oberen zwei Bolzen geöffnet, was ein Nachrutschen von Paketen ermöglicht. Bevor der Prozess dann beendet wird, werden die beiden Bolzen wieder geschlossen. Der Prozess ermöglicht es somit, ein Paket zu separieren.
 
 \paragraph{Treiber Externer Speicher}
+\label{sec:externalMemory}
+Der Treiber für den externen Speicher setzt den SPI-Bus zum AT45DB041-Chip um. Dafür nutzt er die Pins D2 (RXD oder SO), D3 (TXD oder SI), D5 (SCK) und A3 (CS). Ein Befehl an den Speicher ist dabei stets gleich aufgebaut:
+\begin{itemize}
+\item 1 Byte Opcode
+\item 4 Don't-Care-Bits und 11 Bit Seiten-Adresse
+\item 9 Bit Buffer-Adresse
+\item Read Trigger (nur für Lese-Befehle, Senden von ebenso vielen leeren Bytes wie empfangen werden sollen)
+\end{itemize}
 
+Der Treiber stellt folgende Funktionen zur Verfügung:
+
+\begin{itemize}
+  \item void ExtflashDriver\_init()
+  \item uint8\_t ExtflashDriver\_tr\_byte(uint8\_t spiOut)
+  \item void ExtflashDriver\_enable()
+  \item void ExtflashDriver\_disable()
+  \item void ExtflashDriver\_wait\_idle()
+  \item uint8\_t ExtflashDriver\_read\_status\_register(void)
+  \item uint8\_t ExtflashDriver\_get\_last\_compare(void)
+\end{itemize}
+
+Bemerkenswert ist hier insbesondere die Funktion \textit{ExtflashDriver\_tr\_byte}. Entsprechend des SPI-Busses sendet und empfängt sie gleichzeitig ein Byte vom Speicher.  \textit{ExtflashDriver\_wait\_idle} empfängt das erste Byte des Statusregisters. So kann geprüft werden, ob der Speicherchip gerade eine Seite in den Buffer lädt oder den Buffer zurückschreibt und deshalb mit dem nächsten Befehl gewartet werden muss \cite{AT45DB041A:2014:Online}.
 \paragraph{Interface Externer Speicher}
-
-\paragraph{Service Externer Speicher}
-
+Das Interface stellt für das Speicherinterface folgende Funktionen zur Verfügung:
+\begin{itemize}
+  \item void ExtflashInterface\_init()
+  \item void ExtflashInterface\_restore(uint16\_t cell)
+  \item void ExtflashInterface\_flush(uint16\_t cell)
+  \item void ExtflashInterface\_agent\_restore(uint8\_t localAgentId)
+  \item void ExtflashInterface\_agent\_flush(uint8\_t localAgentId)
+  \item uint8\_t ExtflashInterface\_write(uint16\_t address, uint8\_t* data, uint8\_t len)
+  \item uint8\_t ExtflashInterface\_read(uint16\_t address, uint8\_t* data, uint8\_t len)
+\end{itemize}
+\textit{ExtflashInterface\_restore} holt zwei aufeinanderfolgende Seiten (eine Zelle) aus dem Speicher und schreibt sie in den Buffer. \textit{ExtflashInterface\_flush(uint16\_t cell)} schreibt die beiden Seiten im Buffer an die angegebene Stelle im Speicher. \textit{ExtflashInterface\_agent\_restore} und \textit{ExtflashInterface\_agent\_flush} holen die Zelle eines bestimmten Agenten in den Speicher und schließlich sind \textit{ExtflashInterface\_write} und \textit{ExtflashInterface\_read} für Datenzugriffe im Buffer zuständig und können Daten lesen beziehungsweise schreiben.
+\paragraph{Speicherinterface}
+Das Speicherinterface stellt den Agenten den externen Flashspeicher zur Verfügung. Jedem Agenten werden dafür zwei Seiten zugeordnet. Ruft er nun die Funktionen \textit{MemoryInterface\_readComponentCell(uint8\_t componentCount, uint8\_t cell, uint8\_t* result, uint8\_t length)} oder \textit{MemoryInterface\_writeComponentCell(uint8\_t componentCount,uint16\_t cell, uint8\_t* data, uint8\_t length)} auf, wird geprüft, ob die Zelle des aktuellen Agenten bereits im Buffer ist. Falls nicht, werden die aktuellen Bufferdaten gesichert und es werden die Daten des aktiven Agenten geladen.
 \paragraph{Treiber Lichtschranken}
 Durch den Lichtschrankentreiber werden zwei Funktionen zur Verfügung gestellt. Zum einen ist es die Funktion \textit{void photosensor\_drv\_init(void)}. In dieser werden alle nötigen Eingänge der \textsc{Mica}z-Module initialisiert. Zum anderen wird durch den Treiber die Funktion \textit{uint8\_t get\_photosensors()} implementiert. Durch die Funktion kann der Zustand der Lichtschranken abgefragt werden. Dabei steht eine 1 für eine unterbrochene und eine 0 für eine offene Lichtschranke.
 
