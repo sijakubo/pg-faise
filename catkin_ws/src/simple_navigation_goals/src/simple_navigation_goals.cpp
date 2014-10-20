@@ -46,13 +46,13 @@ void GoalCallback(const std_msgs::String::ConstPtr& msg){
 	goal.target_pose.header.frame_id = "map";
   	goal.target_pose.header.stamp = ros::Time::now();
 
-  	goal.target_pose.pose.position.x = 3.135;
-  	goal.target_pose.pose.position.y = -0.850;
+  	goal.target_pose.pose.position.x = 3.090;
+  	goal.target_pose.pose.position.y = -0.795;
   	goal.target_pose.pose.position.z = 0.0;
   	goal.target_pose.pose.orientation.x = 0.0;
   	goal.target_pose.pose.orientation.y = 0.0;
-  	goal.target_pose.pose.orientation.z = 0.999;
-  	goal.target_pose.pose.orientation.w = -0.043;
+  	goal.target_pose.pose.orientation.z = 0.996;
+  	goal.target_pose.pose.orientation.w = -0.093;
 
   	ROS_INFO("Sending goal");
   	ac.sendGoal(goal);
@@ -80,13 +80,13 @@ void GoalCallback(const std_msgs::String::ConstPtr& msg){
 	goal.target_pose.header.frame_id = "map";
   	goal.target_pose.header.stamp = ros::Time::now();
 
-  	goal.target_pose.pose.position.x = -0.564;
-  	goal.target_pose.pose.position.y = 1.043;
+  	goal.target_pose.pose.position.x = -0.597;
+  	goal.target_pose.pose.position.y = 0.998;
   	goal.target_pose.pose.position.z = 0.0;
   	goal.target_pose.pose.orientation.x = 0.0;
   	goal.target_pose.pose.orientation.y = 0.0;
-  	goal.target_pose.pose.orientation.z = 0.044;
-  	goal.target_pose.pose.orientation.w = 0.999;
+  	goal.target_pose.pose.orientation.z = 0.067;
+  	goal.target_pose.pose.orientation.w = 0.998;
 
   	ROS_INFO("Sending goal");
   	ac.sendGoal(goal);
@@ -174,20 +174,22 @@ void LoadCallback(const std_msgs::String::ConstPtr& msg){
   ROS_ERROR("Action Server ready");
 
   if (messageLoad == packageLoaded && targetFlag == 0x0110){
+	
+	sleep(2);
 
 	move_base_msgs::MoveBaseGoal goal;
 
 	goal.target_pose.header.frame_id = "map";
   	goal.target_pose.header.stamp = ros::Time::now();
 
-  	goal.target_pose.pose.position.x = -0.334;
-  	goal.target_pose.pose.position.y = -1.204;
+  	goal.target_pose.pose.position.x = -0.449;
+  	goal.target_pose.pose.position.y = -1.292;
   	goal.target_pose.pose.position.z = 0.0;
   
   	goal.target_pose.pose.orientation.x = 0.0;
   	goal.target_pose.pose.orientation.y = 0.0;
-  	goal.target_pose.pose.orientation.z = 0.043;
-  	goal.target_pose.pose.orientation.w = 0.999;
+  	goal.target_pose.pose.orientation.z = 0.088;
+  	goal.target_pose.pose.orientation.w = 0.996;
 
 
   	ROS_INFO("Rampe anfahren");
@@ -213,19 +215,21 @@ void LoadCallback(const std_msgs::String::ConstPtr& msg){
   }
   else if (messageLoad == packageLoaded && targetFlag == 0x0120){
 	
+	sleep(2);
+	
     	move_base_msgs::MoveBaseGoal goal;
 
 	goal.target_pose.header.frame_id = "map";
   	goal.target_pose.header.stamp = ros::Time::now();
 
-  	goal.target_pose.pose.position.x = 2.924;
-  	goal.target_pose.pose.position.y = 1.378;
+  	goal.target_pose.pose.position.x = 2.955;
+  	goal.target_pose.pose.position.y = 1.492;
   	goal.target_pose.pose.position.z = 0.0;
   
   	goal.target_pose.pose.orientation.x = 0.0;
   	goal.target_pose.pose.orientation.y = 0.0;
   	goal.target_pose.pose.orientation.z = 0.998;
-  	goal.target_pose.pose.orientation.w = -0.068;
+  	goal.target_pose.pose.orientation.w = -0.055;
 
   	ROS_INFO("Rampe anfahren");
   	ac.sendGoal(goal);

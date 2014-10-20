@@ -28,4 +28,7 @@ TrajectoryPlannerROS:
   meter_scoring: true
   holonomic_robot: false
 
+  yaw_goal_tolerance: 0.03
+  xy_goal_tolerance: 0.03
+
   #publish_cost_grid_pc: true

@@ -57,6 +57,7 @@ class TankSteering {
 			ros::Timer setVelocity;	/**< a timer object to call the function which sets the current velocity value to the EPOS2 */
 			ros::Publisher odomPub;	/**< object for sending the current position to the ROS NavStack */
 			ros::Publisher flowPub;	/**< object for sending to goal messages (uc1Response) */		
+			ros::Publisher micazPub;			
 
 			ros::Timer getErrorLoop;	/**< a timer object to call a function which reads out both EPOS2 error historys */
 
@@ -141,6 +142,12 @@ class TankSteering {
 		 * @param velocityVector contains velocities in each direction of space and angular velocities around each axis
 		 */
 		void driveCallback(const geometry_msgs::Twist velocityVector);
+		/**
+		* Function to let the Robot move towards/backwards after Navigation Goal is achieved
+		*
+		* @param boolean if the Robots moves forward or backward
+		*/
+		void moveToRamps(int backward);
 		/**
 		 * flowControl-callback-function - Control flow to load/unload robot
 		 *

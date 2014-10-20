@@ -70,6 +70,7 @@ class TankSteering {
 			double flowControl;
 			double hubControl;
 			double hubPosition;
+			double startPosition;
 		}tankSettings;	/**< Main Settings for tank-steering a robot with two EPOS2 */
 
 		/**
@@ -147,7 +148,7 @@ class TankSteering {
 		*
 		* @param boolean if the Robots moves forward or backward
 		*/
-		void moveToRamps(bool backward);
+		void moveToRamps(int backward);
 		/**
 		 * flowControl-callback-function - Control flow to load/unload robot
 		 *

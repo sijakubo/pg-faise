@@ -10,6 +10,9 @@
 #include <iostream>
 #include <fstream>
 
+static double moveToRampsFlag;
+static double startPositionFlag;
+
 static	double txtPosition = -200.0f;
 static FILE *fp;
 
@@ -36,6 +39,9 @@ TankSteering::TankSteering(ros::NodeHandle roshandle, Epos2MotorController* epos
 	pos.last.x = pos.last.y = pos.last.theta = 0;
 
 	tankSettings.maxSafetyMPS = tankSettings.maxMPS;
+
+	startPositionFlag = 0.0;
+	moveToRampsFlag = 0.0;
 	
 	init();
 }
@@ -89,33 +95,38 @@ void TankSteering::driveCallback(const geometry_msgs::Twist velocityVector)
 }
 
 //@author Jannik Flessner
-void TankSteering::moveToRamps(bool backward)
+void TankSteering::moveToRamps(int backward)
 {
-	double stop = 1.0;
+	double stop = 0.45;
 	double diffPosition = 0.0;
 	double speed;
 
-	if (backward == true){
+	if (backward == 1){
 		speed = -0.25;
 	}
 	else{
 		speed = 0.25;
 	}
 
-	StartPositionLeft = tankSettings.epos[left]->getAbsolutePosition();
-	StartPositionRight = tankSettings.epos[right]->getAbsolutePosition();
-	StartPosition = (StartPositionLeft + StartPositionRight) * 0.5;
-
-	while (diffPosition < stop){
-		tankSettings.targetVelocityMPS[left] = tankSettings.maxMPS * speed;
-		tankSettings.targetVelocityMPS[right] = tankSettings.maxMPS* speed;
+	tankSettings.targetVelocityMPS[left] = tankSettings.maxMPS * speed;
+	tankSettings.targetVelocityMPS[right] = tankSettings.maxMPS* speed;
 		
-		diffPosition = abs(StartPosition - ((tankSettings.epos[left]->getAbsolutePosition() + tankSettings.epos[right]->getAbsolutePosition()) * 0.5))
+	diffPosition = tankSettings.startPosition - ((tankSettings.epos[left]->getAbsolutePosition() + tankSettings.epos[right]->getAbsolutePosition()) * 0.5);
+
+	//ROS_ERROR("Diff: %f Start: %f", diffPosition, tankSettings.startPosition);
+	if (diffPosition < 0){
+		diffPosition = diffPosition * -1.0;
 	}
 
-	tankSettings.targetVelocityMPS[left] = 0.0;
-	tankSettings.targetVelocityMPS[right] = 0.0;
-
+	ROS_ERROR("Diff: %f", diffPosition);
+	if (diffPosition >= stop){
+		ROS_ERROR("Stop at %f reached!", stop);
+		tankSettings.targetVelocityMPS[left] = 0.0;
+		tankSettings.targetVelocityMPS[right] = 0.0;
+		moveToRampsFlag = 0.0;
+		startPositionFlag = 0.0;
+		
+	}
 }
 
 //@author Jannik Flessner
@@ -156,6 +167,7 @@ void TankSteering::flowControl(const ros::TimerEvent& event)
 {
 
 	int lightValue;
+        int backward;
 	lightValue = tankSettings.epos[flow]->getLightSensorsValue();
 	
 	int sensorBack = 0x4000;
@@ -165,45 +177,53 @@ void TankSteering::flowControl(const ros::TimerEvent& event)
 
 	if (tankSettings.flowControl == 1.0 && tankSettings.hubControl == 0.0){
 		if (lightValue == sensorBack && loadStatus != "PackageLoaded"){
-			bool backward = true;
-			TankSteering::moveToRamps(bool backward);
-
+			
+			sleep(2);
 			tankSettings.targetVelocityMPS[flow] = 0.0;
 			
 			loadStatus = "PackageLoaded";
 			tankSettings.flowPub.publish(loadStatus);
 			
 			tankSettings.flowControl = 0.0;
+			moveToRampsFlag = 2.0;
 		}
 		else if (lightValue != sensorBack){
-			bool backward = false;
-			TankSteering::moveToRamps(backward);
 
-			tankSettings.targetVelocityMPS[flow] = 20.0;
+			tankSettings.targetVelocityMPS[flow] = 35.0;
 		}
 	}
 
 
 	if (tankSettings.flowControl == 2.0 && tankSettings.hubControl == 0.0){
 		if (lightValue == sensorNo && loadStatus != "PackageUnloaded"){
-			bool backward = true;
-			TankSteering::moveToRamps(bool backward);
 
+			sleep(2);
 			tankSettings.targetVelocityMPS[flow] = 0.0;
 
 			loadStatus = "PackageUnloaded";
 			tankSettings.flowPub.publish(loadStatus);
 
 			tankSettings.flowControl = 0.0;
+			moveToRampsFlag = 2.0;
 		}
 		else if (lightValue != sensorNo){
-			bool backward = false;
-			TankSteering::moveToRamps(bool backward);
 
-			tankSettings.targetVelocityMPS[flow] = -20.0;
+			tankSettings.targetVelocityMPS[flow] = -35.0;
 		}
 	}
-	
+
+	if (moveToRampsFlag == 2.0){
+		if (startPositionFlag == 0.0){
+
+			tankSettings.startPosition = (tankSettings.epos[left]->getAbsolutePosition() + tankSettings.epos[right]->getAbsolutePosition()) * 0.5;
+			//ROS_ERROR("StartPosition: %f", tankSettings.startPosition);
+			//ROS_ERROR("Links: %f Rechts: %f", tankSettings.epos[left]->getAbsolutePosition(), tankSettings.epos[right]->getAbsolutePosition());
+			startPositionFlag = 1.0;
+        	}
+		
+		backward = 1;
+        	TankSteering::moveToRamps(backward);
+	}
 }
 
 //@author Jannik Flessner
@@ -212,6 +232,7 @@ void TankSteering::hubControl(const ros::TimerEvent& event){
 	double stopDown = 0.0;
 	double stopUp = 10.0;
 	uint8_t micaz[5];
+	int backward;
   	std::string out;
 
 	if (tankSettings.hubControl == 1.1){
@@ -219,6 +240,8 @@ void TankSteering::hubControl(const ros::TimerEvent& event){
 			ROS_ERROR("Stop Hub Motor");
 			tankSettings.targetVelocityMPS[hub] = 0.0;
 			tankSettings.hubControl = 0.0;
+			moveToRampsFlag = 1.0;
+			
 			micaz[0] = 0x55;
 			micaz[1] = 0x01;
 			micaz[2] = 0x10;
@@ -238,6 +261,8 @@ void TankSteering::hubControl(const ros::TimerEvent& event){
 			ROS_ERROR("Stop Hub Motor");
 			tankSettings.targetVelocityMPS[hub] = 0.0;
 			tankSettings.hubControl = 0.0;
+			moveToRampsFlag = 1.0;
+
 			micaz[0] = 0x55;
 			micaz[1] = 0x01;
 			micaz[2] = 0x20;
@@ -258,6 +283,8 @@ void TankSteering::hubControl(const ros::TimerEvent& event){
 			ROS_ERROR("Stop Hub Motor");
 			tankSettings.targetVelocityMPS[hub] = 0.0;
 			tankSettings.hubControl = 0.0;
+			moveToRampsFlag = 1.0;
+
 			micaz[0] = 0x50;
 			micaz[1] = 0x01;
 			micaz[2] = 0x10;
@@ -277,6 +304,8 @@ void TankSteering::hubControl(const ros::TimerEvent& event){
 			ROS_ERROR("Stop Hub Motor");
 			tankSettings.targetVelocityMPS[hub] = 0.0;
 			tankSettings.hubControl = 0.0;
+			moveToRampsFlag = 1.0;
+
 			micaz[0] = 0x50;
 			micaz[1] = 0x01;
 			micaz[2] = 0x20;
@@ -290,6 +319,19 @@ void TankSteering::hubControl(const ros::TimerEvent& event){
 		else if (tankSettings.hubPosition < stopUp){
 			tankSettings.targetVelocityMPS[hub] = tankSettings.maxMPS * 0.75;
 		}
+	}
+
+	if (moveToRampsFlag == 1.0){
+		if (startPositionFlag == 0.0){
+
+			tankSettings.startPosition = (tankSettings.epos[left]->getAbsolutePosition() + tankSettings.epos[right]->getAbsolutePosition()) * 0.5;
+			//ROS_ERROR("StartPosition: %f", tankSettings.startPosition);
+			//ROS_ERROR("Links: %f Rechts: %f", tankSettings.epos[left]->getAbsolutePosition(), tankSettings.epos[right]->getAbsolutePosition());
+			startPositionFlag = 1.0;
+        	}
+		
+		backward = 0;
+        	TankSteering::moveToRamps(backward);
 	}
 
 }
