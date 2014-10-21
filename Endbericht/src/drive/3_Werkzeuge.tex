@@ -2,18 +2,18 @@
 
 \subsubsection{Robot Operating System (ROS)}
 
-Es gibt viele Robotik-Frameworks, die spezifisch für präzise Anwendungen, für Prototypen,
-erstellt wurden. ROS strebt da eher das Allgemeine an. Das »Robot Operating System«
-(ROS) ist ein Open-Source Framework für individuelle Roboter, das sich in der
-Robotikforschung in den letzten Jahren etabliert hat und ein großes Repertoire an Software-Komponenten und -Werkzeugen für Robotikapplikationen bietet.\\
-Die Entwicklung begann 2007 am Stanford Artificial Intelligence Laboratory im Rahmen des
-Stanford-AI-Robot-Projektes (STAIR). Heute wird es hauptsächlich am Robotik Institut Willow
-Garage weiterentwickelt. Seit April 2012 wird ROS von der neu gegründeten,
-gemeinnützigen Organisation Open Source Robotics Foundation (OSRF) unterstützt. Die
-Bibliotheken von ROS setzen auf Betriebssysteme wie Linux, Mac OS X oder Windows auf.
-ROS ist nicht von einer spezifischen Sprache abhängig. Heutzutage gibt es 3 Grundlibraries
-für ROS, die jeweils auf Python, Lisp und C++ ausgerichtet sind. Zwei Exmperimentier-
-Librairies sind für Java und Lua erhältlich.
+Das Robot Operating System ist ein frei verfügbares Framework zur Entwicklung von Roboter-Anwendungen. Die Verwaltung einer Vielzahl von Treibern, Bibliotheken und Tools vereinfacht die Arbeit an Robotern. Durch den Einsatz von Tutorials und Beispielen wird der Einstieg in die Entwicklung mit ROS sehr erleichtert. Die Kommunikation der entwickelten Programme, die sogenannten Nodes, erfolgt über Topics. Wie in Abbildung \ref{fig:ROS_concepts} schematisch dargestellt ist, werden die Daten, die von einer Node
+ausgegeben werden sollen mit einem Titel, dem Topic, versehen und einem Pool an Topics hinzugefügt.
+
+\begin{figure}[h!]
+ \centering
+		\includegraphics[width=0.5\textwidth]{drive/ROS_concepts.png}
+	\caption{ROS Nachrichtenkonzept}
+	\label{fig:ROS_concepts}
+\end{figure}
+
+Falls diese Daten folgend von einer anderen Node benötigt werden, kann diese das Topic einfach abhören und bekommt ausschließlich die gewünschten Daten übermittelt. Mit Hilfe des Nachrichtensystems lässt sich der Ablauf und die Synchronisation von einzelnen Funktionen des Roboters übersichtlich und einfach gestalten. Darüber hinaus bietet ROS praktische Tools zur Visualisierung von Messdaten, wie z.B. Laserscans.
+
 \subsubsection*{Was will ROS?}
 \begin{itemize}
  \item ROS will unterstützen, Code für Forschung und Entwicklung wiederzuverwenden

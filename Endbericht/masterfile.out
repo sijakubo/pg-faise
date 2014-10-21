@@ -1,0 +1,127 @@
+\BOOKMARK [1][]{section.1}{1 Einleitung}{}% 1
+\BOOKMARK [2][]{subsection.1.1}{1.1 Motivation}{section.1}% 2
+\BOOKMARK [2][]{subsection.1.2}{1.2 Zielsetzung}{section.1}% 3
+\BOOKMARK [2][]{subsection.1.3}{1.3 Einsatzszenario}{section.1}% 4
+\BOOKMARK [2][]{subsection.1.4}{1.4 Komponenten}{section.1}% 5
+\BOOKMARK [1][]{section.2}{2 Stand der Technik}{}% 6
+\BOOKMARK [2][]{subsection.2.1}{2.1 Fahrerlose Transportsysteme}{section.2}% 7
+\BOOKMARK [2][]{subsection.2.2}{2.2 Fahrerlose Transportfahrzeuge}{section.2}% 8
+\BOOKMARK [3][]{subsubsection.2.2.1}{2.2.1 Orientierungssystem bzw. Navigation}{subsection.2.2}% 9
+\BOOKMARK [3][]{subsubsection.2.2.2}{2.2.2 Steuerungstechnik}{subsection.2.2}% 10
+\BOOKMARK [2][]{subsection.2.3}{2.3 Materialflusssysteme}{section.2}% 11
+\BOOKMARK [3][]{paragraph.2.3.0.1}{2.3.0.1 Funktionen von Materialflusssystemen}{subsection.2.3}% 12
+\BOOKMARK [2][]{subsection.2.4}{2.4 Multiagentensysteme}{section.2}% 13
+\BOOKMARK [2][]{subsection.2.5}{2.5 Fallbeispiele}{section.2}% 14
+\BOOKMARK [3][]{subsubsection.2.5.1}{2.5.1 FTS in der Gl\344sernen Manufaktur Dresden \(Volkswagen\)}{subsection.2.5}% 15
+\BOOKMARK [3][]{subsubsection.2.5.2}{2.5.2 FTS beim Automobilhersteller BMW im Werk Leipzig}{subsection.2.5}% 16
+\BOOKMARK [1][]{section.3}{3 Projektorganisation}{}% 17
+\BOOKMARK [2][]{subsection.3.1}{3.1 Organisation der Teilgruppen \(Materialfluss, Fahrzeuge, Simulation\)}{section.3}% 18
+\BOOKMARK [2][]{subsection.3.2}{3.2 Rollenverteilung}{section.3}% 19
+\BOOKMARK [2][]{subsection.3.3}{3.3 Vorgehensmodell}{section.3}% 20
+\BOOKMARK [2][]{subsection.3.4}{3.4 Werkzeuge}{section.3}% 21
+\BOOKMARK [3][]{subsubsection.3.4.1}{3.4.1 Jira}{subsection.3.4}% 22
+\BOOKMARK [3][]{subsubsection.3.4.2}{3.4.2 Confluence}{subsection.3.4}% 23
+\BOOKMARK [1][]{section.4}{4 Allgemeine Anforderungen}{}% 24
+\BOOKMARK [2][]{subsection.4.1}{4.1 Ablaufszenario}{section.4}% 25
+\BOOKMARK [1][]{section.5}{5 Teilbericht Simulation}{}% 26
+\BOOKMARK [2][]{subsection.5.1}{5.1 Lastenheft}{section.5}% 27
+\BOOKMARK [2][]{subsection.5.2}{5.2 Grundlegende Designentscheidungen}{section.5}% 28
+\BOOKMARK [3][]{subsubsection.5.2.1}{5.2.1 Eigenentwicklung}{subsection.5.2}% 29
+\BOOKMARK [3][]{subsubsection.5.2.2}{5.2.2 Entwicklung einer Webanwendung}{subsection.5.2}% 30
+\BOOKMARK [3][]{subsubsection.5.2.3}{5.2.3 Umsetzung durch GWT}{subsection.5.2}% 31
+\BOOKMARK [2][]{subsection.5.3}{5.3 Konzeption der Systemkomponenten}{section.5}% 32
+\BOOKMARK [3][]{subsubsection.5.3.1}{5.3.1 Gesamtarchitektur}{subsection.5.3}% 33
+\BOOKMARK [3][]{subsubsection.5.3.2}{5.3.2 Konzeption der Benutzeroberfl\344che}{subsection.5.3}% 34
+\BOOKMARK [3][]{subsubsection.5.3.3}{5.3.3 Generierung von Auftr\344gen}{subsection.5.3}% 35
+\BOOKMARK [3][]{subsubsection.5.3.4}{5.3.4 Anforderungen an ein Multiagenten-Framework}{subsection.5.3}% 36
+\BOOKMARK [3][]{subsubsection.5.3.5}{5.3.5 Ben\366tigte Agententypen}{subsection.5.3}% 37
+\BOOKMARK [3][]{subsubsection.5.3.6}{5.3.6 Kommunikation zwischen den Agenten}{subsection.5.3}% 38
+\BOOKMARK [3][]{subsubsection.5.3.7}{5.3.7 Konzeption des Pathfindings}{subsection.5.3}% 39
+\BOOKMARK [3][]{subsubsection.5.3.8}{5.3.8 Konzeption der Statistiken}{subsection.5.3}% 40
+\BOOKMARK [3][]{subsubsection.5.3.9}{5.3.9 Interaktion der Komponenten}{subsection.5.3}% 41
+\BOOKMARK [2][]{subsection.5.4}{5.4 Implementierung der Systemkomponenten}{section.5}% 42
+\BOOKMARK [3][]{subsubsection.5.4.1}{5.4.1 Implementierte Gesamtarchitektur}{subsection.5.4}% 43
+\BOOKMARK [3][]{subsubsection.5.4.2}{5.4.2 Benutzeroberfl\344che}{subsection.5.4}% 44
+\BOOKMARK [3][]{subsubsection.5.4.3}{5.4.3 Generierung von Auftr\344gen}{subsection.5.4}% 45
+\BOOKMARK [3][]{subsubsection.5.4.4}{5.4.4 Auswahl eines Multiagenten-Frameworks}{subsection.5.4}% 46
+\BOOKMARK [3][]{subsubsection.5.4.5}{5.4.5 Implementierte Agententypen}{subsection.5.4}% 47
+\BOOKMARK [3][]{subsubsection.5.4.6}{5.4.6 Kommunikation zwischen den Agenten}{subsection.5.4}% 48
+\BOOKMARK [4][]{paragraph.5.4.6.1}{5.4.6.1 Jobzuweisung an Ein- und Ausg\344nge}{subsubsection.5.4.6}% 49
+\BOOKMARK [4][]{paragraph.5.4.6.2}{5.4.6.2 Eingang fragt Ausgang und Zwischenlager}{subsubsection.5.4.6}% 50
+\BOOKMARK [4][]{paragraph.5.4.6.3}{5.4.6.3 Ausgang fragt Zwischenlager}{subsubsection.5.4.6}% 51
+\BOOKMARK [4][]{paragraph.5.4.6.4}{5.4.6.4 Auktion}{subsubsection.5.4.6}% 52
+\BOOKMARK [4][]{paragraph.5.4.6.5}{5.4.6.5 Paket von Startrampe abholen und zur Zielrampe bringen}{subsubsection.5.4.6}% 53
+\BOOKMARK [3][]{subsubsection.5.4.7}{5.4.7 Implementierung des Pathfindings}{subsection.5.4}% 54
+\BOOKMARK [3][]{subsubsection.5.4.8}{5.4.8 Implementierung der Statistiken}{subsection.5.4}% 55
+\BOOKMARK [3][]{subsubsection.5.4.9}{5.4.9 Interaktion der Komponenten}{subsection.5.4}% 56
+\BOOKMARK [4][]{paragraph.5.4.9.1}{5.4.9.1 Client-Server Kommunikation}{subsubsection.5.4.9}% 57
+\BOOKMARK [4][]{paragraph.5.4.9.2}{5.4.9.2 Start des Multiagenten-Systems}{subsubsection.5.4.9}% 58
+\BOOKMARK [4][]{paragraph.5.4.9.3}{5.4.9.3 Start des Jobtimers}{subsubsection.5.4.9}% 59
+\BOOKMARK [4][]{paragraph.5.4.9.4}{5.4.9.4 Visualisierung von Zustandsver\344nderungen}{subsubsection.5.4.9}% 60
+\BOOKMARK [2][]{subsection.5.5}{5.5 Testen und Validieren}{section.5}% 61
+\BOOKMARK [1][]{section.6}{6 Teilbericht Materialfluss}{}% 62
+\BOOKMARK [2][]{subsection.6.1}{6.1 Anforderungen}{section.6}% 63
+\BOOKMARK [3][]{subsubsection.6.1.1}{6.1.1 Funktionale Anforderungen}{subsection.6.1}% 64
+\BOOKMARK [3][]{subsubsection.6.1.2}{6.1.2 Nicht-funktionale Anforderungen}{subsection.6.1}% 65
+\BOOKMARK [2][]{subsection.6.2}{6.2 Beschreibung der Komponenten}{section.6}% 66
+\BOOKMARK [3][]{subsubsection.6.2.1}{6.2.1 Rampen}{subsection.6.2}% 67
+\BOOKMARK [3][]{subsubsection.6.2.2}{6.2.2 Mikrocontroller}{subsection.6.2}% 68
+\BOOKMARK [4][]{paragraph.6.2.2.1}{6.2.2.1 Micaz-Modul}{subsubsection.6.2.2}% 69
+\BOOKMARK [4][]{paragraph.6.2.2.2}{6.2.2.2 Mib520}{subsubsection.6.2.2}% 70
+\BOOKMARK [2][]{subsection.6.3}{6.3 Werkzeuge}{section.6}% 71
+\BOOKMARK [3][]{subsubsection.6.3.1}{6.3.1 Atmel Studio}{subsection.6.3}% 72
+\BOOKMARK [3][]{subsubsection.6.3.2}{6.3.2 Atmel JTAGICE3}{subsection.6.3}% 73
+\BOOKMARK [2][]{subsection.6.4}{6.4 Systemarchitektur}{section.6}% 74
+\BOOKMARK [3][]{subsubsection.6.4.1}{6.4.1 Contiki}{subsection.6.4}% 75
+\BOOKMARK [4][]{paragraph.6.4.1.1}{6.4.1.1 Build-Vorgang}{subsubsection.6.4.1}% 76
+\BOOKMARK [4][]{paragraph.6.4.1.2}{6.4.1.2 Prozesse}{subsubsection.6.4.1}% 77
+\BOOKMARK [4][]{paragraph.6.4.1.3}{6.4.1.3 Prozesskommunikation}{subsubsection.6.4.1}% 78
+\BOOKMARK [4][]{paragraph.6.4.1.4}{6.4.1.4 Scheduling und Timer}{subsubsection.6.4.1}% 79
+\BOOKMARK [4][]{paragraph.6.4.1.5}{6.4.1.5 Der Rime Kommunikationsstack}{subsubsection.6.4.1}% 80
+\BOOKMARK [3][]{subsubsection.6.4.2}{6.4.2 Background Level: Treiber, Services und Interfaces}{subsection.6.4}% 81
+\BOOKMARK [4][]{paragraph.6.4.2.1}{6.4.2.1 Treiber Bolzen}{subsubsection.6.4.2}% 82
+\BOOKMARK [4][]{paragraph.6.4.2.2}{6.4.2.2 Interface Bolzen}{subsubsection.6.4.2}% 83
+\BOOKMARK [4][]{paragraph.6.4.2.3}{6.4.2.3 Treiber Externer Speicher}{subsubsection.6.4.2}% 84
+\BOOKMARK [4][]{paragraph.6.4.2.4}{6.4.2.4 Interface Externer Speicher}{subsubsection.6.4.2}% 85
+\BOOKMARK [4][]{paragraph.6.4.2.5}{6.4.2.5 Speicherinterface}{subsubsection.6.4.2}% 86
+\BOOKMARK [4][]{paragraph.6.4.2.6}{6.4.2.6 Treiber Lichtschranken}{subsubsection.6.4.2}% 87
+\BOOKMARK [4][]{paragraph.6.4.2.7}{6.4.2.7 Interface Lichtschranken}{subsubsection.6.4.2}% 88
+\BOOKMARK [4][]{paragraph.6.4.2.8}{6.4.2.8 Treiber Funkmodul}{subsubsection.6.4.2}% 89
+\BOOKMARK [4][]{paragraph.6.4.2.9}{6.4.2.9 Treiber UART-Schnittstelle}{subsubsection.6.4.2}% 90
+\BOOKMARK [4][]{paragraph.6.4.2.10}{6.4.2.10 Interface UART-Schnittstelle}{subsubsection.6.4.2}% 91
+\BOOKMARK [3][]{subsubsection.6.4.3}{6.4.3 Agenten RTE}{subsection.6.4}% 92
+\BOOKMARK [4][]{paragraph.6.4.3.1}{6.4.3.1 Verwaltung der Agenten}{subsubsection.6.4.3}% 93
+\BOOKMARK [4][]{paragraph.6.4.3.2}{6.4.3.2 Austausch von Nachrichten}{subsubsection.6.4.3}% 94
+\BOOKMARK [2][]{subsection.6.5}{6.5 Agenten}{section.6}% 95
+\BOOKMARK [3][]{subsubsection.6.5.1}{6.5.1 Paket-Agent}{subsection.6.5}% 96
+\BOOKMARK [3][]{subsubsection.6.5.2}{6.5.2 Plattform-Agent}{subsection.6.5}% 97
+\BOOKMARK [4][]{paragraph.6.5.2.1}{6.5.2.1 Plattform-Agent der Rampen}{subsubsection.6.5.2}% 98
+\BOOKMARK [4][]{paragraph.6.5.2.2}{6.5.2.2 Plattform-Agent der Volksbots}{subsubsection.6.5.2}% 99
+\BOOKMARK [3][]{subsubsection.6.5.3}{6.5.3 Order-Agent}{subsection.6.5}% 100
+\BOOKMARK [3][]{subsubsection.6.5.4}{6.5.4 Routing-Agenten}{subsection.6.5}% 101
+\BOOKMARK [2][]{subsection.6.6}{6.6 Probleme und Herausforderungen}{section.6}% 102
+\BOOKMARK [1][]{section.7}{7 Teilbericht Fahrzeuge}{}% 103
+\BOOKMARK [2][]{subsection.7.1}{7.1 Anforderungen}{section.7}% 104
+\BOOKMARK [2][]{subsection.7.2}{7.2 Komponenten}{section.7}% 105
+\BOOKMARK [3][]{subsubsection.7.2.1}{7.2.1 Fahreinheit}{subsection.7.2}% 106
+\BOOKMARK [3][]{subsubsection.7.2.2}{7.2.2 Hub-F\366rderband}{subsection.7.2}% 107
+\BOOKMARK [3][]{subsubsection.7.2.3}{7.2.3 Steuereinheit}{subsection.7.2}% 108
+\BOOKMARK [3][]{subsubsection.7.2.4}{7.2.4 Architektur}{subsection.7.2}% 109
+\BOOKMARK [2][]{subsection.7.3}{7.3 Werkzeuge}{section.7}% 110
+\BOOKMARK [3][]{subsubsection.7.3.1}{7.3.1 Robot Operating System \(ROS\)}{subsection.7.3}% 111
+\BOOKMARK [3][]{subsubsection.7.3.2}{7.3.2 Epos Control}{subsection.7.3}% 112
+\BOOKMARK [3][]{subsubsection.7.3.3}{7.3.3 SOPAS Engineeringtool}{subsection.7.3}% 113
+\BOOKMARK [2][]{subsection.7.4}{7.4 Allgemeine Hardware Initialisierung}{section.7}% 114
+\BOOKMARK [2][]{subsection.7.5}{7.5 Implementierung}{section.7}% 115
+\BOOKMARK [3][]{subsubsection.7.5.1}{7.5.1 Ablaufkonzept}{subsection.7.5}% 116
+\BOOKMARK [3][]{subsubsection.7.5.2}{7.5.2 Implementierung der Navigation}{subsection.7.5}% 117
+\BOOKMARK [3][]{subsubsection.7.5.3}{7.5.3 Implementierung der Paket\374bergabe}{subsection.7.5}% 118
+\BOOKMARK [2][]{subsection.7.6}{7.6 Evaluierung der Ergebnisse}{section.7}% 119
+\BOOKMARK [2][]{subsection.7.7}{7.7 Herausforderungen}{section.7}% 120
+\BOOKMARK [2][]{subsection.7.8}{7.8 Ausblick}{section.7}% 121
+\BOOKMARK [1][]{section.8}{8 Integration}{}% 122
+\BOOKMARK [2][]{subsection.8.1}{8.1 Ablauf in physischer Zelle}{section.8}% 123
+\BOOKMARK [1][]{section.9}{9 Ergebnisse}{}% 124
+\BOOKMARK [2][]{subsection.9.1}{9.1 Realisierte Ziele}{section.9}% 125
+\BOOKMARK [2][]{subsection.9.2}{9.2 Fazit}{section.9}% 126
+\BOOKMARK [2][]{subsection.9.3}{9.3 Vision}{section.9}% 127
