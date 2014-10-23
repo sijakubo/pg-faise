@@ -1,6 +1,6 @@
 \subsection{Anforderungen}
 
-In diesem Kapitel werden sämtliche Anforderungen an die Funktionalität des Volksbots beschrieben. Diese sind in realistische und viosionierte Anforderungen unterteilt. Die realistischen Anforderungen beschreiben die tatsächlich umgesetzten Funktionalitäten.
+In diesem Kapitel werden sämtliche Anforderungen an die Funktionalität des Volksbots beschrieben. Diese sind in realistische und visionierte Anforderungen unterteilt. Die realistischen Anforderungen beschreiben die tatsächlich umgesetzten Funktionalitäten.
 
 \subsubsection*{Realistische Anforderungen}
 
@@ -10,7 +10,7 @@ In diesem Kapitel werden sämtliche Anforderungen an die Funktionalität des Vol
 
 \item \textbf{Planung}: Bei der Erteilung eines Auftrages und dem Bieten für einen Auftrag, muss der Volksbot die Route vom aktuellen Standort zum Startpunkt berechnen. Dies gilt ebenso vom Startpunkt zum Endpunkt.
 
-\item \textbf{Navigation}: Für die Routenplanung soll der kürzeste Weg verwendet werden, sofern möglich die direkte Verbindung zum gewüschten Ziel. Die Planung, Navigation und Positionierung erfolgt dabei auf dem entsprechenden Notebook.
+\item \textbf{Navigation}: Für die Routenplanung soll der kürzeste Weg verwendet werden, sofern möglich die direkte Verbindung zum gewünschten Ziel. Die Planung, Navigation und Positionierung erfolgt dabei auf dem entsprechenden Notebook.
 
 \item \textbf{Positionierung}: Die Umgebungskarte ist jedem Volksbot bekannt. Bei Bewegungen aktualisiert dieser seine Position mittels Odometrie, um die geplante Route korrekt zu befahren. Zur lokalen Unterstützung werden die Laserscanner verwendet werden. Startpunkt eines Volksbots wird statisch definiert.
 
@@ -30,6 +30,6 @@ In diesem Kapitel werden sämtliche Anforderungen an die Funktionalität des Vol
 
 \item \textbf{Energiemanagement}: Sobald ein Volksbot seinen kritischen Energiezustand erreicht, werden alle Auftragsverteilungen ignoriert und der Bot setzt die Dockingstation als primäres Ziel. Sollten mehrere Bots die Ladestation ansteuern, oder diese bereits belegt sein, so wird der Folgeablauf durch eine Queue oder ein anderes Verfahren geregelt.
 
-\item \textbf{Kollisionsvermeidung}: Sobald eine Kollision mit einem festen oder mobilen Objekt erkannt wird, wird eine Neuberechnung, Umplanung oder ein Ausweichverfahren eingeleitet um entsprechend zu reagieren.
+\item \textbf{Kollisionsvermeidung}: Sobald eine Kollision mit einem festen oder mobilen Objekt erkannt wird, wird eine Neuberechnung, Umplanung oder ein Ausweichverfahren eingeleitet um entsprechend zu reagieren. Die Kollisionsvermeidung reagiert dynamisch und reicht weiter als die Auslösung eines Notstopps. Bei Verwendung von mehreren Volksbots wird eine Bahnplanung mit Reservierungsfunktion realisiert.
 
 \end{itemize}

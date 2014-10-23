@@ -230,7 +230,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {7.4}Allgemeine Hardware Initialisierung}{93}{subsection.7.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {7.5}Implementierung}{93}{subsection.7.5}
+\contentsline {subsection}{\numberline {7.5}Implementierung}{94}{subsection.7.5}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {7.5.1}Ablaufkonzept}{94}{subsubsection.7.5.1}
 \defcounter {refsection}{0}\relax 
