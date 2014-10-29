@@ -244,9 +244,9 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {7.8}Ausblick}{101}{subsection.7.8}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {8}Integration}{103}{section.8}
+\contentsline {section}{\numberline {8}Unterschiede zwischen Realisierung in physischer Zelle und Simulation}{103}{section.8}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {8.1}Ablauf in physischer Zelle}{103}{subsection.8.1}
+\contentsline {subsection}{\numberline {8.1}Pathfinding in Simulation und Volksbot}{103}{subsection.8.1}
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {9}Ergebnisse}{104}{section.9}
 \defcounter {refsection}{0}\relax 
