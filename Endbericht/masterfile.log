@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2014.2.11)  29 OCT 2014 10:52
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2014.2.11)  29 OCT 2014 11:20
 entering extended mode
 **masterfile.tex
 (C:\Users\Jan\Documents\pg-faise\Endbericht\masterfile.tex
@@ -2585,68 +2585,64 @@ Package csquotes Info: Input encoding change on input line 48.
  ("C:\Program Files\MiKTeX 2.9\tex\latex\base\latin1.def"
 File: latin1.def 2008/03/30 v1.1d Input encoding file
 ) [97]
-<image/drive/sequenz.png, id=1490, 456.20438pt x 245.41687pt>
+<image/drive/sequenz.png, id=1490, 465.23813pt x 245.41687pt>
 File: image/drive/sequenz.png Graphic file (type png)
 
 <use image/drive/sequenz.png>
 Package pdftex.def Info: image/drive/sequenz.png used on input line 54.
-(pdftex.def)             Requested size: 441.01773pt x 237.25269pt.
+(pdftex.def)             Requested size: 441.01773pt x 232.64664pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 ) (C:\Users\Jan\Documents\pg-faise\Endbericht\src/drive/6_Evaluierung.tex)
 (C:\Users\Jan\Documents\pg-faise\Endbericht\src/drive/7_Herausforderungen.tex
-[98]
-<image/drive/Odometrie_vergleich.png, id=1507, 1003.49907pt x 453.19313pt>
+[98] [99 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/drive/sequenz.png>]
+<image/drive/Odometrie_vergleich.png, id=1512, 1003.49907pt x 453.19313pt>
 File: image/drive/Odometrie_vergleich.png Graphic file (type png)
 
 <use image/drive/Odometrie_vergleich.png>
 Package pdftex.def Info: image/drive/Odometrie_vergleich.png used on input line
- 7.
+ 11.
 (pdftex.def)             Requested size: 441.01773pt x 199.17047pt.
-
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-[99 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/drive/sequenz.png>]
-[100 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/drive/Odometrie_vergleic
-h.png>]) (C:\Users\Jan\Documents\pg-faise\Endbericht\src/drive/8_Ausblick.tex
-[101])) [102] (C:\Users\Jan\Documents\pg-faise\Endbericht\src/chapter8.tex)
-[103
-
-
-
-] (C:\Users\Jan\Documents\pg-faise\Endbericht\src/chapter9.tex [104
+ [100 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/drive/Odometrie_verglei
+ch.png>])
+(C:\Users\Jan\Documents\pg-faise\Endbericht\src/drive/8_Ausblick.tex [101]))
+[102] (C:\Users\Jan\Documents\pg-faise\Endbericht\src/chapter8.tex) [103
 
 
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 12--17
+(C:\Users\Jan\Documents\pg-faise\Endbericht\src/chapter9.tex [104
+
+
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 15--20
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 12--17
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 20--25
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 20--25
+Underfull \hbox (badness 10000) in paragraph at lines 15--20
 
  []
 
 [105]
-Underfull \hbox (badness 10000) in paragraph at lines 28--31
+Underfull \hbox (badness 10000) in paragraph at lines 23--28
 
  []
 
-[106]) [107]
+
+Underfull \hbox (badness 10000) in paragraph at lines 23--28
+
+ []
+
+[106]
+Underfull \hbox (badness 10000) in paragraph at lines 31--34
+
+ []
+
+) [107]
 
 LaTeX Warning: Empty bibliography on input line 212.
 
@@ -2667,9 +2663,15 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 214.
 (C:\Users\Jan\Documents\pg-faise\Endbericht\src/chapter9.aux))
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 214.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 214.
-Package rerunfilecheck Info: File `masterfile.out' has not changed.
-(rerunfilecheck)             Checksum: 9716D9E6DE92847630E905CBFF2141D4;10715.
 
+
+Package rerunfilecheck Warning: File `masterfile.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `masterfile.out':
+(rerunfilecheck)             Before: 9716D9E6DE92847630E905CBFF2141D4;10715
+(rerunfilecheck)             After:  E9D3A7290285125059AF54CD56E31616;10865.
 
 LaTeX Warning: There were undefined references.
 
@@ -2685,8 +2687,8 @@ Package logreq Info: Writing requests to 'masterfile.run.xml'.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 214.
  ) 
 Here is how much of TeX's memory you used:
- 22523 strings out of 493921
- 351260 string characters out of 3147288
+ 22525 strings out of 493921
+ 351298 string characters out of 3147288
  636207 words of memory out of 3000000
  24767 multiletter control sequences out of 15000+200000
  74254 words of font info for 114 fonts, out of 3000000 for 9000
@@ -2709,9 +2711,9 @@ alatino/uplb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplbi8
 a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplr8a.pfb><C:/Prog
 ram Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplr8a.pfb><C:/Program Files/MiKT
 eX 2.9/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on masterfile.pdf (114 pages, 5229895 bytes).
+Output written on masterfile.pdf (114 pages, 5231973 bytes).
 PDF statistics:
- 1693 PDF objects out of 1728 (max. 8388607)
- 451 named destinations out of 1000 (max. 500000)
+ 1695 PDF objects out of 1728 (max. 8388607)
+ 453 named destinations out of 1000 (max. 500000)
  1277 words of extra memory for PDF output out of 10000 (max. 10000000)
 
