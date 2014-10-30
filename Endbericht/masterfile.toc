@@ -248,9 +248,21 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {7.8}Ausblick}{101}{subsection.7.8}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {8}Unterschiede zwischen Realisierung in physischer Zelle und Simulation}{103}{section.8}
+\contentsline {section}{\numberline {8}Integration der Teilsysteme}{103}{section.8}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {8.1}Pathfinding in Simulation und Volksbot}{103}{subsection.8.1}
+\contentsline {subsection}{\numberline {8.1}Die physische Zelle}{103}{subsection.8.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {8.1.1}Aufbau}{103}{subsubsection.8.1.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {8.1.2}Ablauf}{103}{subsubsection.8.1.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {8.2}Integration von Simulation und physischer Zelle}{103}{subsection.8.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {8.3}Plattformbedingte Besonderheiten}{103}{subsection.8.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {8.3.1}Multiagentensystem und dessen Laufzeitumgebung}{103}{subsubsection.8.3.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {8.3.2}Pathfinding des Volksbot und in der Simulation}{103}{subsubsection.8.3.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {9}Ergebnisse}{104}{section.9}
 \defcounter {refsection}{0}\relax 
