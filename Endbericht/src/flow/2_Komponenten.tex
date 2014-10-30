@@ -32,11 +32,12 @@ Der \textbf{Speicher} besteht in der Regel aus dem Arbeitsspeicher (RAM, kurz f�
 
 Zwischenergebnisse, Messwerte von Sensoren, Steuergrößen usw. werden auf dem RAM abgelegt. Dieser ist deutlich schneller als der Flash-Speicher, verfügt aber in der Regel über deutlich weniger Speicherplatz. Alle Werte, welche zur Laufzeit im RAM abgelegt werden, sind im Gegensatz zum Flash-Speicher flüchtig. Das bedeutet, dass Daten bei einem Neustart des Mikrocontrollers nicht erhalten bleiben.
 
-Durch die \textbf{Peripheriekomponenten} wird die Verbindung und Kommunikation zwischen Controller und Außenwelt ermöglicht. Über die digitalen Ein- und Ausgänge (GPIO, kurz für: General Purpose Input/Output) können Sensoren, Aktoren oder andere Systeme mit dem Mikrocontroller verbunden werden. Die meisten Mikrocontroller bieten eine Vielzahl von Ein- und Ausgängen \cite[S. 13-16]{SOM2012}.
+Durch die \textbf{Peripheriekomponenten} wird die Verbindung und Kommunikation zwischen Controller und Außenwelt ermöglicht. Über die digitalen Ein- und Ausgänge (GPIO, kurz für: General Purpose Input/Output) können Sensoren, Aktoren oder andere Systeme mit dem Mikrocontroller verbunden werden. Die meisten Mikrocontroller bieten eine Vielzahl von Ein- und Ausgängen \cite{Brinkschulte:2002:Mikrocontroller}.
 
 Bei der Umsetzung des Projekts wurden \textsc{Mica}z-Module eingesetzt. Im Folgenden werden kurz die Eigenheiten dieser Module erläutert.
 
 \paragraph{\textsc{Mica}z-Modul}
+\label{MICAZ}
 Ein \textsc{Mica}z-Modul ist drahtloser Sensornetzwerkknoten von der Firma Memsic. Mehrere dieser Module übernehmen in der physischen Zelle die Berechnung Geschäftslogik und die Steuerung der Rampen. \autoref{fig:micaz} zeigt ein solches Modul, während \autoref{fig:blockmicaz}  ein Blockdiagramm von dessen Struktur darstellt. Herzstück der Module ist ein ATMega128L-Mikrocontroller. Bei diesem handelt es sich um einen Low-Power-Mikrocontroller von der Firma Atmel. Er verfügt  über einen 128 KB großen Speicher für Programmcode und 4 KB Arbeitsspeicher. Zudem können Konfigurationsdaten in einem 4 KB großen EEPROM abgelegt werden.
 
 Darüber hinaus verfügt ein \textsc{Mica}z-Module über einen CC2420-Funkchip der Firma Texas Instruments. Dieser ermöglicht die drahtlose Kommunikation mit anderen Modulen auf einer Frequenz von 2.4 GHz ermöglicht. Es wird dabei der IEEE 802.15.4 Standard verwendet. Eine Antenne kann über eine MMCX-Schnittstelle mit dem Modul verbunden werden, um Signalstärke und -reichweite zu erhöhen. 
@@ -51,7 +52,7 @@ Um Messdaten speichern zu können ist weiterhin ein 528 KB großer Speicherbaust
 \end{figure}
 
 Zugang zu einer Vielzahl der Leitungen des Moduls gewährt ein 51-poliger Steckverbinder. Über eine Erweiterungsplatine werden so etwa die Lichtschranken und Magnetbolzen der Rampe angeschlossen. Denkbar wäre auch ein größerer Arbeitsspeicher, alle nötigen Pins des Mikrocontrollers sind über den Steckverbinder erreichbar.
-Im Projekt wurde die Steckverbindung weiterhin dafür genutzt, die \textsc{Mica}z-Module über ein \textsc{Mib}520 an einen PC anzuschließen, um sie über eine UART-Schnittstelle auszulesen und per JTAG (siehe \autoref{sec:JTAGICE3}) zu programmieren \cite{MICSHEET,C2420SHEET}.
+Im Projekt wurde die Steckverbindung weiterhin dafür genutzt, die \textsc{Mica}z-Module über ein \textsc{Mib}520 an einen PC anzuschließen, um sie über eine UART-Schnittstelle auszulesen und per JTAG (siehe \autoref{sec:JTAGICE3}) zu programmieren \cite{Memsic:2014:Online,CC2420:2014:Online}.
 
 \begin{figure}[th]
   \centering
