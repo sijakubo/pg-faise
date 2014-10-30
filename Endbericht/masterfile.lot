@@ -1,3 +1,7 @@
 \boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
 \defcounter {refsection}{0}\relax 
 \select@language {ngerman}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {1}{\ignorespaces UART-Kommunikation von \textsc {Mica}z-Modul zu Volksbot\relax }}{104}{table.caption.60}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {2}{\ignorespaces UART-Kommunikation von Volksbot zu \textsc {Mica}z-Modul\relax }}{104}{table.caption.61}
