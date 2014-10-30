@@ -1,1 +1,16 @@
 \subsubsection{Multiagentensystem und dessen Laufzeitumgebung}
+Sowohl im Teilsystem Simulation als auch im Materialfluss kommen Agenten zum Einsatz, die die Betriebslogik abbilden. 
+
+Da beide jedoch auf sehr unterschiedlichen Plattformen (Webserver beziehungsweise verteilte Mikrocontroller) zum Einsatz kommen, kann kein einheitliches Multiagentensystem zum Einsatz kommen. Stattdessen wird in der Simulation JADE verwendet, während im Materialfluss ein eigens entwickeltes AgentRTE zum Einsatz kommt, das speziell für den Einsatz auf Mikrocontrollern angepasst wurde. Bedingt durch die zur Verfügung stehenden Ressourcen ist dieses System im Bezug auf die maximale Kommunikationsbandbreite, die maximale Anzahl an Agenten und die Anzahl der gepufferten Nachrichten deutlich eingeschränkter. Auch erlaubt es im Gegensatz zu JADE keine \textit{Behaviors}, sondern das Verhalten der Agenten muss prozedural oder mit Zustandsautomaten abgebildet werden.
+
+Die ausgetauschten Agenten-Nachrichten hingegen sind in beiden Systemen zumindest an den FIPA-Standard angelehnt, eine Umwandlung von einem in das andere Format kann daher durch eine einfache Abbildung realisiert werden. Weiterhin ist im physischen System die genaue Reihenfolge der Nachrichten-Parameter von großer Bedeutung, da hier nicht mit Objekten, sondern mit Byte-Arrays gearbeitet wird, die entsprechend interpretiert werden.
+
+\begin{itemize}
+\item TODO für Simulation:
+\begin{itemize}
+\item Welche Agenten gibt es zusätzlich zu Platform-, Routing-, Order- und Paketagenten?
+\item Warum musste von dieser Struktur abgewichen werden?
+\item Begründung: Warum konnten Paketagenten nicht ein einzelnes Paket repräsentieren?
+\item Kann all das bei der Integration zu Schwierigkeiten führen? Worauf muss evtl geachtet werden?
+\end{itemize}
+\end{itemize}
