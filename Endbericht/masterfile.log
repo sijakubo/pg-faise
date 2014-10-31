@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2014.10.13)  31 OCT 2014 19:34
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2014.10.13)  31 OCT 2014 19:41
 entering extended mode
 **masterfile.tex
 (C:\Users\Jan\Documents\pg-faise\Endbericht\masterfile.tex
@@ -1461,14 +1461,15 @@ Package biblatex Warning: Data encoding is 'utf8'.
 (biblatex)                Use backend=biber.
 
 Package biblatex Info: Trying to load bibliographic data...
-Package biblatex Info: ... file 'masterfile.bbl' not found.
-No file masterfile.bbl.
+Package biblatex Info: ... file 'masterfile.bbl' found.
+(C:\Users\Jan\Documents\pg-faise\Endbericht\masterfile.bbl)
 Package biblatex Info: Reference section=0 on input line 64.
 Package biblatex Info: Reference segment=0 on input line 64.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \c@lstlisting=\count317
+
 (C:\Users\Jan\Documents\pg-faise\Endbericht\src/title.tex
 <image/UniLogo.png, id=539, 1187.43625pt x 367.3725pt>
 File: image/UniLogo.png Graphic file (type png)
@@ -1533,33 +1534,15 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 [4] (C:\Users\Jan\Documents\pg-faise\Endbericht\masterfile.lof [5
 
-]
-LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <10.95> not available
-(Font)              Font shape `T1/ppl/b/n' tried instead on input line 69.
-
-Overfull \hbox (37.97815pt too wide) in paragraph at lines 69--69
- [][] [][]\T1/ppl/m/n/10.95 Schematischer Auf-bau ei-nes Mi-kro-con-trol-lers v
-gl. [[]][] [][]  
- []
-
-)
+])
 \tf@lof=\write6
- (C:\Users\Jan\Documents\pg-faise\Endbericht\masterfile.lot)
+
+(C:\Users\Jan\Documents\pg-faise\Endbericht\masterfile.lot)
 \tf@lot=\write7
 ) [6]
 (C:\Users\Jan\Documents\pg-faise\Endbericht\src/chapter1.tex
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
 (Font)              Font shape `T1/phv/b/n' tried instead on input line 5.
-
-
-LaTeX Warning: Citation 'ieft' on page 1 undefined on input line 6.
-
-
-LaTeX Warning: Citation 'stf' on page 1 undefined on input line 8.
-
-
-LaTeX Warning: Citation 'fts' on page 1 undefined on input line 10.
-
 
 Underfull \hbox (badness 10000) in paragraph at lines 6--13
 
@@ -1604,44 +1587,15 @@ LaTeX Font Info:    Try loading font information for TS1+ppl on input line 29.
  ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ts1ppl.fd"
 File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
 ))
-[3] (C:\Users\Jan\Documents\pg-faise\Endbericht\src/chapter2.tex
-
-LaTeX Warning: Citation 'Guenther:Krueger:2000' on page 4 undefined on input li
-ne 5.
-
-
-LaTeX Warning: Citation 'Werner:2014:Online' on page 4 undefined on input line 
-12.
-
-
-LaTeX Warning: Citation 'Martin:2006' on page 4 undefined on input line 26.
-
-
-LaTeX Warning: Citation 'Guenther:Krueger:2000' on page 4 undefined on input li
-ne 31.
-
-
-LaTeX Warning: Citation 'Guenther:2011' on page 4 undefined on input line 40.
-
-[4
+[3] (C:\Users\Jan\Documents\pg-faise\Endbericht\src/chapter2.tex [4
 
 
 
-]
+] [5]
+LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <10.95> not available
+(Font)              Font shape `T1/ppl/b/n' tried instead on input line 84.
 
-LaTeX Warning: Citation 'VDI:92' on page 5 undefined on input line 47.
-
-
-LaTeX Warning: Citation 'Guenther:2011' on page 5 undefined on input line 57.
-
-[5]
-
-LaTeX Warning: Citation 'Guenther:2011' on page 6 undefined on input line 82.
-
-
-LaTeX Warning: Citation 'Guenther:2011' on page 6 undefined on input line 89.
-
-[6] <image/Prinzipskizze_induktiven.jpg, id=855, 459.21562pt x 124.96687pt>
+[6] <image/Prinzipskizze_induktiven.jpg, id=889, 459.21562pt x 124.96687pt>
 File: image/Prinzipskizze_induktiven.jpg Graphic file (type jpg)
 
 <use image/Prinzipskizze_induktiven.jpg>
@@ -1649,11 +1603,7 @@ Package pdftex.def Info: image/Prinzipskizze_induktiven.jpg used on input line
 98.
 (pdftex.def)             Requested size: 396.91325pt x 108.01859pt.
 
-
-LaTeX Warning: Citation 'Guenther:2011' on page 7 undefined on input line 105.
-
-
-<image/Prinzipskizze_Koppelnavigation_rechts.jpg, id=857, 461.47406pt x 115.180
+<image/Prinzipskizze_Koppelnavigation_rechts.jpg, id=892, 461.47406pt x 115.180
 31pt>
 File: image/Prinzipskizze_Koppelnavigation_rechts.jpg Graphic file (type jpg)
  <use image/Prinzipskizze_Koppelnavigation_rechts.jpg>
@@ -1661,12 +1611,7 @@ Package pdftex.def Info: image/Prinzipskizze_Koppelnavigation_rechts.jpg used o
 n input line 109.
 (pdftex.def)             Requested size: 396.91325pt x 99.06717pt.
 
-
-LaTeX Warning: Citation 'Werner:2014:Online' on page 7 undefined on input line 
-123.
-
-
-<image/Prinzipskizze_Koppelnavigation_links.jpg, id=859, 304.13625pt x 208.78pt
+<image/Prinzipskizze_Koppelnavigation_links.jpg, id=895, 304.13625pt x 208.78pt
 >
 File: image/Prinzipskizze_Koppelnavigation_links.jpg Graphic file (type jpg)
  <use image/Prinzipskizze_Koppelnavigation_links.jpg>
@@ -1676,12 +1621,9 @@ Package pdftex.def Info: image/Prinzipskizze_Koppelnavigation_links.jpg used on
  [7 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/Prinzipskizze_induktiven.
 jpg> <C:/Users/Jan/Documents/pg-faise/Endbericht/image/Prinzipskizze_Koppelnavi
 gation_rechts.jpg>]
-
-LaTeX Warning: Citation 'Guenther:2011' on page 8 undefined on input line 135.
-
 [8 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/Prinzipskizze_Koppelnaviga
 tion_links.jpg>]
-<image/Prinzipskizze_zur_Navigation_mittels_GPS.jpg, id=868, 563.85657pt x 140.
+<image/Prinzipskizze_zur_Navigation_mittels_GPS.jpg, id=905, 563.85657pt x 140.
 77594pt>
 File: image/Prinzipskizze_zur_Navigation_mittels_GPS.jpg Graphic file (type jpg
 )
@@ -1690,10 +1632,7 @@ Package pdftex.def Info: image/Prinzipskizze_zur_Navigation_mittels_GPS.jpg use
 d on input line 145.
 (pdftex.def)             Requested size: 396.91325pt x 99.09666pt.
 
-
-LaTeX Warning: Citation 'VDI:1994' on page 9 undefined on input line 167.
-
-<image/Systemarchitektur_FTS.jpg, id=869, 732.7375pt x 365.365pt>
+<image/Systemarchitektur_FTS.jpg, id=907, 732.7375pt x 365.365pt>
 File: image/Systemarchitektur_FTS.jpg Graphic file (type jpg)
 
 <use image/Systemarchitektur_FTS.jpg>
@@ -1702,111 +1641,50 @@ Package pdftex.def Info: image/Systemarchitektur_FTS.jpg used on input line 179
 (pdftex.def)             Requested size: 396.91325pt x 197.91298pt.
  [9 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/Prinzipskizze_zur_Navigat
 ion_mittels_GPS.jpg>]
-
-LaTeX Warning: Citation 'Guenther:2011' on page 10 undefined on input line 189.
-
-
 File: image/Systemarchitektur_FTS.jpg Graphic file (type jpg)
+
 <use image/Systemarchitektur_FTS.jpg>
 Package pdftex.def Info: image/Systemarchitektur_FTS.jpg used on input line 196
 .
 (pdftex.def)             Requested size: 396.91325pt x 197.91298pt.
-
-
-LaTeX Warning: Citation 'Langenbach:2012' on page 10 undefined on input line 20
-8.
-
-[10 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/Systemarchitektur_FTS.jpg
->] <image/Wertschoepfungskette.jpg, id=878, 705.63625pt x 318.18875pt>
+ [10 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/Systemarchitektur_FTS.jp
+g>]
+<image/Wertschoepfungskette.jpg, id=919, 705.63625pt x 318.18875pt>
 File: image/Wertschoepfungskette.jpg Graphic file (type jpg)
 
 <use image/Wertschoepfungskette.jpg>
 Package pdftex.def Info: image/Wertschoepfungskette.jpg used on input line 222.
 
 (pdftex.def)             Requested size: 396.91325pt x 178.97586pt.
- [11]
-
-LaTeX Warning: Citation 'VDI:1978' on page 12 undefined on input line 233.
-
+ [11] [12 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/Wertschoepfungskett
+e.jpg>]
 
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
 (hyperref)                than one, level fixed on input line 241.
 
-
-LaTeX Warning: Citation 'Ten:2008' on page 12 undefined on input line 248.
-
-
-LaTeX Warning: Citation 'Wulz:Johannes:2008' on page 12 undefined on input line
- 256.
-
-<image/Stetigfoerderer.jpg, id=883, 411.5375pt x 270.00874pt>
+<image/Stetigfoerderer.jpg, id=934, 411.5375pt x 270.00874pt>
 File: image/Stetigfoerderer.jpg Graphic file (type jpg)
 
 <use image/Stetigfoerderer.jpg>
 Package pdftex.def Info: image/Stetigfoerderer.jpg used on input line 260.
 (pdftex.def)             Requested size: 308.71106pt x 202.54312pt.
- [12 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/Wertschoepfungskette.jpg
->]
-
-LaTeX Warning: Citation 'VDI:1978' on page 13 undefined on input line 268.
 
 
-LaTeX Warning: Citation 'Stich:Bruckner:2002' on page 13 undefined on input lin
-e 277.
+LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-
-LaTeX Warning: Citation 'Langenbach:2012' on page 13 undefined on input line 28
-3.
-
-
-Underfull \hbox (badness 3302) in paragraph at lines 265--284
-\T1/ppl/m/n/10.95 Men-gen-aus-gleich, Raum-aus-gleich und Sortimentsausgleich[[
-]].
- []
-
-[13 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/Stetigfoerderer.jpg>]
-[14]
-
-LaTeX Warning: Citation 'GH:2010' on page 15 undefined on input line 304.
-
-
-LaTeX Warning: Citation 'BZW:1998' on page 15 undefined on input line 307.
-
-
-LaTeX Warning: Citation 'Roidl:2012' on page 15 undefined on input line 307.
-
-
+[13] [14 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/Stetigfoerderer.jpg>
+]
 Overfull \hbox (6.47452pt too wide) in paragraph at lines 303--308
 \T1/ppl/m/n/10.95 Zur Um-set-zung der de-zen-tra-len Steue-rung wer-den Soft-wa
 -re-agen-ten ein-ge-setzt. Bei Software-
  []
 
-
-LaTeX Warning: Citation 'Roidl:2012' on page 15 undefined on input line 313.
-
-[15] [16]
-
-LaTeX Warning: Citation 'Guenther:2011' on page 17 undefined on input line 354.
+[15] [16]) [17] (C:\Users\Jan\Documents\pg-faise\Endbericht\src/chapter3.tex
+[18
 
 
 
-LaTeX Warning: Citation 'Guenther:2011' on page 17 undefined on input line 359.
-
-
-
-LaTeX Warning: Citation 'Guenther:2011' on page 17 undefined on input line 365.
-
-
-
-LaTeX Warning: Citation 'Guenther:2011' on page 17 undefined on input line 368.
-
-
-) [17] (C:\Users\Jan\Documents\pg-faise\Endbericht\src/chapter3.tex [18
-
-
-
-]
-<image/Projektorganisation_Scrum.png, id=914, 831.85782pt x 244.66406pt>
+] <image/Projektorganisation_Scrum.png, id=977, 831.85782pt x 244.66406pt>
 File: image/Projektorganisation_Scrum.png Graphic file (type png)
 
 <use image/Projektorganisation_Scrum.png>
@@ -1817,7 +1695,7 @@ Package pdftex.def Info: image/Projektorganisation_Scrum.png used on input line
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[19] <image/Vorgehensmodell_Prototyping.png, id=919, 859.71187pt x 493.845pt>
+[19] <image/Vorgehensmodell_Prototyping.png, id=982, 859.71187pt x 493.845pt>
 File: image/Vorgehensmodell_Prototyping.png Graphic file (type png)
 
 <use image/Vorgehensmodell_Prototyping.png>
@@ -1826,7 +1704,7 @@ ne 68.
 (pdftex.def)             Requested size: 396.91325pt x 228.00035pt.
  [20 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/Projektorganisation_Scru
 m.png>]
-<image/logoAtlassian.png, id=924, 810.02625pt x 250.9375pt>
+<image/logoAtlassian.png, id=987, 810.02625pt x 250.9375pt>
 File: image/logoAtlassian.png Graphic file (type png)
 
 <use image/logoAtlassian.png>
@@ -1836,19 +1714,19 @@ Package pdftex.def Info: image/logoAtlassian.png used on input line 83.
 ing.png> <C:/Users/Jan/Documents/pg-faise/Endbericht/image/logoAtlassian.png>])
  [22]
 (C:\Users\Jan\Documents\pg-faise\Endbericht\src/chapter4.tex
-<image/Alg1.png, id=937, 662.475pt x 543.53062pt>
+<image/Alg1.png, id=1000, 662.475pt x 543.53062pt>
 File: image/Alg1.png Graphic file (type png)
  <use image/Alg1.png>
 Package pdftex.def Info: image/Alg1.png used on input line 8.
 (pdftex.def)             Requested size: 264.61333pt x 217.10153pt.
 
-<image/Alg2.png, id=939, 662.475pt x 543.53062pt>
+<image/Alg2.png, id=1002, 662.475pt x 543.53062pt>
 File: image/Alg2.png Graphic file (type png)
  <use image/Alg2.png>
 Package pdftex.def Info: image/Alg2.png used on input line 17.
 (pdftex.def)             Requested size: 264.61333pt x 217.10153pt.
 
-<image/Alg3.png, id=941, 661.72218pt x 543.53062pt>
+<image/Alg3.png, id=1004, 661.72218pt x 543.53062pt>
 File: image/Alg3.png Graphic file (type png)
  <use image/Alg3.png>
 Package pdftex.def Info: image/Alg3.png used on input line 25.
@@ -1870,50 +1748,35 @@ Underfull \hbox (badness 10000) in paragraph at lines 4--129
 
 
 ]
-
-LaTeX Warning: Citation 'plstg' on page 26 undefined on input line 16.
-
-
-LaTeX Warning: Citation 'plstg' on page 26 undefined on input line 18.
-
-
 Underfull \hbox (badness 10000) in paragraph at lines 16--19
 
  []
 
-[26]
-
-LaTeX Warning: Citation 'gwt' on page 27 undefined on input line 27.
-
-[27]
-
-LaTeX Warning: Citation 'mas' on page 28 undefined on input line 32.
-
-
+[26] [27]
 Underfull \hbox (badness 10000) in paragraph at lines 32--35
 
  []
 
-<image/grobarchitektur.jpg, id=975, 778.91pt x 438.63875pt>
+<image/grobarchitektur.jpg, id=1044, 778.91pt x 438.63875pt>
 File: image/grobarchitektur.jpg Graphic file (type jpg)
 
 <use image/grobarchitektur.jpg>
 Package pdftex.def Info: image/grobarchitektur.jpg used on input line 38.
 (pdftex.def)             Requested size: 352.81552pt x 198.68407pt.
- [28 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/grobarchitektur.jpg>] <i
-mage/Mockup.png, id=981, 1007.765pt x 554.07pt>
+ [28 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/grobarchitektur.jpg>]
+<image/Mockup.png, id=1051, 1007.765pt x 554.07pt>
 File: image/Mockup.png Graphic file (type png)
-
-<use image/Mockup.png>
+ <use image/Mockup.png>
 Package pdftex.def Info: image/Mockup.png used on input line 47.
 (pdftex.def)             Requested size: 352.81552pt x 193.97813pt.
- [29 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/Mockup.png (PNG copy)>] 
+
+[29 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/Mockup.png (PNG copy)>]
 [30]
 Underfull \hbox (badness 10000) in paragraph at lines 76--81
 
  []
 
-[31] [32] <image/Interaktion.jpg, id=1012, 914.41624pt x 635.37375pt>
+[31] [32] <image/Interaktion.jpg, id=1082, 914.41624pt x 635.37375pt>
 File: image/Interaktion.jpg Graphic file (type jpg)
 
 <use image/Interaktion.jpg>
@@ -1923,20 +1786,14 @@ Package pdftex.def Info: image/Interaktion.jpg used on input line 107.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[33]
-
-LaTeX Warning: Citation 'jade' on page 34 undefined on input line 116.
-
-LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <9> not available
-(Font)              Font shape `T1/ppl/b/n' tried instead on input line 116.
-<image/architekturSimu.jpg, id=1029, 760.8425pt x 438.63875pt>
+[33] <image/architekturSimu.jpg, id=1100, 760.8425pt x 438.63875pt>
 File: image/architekturSimu.jpg Graphic file (type jpg)
 
 <use image/architekturSimu.jpg>
 Package pdftex.def Info: image/architekturSimu.jpg used on input line 119.
 (pdftex.def)             Requested size: 352.81552pt x 203.40938pt.
  [34 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/Interaktion.jpg>] <image
-/Gui.PNG, id=1035, 883.04906pt x 556.32843pt>
+/Gui.PNG, id=1107, 883.04906pt x 556.32843pt>
 File: image/Gui.PNG Graphic file (type png)
 
 <use image/Gui.PNG>
@@ -1946,7 +1803,7 @@ Package pdftex.def Info: image/Gui.PNG used on input line 127.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<image/Auftragsgenerierung.PNG, id=1038, 715.17188pt x 125.71968pt>
+<image/Auftragsgenerierung.PNG, id=1110, 715.17188pt x 125.71968pt>
 File: image/Auftragsgenerierung.PNG Graphic file (type png)
 
 <use image/Auftragsgenerierung.PNG>
@@ -1973,14 +1830,14 @@ LaTeX Warning: Citation 'jadetwo' on page 36 undefined on input line 143.
 
 [36 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/Gui.PNG> <C:/Users/Jan/Do
 cuments/pg-faise/Endbericht/image/Auftragsgenerierung.PNG>] [37] [38]
-<image/Jobagent.png, id=1063, 831.85782pt x 406.51875pt>
+<image/Jobagent.png, id=1135, 831.85782pt x 406.51875pt>
 File: image/Jobagent.png Graphic file (type png)
 
 <use image/Jobagent.png>
 Package pdftex.def Info: image/Jobagent.png used on input line 173.
 (pdftex.def)             Requested size: 441.02217pt x 264.62483pt.
  [39 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/Jobagent.png>] <image/Ei
-ngangAusgang.png, id=1070, 854.44218pt x 450.9347pt>
+ngangAusgang.png, id=1142, 854.44218pt x 450.9347pt>
 File: image/EingangAusgang.png Graphic file (type png)
 
 <use image/EingangAusgang.png>
@@ -1991,14 +1848,14 @@ Package pdftex.def Info: image/EingangAusgang.png used on input line 195.
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [40] [41 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/EingangAusgang.png>]
-<image/AusgangZW.png, id=1081, 948.54375pt x 423.83344pt>
+<image/AusgangZW.png, id=1153, 948.54375pt x 423.83344pt>
 File: image/AusgangZW.png Graphic file (type png)
 
 <use image/AusgangZW.png>
 Package pdftex.def Info: image/AusgangZW.png used on input line 213.
 (pdftex.def)             Requested size: 441.01039pt x 264.62361pt.
  [42 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/AusgangZW.png>] <image/A
-uktion.PNG, id=1089, 718.93594pt x 370.38374pt>
+uktion.PNG, id=1161, 718.93594pt x 370.38374pt>
 File: image/Auktion.PNG Graphic file (type png)
 
 <use image/Auktion.PNG>
@@ -2009,7 +1866,7 @@ Package pdftex.def Info: image/Auktion.PNG used on input line 235.
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [43] [44 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/Auktion.PNG>]
-<image/Fahren.PNG, id=1100, 676.02562pt x 344.78813pt>
+<image/Fahren.PNG, id=1172, 676.02562pt x 344.78813pt>
 File: image/Fahren.PNG Graphic file (type png)
  <use image/Fahren.PNG>
 Package pdftex.def Info: image/Fahren.PNG used on input line 255.
@@ -2025,11 +1882,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 272--277
 
  []
 
-[46]
-
-LaTeX Warning: Citation 'gwtrpc' on page 47 undefined on input line 290.
-
-<image/RPCS.PNG, id=1113, 740.7675pt x 389.20406pt>
+[46] <image/RPCS.PNG, id=1186, 740.7675pt x 389.20406pt>
 File: image/RPCS.PNG Graphic file (type png)
  <use image/RPCS.PNG>
 Package pdftex.def Info: image/RPCS.PNG used on input line 295.
@@ -2039,7 +1892,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 290--299
 
  []
 
-[47] <image/StartMAS.PNG, id=1118, 676.77844pt x 456.20438pt>
+[47] <image/StartMAS.PNG, id=1192, 676.77844pt x 456.20438pt>
 File: image/StartMAS.PNG Graphic file (type png)
 
 <use image/StartMAS.PNG>
@@ -2061,14 +1914,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 300--309
  []
 
 [48 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/RPCS.PNG>]
-<image/Jobtimer.PNG, id=1127, 599.99156pt x 315.42844pt>
+<image/Jobtimer.PNG, id=1201, 599.99156pt x 315.42844pt>
 File: image/Jobtimer.PNG Graphic file (type png)
 
 <use image/Jobtimer.PNG>
 Package pdftex.def Info: image/Jobtimer.PNG used on input line 314.
 (pdftex.def)             Requested size: 441.0297pt x 264.63078pt.
 
-<image/addJob.PNG, id=1129, 326.72063pt x 164.11313pt>
+<image/addJob.PNG, id=1203, 326.72063pt x 164.11313pt>
 File: image/addJob.PNG Graphic file (type png)
  <use image/addJob.PNG>
 Package pdftex.def Info: image/addJob.PNG used on input line 323.
@@ -2093,32 +1946,16 @@ Underfull \hbox (badness 10000) in paragraph at lines 310--327
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [50 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/Jobtimer.PNG>]
-
-LaTeX Warning: Citation 'gwteventservice' on page 51 undefined on input line 32
-9.
-
-
-LaTeX Warning: Citation 'gwteventservice' on page 51 undefined on input line 32
-9.
-
-<image/addEvent.PNG, id=1141, 548.80031pt x 146.79843pt>
+<image/addEvent.PNG, id=1217, 548.80031pt x 146.79843pt>
 File: image/addEvent.PNG Graphic file (type png)
 
 <use image/addEvent.PNG>
 Package pdftex.def Info: image/addEvent.PNG used on input line 333.
 (pdftex.def)             Requested size: 352.82205pt x 176.40363pt.
-
-
-LaTeX Warning: Citation 'gwteventservice' on page 51 undefined on input line 33
-8.
-
-
-LaTeX Warning: Citation 'gwteventservice' on page 51 undefined on input line 34
-0.
-
-<image/Vis.PNG, id=1143, 563.10374pt x 419.31656pt>
+ <image/Vis.PNG, id=1221, 563.10374pt x 419.31656pt>
 File: image/Vis.PNG Graphic file (type png)
- <use image/Vis.PNG>
+
+<use image/Vis.PNG>
 Package pdftex.def Info: image/Vis.PNG used on input line 344.
 (pdftex.def)             Requested size: 441.02353pt x 264.6123pt.
 
@@ -2157,107 +1994,54 @@ ers/Jan/Documents/pg-faise/Endbericht/image/Vis.PNG>]) [54]
 
 
 ]) (C:\Users\Jan\Documents\pg-faise\Endbericht\src/flow/2_Komponenten.tex
-[56] <image/flow/rampe.png, id=1184, 454.8192pt x 808.9422pt>
+[56] <image/flow/rampe.png, id=1263, 454.8192pt x 808.9422pt>
 File: image/flow/rampe.png Graphic file (type png)
 
 <use image/flow/rampe.png>
 Package pdftex.def Info: image/flow/rampe.png used on input line 13.
 (pdftex.def)             Requested size: 220.50887pt x 392.20071pt.
  [57 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/flow/rampe.png>]
-
-LaTeX Warning: Citation 'ECHT2005' on page 58 undefined on input line 21.
-
-<image/flow/schemamc.pdf, id=1191, 538.95053pt x 481.81204pt>
+<image/flow/schemamc.pdf, id=1271, 538.95053pt x 481.81204pt>
 File: image/flow/schemamc.pdf Graphic file (type pdf)
 
 <use image/flow/schemamc.pdf>
 Package pdftex.def Info: image/flow/schemamc.pdf used on input line 24.
 (pdftex.def)             Requested size: 352.81552pt x 315.41643pt.
-
-
-LaTeX Warning: Citation 'Brinkschulte:2002:Mikrocontroller' on page 58 undefine
-d on input line 25.
-
-
-LaTeX Warning: Citation 'Brinkschulte:2002:Mikrocontroller' on page 58 undefine
-d on input line 25.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 25--25
-[][][]|\T1/ppl/m/n/10.95 Sche-ma-ti-scher Auf-bau ei-nes Mi-kro-con-trol-lers v
-gl.
- []
-
-[58 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/flow/schemamc.pdf>]
-
-LaTeX Warning: Citation 'Brinkschulte:2002:Mikrocontroller' on page 59 undefine
-d on input line 35.
-
+ [58 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/flow/schemamc.pdf>]
 LaTeX Font Info:    Font shape `T1/phv/bx/sc' in size <10.95> not available
 (Font)              Font shape `T1/phv/b/sc' tried instead on input line 41.
-[59] <image/flow/AT45DB041.png, id=1215, 535.2497pt x 289.08pt>
+ [59]
+<image/flow/AT45DB041.png, id=1299, 535.2497pt x 289.08pt>
 File: image/flow/AT45DB041.png Graphic file (type png)
 
 <use image/flow/AT45DB041.png>
 Package pdftex.def Info: image/flow/AT45DB041.png used on input line 49.
 (pdftex.def)             Requested size: 441.01773pt x 238.1984pt.
 
-
-LaTeX Warning: Citation 'AT45DB041A:2014:Online' on page 60 undefined on input 
-line 50.
-
-
-LaTeX Warning: Citation 'AT45DB041A:2014:Online' on page 60 undefined on input 
-line 50.
-
-
-LaTeX Warning: Citation 'Memsic:2014:Online' on page 60 undefined on input line
- 55.
-
-
-LaTeX Warning: Citation 'CC2420:2014:Online' on page 60 undefined on input line
- 55.
-
-<image/flow/micaz.png, id=1217, 257.46187pt x 262.73157pt>
+<image/flow/micaz.png, id=1305, 257.46187pt x 262.73157pt>
 File: image/flow/micaz.png Graphic file (type png)
 
 <use image/flow/micaz.png>
 Package pdftex.def Info: image/flow/micaz.png used on input line 59.
 (pdftex.def)             Requested size: 176.40439pt x 180.01813pt.
 
-
-LaTeX Warning: Citation 'Memsic:2014:Online' on page 60 undefined on input line
- 60.
-
-
-LaTeX Warning: Citation 'Memsic:2014:Online' on page 60 undefined on input line
- 60.
-
-<image/flow/blockmicaz.PNG, id=1218, 161.10187pt x 260.47313pt>
+<image/flow/blockmicaz.PNG, id=1308, 161.10187pt x 260.47313pt>
 File: image/flow/blockmicaz.PNG Graphic file (type png)
 
 <use image/flow/blockmicaz.PNG>
 Package pdftex.def Info: image/flow/blockmicaz.PNG used on input line 66.
 (pdftex.def)             Requested size: 176.40439pt x 285.22563pt.
-
-
-LaTeX Warning: Citation 'Memsic:2014:Online' on page 60 undefined on input line
- 67.
-
-
-LaTeX Warning: Citation 'Memsic:2014:Online' on page 60 undefined on input line
- 67.
-
-) (C:\Users\Jan\Documents\pg-faise\Endbericht\src/flow/3_Werkzeuge.tex [60 <C:/
-Users/Jan/Documents/pg-faise/Endbericht/image/flow/AT45DB041.png>]
-<image/flow/AVRStudio_1.png, id=1226, 621.82312pt x 387.69844pt>
+)
+(C:\Users\Jan\Documents\pg-faise\Endbericht\src/flow/3_Werkzeuge.tex [60 <C:/Us
+ers/Jan/Documents/pg-faise/Endbericht/image/flow/AT45DB041.png>]
+<image/flow/AVRStudio_1.png, id=1319, 621.82312pt x 387.69844pt>
 File: image/flow/AVRStudio_1.png Graphic file (type png)
 
 <use image/flow/AVRStudio_1.png>
 Package pdftex.def Info: image/flow/AVRStudio_1.png used on input line 13.
 (pdftex.def)             Requested size: 374.86775pt x 233.7271pt.
 
-<image/flow/AVRStudio_2.png, id=1227, 685.05937pt x 493.0922pt>
+<image/flow/AVRStudio_2.png, id=1320, 685.05937pt x 493.0922pt>
 File: image/flow/AVRStudio_2.png Graphic file (type png)
 
 <use image/flow/AVRStudio_2.png>
@@ -2271,15 +2055,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 Users/Jan/Documents/pg-faise/Endbericht/image/flow/blockmicaz.PNG> <C:/Users/Ja
 n/Documents/pg-faise/Endbericht/image/flow/AVRStudio_1.png>] [63 <C:/Users/Jan/
 Documents/pg-faise/Endbericht/image/flow/AVRStudio_2.png>]
-
-LaTeX Warning: Citation 'AtmelJTAGICE3:2014:Online' on page 64 undefined on inp
-ut line 33.
-
-
-LaTeX Warning: Citation 'IEEE1149:2014:Online' on page 64 undefined on input li
-ne 33.
-
-<image/flow/jtagice3.jpg, id=1242, 250.9375pt x 149.55875pt>
+<image/flow/jtagice3.jpg, id=1337, 250.9375pt x 149.55875pt>
 File: image/flow/jtagice3.jpg Graphic file (type jpg)
 
 <use image/flow/jtagice3.jpg>
@@ -2287,22 +2063,10 @@ Package pdftex.def Info: image/flow/jtagice3.jpg used on input line 48.
 (pdftex.def)             Requested size: 308.71106pt x 184.01321pt.
 
 
-LaTeX Warning: Citation 'AtmelJTAGICE3:2014:Online' on page 64 undefined on inp
-ut line 49.
-
-
-LaTeX Warning: Citation 'AtmelJTAGICE3:2014:Online' on page 64 undefined on inp
-ut line 49.
-
-
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 ) (C:\Users\Jan\Documents\pg-faise\Endbericht\src/flow/4_Systemarchitektur.tex
-
-LaTeX Warning: Citation 'AUTOSAR:2014:Online' on page 64 undefined on input lin
-e 3.
-
-<image/flow/Architektur_Rampe.png, id=1246, 87.57423pt x 36.60263pt>
+<image/flow/Architektur_Rampe.png, id=1344, 87.57423pt x 36.60263pt>
 File: image/flow/Architektur_Rampe.png Graphic file (type png)
 
 <use image/flow/Architektur_Rampe.png>
@@ -2311,15 +2075,9 @@ Package pdftex.def Info: image/flow/Architektur_Rampe.png used on input line 7.
 (pdftex.def)             Requested size: 441.01773pt x 184.35191pt.
 
 
-LaTeX Warning: Citation 'Stasch:Hahn' on page 64 undefined on input line 8.
-
-
-LaTeX Warning: Citation 'Stasch:Hahn' on page 64 undefined on input line 8.
-
-
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<image/flow/Architektur_VB.png, id=1247, 87.57423pt x 36.60263pt>
+<image/flow/Architektur_VB.png, id=1347, 87.57423pt x 36.60263pt>
 File: image/flow/Architektur_VB.png Graphic file (type png)
 
 <use image/flow/Architektur_VB.png>
@@ -2327,24 +2085,10 @@ Package pdftex.def Info: image/flow/Architektur_VB.png used on input line 14.
 (pdftex.def)             Requested size: 441.01773pt x 184.35191pt.
 
 
-LaTeX Warning: Citation 'Stasch:Hahn' on page 64 undefined on input line 15.
-
-
-LaTeX Warning: Citation 'Stasch:Hahn' on page 64 undefined on input line 15.
-
-
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [64] [65 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/flow/jtagice3.jpg> <
 C:/Users/Jan/Documents/pg-faise/Endbericht/image/flow/Architektur_Rampe.png>]
-
-LaTeX Warning: Citation 'Contiki:2014:Online' on page 66 undefined on input lin
-e 31.
-
-
-LaTeX Warning: Citation 'IEEE802154:2014:Online' on page 66 undefined on input 
-line 31.
-
 [66 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/flow/Architektur_VB.png>]
 ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\lstlang1.sty"
 File: lstlang1.sty 2014/09/06 1.5e listings language file
@@ -2377,28 +2121,8 @@ Package csquotes Info: Input encoding change on input line 48.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\latin1.def"
 File: latin1.def 2008/03/30 v1.1d Input encoding file
-) [68]
-
-LaTeX Warning: Citation 'Contiki:2014:Online' on page 69 undefined on input lin
-e 59.
-
-
-LaTeX Warning: Citation 'Contiki:2014:Online' on page 69 undefined on input lin
-e 70.
-
-
-LaTeX Warning: Citation 'Walter:2010' on page 69 undefined on input line 70.
-
-[69]
-
-LaTeX Warning: Citation 'Dunkels:2007:Proc' on page 70 undefined on input line 
-79.
-
-
-LaTeX Warning: Citation 'CC2420:2014:Online' on page 70 undefined on input line
- 83.
-
-<image/flow/Rime.png, id=1314, 105.87555pt x 73.96834pt>
+) [68] [69]
+<image/flow/Rime.png, id=1428, 105.87555pt x 73.96834pt>
 File: image/flow/Rime.png Graphic file (type png)
 
 <use image/flow/Rime.png>
@@ -2406,35 +2130,11 @@ Package pdftex.def Info: image/flow/Rime.png used on input line 89.
 (pdftex.def)             Requested size: 308.71106pt x 215.67644pt.
 
 
-LaTeX Warning: Citation 'Dunkels:2007:Proc' on page 70 undefined on input line 
-90.
-
-
-LaTeX Warning: Citation 'Dunkels:2007:Proc' on page 70 undefined on input line 
-90.
-
-
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[70]
-
-LaTeX Warning: Citation 'Buettner:2006:Proc' on page 71 undefined on input line
- 98.
-
-(C:\Users\Jan\Documents\pg-faise\Endbericht\src/flow/4_2_Treiber.tex
-
-LaTeX Warning: Citation 'Stasch:Hahn' on page 71 undefined on input line 2.
-
-
-LaTeX Warning: Citation 'Stasch:Hahn' on page 71 undefined on input line 2.
-
+[70] (C:\Users\Jan\Documents\pg-faise\Endbericht\src/flow/4_2_Treiber.tex
 [71 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/flow/Rime.png>] [72]
-[73]
-
-LaTeX Warning: Citation 'AT45DB041A:2014:Online' on page 74 undefined on input 
-line 64.
-
-[74] [75] [76]
+[73] [74] [75] [76]
 Overfull \hbox (8.65933pt too wide) in paragraph at lines 114--115
 []\T1/ppl/m/n/10.95 Die In-itia-li-sie-rung der UART-Schnittstelle fin-det in d
 er Me-tho-de \T1/ppl/m/it/10.95 vo-id Uart-Dri-ver_line_init(void)
@@ -2459,12 +2159,11 @@ File: latin1.def 2008/03/30 v1.1d Input encoding file
 )
 LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <9> not available
 (Font)              Font shape `T1/pcr/m/sl' tried instead on input line 2.
- [79]
 Package csquotes Info: Input encoding change on input line 20.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\latin1.def"
 File: latin1.def 2008/03/30 v1.1d Input encoding file
-))
+) [79])
 (C:\Users\Jan\Documents\pg-faise\Endbericht\src/flow/4_4_Agenten.tex [80]
 Overfull \hbox (23.83742pt too wide) in paragraph at lines 11--12
 []\T1/ppl/m/n/10.95 Schlieÿlich kann der mo-men-ta-ne Zu-stand des Pa-kets über
@@ -2477,7 +2176,7 @@ Overfull \hbox (1.6965pt too wide) in paragraph at lines 17--18
 E_PHYSICAL\T1/ppl/m/n/10.95 -Nachricht die IDs al-ler Paket-Agenten
  []
 
-[82] <image/flow/RoutingAgent_FSM.png, id=1399, 154.70598pt x 96.55272pt>
+[82] <image/flow/RoutingAgent_FSM.png, id=1520, 154.70598pt x 96.55272pt>
 File: image/flow/RoutingAgent_FSM.png Graphic file (type png)
 
 <use image/flow/RoutingAgent_FSM.png>
@@ -2501,7 +2200,7 @@ Overfull \vbox (5.13739pt too high) has occurred while \output is active []
 
 
 ]) (C:\Users\Jan\Documents\pg-faise\Endbericht\src/drive/2_Komponenten.tex
-<image/drive/Volksbot.png, id=1421, 533.1555pt x 355.437pt>
+<image/drive/Volksbot.png, id=1542, 533.1555pt x 355.437pt>
 File: image/drive/Volksbot.png Graphic file (type png)
 
 <use image/drive/Volksbot.png>
@@ -2509,7 +2208,7 @@ Package pdftex.def Info: image/drive/Volksbot.png used on input line 7.
 (pdftex.def)             Requested size: 396.91325pt x 264.61919pt.
  [88 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/drive/Volksbot.png (PNG 
 copy)>]
-<image/drive/DRIVE_Architektur.png, id=1427, 510.40688pt x 336.50719pt>
+<image/drive/DRIVE_Architektur.png, id=1548, 510.40688pt x 336.50719pt>
 File: image/drive/DRIVE_Architektur.png Graphic file (type png)
 
 <use image/drive/DRIVE_Architektur.png>
@@ -2521,7 +2220,7 @@ Package pdftex.def Info: image/drive/DRIVE_Architektur.png used on input line 3
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 ) (C:\Users\Jan\Documents\pg-faise\Endbericht\src/drive/3_Werkzeuge.tex
-[89] <image/drive/ROS_concepts.png, id=1433, 229.85875pt x 116.435pt>
+[89] <image/drive/ROS_concepts.png, id=1554, 229.85875pt x 116.435pt>
 File: image/drive/ROS_concepts.png Graphic file (type png)
 
 <use image/drive/ROS_concepts.png>
@@ -2534,7 +2233,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 LaTeX Font Info:    Font shape `T1/ppl/bx/it' in size <10.95> not available
 (Font)              Font shape `T1/ppl/b/it' tried instead on input line 15.
 [90 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/drive/DRIVE_Architektur.p
-ng>] <image/drive/rviz.png, id=1440, 979.40906pt x 559.33969pt>
+ng>] <image/drive/rviz.png, id=1561, 979.40906pt x 559.33969pt>
 File: image/drive/rviz.png Graphic file (type png)
 
 <use image/drive/rviz.png>
@@ -2542,7 +2241,7 @@ Package pdftex.def Info: image/drive/rviz.png used on input line 19.
 (pdftex.def)             Requested size: 441.01773pt x 251.86269pt.
  [91 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/drive/ROS_concepts.png> 
 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/drive/rviz.png>]
-<image/drive/Epos_Studio.png, id=1447, 889.82437pt x 456.20438pt>
+<image/drive/Epos_Studio.png, id=1568, 889.82437pt x 456.20438pt>
 File: image/drive/Epos_Studio.png Graphic file (type png)
 
 <use image/drive/Epos_Studio.png>
@@ -2553,7 +2252,7 @@ Package pdftex.def Info: image/drive/Epos_Studio.png used on input line 32.
 alisierung.tex [92 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/drive/Epos
 _Studio.png>])
 (C:\Users\Jan\Documents\pg-faise\Endbericht\src/drive/5_Implementierung.tex
-<image/drive/Ablaufkonzept.png, id=1453, 414.79968pt x 253.69781pt>
+<image/drive/Ablaufkonzept.png, id=1574, 414.79968pt x 253.69781pt>
 File: image/drive/Ablaufkonzept.png Graphic file (type png)
 
 <use image/drive/Ablaufkonzept.png>
@@ -2563,9 +2262,6 @@ Package pdftex.def Info: image/drive/Ablaufkonzept.png used on input line 11.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-
-LaTeX Warning: Citation 'Der:2000' on page 93 undefined on input line 18.
-
 [93] [94 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/drive/Ablaufkonzept.
 png>] ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\lstlang1.sty"
 File: lstlang1.sty 2014/09/06 1.5e listings language file
@@ -2574,16 +2270,13 @@ Package csquotes Info: Input encoding change on input line 40.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\latin1.def"
 File: latin1.def 2008/03/30 v1.1d Input encoding file
-)
-
-LaTeX Warning: Citation 'Bischoff:2004' on page 95 undefined on input line 42.
-
-[95]
+) [95]
 Package csquotes Info: Input encoding change on input line 48.
- ("C:\Program Files\MiKTeX 2.9\tex\latex\base\latin1.def"
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\latin1.def"
 File: latin1.def 2008/03/30 v1.1d Input encoding file
 ) [96] [97]
-<image/drive/sequenz.png, id=1540, 465.23813pt x 245.41687pt>
+<image/drive/sequenz.png, id=1665, 465.23813pt x 245.41687pt>
 File: image/drive/sequenz.png Graphic file (type png)
 
 <use image/drive/sequenz.png>
@@ -2592,7 +2285,7 @@ Package pdftex.def Info: image/drive/sequenz.png used on input line 54.
 )
 (C:\Users\Jan\Documents\pg-faise\Endbericht\src/drive/7_Herausforderungen.tex
 [98 <C:/Users/Jan/Documents/pg-faise/Endbericht/image/drive/sequenz.png>]
-<image/drive/Odometrie_vergleich.png, id=1546, 1003.49907pt x 453.19313pt>
+<image/drive/Odometrie_vergleich.png, id=1671, 1003.49907pt x 453.19313pt>
 File: image/drive/Odometrie_vergleich.png Graphic file (type png)
 
 <use image/drive/Odometrie_vergleich.png>
@@ -2605,7 +2298,7 @@ h.png>]) [100]
 (C:\Users\Jan\Documents\pg-faise\Endbericht\src/chapter8.tex
 (C:\Users\Jan\Documents\pg-faise\Endbericht\src/integration/1_Physische_Zelle.t
 ex (C:\Users\Jan\Documents\pg-faise\Endbericht\src/integration/1_1_Aufbau.tex
-<image/physischeZelle.png, id=1561, 300.1614pt x 229.8186pt>
+<image/physischeZelle.png, id=1686, 300.1614pt x 229.8186pt>
 File: image/physischeZelle.png Graphic file (type png)
 
 <use image/physischeZelle.png>
@@ -2661,12 +2354,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 39--200
 
  []
 
-[110]
+[110] [111
 
-LaTeX Warning: Empty bibliography on input line 212.
 
+] [112]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 214.
+ [113]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 214.
+
 (C:\Users\Jan\Documents\pg-faise\Endbericht\masterfile.aux
 (C:\Users\Jan\Documents\pg-faise\Endbericht\src/title.aux)
 (C:\Users\Jan\Documents\pg-faise\Endbericht\src/abstract.aux)
@@ -2700,11 +2395,11 @@ Package logreq Info: Writing requests to 'masterfile.run.xml'.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 214.
  ) 
 Here is how much of TeX's memory you used:
- 22585 strings out of 493921
- 353380 string characters out of 3147287
- 672793 words of memory out of 3000000
- 24800 multiletter control sequences out of 15000+200000
- 74254 words of font info for 114 fonts, out of 3000000 for 9000
+ 22683 strings out of 493921
+ 355471 string characters out of 3147287
+ 683107 words of memory out of 3000000
+ 24851 multiletter control sequences out of 15000+200000
+ 73697 words of font info for 115 fonts, out of 3000000 for 9000
  845 hyphenation exceptions out of 8191
  54i,12n,57p,1692b,2373s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/mnsymbol/MnSymbolE.enc}{C:/Progr
@@ -2724,9 +2419,9 @@ alatino/uplb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplbi8
 a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplr8a.pfb><C:/Prog
 ram Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplr8a.pfb><C:/Program Files/MiKT
 eX 2.9/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on masterfile.pdf (117 pages, 5331985 bytes).
+Output written on masterfile.pdf (120 pages, 5347862 bytes).
 PDF statistics:
- 1755 PDF objects out of 2073 (max. 8388607)
- 462 named destinations out of 1000 (max. 500000)
+ 1926 PDF objects out of 2073 (max. 8388607)
+ 505 named destinations out of 1000 (max. 500000)
  1338 words of extra memory for PDF output out of 10000 (max. 10000000)
 
