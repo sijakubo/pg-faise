@@ -1,18 +1,34 @@
 \subsubsection{Ablauf}
 
-Im folgenden wird der Ablauf für einen Transport innerhalb des physikalischen Aufbau aus Abbildung \ref{fig:physischeZelle} vom Ausgang der Rampe A zum Eingang der Rampe B beschrieben. Dafür muss zunächst ein Paket in das System initialisiert und dadurch ein Auftrag generiert werden. Anschließend kann durch den Materialfluss der Transport ausgelöst werden.
+Im Folgenden wird der Ablauf für einen Transport innerhalb des physikalischen Aufbaus aus Abbildung \ref{fig:physischeZelle} vom Ausgang der Rampe A zum Eingang der Rampe B beschrieben. Dafür muss zunächst ein Paket über das Gateway von außen im System initialisiert und dadurch ein Auftrag generiert werden. Anschließend wird durch den Materialfluss per Auktion ein Volksbot ausgewählt und schließlich der Transport ausgelöst. Die Folgende Auflistung nennt die einzelnen Schritte zwischen Materialflusssystem und Fahrzeugen. Der Transport von einem Paket auf Rampe B zur Rampe A verläuft entsprechend analog.
 
+\begin{itemize}
+\item Initialisierung:
 \begin{itemize}
 \item Volksbot wird lokalisiert und wartet auf Auftrag
 \item Registrierung der Pakete im System (Gateway)
-\item Materialfluss sendet Nachricht (Opcode mit Ziel-ID: Ausgang Rampe A) an Volksbot
+\end{itemize}
+\item Auswahl des Volksbots über eine Auktion:
+\begin{itemize}
+\item Routing-Agent auf Rampe A führt eine Auktion unter allen Routing-Agenten durch, wer das Paket am günstigsten zu Rampe B befördern kann.
+\item Routing-Agent auf dem Volksbot erfragt beim Volksbot die Kosten für eine Fahrt vom aktuellen Standort über Rampe A zu Rampe B.
+\item Der Volksbot antwortet mit den berechneten Kosten.
+\item Der Routing-Agent auf dem Volksbot gibt die berechneten Kosten als Angebot zurück an den Routing-Agenten auf Rampe A
+\item Nach Ablauf eines Timeouts wählt der Routing-Agent auf Rampe A den Sieger der Auktion aus und erteilt diesem den Auftrag, das Paket abzuholen und zu Rampe B zu bringen.
+\end{itemize}
+\item Transport:
+\begin{itemize}
+\item Routing-Agent auf dem Volksbot erhält die Bestätigung seines Angebots und sendet eine Nachricht (Opcode mit Ziel-ID: Ausgang Rampe A) an Volksbot
 \item Volksbot entschlüsselt Opcode und startet Navigation zu Rampe A
 \item Hubposition am Volksbot wird auf Höhe Ausgang Rampe A gefahren
-\item Wenn Volksbot Navigationsziel erreicht hat und Hubhöhe eingestellt ist, wird eine Statusrückmeldung an Materialfluss gesendet
-\item Rampe A gibt das Paket ab und der Volksbot nimmt durch Ansteuerung der Floweinheit das Paket auf
-\item Volksbot fährt zum Eingang Rampe B und regelt die Hubhöhe auf entsprechende Rampenhöhe
-\item Volksbot gibt Statusrückmeldung an Materialfluss und löst Paketübergabe aus
-\item Volksbot frei für nächsten Auftrag
-
-
+\item Wenn Volksbot Navigationsziel erreicht hat und Hubhöhe eingestellt ist, wird eine Statusrückmeldung an den Platform-Agenten des Volksbots gesendet.
+\item Die Platform-Agenten von Volksbot und Rampe A handeln die Paketübergabe aus und die Rampe gibt das Paket frei
+\item Der Paket-Agent des Pakets wird auf den Volksbot übertragen  und der Volksbot nimmt durch Ansteuerung der Floweinheit
+\item Der Volksbot fährt zum Eingang Rampe B und regelt die Hubhöhe auf entsprechende Rampenhöhe
+\item Der Volksbot gibt Statusrückmeldung an seinen Platform-Agenten
+\item Die Platform-Agenten von Volksbot und Rampe B handeln die Paketübergabe aus
+\item Der Volksbot löst die Paketübergabe aus
+\item Der Paket-Agent wird vom Volksbot auf Rampe B übertragen
+\item Der Volksbot wartet auf weitere Aufträge
+\end{itemize}
 \end{itemize}
