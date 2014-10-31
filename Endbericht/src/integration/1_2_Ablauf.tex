@@ -1,4 +1,18 @@
 \subsubsection{Ablauf}
 
-Zunächst wird ein Paket innerhalb des Systems initialisiert und dadurch ein Auftrag generiert.
-%wird heute nachm. fertig gemacht !
+Im folgenden wird der Ablauf für einen Transport innerhalb des physikalischen Aufbau aus Abbildung \ref{fig:physischeZelle} vom Ausgang der Rampe A zum Eingang der Rampe B beschrieben. Dafür muss zunächst ein Paket in das System initialisiert und dadurch ein Auftrag generiert werden. Anschließend kann durch den Materialfluss der Transport ausgelöst werden.
+
+\begin{itemize}
+\item Volksbot wird lokalisiert und wartet auf Auftrag
+\item Registrierung der Pakete im System (Gateway)
+\item Materialfluss sendet Nachricht (Opcode mit Ziel-ID: Ausgang Rampe A) an Volksbot
+\item Volksbot entschlüsselt Opcode und startet Navigation zu Rampe A
+\item Hubposition am Volksbot wird auf Höhe Ausgang Rampe A gefahren
+\item Wenn Volksbot Navigationsziel erreicht hat und Hubhöhe eingestellt ist, wird eine Statusrückmeldung an Materialfluss gesendet
+\item Rampe A gibt das Paket ab und der Volksbot nimmt durch Ansteuerung der Floweinheit das Paket auf
+\item Volksbot fährt zum Eingang Rampe B und regelt die Hubhöhe auf entsprechende Rampenhöhe
+\item Volksbot gibt Statusrückmeldung an Materialfluss und löst Paketübergabe aus
+\item Volksbot frei für nächsten Auftrag
+
+
+\end{itemize}
